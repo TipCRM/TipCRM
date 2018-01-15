@@ -1,0 +1,22 @@
+tipcrm:
+  swagger:
+    title: Project of Tip CRM
+    description: Tip CRM Swagger UI
+    url:
+    version: 1.0
+    author: neil(1051750377@qq.com), moses(1285823170@qq.com)
+
+spring:
+      application:
+         name: plm2
+      datasource:
+         driverClassName: com.mysql.jdbc.Driver
+         url: jdbc:mysql://www.potafish.com:3306/TIP_CRM?zeroDateTimeBehavior=convertToNull&verifyServerCertificate=false&useSSL=true
+         username:
+         password:
+      jackson:
+         date-format: MM/dd/yyyy hh:mm:ss a
+#         time-zone: ${TZ}
+      jpa:
+         show-sql: true
+         database-platform: org.hibernate.dialect.MySQL5Dialect
