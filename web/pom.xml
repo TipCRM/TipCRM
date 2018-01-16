@@ -65,6 +65,7 @@
     </dependencies>
 
     <build>
+        <finalName>tipcrm</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
