@@ -29,7 +29,7 @@ Prerequisite:
         $ mvn clean package
         ```
     * Change work directory to web/target
-    * Run jar package with command 
+    * Run jar package with command
         ```
         $ java -jar tipcrm*.jar
         ```
