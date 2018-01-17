@@ -24,7 +24,11 @@ public class TestApi {
 
     @RequestMapping(value = "query/{userId}", method = RequestMethod.GET)
     public JsonEntity<TestEntity> queryByUserId(@PathVariable("userId") Long id) {
-        logger.info("id = " + id);
-        return ResponseHelper.createInstance(testService.findById(id));
+        TestEntity testEntity = testService.findById(id);
+        logger.debug("DEBUG: id = " + id);
+        logger.info("INFO: id = " + id);
+        logger.warn("WARN: id = " + id);
+        logger.error("ERROR: id = " + id);
+        return ResponseHelper.createInstance(testEntity);
     }
 }
