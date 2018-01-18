@@ -1,5 +1,6 @@
 server:
   context-path: /tipcrm
+  port: 8080
 tipcrm:
   swagger:
     title: Project of Tip CRM
