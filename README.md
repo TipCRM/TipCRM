@@ -31,5 +31,5 @@ Prerequisite:
     * Change work directory to web/target
     * Run jar package with command
         ```
-        $ java -jar tipcrm*.jar
+        $ java -jar tipcrm*.jar 
         ```
