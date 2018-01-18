@@ -15,10 +15,10 @@ import org.springframework.http.HttpStatus;
 @ComponentScan(basePackages = {"com.tipcrm"})
 @EntityScan(basePackages = "com.tipcrm.dao.entity")
 @EnableJpaRepositories(basePackages = "com.tipcrm.dao.repository")
-public class TimCRMApplication {
+public class TipCRMApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TimCRMApplication.class, args);
+        SpringApplication.run(TipCRMApplication.class, args);
     }
     @Bean
     public EmbeddedServletContainerCustomizer containerCustomizer() {
