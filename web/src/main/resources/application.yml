@@ -23,3 +23,12 @@ spring:
       jpa:
          show-sql: true
          database-platform: org.hibernate.dialect.MySQL5Dialect
+
+shiroFilter:
+  loginUrl: /login.html
+  successUrl: /
+  unauthorizedUrl: /401.html
+  filterChainDefinitionMap:
+    /login_assets/**: anon
+    /logout: logout
+    /**: authc
