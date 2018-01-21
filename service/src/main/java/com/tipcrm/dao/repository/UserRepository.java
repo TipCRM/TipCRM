@@ -1,10 +1,9 @@
 package com.tipcrm.dao.repository;
-
-import com.tipcrm.dao.entity.TestEntity;
+import com.tipcrm.dao.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TestRepository extends JpaRepository<TestEntity, Long> {
-
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByUserName(String userName);
 }
