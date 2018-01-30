@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     @Override
-    public Set<String> getRoleListByUserId(Long userId) {
+    public Set<String> getRoleListByUserId(Integer userId) {
         Set<String> roles = new HashSet<String>();
         User user = userRepository.findOne(userId);
         for (Role role : user.getRoles()) {
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<String> getPermissionValueListByUserId(Long userId) {
+    public Set<String> getPermissionValueListByUserId(Integer userId) {
         Set<String> permissions = new HashSet<String>();
         User user = userRepository.findOne(userId);
         for (Role role : user.getRoles()) {

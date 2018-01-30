@@ -37,6 +37,11 @@ public class JsonEntity<T> implements Serializable {
 
     public JsonEntity(T data) {
         this.data = data;
+
+    }
+    public JsonEntity(int status,T data) {
+        this.status = status;
+        this.data = data;
     }
 
     public int getStatus() {
