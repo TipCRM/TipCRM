@@ -1,5 +1,7 @@
 package com.tipcrm.service;
+import com.tipcrm.dao.entity.Security;
 import com.tipcrm.dao.entity.User;
+import com.tipcrm.dao.repository.SecurityRepository;
 import com.tipcrm.dao.repository.UserRepository;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -24,9 +26,12 @@ public class TipCRMRealm extends AuthorizingRealm {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private SecurityRepository securityRepository;
+
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        Long userId = (Long) SecurityUtils.getSubject().getPrincipal();
+        Integer userId = (Integer) SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.setRoles(userService.getRoleListByUserId(userId));
         info.setStringPermissions(userService.getPermissionValueListByUserId(userId));
@@ -41,9 +46,10 @@ public class TipCRMRealm extends AuthorizingRealm {
         if (user == null) {
             throw new UnknownAccountException("帐号不存在！");
         }
-        if (!user.getPassword().equals(password)) {
+        Security security = securityRepository.findOne(user.getId());
+        if (!security.getPassword().equals(password)) {
             throw new IncorrectCredentialsException("密码不正确！");
         }
-        return new SimpleAuthenticationInfo(user.getId(), user.getPassword(), getName());
+        return new SimpleAuthenticationInfo(user.getId(), security.getPassword(), getName());
     }
 }

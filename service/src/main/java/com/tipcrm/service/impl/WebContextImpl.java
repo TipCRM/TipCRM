@@ -12,8 +12,8 @@ public class WebContextImpl implements WebContext{
     private UserRepository userRepository;
 
     @Override
-    public Long getCurrentUserId() {
-        return (Long) SecurityUtils.getSubject().getPrincipal();
+    public Integer getCurrentUserId() {
+        return (Integer) SecurityUtils.getSubject().getPrincipal();
     }
 
     @Override

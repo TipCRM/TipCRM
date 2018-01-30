@@ -18,16 +18,10 @@ public class User {
     @GeneratedValue
     @Id
     @Column(name = "oid")
-    private Long id;
+    private Integer id;
 
     @Column(name = "username")
     private String userName;
-
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "salt")
-    private String salt;
 
     @Column(name = "email")
     private String email;
@@ -42,25 +36,25 @@ public class User {
     private String phoneNo;
 
     @Column(name = "status")
-    private Long status;
+    private Integer status;
 
     @Column(name = "hire_id")
-    private Long hireId;
+    private Integer hireId;
 
     @Column(name = "hire_time")
     private Date hireTime;
 
     @Column(name = "manager_id")
-    private Long managerId;
+    private Integer managerId;
 
     @Column(name = "department_id")
-    private Long departmentId;
+    private Integer departmentId;
 
     @Column(name = "level_id")
-    private Long levelId;
+    private Integer levelId;
 
     @Column(name = "dismiss_id")
-    private Long dismissId;
+    private Integer dismissId;
 
     @Column(name = "dismiss_date")
     private Date dismissDate;
@@ -69,7 +63,7 @@ public class User {
     private String dismissReason;
 
     @Column(name = "update_id")
-    private Long updateId;
+    private Integer updateId;
 
     @Column(name = "update_time")
     private Date updateTime;
@@ -78,11 +72,11 @@ public class User {
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private List<Role> roles = new ArrayList<Role>();
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -92,22 +86,6 @@ public class User {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
     }
 
     public String getEmail() {
@@ -142,19 +120,19 @@ public class User {
         this.phoneNo = phoneNo;
     }
 
-    public Long getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Long status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public Long getHireId() {
+    public Integer getHireId() {
         return hireId;
     }
 
-    public void setHireId(Long hireId) {
+    public void setHireId(Integer hireId) {
         this.hireId = hireId;
     }
 
@@ -166,59 +144,59 @@ public class User {
         this.hireTime = hireTime;
     }
 
-    public Long getManagerId() {
+    public Integer getManagerId() {
         return managerId;
     }
 
-    public void setManagerId(Long managerId) {
+    public void setManagerId(Integer managerId) {
         this.managerId = managerId;
     }
 
-    public Long getDepartmentId() {
+    public Integer getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId(Long departmentId) {
+    public void setDepartmentId(Integer departmentId) {
         this.departmentId = departmentId;
     }
 
-    public Long getLevelId() {
+    public Integer getLevelId() {
         return levelId;
     }
 
-    public void setLevelId(Long levelId) {
+    public void setLevelId(Integer levelId) {
         this.levelId = levelId;
     }
 
-    public Long getDismissId() {
+    public Integer getDismissId() {
         return dismissId;
     }
 
-    public void setDismissId(Long dismissId) {
+    public void setDismissId(Integer dismissId) {
         this.dismissId = dismissId;
     }
 
-    public Date getDimissDate() {
+    public Date getDismissDate() {
         return dismissDate;
     }
 
-    public void setDimissDate(Date dimissDate) {
-        this.dismissDate = dimissDate;
+    public void setDismissDate(Date dismissDate) {
+        this.dismissDate = dismissDate;
     }
 
-    public String getDimissReason() {
+    public String getDismissReason() {
         return dismissReason;
     }
 
-    public void setDimissReason(String dimissReason) {
-        this.dismissReason = dimissReason;
+    public void setDismissReason(String dismissReason) {
+        this.dismissReason = dismissReason;
     }
 
-    public Long getUpdateId() {
+    public Integer getUpdateId() {
         return updateId;
     }
 
-    public void setUpdateId(Long updateId) {
+    public void setUpdateId(Integer updateId) {
         this.updateId = updateId;
     }
 

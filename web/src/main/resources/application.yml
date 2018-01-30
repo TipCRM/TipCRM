@@ -29,6 +29,8 @@ shiroFilter:
   successUrl: /
   unauthorizedUrl: /401.html
   filterChainDefinitionMap:
+    /public/api/login: anon
+    /regist.html: anon
     /login_assets/**: anon
     /logout: logout
     /**: authc
