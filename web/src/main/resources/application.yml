@@ -14,7 +14,7 @@ spring:
          name: plm2
       datasource:
          driverClassName: com.mysql.jdbc.Driver
-         url: jdbc:mysql://www.potafish.com:3306/TIP_CRM?zeroDateTimeBehavior=convertToNull&verifyServerCertificate=false&useSSL=true
+         url: jdbc:mysql://www.potafish.com:3306/TIP_CRM?zeroDateTimeBehavior=convertToNull&verifyServerCertificate=false&useSSL=true&useUnicode=true&characterEncoding=utf-8
          username:
          password:
       jackson:
@@ -30,6 +30,7 @@ shiroFilter:
   unauthorizedUrl: /401.html
   filterChainDefinitionMap:
     /public/api/login: anon
+    /public/api/regist: anon
     /regist.html: anon
     /login_assets/**: anon
     /logout: logout

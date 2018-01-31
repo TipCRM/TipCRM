@@ -41,9 +41,9 @@ public class TipCRMRealm extends AuthorizingRealm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        String userName = (String) token.getPrincipal();
+        String loginKey = (String) token.getPrincipal();
         String password = String.valueOf((char[]) token.getCredentials());
-        User user = userRepository.findByUserName(userName);
+        User user = userRepository.findByEmailOrPhoneNo(loginKey);
         if (user == null) {
             throw new UnknownAccountException();
         }

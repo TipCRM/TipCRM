@@ -54,9 +54,9 @@ a[href^="http://tongji.baidu.com"]{display: none;}
 .zhuce_body .zhuce_kong .zc .bj_bai .kuang_txt{ width:236px; height:32px; border:1px solid #dddddd; line-height:32px; padding-left:32px; color:#b1a9a9;  margin-bottom:10px; }
 .zhuce_body .zhuce_kong .zc .bj_bai .btn_zhuce{ width:270px; height:33px; background:#37b5f9; font-size:14px; line-height:33px; text-align:center; border:0px; color:#fff; border-radius:3px; cursor:pointer;}
 
-.zhuce_body .zhuce_kong .zc .bj_bai .phone{background:url(../images/zc_06.jpg) no-repeat 10px 10px;}
+.zhuce_body .zhuce_kong .zc .bj_bai .username{background:url(../images/zc_06.jpg) no-repeat 10px 10px;}
 .zhuce_body .zhuce_kong .zc .bj_bai .email{background:url(../images/zc_12.jpg) no-repeat 10px 10px;}
-.zhuce_body .zhuce_kong .zc .bj_bai .possword{background:url(../images/zc_16.jpg) no-repeat 10px 10px;}
+.zhuce_body .zhuce_kong .zc .bj_bai .password{background:url(../images/zc_16.jpg) no-repeat 10px 10px;}
 .zhuce_body .zhuce_kong .zc .bj_bai .yanzm{background:url(../images/zc_19.jpg) no-repeat 10px 10px; margin-bottom:0px;}
 
 .zhuce_body .zhuce_kong .zc .bj_bai .hui_kuang{ float:left; width:97px; height:31px; border:1px solid #dddddd;}

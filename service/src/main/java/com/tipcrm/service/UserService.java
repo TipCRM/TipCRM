@@ -7,5 +7,7 @@ public interface UserService {
 
     Set<String> getPermissionValueListByUserId(Integer userId);
 
-    String regist(String username, String password, String email, Boolean isManager) throws Exception;
+    String regist(String email, String password, String username, Boolean isManager) throws Exception;
+
+    void login(String loginKey, String password) throws Exception;
 }
