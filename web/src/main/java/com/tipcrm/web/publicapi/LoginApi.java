@@ -1,5 +1,6 @@
 package com.tipcrm.web.publicapi;
 
+import com.tipcrm.service.UserService;
 import com.tipcrm.web.start.ShiroProps;
 import com.tipcrm.web.util.JsonEntity;
 import com.tipcrm.web.util.ResponseHelper;
@@ -23,6 +24,9 @@ public class LoginApi {
     @Autowired
     private ShiroProps shiroProps;
 
+    @Autowired
+    private UserService userService;
+
     private Logger logger = LoggerFactory.getLogger(LoginApi.class);
 
     @RequestMapping(value = "login", method = {RequestMethod.POST})
@@ -40,6 +44,16 @@ public class LoginApi {
             return new JsonEntity<>(500, "密码不正确");
         } catch (Exception e) {
             return new JsonEntity<>(500, "登陆失败");
+        }
+    }
+
+    @RequestMapping(value = "regist", method = {RequestMethod.POST})
+    public JsonEntity<String> regist(String username, String password, String email, Boolean isManager) {
+        try {
+            String name = userService.regist(username, password, email, isManager);
+            return ResponseHelper.createInstance(name);
+        } catch (Exception e) {
+            return new JsonEntity<>(500, e.getMessage());
         }
     }
 }

@@ -14,6 +14,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,12 +45,9 @@ public class TipCRMRealm extends AuthorizingRealm {
         String password = String.valueOf((char[]) token.getCredentials());
         User user = userRepository.findByUserName(userName);
         if (user == null) {
-            throw new UnknownAccountException("帐号不存在！");
+            throw new UnknownAccountException();
         }
         Security security = securityRepository.findOne(user.getId());
-        if (!security.getPassword().equals(password)) {
-            throw new IncorrectCredentialsException("密码不正确！");
-        }
-        return new SimpleAuthenticationInfo(user.getId(), security.getPassword(), getName());
+        return new SimpleAuthenticationInfo(user.getId(), security.getPassword(), ByteSource.Util.bytes(security.getSalt()), getName());
     }
 }

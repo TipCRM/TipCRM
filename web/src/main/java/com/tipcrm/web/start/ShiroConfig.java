@@ -1,5 +1,7 @@
 package com.tipcrm.web.start;
+import com.tipcrm.bo.Constants;
 import com.tipcrm.service.TipCRMRealm;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -8,6 +10,7 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,16 +29,16 @@ public class ShiroConfig {
     }
 
     @Bean
-    public SecurityManager securityManager() {
+    public SecurityManager securityManager(@Qualifier(value = "hashedCredentialsMatcher") HashedCredentialsMatcher hashedCredentialsMatcher) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        // 设置realm.
-        securityManager.setRealm(tipCRMRealm());
+        securityManager.setRealm(tipCRMRealm(hashedCredentialsMatcher));
         return securityManager;
     }
 
     @Bean
-    public TipCRMRealm tipCRMRealm() {
+    public TipCRMRealm tipCRMRealm(HashedCredentialsMatcher hashedCredentialsMatcher) {
         TipCRMRealm tipCRMRealm = new TipCRMRealm();
+        tipCRMRealm.setCredentialsMatcher(hashedCredentialsMatcher);
         return tipCRMRealm;
     }
 
@@ -52,11 +55,12 @@ public class ShiroConfig {
         return advisorAutoProxyCreator;
     }
 
-    @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
-        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager());
-        return authorizationAttributeSourceAdvisor;
+    @Bean(name = "hashedCredentialsMatcher")
+    public HashedCredentialsMatcher hashedCredentialsMatcher() {
+        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+        hashedCredentialsMatcher.setHashAlgorithmName("MD5");
+        hashedCredentialsMatcher.setHashIterations(Constants.HASH_ITERATIONS);
+        return hashedCredentialsMatcher;
     }
 
 }
