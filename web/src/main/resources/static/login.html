@@ -30,7 +30,7 @@
                 <a href="#" class="zhuce_wb">微博注册</a>
                 <a href="#" class="zhuce_wx">微信注册</a>
                 <p>没有帐号？<a href="regist.html">立即注册</a></p>
-            
+
             </div>
         </div>
         <P>Powered by 小窍门信息技术有限公司</P>
@@ -52,6 +52,7 @@
                         var pathName = document.location.pathname;
                         var index = pathName.substr(1).indexOf("/");
                         var result = pathName.substr(0,index+1);
+                        result = result + res["data"];
                         window.location.href=result;
                     } else {
                         $("#error").html(res["data"]);
