@@ -1,10 +1,6 @@
 package com.tipcrm.web.publicapi;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.tipcrm.web.start.ShiroProps;
 import com.tipcrm.web.util.JsonEntity;
 import com.tipcrm.web.util.ResponseHelper;
 import org.apache.shiro.SecurityUtils;
@@ -13,22 +9,29 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/public/api")
-public class LoginController {
+public class LoginApi {
 
-    private Logger logger = LoggerFactory.getLogger(LoginController.class);
+    @Autowired
+    private ShiroProps shiroProps;
+
+    private Logger logger = LoggerFactory.getLogger(LoginApi.class);
 
     @RequestMapping(value = "login", method = {RequestMethod.POST})
     public JsonEntity<String> login(String username, String password) {
         try {
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+
             SecurityUtils.getSubject().login(token);
-            return ResponseHelper.createInstance("登陆成功");
+            return ResponseHelper.createInstance(shiroProps.getSuccessUrl());
         } catch (UnknownAccountException e) {
             logger.info("账号不存在");
             return new JsonEntity<>(500, "账号不存在");

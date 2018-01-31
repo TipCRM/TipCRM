@@ -45,11 +45,11 @@ a[href^="http://tongji.baidu.com"]{display: none;}
 .login_bj{ background:url(../images/bj_zhuce.jpg) no-repeat top center;}
 .zhuce_body{ float:left; width:100%; height:auto;}
 .zhuce_body .logo{ width:114px; height:54px; margin:53px 0 0 65px;}
-.zhuce_body .zhuce_kong{ position:absolute; top:50%; left:50%; width:600px; height:478px; margin-left:-300px; margin-top:-239px;}
+.zhuce_body .zhuce_kong{ position:absolute; top:50%; left:50%; width:600px; height:500px; margin-left:-300px; margin-top:-239px;}
 .zhuce_body .zhuce_kong .zc{width:600px; height:408px;}
-.zhuce_body .zhuce_kong .zc .bj_bai{ float:left; width:314px; height:408px; padding-left:50px; background:#FFF;}
+.zhuce_body .zhuce_kong .zc .bj_bai{ float:left; width:314px; height:428px; padding-left:50px; background:#FFF;}
 .zhuce_body .zhuce_kong .zc .bj_bai h3{ font:16px/70px "微软雅黑", "黑体"; color:#333333; width:270px; text-align:center;}
-.zhuce_body .zhuce_kong .zc .bj_right{ float:left;width:185px; height:408px; padding-left:51px; background:#f8f8f8;}
+.zhuce_body .zhuce_kong .zc .bj_right{ float:left;width:185px; height:428px; padding-left:51px; background:#f8f8f8;}
 .zhuce_kong > p{font:16px/70px "微软雅黑", "黑体"; text-align:center; color:#fff;}
 .zhuce_body .zhuce_kong .zc .bj_bai .kuang_txt{ width:236px; height:32px; border:1px solid #dddddd; line-height:32px; padding-left:32px; color:#b1a9a9;  margin-bottom:10px; }
 .zhuce_body .zhuce_kong .zc .bj_bai .btn_zhuce{ width:270px; height:33px; background:#37b5f9; font-size:14px; line-height:33px; text-align:center; border:0px; color:#fff; border-radius:3px; cursor:pointer;}
@@ -84,3 +84,5 @@ a[href^="http://tongji.baidu.com"]{display: none;}
 .zhuce_body .login_kuang .zc .bj_bai a{ color:#37b5f9; float:right; margin-right:35px;}
 .zhuce_body .login_kuang .zc .bj_bai .btn_zhuce{ width:227px; height:33px; background:#37b5f9; font-size:14px; line-height:33px; text-align:center; border:0px; color:#fff; border-radius:3px; cursor:pointer;}
 .zhuce_body .login_kuang .zc .bj_bai .btn_zhuce:hover,.login_qita_kuang .zc .left .btn_zhuce:hover{ background:#0065d0;}
+
+#error{color: #f26d7e; line-height: 15px}
