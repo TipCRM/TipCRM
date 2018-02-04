@@ -21,7 +21,7 @@ public class TestApi {
     private WebContext webContext;
 
     // @RequiresPermissions(value = "user:view")
-    @RequestMapping(value = "getCurrentUserName", method = RequestMethod.GET)
+    @RequestMapping(value = "currentUserName", method = RequestMethod.GET)
     public JsonEntity<String> getUser() {
         logger.debug(webContext.getCurrentUserId() + ":" + webContext.getCurrentUserName());
         return ResponseHelper.createInstance(webContext.getCurrentUserName());

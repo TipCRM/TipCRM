@@ -44,9 +44,13 @@
     function login() {
         $.ajax({
                 url: "public/api/login",
-                data: $("#login_form").serialize(),
+                data: JSON.stringify({
+                    loginKey: $('input[name="loginKey"]').val(),
+                    password: $('input[name="password"]').val()
+                }),
                 dataType: "JSON",
                 type: "POST",
+            contentType: "application/json",
                 success: function (res) {
                     if (res["status"] == 200) {
                         var pathName = document.location.pathname;
