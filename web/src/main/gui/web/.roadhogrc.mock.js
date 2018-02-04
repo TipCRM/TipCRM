@@ -24,7 +24,7 @@ const proxy = {
     },
     $body: {
       name: 'Brother Lu',
-      avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+      avatar: '/favicon.png',
       userid: '00000001',
       notifyCount: 12,
     },
@@ -133,5 +133,7 @@ const proxy = {
     });
   },
 };
-
-export default noProxy ? {'GET /api/(.*)': 'https://120.79.39.237:8080/',} : delay(proxy, 1000);
+const apis = {
+  'GET /api/(.*)':'https://120.79.39.237/api/',
+};
+export default noProxy ? delay(apis,1000) : delay(proxy, 1000);

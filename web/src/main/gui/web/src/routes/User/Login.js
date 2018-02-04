@@ -74,8 +74,8 @@ export default class LoginPage extends Component {
           <Submit loading={submitting}>登录</Submit>
           <div className={styles.other}>
             其他登录方式
-            <Icon className={styles.icon} type="alipay-circle" />
-            <Icon className={styles.icon} type="taobao-circle" />
+            <Icon className={styles.icon} type="qq" />
+            <Icon className={styles.icon} type="wechat" />
             <Icon className={styles.icon} type="weibo-circle" />
             <Link className={styles.register} to="/user/register">注册账户</Link>
           </div>
