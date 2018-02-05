@@ -134,6 +134,6 @@ const proxy = {
   },
 };
 const apis = {
-  'GET /api/(.*)':'https://120.79.39.237/api/',
+  'POST /public/api/(.*)':'http://www.potafish.com/public/api/',
 };
 export default noProxy ? delay(apis,1000) : delay(proxy, 1000);

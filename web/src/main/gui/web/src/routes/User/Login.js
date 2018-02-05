@@ -63,9 +63,9 @@ export default class LoginPage extends Component {
               !login.submitting &&
               this.renderMessage('账户或密码错误')
             }
-            <UserName name="userName" placeholder="admin/user" />
-            <Password name="password" placeholder="888888/123456" />
-            <CaptchaWeb name="captchaWeb"/>
+            <UserName name="loginKey" placeholder="1051750377@qq.com" />
+            <Password name="password" placeholder="tipcrm" />
+            {/*<CaptchaWeb name="captchaWeb"/>*/}
           </Tab>
           <div>
             <Checkbox checked={this.state.autoLogin} onChange={this.changeAutoLogin}>自动登录</Checkbox>
