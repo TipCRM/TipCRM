@@ -11,13 +11,12 @@ export default {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
-      let addtionRes = {type:'account',};
-      if (response.status >= 400){
-        addtionRes = {...addtionRes,...{currentAuthority:'admin'}};
-      } else{
-        addtionRes = {...addtionRes,...{currentAuthority:'guest'}};
+      let res ={};
+      if (response.status === 200) {
+        res = {...response,...{currentAuthority:'admin'}};
+      } else {
+        res = {...response,...{currentAuthority:'guest'}};
       }
-      const res = {...response,...addtionRes};
       console.log(res);
       yield put({
         type: 'changeLoginStatus',
@@ -58,12 +57,10 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      console.log(payload);
       setAuthority(payload.currentAuthority);
       return {
         ...state,
         status: payload.status,
-        type: payload.type,
         data: payload.data,
       };
     },
