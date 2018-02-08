@@ -1,86 +1,73 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
-import { Checkbox, Alert, Icon } from 'antd';
-import Login from '../../components/Login';
+import { Button, Row, Form, Input, Icon } from 'antd'
 import styles from './Login.less';
+import logo from '../../assets/logo.svg';
 
-const { Tab, UserName, Password, Mobile, Captcha, CaptchaWeb, Submit } = Login;
+const FormItem = Form.Item
 
-@connect(({ login, loading }) => ({
-  login,
-  submitting: loading.effects['login/login'],
-}))
-export default class LoginPage extends Component {
-  state = {
-    type: 'account',
-    autoLogin: true,
+const Login = ({
+  loading,
+  dispatch,
+  form: {
+    getFieldDecorator,
+    validateFieldsAndScroll,
+    },
+  }) => {
+  function handleOk () {
+    validateFieldsAndScroll((errors, values) => {
+      if (errors) {
+        return
+      }
+      dispatch({ type: 'login/login', payload: values })
+    })
   }
 
-  onTabChange = (type) => {
-    this.setState({ type });
-  }
-
-  handleSubmit = (err, values) => {
-    const { type } = this.state;
-    if (!err) {
-      this.props.dispatch({
-        type: 'login/login',
-        payload: {
-          ...values,
-          type,
-        },
-      });
-    }
-  }
-
-  changeAutoLogin = (e) => {
-    this.setState({
-      autoLogin: e.target.checked,
-    });
-  }
-
-  renderMessage = (content) => {
-    return (
-      <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />
-    );
-  }
-
-  render() {
-    const { login, submitting } = this.props;
-    const { type } = this.state;
-    return (
-      <div className={styles.main}>
-        <Login
-          defaultActiveKey={type}
-          onTabChange={this.onTabChange}
-          onSubmit={this.handleSubmit}
-        >
-          <Tab key="account" tab="账户密码登录">
-            {
-              login.status === 'error' &&
-              login.type === 'account' &&
-              !login.submitting &&
-              this.renderMessage('账户或密码错误')
-            }
-            <UserName name="loginKey" placeholder="1051750377@qq.com" />
-            <Password name="password" placeholder="tipcrm" />
-            {/*<CaptchaWeb name="captchaWeb"/>*/}
-          </Tab>
-          <div>
-            <Checkbox checked={this.state.autoLogin} onChange={this.changeAutoLogin}>自动登录</Checkbox>
-            <a style={{ float: 'right' }} href="">忘记密码？</a>
-          </div>
-          <Submit loading={submitting}>登录</Submit>
-          <div className={styles.other}>
-            其他登录方式
-            <Icon className={styles.icon} type="qq" />
-            <Icon className={styles.icon} type="wechat" />
-            <Icon className={styles.icon} type="weibo-circle" />
-            <Link className={styles.register} to="/user/register">注册账户</Link>
-          </div>
-        </Login>
+  return (
+    <div className={styles.form}>
+      <div className={styles.logo}>
+        <img alt="logo" src={logo} />
+        <span>{'xxx公司客户信息管理系统'}</span>
       </div>
-    );
-  }
+      <form>
+        <FormItem hasFeedback>
+          {getFieldDecorator('username', {
+            rules: [
+              {
+                required: true,
+              },
+            ],
+          })(<Input onPressEnter={handleOk} placeholder="用户名" prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
+        </FormItem>
+        <FormItem hasFeedback>
+          {getFieldDecorator('password', {
+            rules: [
+              {
+                required: true,
+              },
+            ],
+          })(<Input type="password" onPressEnter={handleOk} placeholder="密码"  prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
+        </FormItem>
+        <Row>
+          <Button type="primary" onClick={handleOk} loading={loading.effects.login}>
+            登录
+          </Button>
+          <p>
+            <span>Username：guest</span>
+            <span>Password：guest</span>
+          </p>
+        </Row>
+
+      </form>
+    </div>
+  )
 }
+
+Login.propTypes = {
+  form: PropTypes.object,
+  dispatch: PropTypes.func,
+  loading: PropTypes.object,
+}
+
+export default connect(({ loading }) => ({ loading }))(Form.create()(Login))
