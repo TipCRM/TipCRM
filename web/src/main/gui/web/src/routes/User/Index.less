@@ -1,13 +1,12 @@
 @import "~antd/lib/style/themes/default.less";
 
-
 .form {
   position: absolute;
   top: 50%;
   left: 50%;
   margin: -160px 0 0 -160px;
   width: 320px;
-  height: 320px;
+  height: auto;
   padding: 36px;
   box-shadow: 0 0 100px rgba(0,0,0,.08);
 
@@ -51,4 +50,53 @@
 .ant-spin-container,
 .ant-spin-nested-loading {
   height: 100%;
+}
+
+.success,
+.warning,
+.error {
+  transition: color 0.3s;
+}
+
+.success {
+  color: @success-color;
+}
+
+.warning {
+  color: @warning-color;
+}
+
+.error {
+  color: @error-color;
+}
+
+.progress-pass > .progress {
+  :global {
+    .ant-progress-bg {
+      background-color: @warning-color;
+    }
+  }
+}
+
+.login{
+  float: right;
+}
+
+.registerResult {
+  :global {
+    .anticon {
+      font-size: 64px;
+    }
+  }
+  .title {
+    margin-top: 32px;
+    font-size: 20px;
+    line-height: 28px;
+  }
+  .actions {
+    margin-top: 40px;
+    a + a {
+      margin-left: 8px;
+    }
+  }
 }

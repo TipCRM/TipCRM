@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import {Link} from 'dva/router';
 import { connect } from 'dva';
-import { Button, Row, Form, Input, Icon, message } from 'antd'
-import styles from './Login.less';
+import { Button, Row, Form, Input, Icon } from 'antd'
+import styles from './Index.less';
 import logo from '../../assets/logo.svg';
 
 const FormItem = Form.Item;
@@ -32,12 +32,13 @@ export default class Login extends React.PureComponent{
 
   render(){
     const {getFieldDecorator} = this.props.form;
+    const {loading} = this.props;
     //console.log(this.props.data);
     return (
       <div className={styles.form}>
         <div className={styles.logo}>
           <img alt="logo" src={logo} />
-          <span>{'信息管理系统'}</span>
+          <span>{'客户信息管理系统'}</span>
         </div>
         <form>
           <FormItem>
@@ -60,13 +61,19 @@ export default class Login extends React.PureComponent{
               ],
             })(<Input type="password" onPressEnter={this.handleSubmit} placeholder="密码"  prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
           </FormItem>
-          <Row>
-            <Button type="primary" onClick={this.handleSubmit} loading={this.loading}>
+          <FormItem>
+            <Button type="primary"
+                    onClick={this.handleSubmit}
+                    loading={loading}
+                    htmlType="submit">
               登录
             </Button>
-            <p>
-              <span>1051750377@qq.com/tipcrm</span>
-            </p>
+          </FormItem>
+          <Row>
+            <span>1051750377@qq.com/tipcrm</span>
+            <Link className={styles.login} to="/user/register">
+              马上注册
+            </Link>
           </Row>
         </form>
       </div>
