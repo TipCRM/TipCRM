@@ -41,15 +41,6 @@ class UserLayout extends React.PureComponent {
     return (
       <DocumentTitle title={this.getPageTitle()}>
         <div className={styles.container}>
-          <div className={styles.top}>
-            <div className={styles.header}>
-              <Link to="/">
-                <img alt="logo" className={styles.logo} src={logo} />
-                <span className={styles.title}>Tip CRM</span>
-              </Link>
-            </div>
-            <div className={styles.desc}>XXX公司客户信息管理系统</div>
-          </div>
           <Switch>
             {getRoutes(match.path, routerData).map(item =>
               (

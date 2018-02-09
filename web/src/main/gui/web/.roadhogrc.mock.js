@@ -135,5 +135,20 @@ const proxy = {
 };
 const apis = {
   'POST /public/api/(.*)':'http://www.potafish.com/public/api/',
+  'GET /api/currentUser': {
+    $desc: "获取当前用户接口",
+    $params: {
+      pageSize: {
+        desc: '分页',
+        exp: 2,
+      },
+    },
+    $body: {
+      name: 'Brother Lu',
+      avatar: '/favicon.png',
+      userid: '00000001',
+      notifyCount: 12,
+    },
+  },
 };
 export default noProxy ? delay(apis,1000) : delay(proxy, 1000);

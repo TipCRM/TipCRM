@@ -1,73 +1,74 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Button, Row, Form, Input, Icon } from 'antd'
+import { Button, Row, Form, Input, Icon, message } from 'antd'
 import styles from './Login.less';
 import logo from '../../assets/logo.svg';
 
-const FormItem = Form.Item
+const FormItem = Form.Item;
 
-const Login = ({
-  loading,
-  dispatch,
-  form: {
-    getFieldDecorator,
-    validateFieldsAndScroll,
-    },
-  }) => {
-  function handleOk () {
-    validateFieldsAndScroll((errors, values) => {
+@connect(({loading}) =>
+  ({loading: loading.effects['login/login'],})
+)
+@Form.create()
+export default class Login extends React.PureComponent{
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((errors, values) => {
       if (errors) {
-        return
+        return;
       }
-      dispatch({ type: 'login/login', payload: values })
+      this.props.dispatch(
+        { type: 'login/login',
+          payload: values
+        });
     })
+    message.error('用户名或密码不正确');
   }
 
-  return (
-    <div className={styles.form}>
-      <div className={styles.logo}>
-        <img alt="logo" src={logo} />
-        <span>{'xxx公司客户信息管理系统'}</span>
+  render(){
+    const {getFieldDecorator} = this.props.form;
+    console.log(this.props.data);
+    return (
+
+      <div className={styles.form}>
+        <div className={styles.logo}>
+          <img alt="logo" src={logo} />
+          <span>{'信息管理系统'}</span>
+        </div>
+        <form>
+          <FormItem>
+            {getFieldDecorator('loginKey', {
+              rules: [
+                {
+                  required: true,
+                  message:'请输入用户名'
+                },
+              ],
+            })(<Input onPressEnter={this.handleSubmit} placeholder="用户名" prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('password', {
+              rules: [
+                {
+                  required: true,
+                  message:'请输入密码',
+                },
+              ],
+            })(<Input type="password" onPressEnter={this.handleSubmit} placeholder="密码"  prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
+          </FormItem>
+          <Row>
+            <Button type="primary" onClick={this.handleSubmit} loading={this.loading}>
+              登录
+            </Button>
+            <p>
+              <span>1051750377@qq.com/tipcrm</span>
+            </p>
+          </Row>
+
+        </form>
       </div>
-      <form>
-        <FormItem hasFeedback>
-          {getFieldDecorator('username', {
-            rules: [
-              {
-                required: true,
-              },
-            ],
-          })(<Input onPressEnter={handleOk} placeholder="用户名" prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
-        </FormItem>
-        <FormItem hasFeedback>
-          {getFieldDecorator('password', {
-            rules: [
-              {
-                required: true,
-              },
-            ],
-          })(<Input type="password" onPressEnter={handleOk} placeholder="密码"  prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
-        </FormItem>
-        <Row>
-          <Button type="primary" onClick={handleOk} loading={loading.effects.login}>
-            登录
-          </Button>
-          <p>
-            <span>Username：guest</span>
-            <span>Password：guest</span>
-          </p>
-        </Row>
-
-      </form>
-    </div>
-  )
+    );
+  }
 }
-
-Login.propTypes = {
-  form: PropTypes.object,
-  dispatch: PropTypes.func,
-  loading: PropTypes.object,
-}
-
-export default connect(({ loading }) => ({ loading }))(Form.create()(Login))
