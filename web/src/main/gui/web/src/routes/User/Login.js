@@ -13,6 +13,10 @@ const FormItem = Form.Item;
 @Form.create()
 export default class Login extends React.PureComponent{
 
+  /**
+   * user login action
+   * @param e
+     */
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((errors, values) => {
@@ -24,14 +28,12 @@ export default class Login extends React.PureComponent{
           payload: values
         });
     })
-    message.error('用户名或密码不正确');
   }
 
   render(){
     const {getFieldDecorator} = this.props.form;
-    console.log(this.props.data);
+    //console.log(this.props.data);
     return (
-
       <div className={styles.form}>
         <div className={styles.logo}>
           <img alt="logo" src={logo} />
@@ -66,7 +68,6 @@ export default class Login extends React.PureComponent{
               <span>1051750377@qq.com/tipcrm</span>
             </p>
           </Row>
-
         </form>
       </div>
     );

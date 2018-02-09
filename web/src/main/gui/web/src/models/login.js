@@ -29,6 +29,8 @@ export default {
         // The refresh will automatically redirect to the home page
         // yield put(routerRedux.push('/'));
         window.location.reload();
+      } else {
+        throw res.data;
       }
     },
     *logout(_, { put, select }) {

@@ -8,11 +8,14 @@ import createLoading from 'dva-loading';
 import 'moment/locale/zh-cn';
 import FastClick from 'fastclick';
 import './rollbar';
-
+import {message} from 'antd';
 import './index.less';
 // 1. Initialize
 const app = dva({
   history: createHistory(),
+  onError (error) {
+    message.error(error.message)
+  },
 });
 
 // 2. Plugins
