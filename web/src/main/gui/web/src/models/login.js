@@ -11,11 +11,11 @@ export default {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
-      let res ={};
-      if (response.status === 200) {
-        res = {...response,...{currentAuthority:'admin'}};
-      } else {
+      let res;
+      if (response.status >= 400){
         res = {...response,...{currentAuthority:'guest'}};
+      } else{
+        res = {...response,...{currentAuthority:'admin'}};
       }
       console.log(res);
       yield put({
@@ -29,6 +29,8 @@ export default {
         // The refresh will automatically redirect to the home page
         // yield put(routerRedux.push('/'));
         window.location.reload();
+      } else {
+        throw res.data;
       }
     },
     *logout(_, { put, select }) {
@@ -57,10 +59,12 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
+      //console.log(payload);
       setAuthority(payload.currentAuthority);
       return {
         ...state,
         status: payload.status,
+        type: payload.type,
         data: payload.data,
       };
     },
