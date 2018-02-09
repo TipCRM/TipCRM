@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd';
-import styles from './Register.less';
+import { Form, Input, Button, Row, Col, Popover, Progress, Icon } from 'antd';
+import styles from './Index.less';
+import logo from '../../assets/logo.svg';
 
 const FormItem = Form.Item;
-const { Option } = Select;
-const InputGroup = Input.Group;
 
 const passwordStatusMap = {
   ok: <div className={styles.success}>强度：强</div>,
@@ -31,11 +30,10 @@ export default class Register extends Component {
     confirmDirty: false,
     visible: false,
     help: '',
-    prefix: '86',
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.register.status === 'ok') {
+    if (nextProps.register.status === 200) {
       this.props.dispatch(routerRedux.push('/user/register-result'));
     }
   }
@@ -70,13 +68,13 @@ export default class Register extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    console.log('aaaa');
     this.props.form.validateFields({ force: true }, (err, values) => {
       if (!err) {
         this.props.dispatch({
           type: 'register/submit',
           payload: {
             ...values,
-            prefix: this.state.prefix,
           },
         });
       }
@@ -125,12 +123,6 @@ export default class Register extends Component {
     }
   };
 
-  changePrefix = (value) => {
-    this.setState({
-      prefix: value,
-    });
-  };
-
   renderPasswordProgress = () => {
     const { form } = this.props;
     const value = form.getFieldValue('password');
@@ -151,13 +143,26 @@ export default class Register extends Component {
   render() {
     const { form, submitting } = this.props;
     const { getFieldDecorator } = form;
-    const { count, prefix } = this.state;
+    const { count } = this.state;
     return (
-      <div className={styles.main}>
-        <h3>注册</h3>
+      <div className={styles.form} style={{marginTop:'-320px'}}>
+        <div className={styles.logo}>
+          <img alt="logo" src={logo} />
+          <span>{'系统账号注册'}</span>
+        </div>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('mail', {
+            {getFieldDecorator('username', {
+              rules: [
+                {
+                  required: true,
+                  message:'请输入用户名'
+                },
+              ],
+            })(<Input onPressEnter={this.handleSubmit} placeholder="用户名" prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
+          </FormItem>
+          <FormItem hasFeedback>
+            {getFieldDecorator('email', {
               rules: [
                 {
                   required: true,
@@ -168,9 +173,9 @@ export default class Register extends Component {
                   message: '邮箱地址格式错误！',
                 },
               ],
-            })(<Input size="large" placeholder="邮箱" />)}
+            })(<Input placeholder="邮箱" prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }}/>} />)}
           </FormItem>
-          <FormItem help={this.state.help}>
+          <FormItem help={this.state.help} hasFeedback>
             <Popover
               content={
                 <div style={{ padding: '4px 0' }}>
@@ -193,14 +198,14 @@ export default class Register extends Component {
                 ],
               })(
                 <Input
-                  size="large"
                   type="password"
                   placeholder="至少6位密码，区分大小写"
+                  prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }}/>}
                 />
               )}
             </Popover>
           </FormItem>
-          <FormItem>
+          <FormItem hasFeedback>
             {getFieldDecorator('confirm', {
               rules: [
                 {
@@ -211,19 +216,13 @@ export default class Register extends Component {
                   validator: this.checkConfirm,
                 },
               ],
-            })(<Input size="large" type="password" placeholder="确认密码" />)}
+            })(<Input
+              type="password"
+              placeholder="确认密码"
+              prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }}/>}
+            />)}
           </FormItem>
-          <FormItem>
-            <InputGroup compact>
-              <Select
-                size="large"
-                value={prefix}
-                onChange={this.changePrefix}
-                style={{ width: '20%' }}
-              >
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-              </Select>
+          <FormItem hasFeedback>
               {getFieldDecorator('mobile', {
                 rules: [
                   {
@@ -237,12 +236,10 @@ export default class Register extends Component {
                 ],
               })(
                 <Input
-                  size="large"
-                  style={{ width: '80%' }}
                   placeholder="11位手机号"
+                  prefix={<Icon type="mobile" style={{ color: 'rgba(0,0,0,.25)' }}/>}
                 />
               )}
-            </InputGroup>
           </FormItem>
           <FormItem>
             <Row gutter={8}>
@@ -254,28 +251,25 @@ export default class Register extends Component {
                       message: '请输入验证码！',
                     },
                   ],
-                })(<Input size="large" placeholder="验证码" />)}
+                })(<Input placeholder="验证码" />)}
               </Col>
               <Col span={8}>
                 <Button
-                  size="large"
                   disabled={count}
                   className={styles.getCaptcha}
                   onClick={this.onGetCaptcha}
                 >
-                  {count ? `${count} s` : '获取验证码'}
+                  {count ? `${count} s` : '验证码'}
                 </Button>
               </Col>
             </Row>
           </FormItem>
           <FormItem>
             <Button
-              size="large"
               loading={submitting}
               className={styles.submit}
               type="primary"
-              htmlType="submit"
-            >
+              htmlType="submit">
               注册
             </Button>
             <Link className={styles.login} to="/user/login">

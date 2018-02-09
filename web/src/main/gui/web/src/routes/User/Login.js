@@ -1,85 +1,81 @@
-import React, { Component } from 'react';
+import React from 'react';
+import {Link} from 'dva/router';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
-import { Checkbox, Alert, Icon } from 'antd';
-import Login from '../../components/Login';
-import styles from './Login.less';
+import { Button, Row, Form, Input, Icon } from 'antd'
+import styles from './Index.less';
+import logo from '../../assets/logo.svg';
 
-const { Tab, UserName, Password, Mobile, Captcha, CaptchaWeb, Submit } = Login;
+const FormItem = Form.Item;
 
-@connect(({ login, loading }) => ({
-  login,
-  submitting: loading.effects['login/login'],
-}))
-export default class LoginPage extends Component {
-  state = {
-    type: 'account',
-    autoLogin: true,
+@connect(({loading}) =>
+  ({loading: loading.effects['login/login'],})
+)
+@Form.create()
+export default class Login extends React.PureComponent{
+
+  /**
+   * user login action
+   * @param e
+     */
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((errors, values) => {
+      if (errors) {
+        return;
+      }
+      this.props.dispatch(
+        { type: 'login/login',
+          payload: values
+        });
+    })
   }
 
-  onTabChange = (type) => {
-    this.setState({ type });
-  }
-
-  handleSubmit = (err, values) => {
-    const { type } = this.state;
-    if (!err) {
-      this.props.dispatch({
-        type: 'login/login',
-        payload: {
-          ...values,
-          type,
-        },
-      });
-    }
-  }
-
-  changeAutoLogin = (e) => {
-    this.setState({
-      autoLogin: e.target.checked,
-    });
-  }
-
-  renderMessage = (content) => {
+  render(){
+    const {getFieldDecorator} = this.props.form;
+    const {loading} = this.props;
+    //console.log(this.props.data);
     return (
-      <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />
-    );
-  }
-
-  render() {
-    const { login, submitting } = this.props;
-    const { type } = this.state;
-    return (
-      <div className={styles.main}>
-        <Login
-          defaultActiveKey={type}
-          onTabChange={this.onTabChange}
-          onSubmit={this.handleSubmit}
-        >
-          <Tab key="account" tab="账户密码登录">
-            {
-              login.status === 'error' &&
-              login.type === 'account' &&
-              !login.submitting &&
-              this.renderMessage('账户或密码错误')
-            }
-            <UserName name="userName" placeholder="admin/user" />
-            <Password name="password" placeholder="888888/123456" />
-            <CaptchaWeb name="captchaWeb"/>
-          </Tab>
-          <div>
-            <Checkbox checked={this.state.autoLogin} onChange={this.changeAutoLogin}>自动登录</Checkbox>
-            <a style={{ float: 'right' }} href="">忘记密码？</a>
-          </div>
-          <Submit loading={submitting}>登录</Submit>
-          <div className={styles.other}>
-            其他登录方式
-            <Icon className={styles.icon} type="qq" />
-            <Icon className={styles.icon} type="wechat" />
-            <Icon className={styles.icon} type="weibo-circle" />
-            <Link className={styles.register} to="/user/register">注册账户</Link>
-          </div>
-        </Login>
+      <div className={styles.form}>
+        <div className={styles.logo}>
+          <img alt="logo" src={logo} />
+          <span>{'客户信息管理系统'}</span>
+        </div>
+        <form>
+          <FormItem>
+            {getFieldDecorator('loginKey', {
+              rules: [
+                {
+                  required: true,
+                  message:'请输入用户名'
+                },
+              ],
+            })(<Input onPressEnter={this.handleSubmit} placeholder="用户名" prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('password', {
+              rules: [
+                {
+                  required: true,
+                  message:'请输入密码',
+                },
+              ],
+            })(<Input type="password" onPressEnter={this.handleSubmit} placeholder="密码"  prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
+          </FormItem>
+          <FormItem>
+            <Button type="primary"
+                    onClick={this.handleSubmit}
+                    loading={loading}
+                    htmlType="submit">
+              登录
+            </Button>
+          </FormItem>
+          <Row>
+            <span>1051750377@qq.com/tipcrm</span>
+            <Link className={styles.login} to="/user/register">
+              马上注册
+            </Link>
+          </Row>
+        </form>
       </div>
     );
   }
