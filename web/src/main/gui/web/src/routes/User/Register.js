@@ -68,7 +68,6 @@ export default class Register extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log('aaaa');
     this.props.form.validateFields({ force: true }, (err, values) => {
       if (!err) {
         this.props.dispatch({
@@ -151,7 +150,7 @@ export default class Register extends Component {
           <span>{'系统账号注册'}</span>
         </div>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem>
+          <FormItem hasFeedback>
             {getFieldDecorator('username', {
               rules: [
                 {

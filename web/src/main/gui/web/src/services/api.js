@@ -81,3 +81,14 @@ export async function fakeRegister(params) {
 export async function queryNotices() {
   return request('/api/notices');
 }
+
+export async function queryCustomers(params) {
+  return request('/public/api/customers',{
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function queryMenu() {
+  return request('/public/api/menu');
+}

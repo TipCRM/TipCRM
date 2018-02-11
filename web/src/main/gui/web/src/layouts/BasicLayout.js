@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Icon, message } from 'antd';
+import { Layout, Icon, message, Spin } from 'antd';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
 import { Route, Redirect, Switch, routerRedux } from 'dva/router';
@@ -72,6 +72,7 @@ class BasicLayout extends React.PureComponent {
   }
   state = {
     isMobile,
+    state:[],
   };
   getChildContext() {
     const { location, routerData } = this.props;
@@ -80,12 +81,20 @@ class BasicLayout extends React.PureComponent {
       breadcrumbNameMap: routerData,
     };
   }
+  componentWillMount(){
+    console.log("start init menu");
+    this.props.dispatch({
+      type: 'global/fetchMenu',
+    });
+  }
+
   componentDidMount() {
     enquireScreen((mobile) => {
       this.setState({
         isMobile: mobile,
       });
     });
+    // console.log("start init fetchCurrent");
     this.props.dispatch({
       type: 'user/fetchCurrent',
     });
@@ -140,10 +149,31 @@ class BasicLayout extends React.PureComponent {
       });
     }
   }
+  initSideMenu=(item) => {
+    const {menu} = this.props;
+    return(
+      menu.map(menu => {
+        if (menu.path === item.path){
+          console.log(menu.path);
+          return(
+            <AuthorizedRoute
+              key={item.key}
+              path={item.path}
+              component={item.component}
+              exact={item.exact}
+              authority={item.authority}
+              redirectPath="/exception/403"
+            />
+          );
+        }
+      })
+    );
+  }
   render() {
     const {
-      currentUser, collapsed, fetchingNotices, notices, routerData, match, location,
+      currentUser, collapsed, fetchingNotices, notices, routerData, match, location, fetchingMenu
     } = this.props;
+    const {menu} = this.props;
     const links = [{
       key: 'help',
       title: '帮助',
@@ -160,18 +190,20 @@ class BasicLayout extends React.PureComponent {
     const bashRedirect = this.getBashRedirect();
     const layout = (
       <Layout>
-        <SiderMenu
-          logo={logo}
-          // 不带Authorized参数的情况下如果没有权限,会强制跳到403界面
-          // If you do not have the Authorized parameter
-          // you will be forced to jump to the 403 interface without permission
-          Authorized={Authorized}
-          menuData={getMenuData()}
-          collapsed={collapsed}
-          location={location}
-          isMobile={this.state.isMobile}
-          onCollapse={this.handleMenuCollapse}
-        />
+        <Spin spinning={fetchingMenu}>
+          <SiderMenu
+            logo={logo}
+            // 不带Authorized参数的情况下如果没有权限,会强制跳到403界面
+            // If you do not have the Authorized parameter
+            // you will be forced to jump to the 403 interface without permission
+            Authorized={Authorized}
+            menuData={getMenuData()}
+            collapsed={collapsed}
+            location={location}
+            isMobile={this.state.isMobile}
+            onCollapse={this.handleMenuCollapse}
+          />
+        </Spin>
         <Layout>
           <GlobalHeader
             logo={logo}
@@ -194,19 +226,18 @@ class BasicLayout extends React.PureComponent {
                   )
                 }
                 {
-                  getRoutes(match.path, routerData).map(item =>
-                    (
-                      <AuthorizedRoute
-                        key={item.key}
-                        path={item.path}
-                        component={item.component}
-                        exact={item.exact}
-                        authority={item.authority}
-                        redirectPath="/exception/403"
-                      />
-                    )
-                  )
+                  getRoutes(match.path, routerData).map(item =>(
+                    <AuthorizedRoute
+                      key={item.key}
+                      path={item.path}
+                      component={item.component}
+                      exact={item.exact}
+                      authority={item.authority}
+                      redirectPath="/exception/403"
+                    />
+                  ))
                 }
+                <Route exact path="/list/search/projects" component={routerData['/index'].component} />
                 <Redirect exact from="/" to={bashRedirect} />
                 <Route render={NotFound} />
               </Switch>
@@ -238,5 +269,7 @@ export default connect(({ user, global, loading }) => ({
   currentUser: user.currentUser,
   collapsed: global.collapsed,
   fetchingNotices: loading.effects['global/fetchNotices'],
+  fetchingMenu: loading.effects['global/fetchMenu'],
   notices: global.notices,
+  menu: global.menu,
 }))(BasicLayout);

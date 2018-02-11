@@ -75,9 +75,14 @@ function getFlatMenuData(menus) {
  */
 export const getRouterData = (app) => {
   const routerConfig = {
+    /** baselayout and userlayout create by brotherlu **/
     '/': {
-      component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
+      component: dynamicWrapper(app, ['user', 'login','global'], () => import('../layouts/BasicLayout')),
     },
+    '/user': {
+      component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
+    },
+    /**** end ****/
     '/exception/403': {
       component: dynamicWrapper(app, [], () => import('../routes/Exception/403')),
     },
@@ -90,9 +95,6 @@ export const getRouterData = (app) => {
     '/exception/trigger': {
       component: dynamicWrapper(app, ['error'], () => import('../routes/Exception/triggerException')),
     },
-    '/user': {
-      component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
-    },
     '/user/login': {
       component: dynamicWrapper(app, ['login'], () => import('../routes/User/Login')),
     },
@@ -104,7 +106,10 @@ export const getRouterData = (app) => {
     },
     '/index': {
       component: dynamicWrapper(app,[],() => import ('../routes/Index/Index')),
-  },
+    },
+    '/customer': {
+      component: dynamicWrapper(app,['customer'],() => import ('../routes/Customer/Customer')),
+    },
   };
   // Get name from ./menu.js or just set it in the router data.
   const menuData = getFlatMenuData(getMenuData());
@@ -117,5 +122,6 @@ export const getRouterData = (app) => {
       authority: routerConfig[item].authority || menuItem.authority,
     };
   });
+  console.log(routerData);
   return routerData;
 };
