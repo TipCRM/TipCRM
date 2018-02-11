@@ -3,12 +3,22 @@ import { Button } from 'antd';
 import { Link } from 'dva/router';
 import Result from '../../components/Result';
 import styles from './Index.less';
+import {fakeAccountLogin} from '../../services/api'
 
 const title = <div className={styles.title}>你的账户：AntDesign@example.com 注册成功</div>;
 
+const handlerOnClick=(e)=>{
+  e.preventDefault();
+  const res = fakeAccountLogin({loginKey:'AAAA',password:'aaaa'});
+  const {data} = res;
+  console.log(data);
+  console.log(res);
+  return res;
+}
+
 const actions = (
   <div className={styles.actions}>
-    <Link to="/"><Button>返回首页</Button></Link>
+    <Link to="/"><Button onClick={handlerOnClick}>返回首页</Button></Link>
   </div>
 );
 

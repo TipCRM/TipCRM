@@ -47,7 +47,7 @@ export default class SiderMenu extends PureComponent {
       currentMenuSelectedKeys = currentMenuSelectedKeys.concat(this.getSelectedMenuKeys(item));
     });
     if (currentMenuSelectedKeys.length === 0) {
-      return ['dashboard'];
+      return ['index'];
     }
     return currentMenuSelectedKeys;
   }

@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "precommit": "npm run lint-staged",
-    "start": "cross-env DISABLE_ESLINT=true roadhog dev",
-    "start:no-proxy": "cross-env NO_PROXY=true DISABLE_ESLINT=true roadhog dev",
+    "start": "cross-env DISABLE_ESLINT=true roadhog dev BROWN=NO",
+    "start:no-proxy": "cross-env NO_PROXY=true DISABLE_ESLINT=true BROWN=NO roadhog dev",
     "build": "cross-env DISABLE_ESLINT=true roadhog build",
     "site": "roadhog-api-doc static && gh-pages -d dist",
     "analyze": "ANALYZE=true roadhog build",
