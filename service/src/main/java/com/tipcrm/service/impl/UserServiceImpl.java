@@ -41,28 +41,6 @@ public class UserServiceImpl implements UserService {
     private ConfigurationRepository configurationRepository;
 
     @Override
-    public Set<String> getRoleListByUserId(Integer userId) {
-        Set<String> roles = new HashSet<String>();
-        User user = userRepository.findOne(userId);
-        for (Role role : user.getRoles()) {
-            roles.add(role.getName());
-        }
-        return roles;
-    }
-
-    @Override
-    public Set<String> getPermissionValueListByUserId(Integer userId) {
-        Set<String> permissions = new HashSet<String>();
-        User user = userRepository.findOne(userId);
-        for (Role role : user.getRoles()) {
-            for (Permission permission : role.getPermissions()) {
-                permissions.add(permission.getValue());
-            }
-        }
-        return permissions;
-    }
-
-    @Override
     public String regist(RegistBo registBo) throws Exception {
         Configuration registable = configurationRepository.findByKey(ConfigurationItems.REGISTABLE.name());
         if (!Boolean.valueOf(registable.getValue())) {

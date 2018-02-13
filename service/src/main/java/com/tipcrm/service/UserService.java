@@ -6,9 +6,7 @@ import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.RegistBo;
 
 public interface UserService {
-    Set<String> getRoleListByUserId(Integer userId);
 
-    Set<String> getPermissionValueListByUserId(Integer userId);
 
     String regist(RegistBo registBo) throws Exception;
 
