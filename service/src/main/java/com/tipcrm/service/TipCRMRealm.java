@@ -7,7 +7,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -22,7 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class TipCRMRealm extends AuthorizingRealm {
 
     @Autowired
-    private UserService userService;
+    private RoleService roleService;
+
+    @Autowired
+    private PermissionService permissionService;
 
     @Autowired
     private UserRepository userRepository;
@@ -34,8 +36,8 @@ public class TipCRMRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         Integer userId = (Integer) SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.setRoles(userService.getRoleListByUserId(userId));
-        info.setStringPermissions(userService.getPermissionValueListByUserId(userId));
+        info.setRoles(roleService.getRoleListByUserId(userId));
+        info.setStringPermissions(permissionService.getPermissionValueListByUserId(userId));
         return info;
     }
 

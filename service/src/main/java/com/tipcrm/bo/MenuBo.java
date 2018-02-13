@@ -9,6 +9,16 @@ public class MenuBo {
     private String url;
     private List<MenuBo> menuBos = new ArrayList<MenuBo>();
 
+    public MenuBo(String name, String icon, String url, List<MenuBo> menuBos) {
+        this.name = name;
+        this.icon = icon;
+        this.url = url;
+        this.menuBos = menuBos;
+    }
+
+    public MenuBo() {
+    }
+
     public String getName() {
         return name;
     }
