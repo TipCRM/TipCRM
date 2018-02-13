@@ -11,14 +11,13 @@ public class WebContextImpl implements WebContext{
     @Autowired
     private UserRepository userRepository;
 
-    @Override
     public Integer getCurrentUserId() {
         return (Integer) SecurityUtils.getSubject().getPrincipal();
     }
 
     @Override
-    public String getCurrentUserName() {
+    public User getCurrentUser() {
         User user = userRepository.findOne(getCurrentUserId());
-        return user.getUserName();
+        return user;
     }
 }

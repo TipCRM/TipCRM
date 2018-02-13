@@ -3,9 +3,9 @@ package com.tipcrm.web.publicapi;
 import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.RegistBo;
 import com.tipcrm.service.UserService;
-import com.tipcrm.web.start.ShiroProps;
 import com.tipcrm.web.util.JsonEntity;
 import com.tipcrm.web.util.ResponseHelper;
+import io.swagger.annotations.Api;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.slf4j.Logger;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/public/api")
+@Api
 public class LoginApi {
 
     @Autowired
@@ -25,30 +26,22 @@ public class LoginApi {
 
     private Logger logger = LoggerFactory.getLogger(LoginApi.class);
 
-    @Autowired
-    private ShiroProps shiroProps;
-
     @RequestMapping(value = "login", method = {RequestMethod.POST})
-    public JsonEntity<String> login(@RequestBody LoginBo loginBo) {
+    public JsonEntity<String> login(@RequestBody LoginBo loginBo) throws Exception {
         try {
             userService.login(loginBo);
-            return ResponseHelper.createInstance(shiroProps.getSuccessUrl());
-        } catch (UnknownAccountException e) {
-            return new JsonEntity<>(500, "账号不存在");
-        } catch (IncorrectCredentialsException e) {
-            return new JsonEntity<>(500, "密码不正确");
+            return ResponseHelper.createInstance("success");
+        } catch (UnknownAccountException | IncorrectCredentialsException e) {
+            throw new IncorrectCredentialsException("账号或密码不正确");
         } catch (Exception e) {
-            return new JsonEntity<>(500, "登陆失败");
+            throw new Exception("登陆失败，请联系管理员");
         }
     }
 
     @RequestMapping(value = "regist", method = {RequestMethod.POST})
-    public JsonEntity<String> regist(@RequestBody RegistBo registBo) {
-        try {
-            String name = userService.regist(registBo);
-            return ResponseHelper.createInstance(name);
-        } catch (Exception e) {
-            return new JsonEntity<>(500, e.getMessage());
-        }
+    public JsonEntity<String> regist(@RequestBody RegistBo registBo) throws Exception {
+        String name = userService.regist(registBo);
+        return ResponseHelper.createInstance(name);
     }
+
 }

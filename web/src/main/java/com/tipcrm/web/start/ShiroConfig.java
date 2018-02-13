@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -21,18 +20,17 @@ public class ShiroConfig {
     private static final Logger logger = LoggerFactory.getLogger(ShiroConfig.class);
 
     @Bean
-    @ConfigurationProperties(prefix = "shiroFilter")
-    public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-        shiroFilterFactoryBean.setSecurityManager(securityManager);
-        return shiroFilterFactoryBean;
-    }
-
-    @Bean
     public SecurityManager securityManager(@Qualifier(value = "hashedCredentialsMatcher") HashedCredentialsMatcher hashedCredentialsMatcher) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(tipCRMRealm(hashedCredentialsMatcher));
         return securityManager;
+    }
+
+    @Bean("shiroFilter")
+    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        shiroFilterFactoryBean.setSecurityManager(securityManager);
+        return shiroFilterFactoryBean;
     }
 
     @Bean
@@ -47,12 +45,19 @@ public class ShiroConfig {
         return new LifecycleBeanPostProcessor();
     }
 
+    @DependsOn("lifecycleBeanPostProcessor")
     @Bean
-    @DependsOn( {"lifecycleBeanPostProcessor"})
-    public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator() {
+    public DefaultAdvisorAutoProxyCreator autoProxyCreator() {
         DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
         advisorAutoProxyCreator.setProxyTargetClass(true);
         return advisorAutoProxyCreator;
+    }
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor sourceAdvisor(DefaultWebSecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor sourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        sourceAdvisor.setSecurityManager(securityManager);
+        return sourceAdvisor;
     }
 
     @Bean(name = "hashedCredentialsMatcher")
