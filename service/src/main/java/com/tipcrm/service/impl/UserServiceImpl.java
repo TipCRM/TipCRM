@@ -1,21 +1,31 @@
 package com.tipcrm.service.impl;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
-import com.tipcrm.bo.Constants;
+import com.google.common.collect.Lists;
+import com.tipcrm.constant.Constants;
 import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.RegistBo;
+import com.tipcrm.constant.ListBoxCategory;
+import com.tipcrm.constant.Roles;
+import com.tipcrm.constant.UserStatus;
 import com.tipcrm.dao.entity.Configuration;
-import com.tipcrm.dao.entity.Permission;
+import com.tipcrm.dao.entity.Department;
+import com.tipcrm.dao.entity.Level;
+import com.tipcrm.dao.entity.ListBox;
 import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.entity.Security;
 import com.tipcrm.dao.entity.User;
-import com.tipcrm.dao.enums.ConfigurationItems;
+import com.tipcrm.constant.ConfigurationItems;
 import com.tipcrm.dao.repository.ConfigurationRepository;
+import com.tipcrm.dao.repository.DepartmentRepository;
+import com.tipcrm.dao.repository.LevelRepository;
+import com.tipcrm.dao.repository.RoleRepository;
 import com.tipcrm.dao.repository.SecurityRepository;
 import com.tipcrm.dao.repository.UserRepository;
+import com.tipcrm.service.ListBoxService;
 import com.tipcrm.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -26,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
@@ -40,18 +51,56 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ConfigurationRepository configurationRepository;
 
+    @Autowired
+    private ListBoxService listBoxService;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
+
+    @Autowired
+    private LevelRepository levelRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
     @Override
     public String regist(RegistBo registBo) throws Exception {
         Configuration registable = configurationRepository.findByKey(ConfigurationItems.REGISTABLE.name());
+        ListBox userStatusActive = listBoxService.findByCategoryAndName(ListBoxCategory.USER_STATUS.name(), UserStatus.ACTIVE.name());
+        List<User> users = userRepository.findByUserName(Constants.User.SYSTEM);
+        if (CollectionUtils.isEmpty(users)) {
+            throw new Exception("系统用户丢失，请联系运维人员修复数据库");
+        }
+        User systemUser = users.get(0);
         if (!Boolean.valueOf(registable.getValue())) {
             throw new Exception("管理员没有开放注册通道");
+        }
+        User manager = null;
+        if (registBo.getManagerId() != null) {
+            manager = userRepository.findOne(registBo.getManagerId());
+        }
+        Department department = null;
+        if (registBo.getDepartmentId() != null) {
+            department = departmentRepository.findOne(registBo.getDepartmentId());
+        }
+        Level level = levelRepository.findByName(Roles.GENERAL_MANAGER.name());
+        Role role = null;
+        if (registBo.getTopManager()) {
+            role = roleRepository.findByName(Roles.GENERAL_MANAGER.name());
+        } else {
+            role = roleRepository.findByName(Roles.NORMAL.name());
         }
         validateRegistUser(registBo);
         User user = new User();
         user.setEmail(registBo.getEmail());
         user.setUserName(registBo.getUsername());
-        user.setStatus(1);
+        user.setStatus(userStatusActive);
+        user.setHire(systemUser);
         user.setHireTime(new Date());
+        user.setManager(manager);
+        user.setDepartment(department);
+        user.setLevel(level);
+        user.setRoles(Lists.newArrayList(role));
         userRepository.save(user);
         Security security = new Security();
         security.setUserId(user.getId());
@@ -79,6 +128,9 @@ public class UserServiceImpl implements UserService {
         }
         if (StringUtils.isBlank(registBo.getUsername())) {
             throw new Exception("姓名不能为空");
+        }
+        if (Constants.User.SYSTEM.equals(registBo.getUsername())) {
+            throw new Exception("非法用户名");
         }
         if (!EmailValidator.getInstance().isValid(registBo.getEmail())) {
             throw new Exception("邮箱格式不正确");

@@ -5,11 +5,13 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -35,40 +37,50 @@ public class User {
     @Column(name = "phone_no")
     private String phoneNo;
 
-    @Column(name = "status")
-    private Integer status;
+    @Column(name = "avatar")
+    private String avatar;
 
-    @Column(name = "hire_id")
-    private Integer hireId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "status")
+    private ListBox status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hire_id")
+    private User hire;
 
     @Column(name = "hire_time")
     private Date hireTime;
 
-    @Column(name = "manager_id")
-    private Integer managerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager_id")
+    private User manager;
 
-    @Column(name = "department_id")
-    private Integer departmentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private Department department;
 
-    @Column(name = "level_id")
-    private Integer levelId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "level_id")
+    private Level level;
 
-    @Column(name = "dismiss_id")
-    private Integer dismissId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dismiss_id")
+    private User dismissUser;
 
     @Column(name = "dismiss_date")
-    private Date dismissDate;
+    private Date dismissTime;
 
     @Column(name = "dismiss_reason")
     private String dismissReason;
 
-    @Column(name = "update_id")
-    private Integer updateId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "update_id")
+    private User updateUser;
 
     @Column(name = "update_time")
     private Date updateTime;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private List<Role> roles = new ArrayList<Role>();
 
@@ -120,20 +132,28 @@ public class User {
         this.phoneNo = phoneNo;
     }
 
-    public Integer getStatus() {
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public ListBox getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(ListBox status) {
         this.status = status;
     }
 
-    public Integer getHireId() {
-        return hireId;
+    public User getHire() {
+        return hire;
     }
 
-    public void setHireId(Integer hireId) {
-        this.hireId = hireId;
+    public void setHire(User hire) {
+        this.hire = hire;
     }
 
     public Date getHireTime() {
@@ -144,44 +164,44 @@ public class User {
         this.hireTime = hireTime;
     }
 
-    public Integer getManagerId() {
-        return managerId;
+    public User getManager() {
+        return manager;
     }
 
-    public void setManagerId(Integer managerId) {
-        this.managerId = managerId;
+    public void setManager(User manager) {
+        this.manager = manager;
     }
 
-    public Integer getDepartmentId() {
-        return departmentId;
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setDepartmentId(Integer departmentId) {
-        this.departmentId = departmentId;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
-    public Integer getLevelId() {
-        return levelId;
+    public Level getLevel() {
+        return level;
     }
 
-    public void setLevelId(Integer levelId) {
-        this.levelId = levelId;
+    public void setLevel(Level level) {
+        this.level = level;
     }
 
-    public Integer getDismissId() {
-        return dismissId;
+    public User getDismissUser() {
+        return dismissUser;
     }
 
-    public void setDismissId(Integer dismissId) {
-        this.dismissId = dismissId;
+    public void setDismissUser(User dismissUser) {
+        this.dismissUser = dismissUser;
     }
 
-    public Date getDismissDate() {
-        return dismissDate;
+    public Date getDismissTime() {
+        return dismissTime;
     }
 
-    public void setDismissDate(Date dismissDate) {
-        this.dismissDate = dismissDate;
+    public void setDismissTime(Date dismissTime) {
+        this.dismissTime = dismissTime;
     }
 
     public String getDismissReason() {
@@ -192,12 +212,12 @@ public class User {
         this.dismissReason = dismissReason;
     }
 
-    public Integer getUpdateId() {
-        return updateId;
+    public User getUpdateUser() {
+        return updateUser;
     }
 
-    public void setUpdateId(Integer updateId) {
-        this.updateId = updateId;
+    public void setUpdateUser(User updateUser) {
+        this.updateUser = updateUser;
     }
 
     public Date getUpdateTime() {

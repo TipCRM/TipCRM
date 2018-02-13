@@ -15,8 +15,8 @@ spring:
       datasource:
          driverClassName: com.mysql.jdbc.Driver
          url: jdbc:mysql://www.potafish.com:3306/TIP_CRM?zeroDateTimeBehavior=convertToNull&verifyServerCertificate=false&useSSL=true&useUnicode=true&characterEncoding=utf-8
-         username:
-         password:
+         username: neilw
+         password: tipcrm
       jackson:
          date-format: MM/dd/yyyy hh:mm:ss a
 #         time-zone: ${TZ}

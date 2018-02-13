@@ -4,7 +4,9 @@ public class RegistBo {
     private String email;
     private String password;
     private String username;
-    private Boolean isManager;
+    private Boolean isTopManager;
+    private Integer managerId;
+    private Integer departmentId;
 
     public String getEmail() {
         return email;
@@ -31,10 +33,34 @@ public class RegistBo {
     }
 
     public Boolean getManager() {
-        return isManager;
+        return isTopManager;
     }
 
     public void setManager(Boolean manager) {
-        isManager = manager;
+        isTopManager = manager;
+    }
+
+    public Integer getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(Integer managerId) {
+        this.managerId = managerId;
+    }
+
+    public Boolean getTopManager() {
+        return isTopManager;
+    }
+
+    public void setTopManager(Boolean topManager) {
+        isTopManager = topManager;
+    }
+
+    public Integer getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
     }
 }

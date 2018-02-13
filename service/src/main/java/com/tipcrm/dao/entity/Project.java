@@ -1,4 +1,5 @@
 package com.tipcrm.dao.entity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,19 +7,19 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "configuration")
-public class Configuration {
+@Table(name = "project")
+public class Project extends BaseAllEntity{
 
     @Id
     @GeneratedValue
     @Column(name = "oid")
     private Integer id;
 
-    @Column(name = "key")
-    private String key;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "value")
-    private String value;
+    @Column(name = "note")
+    private String note;
 
     public Integer getId() {
         return id;
@@ -28,19 +29,19 @@ public class Configuration {
         this.id = id;
     }
 
-    public String getKey() {
-        return key;
+    public String getName() {
+        return name;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getValue() {
-        return value;
+    public String getNote() {
+        return note;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setNote(String note) {
+        this.note = note;
     }
 }
