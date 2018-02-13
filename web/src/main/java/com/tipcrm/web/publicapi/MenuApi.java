@@ -5,15 +5,19 @@ import java.util.List;
 import com.tipcrm.bo.MenuBo;
 import com.tipcrm.web.util.JsonEntity;
 import com.tipcrm.web.util.ResponseHelper;
+import io.swagger.annotations.Api;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/public/api/")
+@Api
 public class MenuApi {
 
     @RequestMapping(value = "menu", method = RequestMethod.GET)
+    @RequiresAuthentication
     public JsonEntity<List<MenuBo>> getMenu(){
         List<MenuBo> menuBos = new ArrayList<>();
         MenuBo menuBo = new MenuBo();
