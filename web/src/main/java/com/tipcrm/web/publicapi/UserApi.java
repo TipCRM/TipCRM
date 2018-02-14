@@ -17,6 +17,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,6 +41,18 @@ public class UserApi {
     public JsonEntity<UserBo> getUser() throws Exception {
         Integer userId = webContext.getCurrentUserId();
         return ResponseHelper.createInstance(userService.getUserByUserId(userId));
+
+    }
+
+    @RequestMapping(value = "test", method = RequestMethod.GET)
+    @RequiresAuthentication
+    public JsonEntity<String> getUser1() throws Exception {
+        Integer userId = webContext.getCurrentUserId();
+        User user = userService.findOne(userId);
+        user = userService.findOne(userId);
+        user = userService.findOne(userId);
+        user = userService.findOne(userId);
+        return ResponseHelper.createInstance("success");
 
     }
 }

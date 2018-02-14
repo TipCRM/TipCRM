@@ -8,4 +8,7 @@ public class Constants {
     public static class Filter {
         public static final String FILTER_NAME = "tipcrm_filter";
     }
+    public static class Cache {
+        public static final String USER = "user";
+    }
 }

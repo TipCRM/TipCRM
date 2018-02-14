@@ -1,4 +1,4 @@
-package com.tipcrm.web.start;
+package com.tipcrm.web.config;
 
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Value;

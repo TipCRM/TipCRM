@@ -35,7 +35,12 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +48,10 @@ import org.springframework.util.CollectionUtils;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
+@CacheConfig(cacheNames = "user")
 public class UserServiceImpl implements UserService {
+
+    private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -65,6 +73,25 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Override
+    @CachePut(value = "user")
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    @Cacheable(value = "user", key = "#userId")
+    public User findOne(Integer userId) {
+        logger.debug("进入查询");
+        return userRepository.findOne(userId);
+    }
+
+    @Override
+    public User findByEmailOrPhoneNo(String key) {
+        logger.debug("通过Key查询");
+        return userRepository.findByEmailOrPhoneNo(key);
+    }
 
     @Override
     public String regist(RegistBo registBo) throws Exception {
@@ -100,7 +127,7 @@ public class UserServiceImpl implements UserService {
         user.setLevel(level);
         user.setRoles(Lists.newArrayList(role));
         user.setPaymentPercent(level.getDefaultPaymentPercent());
-        userRepository.save(user);
+        save(user);
         Security security = new Security();
         security.setUserId(user.getId());
         String salt = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
@@ -120,7 +147,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserBo getUserByUserId(Integer userId) throws Exception {
-        User user = userRepository.findOne(userId);
+        System.out.println("内调用");
+        User user = findOne(userId);
         if (user == null) {
             throw new BizException("用户不存在");
         }

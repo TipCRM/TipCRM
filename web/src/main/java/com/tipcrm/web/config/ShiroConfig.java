@@ -1,4 +1,4 @@
-package com.tipcrm.web.start;
+package com.tipcrm.web.config;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.service.TipCRMRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
