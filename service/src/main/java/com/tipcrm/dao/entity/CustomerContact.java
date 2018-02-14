@@ -15,7 +15,7 @@ public class CustomerContact extends BaseCreateEntity{
 
     @Id
     @GeneratedValue
-    @Column(name = "oid")
+    @Column(name = "id")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)

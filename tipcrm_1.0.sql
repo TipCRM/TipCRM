@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `communication`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `communication` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
   `customer_contact_id` int(11) NOT NULL,
   `follow_user_id` int(11) NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE `communication` (
   `entry_time` datetime NOT NULL,
   `update_id` int(11) DEFAULT NULL,
   `update_time` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   KEY `communicationI1` (`customer_id`),
   KEY `communicationI3` (`follow_user_id`),
   KEY `communicationI2` (`customer_contact_id`)
@@ -61,10 +61,10 @@ DROP TABLE IF EXISTS `configuration`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `configuration` (
-  `oid` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `key` varchar(100) COLLATE utf8_bin NOT NULL,
   `value` varchar(255) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `configuration` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -88,7 +88,7 @@ DROP TABLE IF EXISTS `contract`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contract` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
   `follow_user_id` int(11) NOT NULL,
   `follow_department_id` int(11) NOT NULL,
@@ -99,7 +99,7 @@ CREATE TABLE `contract` (
   `review_status_id` int(11) NOT NULL,
   `review_time` datetime(3) NOT NULL,
   `review_note` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   KEY `contractI1` (`customer_id`),
   KEY `contractI2` (`follow_user_id`),
   KEY `contractI3` (`follow_department_id`)
@@ -123,11 +123,11 @@ DROP TABLE IF EXISTS `contract_project`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contract_project` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `contract_id` int(11) NOT NULL,
   `project_id` int(11) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `contract_projectI1` (`contract_id`,`project_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -149,7 +149,7 @@ DROP TABLE IF EXISTS `customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customer` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) COLLATE utf8_bin NOT NULL,
   `status_id` int(11) NOT NULL,
   `address` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -162,7 +162,7 @@ CREATE TABLE `customer` (
   `update_time` datetime(3) DEFAULT NULL,
   `delete_id` int(11) DEFAULT NULL,
   `delete_time` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   KEY `customerI1` (`name`),
   KEY `customerI2` (`follow_user_id`),
   KEY `customerI3` (`follow_department_id`)
@@ -186,7 +186,7 @@ DROP TABLE IF EXISTS `customer_approval`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customer_approval` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8_bin NOT NULL,
   `status_id` int(11) NOT NULL,
@@ -200,7 +200,7 @@ CREATE TABLE `customer_approval` (
   `review_time` datetime(3) DEFAULT NULL,
   `review_status_id` int(11) DEFAULT NULL,
   `review_note` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   KEY `customer_approvalI1` (`name`),
   KEY `customer_approvalI2` (`follow_user_id`),
   KEY `customer_approvalI3` (`follow_department_id`),
@@ -225,7 +225,7 @@ DROP TABLE IF EXISTS `customer_contact`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customer_contact` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
   `name` varchar(45) COLLATE utf8_bin NOT NULL,
   `phone_no` varchar(20) COLLATE utf8_bin NOT NULL,
@@ -235,7 +235,7 @@ CREATE TABLE `customer_contact` (
   `entry_time` datetime(3) NOT NULL,
   `note` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `active` tinyint(1) NOT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   KEY `customer_contactI1` (`customer_id`),
   KEY `customer_contactI2` (`name`,`phone_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -258,7 +258,7 @@ DROP TABLE IF EXISTS `department`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `department` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8_bin NOT NULL,
   `parent_id` int(11) DEFAULT NULL,
   `manager_id` int(11) DEFAULT NULL,
@@ -268,7 +268,7 @@ CREATE TABLE `department` (
   `update_time` datetime(3) DEFAULT NULL,
   `delete_id` int(11) DEFAULT NULL,
   `delete_time` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `departmentI1` (`name`),
   KEY `departmentI2` (`manager_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -291,7 +291,7 @@ DROP TABLE IF EXISTS `goal`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `goal` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `goal` decimal(10,2) NOT NULL,
   `goal_time` datetime(3) NOT NULL,
   `entity_type` int(11) NOT NULL,
@@ -300,7 +300,7 @@ CREATE TABLE `goal` (
   `entry_time` datetime(3) NOT NULL,
   `update_id` int(11) DEFAULT NULL,
   `update_time` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `goalI1` (`entity_type`,`entity_id`,`goal_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -322,7 +322,7 @@ DROP TABLE IF EXISTS `level`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `level` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8_bin NOT NULL,
   `display_name` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `default_payment_percent` decimal(4,2) NOT NULL,
@@ -333,7 +333,7 @@ CREATE TABLE `level` (
   `delete_id` int(11) DEFAULT NULL,
   `delete_time` datetime(3) DEFAULT NULL,
   `deletable` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `levelI1` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -357,7 +357,7 @@ DROP TABLE IF EXISTS `list_box`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `list_box` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `category_name` varchar(100) COLLATE utf8_bin NOT NULL,
   `name` varchar(100) COLLATE utf8_bin NOT NULL,
   `display_name` varchar(100) COLLATE utf8_bin DEFAULT NULL,
@@ -369,7 +369,7 @@ CREATE TABLE `list_box` (
   `delete_id` int(11) DEFAULT NULL,
   `delete_time` datetime(3) DEFAULT NULL,
   `editable` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `list_boxI1` (`category_name`,`name`),
   UNIQUE KEY `list_boxI2` (`category_name`,`sequence`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -408,14 +408,14 @@ DROP TABLE IF EXISTS `menu`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `menu` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8_bin NOT NULL,
   `display_name` varchar(50) COLLATE utf8_bin NOT NULL,
   `icon` varchar(100) COLLATE utf8_bin DEFAULT NULL,
   `parent_id` int(11) DEFAULT NULL,
   `permission` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `url` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `menuI1` (`name`),
   KEY `menuI2` (`permission`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -451,7 +451,7 @@ DROP TABLE IF EXISTS `notification`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `notification` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `to_user_id` int(11) NOT NULL,
   `subject` varchar(100) DEFAULT NULL,
   `content` text,
@@ -459,7 +459,7 @@ CREATE TABLE `notification` (
   `read_status` int(11) NOT NULL,
   `entry_id` int(11) NOT NULL,
   `entry_time` datetime(3) NOT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   KEY `notificationI1` (`to_user_id`),
   KEY `notificationI2` (`type`),
   KEY `notificationI3` (`read_status`)
@@ -483,7 +483,7 @@ DROP TABLE IF EXISTS `permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `permission` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_name` varchar(100) COLLATE utf8_bin DEFAULT NULL,
   `name` varchar(50) COLLATE utf8_bin NOT NULL,
   `value` varchar(50) COLLATE utf8_bin NOT NULL,
@@ -494,7 +494,7 @@ CREATE TABLE `permission` (
   `update_time` datetime(3) DEFAULT NULL,
   `delete_id` int(11) DEFAULT NULL,
   `delete_time` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `permissionI2` (`value`),
   KEY `permissionI1` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -528,7 +528,7 @@ DROP TABLE IF EXISTS `project`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project` (
-  `oid` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `note` varchar(255) DEFAULT NULL,
   `entry_id` int(11) NOT NULL,
@@ -537,7 +537,7 @@ CREATE TABLE `project` (
   `update_time` datetime(3) DEFAULT NULL,
   `delete_id` int(11) DEFAULT NULL,
   `delete_time` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `projectI1` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -559,7 +559,7 @@ DROP TABLE IF EXISTS `role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `role` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8_bin NOT NULL,
   `display_name` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `entry_id` int(11) NOT NULL,
@@ -569,7 +569,7 @@ CREATE TABLE `role` (
   `delete_id` int(11) DEFAULT NULL,
   `delete_time` datetime(3) DEFAULT NULL,
   `editable` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `roleI1` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -594,13 +594,13 @@ DROP TABLE IF EXISTS `role_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `role_permission` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `role_id` int(11) NOT NULL,
   `permission_id` int(11) NOT NULL,
   `deletable` tinyint(1) NOT NULL,
   `entry_id` int(11) NOT NULL,
   `entry_time` datetime(3) NOT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `role_permissionI1` (`role_id`,`permission_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -655,7 +655,7 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
-  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) COLLATE utf8_bin NOT NULL,
   `email` varchar(50) COLLATE utf8_bin NOT NULL,
   `id_card` varchar(20) COLLATE utf8_bin DEFAULT NULL,
@@ -673,7 +673,7 @@ CREATE TABLE `user` (
   `dismiss_reason` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `update_id` int(11) DEFAULT NULL,
   `update_time` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `userI2` (`email`),
   UNIQUE KEY `userI4` (`phone_no`),
   KEY `userI1` (`username`),
@@ -689,7 +689,7 @@ CREATE TABLE `user` (
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` VALUES
-(-1,'SYSTEM','crm@tip.com',NULL,NULL,NULL,NULL,10,-1,NOW(),NULL,NULL,NULL,0.00,NULL,NULL,NULL,NULL,NULL);
+(-1,'SYSTEM','crm@tip.com',NULL,NULL,NULL,NULL,10,-1,NOW(),NULL,NULL,0.00,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -701,10 +701,10 @@ DROP TABLE IF EXISTS `user_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_role` (
-  `oid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `role_id` int(11) NOT NULL,
-  PRIMARY KEY (`oid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `user_roleI1` (`user_id`,`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;

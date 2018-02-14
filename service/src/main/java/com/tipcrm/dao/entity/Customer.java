@@ -15,7 +15,7 @@ public class Customer extends BaseAllEntity{
 
     @Id
     @GeneratedValue
-    @Column(name = "oid")
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "name")

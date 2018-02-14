@@ -11,7 +11,7 @@ import javax.persistence.Table;
 public class Permission extends BaseAllEntity {
     @GeneratedValue
     @Id
-    @Column(name = "oid")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "group_name")

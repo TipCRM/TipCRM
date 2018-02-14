@@ -18,7 +18,7 @@ public class Contract {
 
     @Id
     @GeneratedValue
-    @Column(name = "oid")
+    @Column(name = "id")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)

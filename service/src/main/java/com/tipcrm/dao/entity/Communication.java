@@ -16,7 +16,7 @@ public class Communication extends BaseCreateAndUpdateEntity{
 
     @Id
     @GeneratedValue
-    @Column(name = "oid")
+    @Column(name = "id")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)

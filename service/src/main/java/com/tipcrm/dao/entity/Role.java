@@ -20,7 +20,7 @@ import javax.persistence.Table;
 public class Role extends BaseAllEntity {
     @GeneratedValue
     @Id
-    @Column(name = "oid")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "name")

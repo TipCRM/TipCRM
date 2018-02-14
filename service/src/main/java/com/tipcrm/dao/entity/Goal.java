@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class Goal extends BaseCreateAndUpdateEntity{
     @Id
     @GeneratedValue
-    @Column(name = "oid")
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "goal")
