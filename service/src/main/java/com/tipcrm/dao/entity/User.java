@@ -53,10 +53,6 @@ public class User {
     private Date hireTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id")
-    private User manager;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
     private Department department;
 
@@ -166,14 +162,6 @@ public class User {
 
     public void setHireTime(Date hireTime) {
         this.hireTime = hireTime;
-    }
-
-    public User getManager() {
-        return manager;
-    }
-
-    public void setManager(User manager) {
-        this.manager = manager;
     }
 
     public Department getDepartment() {

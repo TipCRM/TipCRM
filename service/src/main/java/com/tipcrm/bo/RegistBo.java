@@ -5,7 +5,6 @@ public class RegistBo {
     private String password;
     private String username;
     private Boolean isTopManager;
-    private Integer managerId;
     private Integer departmentId;
 
     public String getEmail() {
@@ -38,14 +37,6 @@ public class RegistBo {
 
     public void setTopManager(Boolean topManager) {
         isTopManager = topManager;
-    }
-
-    public Integer getManagerId() {
-        return managerId;
-    }
-
-    public void setManagerId(Integer managerId) {
-        this.managerId = managerId;
     }
 
     public Integer getDepartmentId() {

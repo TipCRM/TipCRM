@@ -1,9 +1,11 @@
 package com.tipcrm.service.impl;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import com.google.common.collect.Lists;
+import com.tipcrm.bo.UserBo;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.RegistBo;
@@ -25,6 +27,7 @@ import com.tipcrm.dao.repository.LevelRepository;
 import com.tipcrm.dao.repository.RoleRepository;
 import com.tipcrm.dao.repository.SecurityRepository;
 import com.tipcrm.dao.repository.UserRepository;
+import com.tipcrm.exception.BizException;
 import com.tipcrm.service.ListBoxService;
 import com.tipcrm.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -75,10 +78,6 @@ public class UserServiceImpl implements UserService {
         if (!Boolean.valueOf(registable.getValue())) {
             throw new Exception("管理员没有开放注册通道");
         }
-        User manager = null;
-        if (registBo.getManagerId() != null) {
-            manager = userRepository.findOne(registBo.getManagerId());
-        }
         Department department = null;
         if (registBo.getDepartmentId() != null) {
             department = departmentRepository.findOne(registBo.getDepartmentId());
@@ -97,7 +96,6 @@ public class UserServiceImpl implements UserService {
         user.setStatus(userStatusActive);
         user.setHire(systemUser);
         user.setHireTime(new Date());
-        user.setManager(manager);
         user.setDepartment(department);
         user.setLevel(level);
         user.setRoles(Lists.newArrayList(role));
@@ -118,6 +116,53 @@ public class UserServiceImpl implements UserService {
         validateLoginInfo(loginBo);
         UsernamePasswordToken token = new UsernamePasswordToken(loginBo.getLoginKey(), loginBo.getPassword());
         SecurityUtils.getSubject().login(token);
+    }
+
+    @Override
+    public UserBo getUserByUserId(Integer userId) throws Exception {
+        User user = userRepository.findOne(userId);
+        if (user == null) {
+            throw new BizException("用户不存在");
+        }
+        UserBo userBo = convertToUserBo(user);
+        return userBo;
+    }
+
+    private UserBo convertToUserBo(User user) {
+        UserBo userBo = new UserBo();
+        userBo.setAvatar(user.getAvatar());
+        userBo.setBirthday(user.getBirthday());
+        Department department = user.getDepartment();
+        if (department != null) {
+            userBo.setDepartment(user.getDepartment().getName());
+            User manager = department.getManager();
+            if (manager != null) {
+                userBo.setManager(manager.getUserName());
+            }
+        }
+        userBo.setEmail(user.getEmail());
+        User hirer = user.getHire();
+        if (hirer != null && !Constants.User.SYSTEM.equals(hirer.getUserName())) {
+            userBo.setHirer(hirer.getUserName());
+        }
+        userBo.setHireTime(user.getHireTime());
+        userBo.setIdCard(user.getIdCard());
+        Level level = user.getLevel();
+        if (level != null) {
+            userBo.setLevel(level.getDisplayName());
+        }
+        userBo.setPhoneNo(user.getPhoneNo());
+        List<Role> roles = user.getRoles();
+        List<String> roleStr = new ArrayList<String>();
+        if (!CollectionUtils.isEmpty(roles)) {
+            for (Role role: roles) {
+                roleStr.add(role.getDisplayName());
+            }
+        }
+        userBo.setRoles(roleStr);
+        userBo.setStatus(user.getStatus().getDisplayName());
+        userBo.setUserName(user.getUserName());
+        return userBo;
     }
 
     private void validateRegistUser(RegistBo registBo) throws Exception {

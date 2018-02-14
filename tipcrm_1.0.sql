@@ -665,7 +665,6 @@ CREATE TABLE `user` (
   `status` int(11) NOT NULL,
   `hire_id` int(11) NOT NULL,
   `hire_time` datetime(3) NOT NULL,
-  `manager_id` int(11) DEFAULT NULL,
   `department_id` int(11) DEFAULT NULL,
   `level_id` int(11) DEFAULT NULL,
   `payment_percent` decimal(4,2) NOT NULL,
@@ -679,8 +678,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `userI4` (`phone_no`),
   KEY `userI1` (`username`),
   KEY `userI3` (`status`),
-  KEY `userI5` (`manager_id`),
-  KEY `userI6` (`department_id`)
+  KEY `userI5` (`department_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

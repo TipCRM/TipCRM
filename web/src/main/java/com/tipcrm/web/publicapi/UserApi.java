@@ -7,6 +7,7 @@ import java.util.Date;
 import com.google.common.collect.Lists;
 import com.tipcrm.bo.UserBo;
 import com.tipcrm.dao.entity.User;
+import com.tipcrm.service.UserService;
 import com.tipcrm.service.WebContext;
 import com.tipcrm.web.util.JsonEntity;
 import com.tipcrm.web.util.ResponseHelper;
@@ -30,28 +31,15 @@ public class UserApi {
     @Autowired
     private WebContext webContext;
 
+    @Autowired
+    private UserService userService;
+
     // @RequiresPermissions(value = "user:view")
     @RequestMapping(value = "currentUserInfo", method = RequestMethod.GET)
     @RequiresAuthentication
-    public JsonEntity<UserBo> getUser() throws ParseException {
-        User user = webContext.getCurrentUser();
+    public JsonEntity<UserBo> getUser() throws Exception {
+        Integer userId = webContext.getCurrentUserId();
+        return ResponseHelper.createInstance(userService.getUserByUserId(userId));
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        logger.debug(user.getId() + ":" + user.getUserName());
-        UserBo userBo = new UserBo();
-        userBo.setUserName(user.getUserName());
-        userBo.setAvatar("https://cdnq.duitang.com/uploads/item/201506/26/20150626174017_LtvMR.thumb.224_0.jpeg");
-        userBo.setBirthday(simpleDateFormat.parse("1994-09-08 00:00:00"));
-        userBo.setDepartment("销售一部");
-        userBo.setEmail("1051750377@qq.com");
-        userBo.setHirer("高力");
-        userBo.setHireTime(simpleDateFormat.parse("2017-11-03 00:00:00"));
-        userBo.setIdCard("51118119940908****");
-        userBo.setLevel("新员工");
-        userBo.setManager("高力");
-        userBo.setPhoneNo("15881193175");
-        userBo.setStatus("在职");
-        userBo.setRoles(Lists.newArrayList("总经理", "部门经理"));
-        return ResponseHelper.createInstance(userBo);
     }
 }
