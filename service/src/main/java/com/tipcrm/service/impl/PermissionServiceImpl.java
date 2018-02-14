@@ -3,8 +3,8 @@ package com.tipcrm.service.impl;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.tipcrm.dao.entity.Permission;
 import com.tipcrm.dao.entity.Role;
+import com.tipcrm.dao.entity.RolePermission;
 import com.tipcrm.dao.entity.User;
 import com.tipcrm.dao.repository.UserRepository;
 import com.tipcrm.service.PermissionService;
@@ -24,8 +24,8 @@ public class PermissionServiceImpl implements PermissionService{
         Set<String> permissions = new HashSet<String>();
         User user = userRepository.findOne(userId);
         for (Role role : user.getRoles()) {
-            for (Permission permission : role.getPermissions()) {
-                permissions.add(permission.getValue());
+            for (RolePermission rolePermission : role.getRolePermissions()) {
+                permissions.add(rolePermission.getPermission().getValue());
             }
         }
         return permissions;

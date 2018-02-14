@@ -1,4 +1,5 @@
 package com.tipcrm.dao.entity;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -83,6 +84,9 @@ public class User {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private List<Role> roles = new ArrayList<Role>();
+
+    @Column(name = "payment_percent")
+    private BigDecimal paymentPercent;
 
     public Integer getId() {
         return id;
@@ -234,5 +238,13 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public BigDecimal getPaymentPercent() {
+        return paymentPercent;
+    }
+
+    public void setPaymentPercent(BigDecimal paymentPercent) {
+        this.paymentPercent = paymentPercent;
     }
 }

@@ -30,7 +30,7 @@ public class UserApi {
     @Autowired
     private WebContext webContext;
 
-    @RequiresPermissions(value = "user:view")
+    // @RequiresPermissions(value = "user:view")
     @RequestMapping(value = "currentUserInfo", method = RequestMethod.GET)
     @RequiresAuthentication
     public JsonEntity<UserBo> getUser() throws ParseException {

@@ -1,26 +1,29 @@
-/*
-SQLyog  v12.2.6 (64 bit)
-MySQL - 5.7.20-0ubuntu0.16.04.1 : Database - TIP_CRM
-*********************************************************************
-*/
+CREATE DATABASE  IF NOT EXISTS `TIP_CRM` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_bin */;
+USE `TIP_CRM`;
+-- MySQL dump 10.13  Distrib 5.7.21, for Linux (x86_64)
+--
+-- Host: www.potafish.com    Database: TIP_CRM
+-- ------------------------------------------------------
+-- Server version	5.7.20-0ubuntu0.16.04.1
 
-
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-
-/*!40101 SET SQL_MODE=''*/;
-
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`TIP_CRM` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_bin */;
 
-USE `TIP_CRM`;
-
-/*Table structure for table `communication` */
+--
+-- Table structure for table `communication`
+--
 
 DROP TABLE IF EXISTS `communication`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `communication` (
   `oid` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
@@ -30,16 +33,33 @@ CREATE TABLE `communication` (
   `note` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `next_communicate_time` datetime(3) DEFAULT NULL,
   `on_side` tinyint(1) NOT NULL COMMENT '是否上门服务',
+  `entry_id` int(11) NOT NULL,
+  `entry_time` datetime NOT NULL,
+  `update_id` int(11) DEFAULT NULL,
+  `update_time` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`oid`),
   KEY `communicationI1` (`customer_id`),
   KEY `communicationI3` (`follow_user_id`),
   KEY `communicationI2` (`customer_contact_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `configuration` */
+--
+-- Dumping data for table `communication`
+--
+
+LOCK TABLES `communication` WRITE;
+/*!40000 ALTER TABLE `communication` DISABLE KEYS */;
+/*!40000 ALTER TABLE `communication` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `configuration`
+--
 
 DROP TABLE IF EXISTS `configuration`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `configuration` (
   `oid` int(11) NOT NULL,
   `key` varchar(100) COLLATE utf8_bin NOT NULL,
@@ -47,15 +67,31 @@ CREATE TABLE `configuration` (
   PRIMARY KEY (`oid`),
   UNIQUE KEY `configuration` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `contract` */
+--
+-- Dumping data for table `configuration`
+--
+
+LOCK TABLES `configuration` WRITE;
+/*!40000 ALTER TABLE `configuration` DISABLE KEYS */;
+INSERT INTO `configuration` VALUES
+(1,'REGISTABLE','TRUE');
+/*!40000 ALTER TABLE `configuration` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `contract`
+--
 
 DROP TABLE IF EXISTS `contract`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contract` (
   `oid` int(11) NOT NULL AUTO_INCREMENT,
-  `customer_master_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
   `follow_user_id` int(11) NOT NULL,
+  `follow_department_id` int(11) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `note` varchar(255) DEFAULT NULL,
   `sign_time` datetime(3) NOT NULL,
@@ -64,14 +100,28 @@ CREATE TABLE `contract` (
   `review_time` datetime(3) NOT NULL,
   `review_note` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`oid`),
-  KEY `contractI1` (`customer_master_id`),
-  KEY `contractI2` (`follow_user_id`)
+  KEY `contractI1` (`customer_id`),
+  KEY `contractI2` (`follow_user_id`),
+  KEY `contractI3` (`follow_department_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `contract_project` */
+--
+-- Dumping data for table `contract`
+--
+
+LOCK TABLES `contract` WRITE;
+/*!40000 ALTER TABLE `contract` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contract` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `contract_project`
+--
 
 DROP TABLE IF EXISTS `contract_project`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contract_project` (
   `oid` int(11) NOT NULL AUTO_INCREMENT,
   `contract_id` int(11) NOT NULL,
@@ -80,11 +130,24 @@ CREATE TABLE `contract_project` (
   PRIMARY KEY (`oid`),
   UNIQUE KEY `contract_projectI1` (`contract_id`,`project_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `customer` */
+--
+-- Dumping data for table `contract_project`
+--
+
+LOCK TABLES `contract_project` WRITE;
+/*!40000 ALTER TABLE `contract_project` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contract_project` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `customer`
+--
 
 DROP TABLE IF EXISTS `customer`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customer` (
   `oid` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) COLLATE utf8_bin NOT NULL,
@@ -104,11 +167,24 @@ CREATE TABLE `customer` (
   KEY `customerI2` (`follow_user_id`),
   KEY `customerI3` (`follow_department_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `customer_approval` */
+--
+-- Dumping data for table `customer`
+--
+
+LOCK TABLES `customer` WRITE;
+/*!40000 ALTER TABLE `customer` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `customer_approval`
+--
 
 DROP TABLE IF EXISTS `customer_approval`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customer_approval` (
   `oid` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
@@ -130,11 +206,24 @@ CREATE TABLE `customer_approval` (
   KEY `customer_approvalI3` (`follow_department_id`),
   KEY `customer_approvalI4` (`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `customer_contact` */
+--
+-- Dumping data for table `customer_approval`
+--
+
+LOCK TABLES `customer_approval` WRITE;
+/*!40000 ALTER TABLE `customer_approval` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customer_approval` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `customer_contact`
+--
 
 DROP TABLE IF EXISTS `customer_contact`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customer_contact` (
   `oid` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
@@ -150,11 +239,24 @@ CREATE TABLE `customer_contact` (
   KEY `customer_contactI1` (`customer_id`),
   KEY `customer_contactI2` (`name`,`phone_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `department` */
+--
+-- Dumping data for table `customer_contact`
+--
+
+LOCK TABLES `customer_contact` WRITE;
+/*!40000 ALTER TABLE `customer_contact` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customer_contact` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `department`
+--
 
 DROP TABLE IF EXISTS `department`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `department` (
   `oid` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8_bin NOT NULL,
@@ -170,11 +272,24 @@ CREATE TABLE `department` (
   UNIQUE KEY `departmentI1` (`name`),
   KEY `departmentI2` (`manager_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `goal` */
+--
+-- Dumping data for table `department`
+--
+
+LOCK TABLES `department` WRITE;
+/*!40000 ALTER TABLE `department` DISABLE KEYS */;
+/*!40000 ALTER TABLE `department` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `goal`
+--
 
 DROP TABLE IF EXISTS `goal`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `goal` (
   `oid` int(11) NOT NULL AUTO_INCREMENT,
   `goal` decimal(10,2) NOT NULL,
@@ -188,14 +303,28 @@ CREATE TABLE `goal` (
   PRIMARY KEY (`oid`),
   UNIQUE KEY `goalI1` (`entity_type`,`entity_id`,`goal_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `level` */
+--
+-- Dumping data for table `goal`
+--
+
+LOCK TABLES `goal` WRITE;
+/*!40000 ALTER TABLE `goal` DISABLE KEYS */;
+/*!40000 ALTER TABLE `goal` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `level`
+--
 
 DROP TABLE IF EXISTS `level`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `level` (
   `oid` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) COLLATE utf8_bin NOT NULL,
+  `name` varchar(50) COLLATE utf8_bin NOT NULL,
+  `display_name` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `default_payment_percent` decimal(4,2) NOT NULL,
   `entry_id` int(11) NOT NULL,
   `entry_time` datetime(3) NOT NULL,
@@ -203,14 +332,30 @@ CREATE TABLE `level` (
   `update_time` datetime(3) DEFAULT NULL,
   `delete_id` int(11) DEFAULT NULL,
   `delete_time` datetime(3) DEFAULT NULL,
+  `deletable` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`oid`),
   UNIQUE KEY `levelI1` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `list_box` */
+--
+-- Dumping data for table `level`
+--
+
+LOCK TABLES `level` WRITE;
+/*!40000 ALTER TABLE `level` DISABLE KEYS */;
+INSERT INTO `level` VALUES
+(1,'NEW_USER','新员工',0.00,-1,NOW(),NULL,NULL,NULL,NULL,0);
+/*!40000 ALTER TABLE `level` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `list_box`
+--
 
 DROP TABLE IF EXISTS `list_box`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `list_box` (
   `oid` int(11) NOT NULL AUTO_INCREMENT,
   `category_name` varchar(100) COLLATE utf8_bin NOT NULL,
@@ -221,17 +366,47 @@ CREATE TABLE `list_box` (
   `entry_time` datetime(3) NOT NULL,
   `update_id` int(11) DEFAULT NULL,
   `update_time` datetime(3) DEFAULT NULL,
-  `dalete_id` int(11) DEFAULT NULL,
+  `delete_id` int(11) DEFAULT NULL,
   `delete_time` datetime(3) DEFAULT NULL,
   `editable` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`oid`),
-  UNIQUE KEY `list_boxI1` (`category_name`,`name`,`sequence`)
+  UNIQUE KEY `list_boxI1` (`category_name`,`name`),
+  UNIQUE KEY `list_boxI2` (`category_name`,`sequence`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `menu` */
+--
+-- Dumping data for table `list_box`
+--
+
+LOCK TABLES `list_box` WRITE;
+/*!40000 ALTER TABLE `list_box` DISABLE KEYS */;
+INSERT INTO `list_box` VALUES
+(1,'CUSTOMER_STATUS','NEW_CUSTOMER','新客户',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(2,'CUSTOMER_STATUS','INTENTIONAL_CUSTOMER','意向客户',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(3,'CUSTOMER_STATUS','SIGNING_CUSTOMER','签约客户',3,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(4,'CUSTOMER_STATUS','EXPIRED_CUSTOMER','过期客户',4,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(5,'APPROVAL_STATUS','PENDING','待审批',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(6,'APPROVAL_STATUS','REJECT','驳回',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(7,'APPROVAL_STATUS','APPROVE','通过',3,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(8,'GOAL_TYPE','USER','员工目标',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(9,'GOAL_TYPE','DEPARTMENT','部门目标',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(10,'USER_STATUS','ACTIVE','正常',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(11,'USER_STATUS','FROZEN','冻结',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(12,'NOTIFICATION_TYPE','SYSTEM_NOTIFICATION','系统通知',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(13,'NOTIFICATION_TYPE','USER_NOTIFICATION','用户通知',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(14,'NOTIFICATION_READ_STATUS','READ','已读',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(15,'NOTIFICATION_READ_STATUS','UNREAD','未读',2,-1,NOW(),NULL,NULL,NULL,NULL,0);
+/*!40000 ALTER TABLE `list_box` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `menu`
+--
 
 DROP TABLE IF EXISTS `menu`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `menu` (
   `oid` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8_bin NOT NULL,
@@ -244,30 +419,69 @@ CREATE TABLE `menu` (
   UNIQUE KEY `menuI1` (`name`),
   KEY `menuI2` (`permission`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `notification` */
+--
+-- Dumping data for table `menu`
+--
+
+LOCK TABLES `menu` WRITE;
+/*!40000 ALTER TABLE `menu` DISABLE KEYS */;
+INSERT INTO `menu` VALUES
+(1,'HOME','主页','home',NULL,NULL,'index'),
+(2,'MY_CUSTOMER','我的客户','team',NULL,NULL,'my/customer'),
+(3,'MY_SUMMARY','销售报表','pie-chart',NULL,NULL,'my/summary'),
+(4,'FINANCE','财务管理','pay-circle-o',NULL,NULL,'finance'),
+(5,'MATERIAL','资料库','file-text',NULL,NULL,'material'),
+(6,'SETTING','系统设置','setting',NULL,NULL,''),
+(7,'CUSTOMER_MANAGEMENT','客户管理','team',6,NULL,'management/customer'),
+(8,'USER_MANAGEMENT','员工管理','usergroup-add',6,'user:view','management/user'),
+(9,'APPROVAL_MANAGEMENT','审批管理','check-circle-o',6,NULL,'management/approval'),
+(10,'PERMISSION_MANAGEMENT','权限管理','unlock',6,NULL,'management/permission'),
+(11,'ROLE_MANAGEMENT','角色管理','solution',6,NULL,'management/role'),
+(12,'MATERIAL_MANAGEMENT','资料管理','book',6,NULL,'management/material');
+/*!40000 ALTER TABLE `menu` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notification`
+--
 
 DROP TABLE IF EXISTS `notification`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `notification` (
   `oid` int(11) NOT NULL AUTO_INCREMENT,
   `to_user_id` int(11) NOT NULL,
   `subject` varchar(100) DEFAULT NULL,
   `content` text,
-  `type` bigint(20) NOT NULL,
+  `type` int(11) NOT NULL,
+  `read_status` int(11) NOT NULL,
   `entry_id` int(11) NOT NULL,
   `entry_time` datetime(3) NOT NULL,
-  `read_status` int(11) NOT NULL,
   PRIMARY KEY (`oid`),
   KEY `notificationI1` (`to_user_id`),
   KEY `notificationI2` (`type`),
   KEY `notificationI3` (`read_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `permission` */
+--
+-- Dumping data for table `notification`
+--
+
+LOCK TABLES `notification` WRITE;
+/*!40000 ALTER TABLE `notification` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notification` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `permission`
+--
 
 DROP TABLE IF EXISTS `permission`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `permission` (
   `oid` int(11) NOT NULL AUTO_INCREMENT,
   `group_name` varchar(100) COLLATE utf8_bin DEFAULT NULL,
@@ -284,23 +498,66 @@ CREATE TABLE `permission` (
   UNIQUE KEY `permissionI2` (`value`),
   KEY `permissionI1` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `project` */
+--
+-- Dumping data for table `permission`
+--
+
+LOCK TABLES `permission` WRITE;
+/*!40000 ALTER TABLE `permission` DISABLE KEYS */;
+INSERT INTO `permission` VALUES
+(1,'客户管理','ADD_UPDATE_CUSTOMER','customer:add_update','添加/修改客户',-1,NOW(),NULL,NULL,NULL,NULL),
+(2,'客户管理','DELETE_CUSTOMER','customer:delete','删除客户',-1,NOW(),NULL,NULL,NULL,NULL),
+(3,'客户管理','TRANSFER_CUSTOMER','customer:transfer','转移客户',-1,NOW(),NULL,NULL,NULL,NULL),
+(4,'客户管理','APPROVAL_CUSTOMER','cusotmer:approval','审批客户',-1,NOW(),NULL,NULL,NULL,NULL),
+(5,'员工管理','USER_ADD','user:add_update','添加/修改员工',-1,NOW(),NULL,NULL,NULL,NULL),
+(6,'员工管理','USER_DELETE','user:delete','员工离职',-1,NOW(),NULL,NULL,NULL,NULL),
+(7,'角色与权限','ROLE_ADD','role:add','添加角色',-1,NOW(),NULL,NULL,NULL,NULL),
+(8,'角色与权限','ROLE_ASSIGN','role:assign','角色分配',-1,NOW(),NULL,NULL,NULL,NULL),
+(9,'部门管理','DEPARTMENT_ADD_UPDATE','department:add_update','添加/修改部门',-1,NOW(),NULL,NULL,NULL,NULL),
+(10,'部门管理','DEPARTMENT_DELETE','department:delete','删除部门',-1,NOW(),NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `project`
+--
 
 DROP TABLE IF EXISTS `project`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project` (
   `oid` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `note` varchar(255) DEFAULT NULL,
+  `entry_id` int(11) NOT NULL,
+  `entry_time` datetime(3) NOT NULL,
+  `update_id` int(11) DEFAULT NULL,
+  `update_time` datetime(3) DEFAULT NULL,
+  `delete_id` int(11) DEFAULT NULL,
+  `delete_time` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`oid`),
   UNIQUE KEY `projectI1` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `role` */
+--
+-- Dumping data for table `project`
+--
+
+LOCK TABLES `project` WRITE;
+/*!40000 ALTER TABLE `project` DISABLE KEYS */;
+/*!40000 ALTER TABLE `project` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role`
+--
 
 DROP TABLE IF EXISTS `role`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `role` (
   `oid` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8_bin NOT NULL,
@@ -315,34 +572,88 @@ CREATE TABLE `role` (
   PRIMARY KEY (`oid`),
   UNIQUE KEY `roleI1` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `role_permission` */
+--
+-- Dumping data for table `role`
+--
+
+LOCK TABLES `role` WRITE;
+/*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` VALUES
+(1,'GENERAL_MANAGER','总经理',-1,NOW(),NULL,NULL,NULL,NULL,0),
+(2,'NORMAL','员工',-1,NOW(),NULL,NULL,NULL,NULL,0);
+/*!40000 ALTER TABLE `role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role_permission`
+--
 
 DROP TABLE IF EXISTS `role_permission`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `role_permission` (
-  `oid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `oid` int(11) NOT NULL AUTO_INCREMENT,
   `role_id` int(11) NOT NULL,
   `permission_id` int(11) NOT NULL,
+  `deletable` tinyint(1) NOT NULL,
+  `entry_id` int(11) NOT NULL,
+  `entry_time` datetime(3) NOT NULL,
   PRIMARY KEY (`oid`),
   UNIQUE KEY `role_permissionI1` (`role_id`,`permission_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `security` */
+--
+-- Dumping data for table `role_permission`
+--
+
+LOCK TABLES `role_permission` WRITE;
+/*!40000 ALTER TABLE `role_permission` DISABLE KEYS */;
+INSERT INTO `role_permission` VALUES
+(1,1,1,0,-1,NOW()),
+(2,1,2,0,-1,NOW()),
+(3,1,3,0,-1,NOW()),
+(4,1,4,0,-1,NOW()),
+(5,1,5,0,-1,NOW()),
+(6,1,6,0,-1,NOW()),
+(7,1,7,0,-1,NOW()),
+(8,1,8,0,-1,NOW());
+/*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `security`
+--
 
 DROP TABLE IF EXISTS `security`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `security` (
   `user_id` int(11) NOT NULL,
   `password` varchar(50) NOT NULL,
   `salt` varchar(100) NOT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `user` */
+--
+-- Dumping data for table `security`
+--
+
+LOCK TABLES `security` WRITE;
+/*!40000 ALTER TABLE `security` DISABLE KEYS */;
+/*!40000 ALTER TABLE `security` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
 
 DROP TABLE IF EXISTS `user`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `oid` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) COLLATE utf8_bin NOT NULL,
@@ -357,12 +668,12 @@ CREATE TABLE `user` (
   `manager_id` int(11) DEFAULT NULL,
   `department_id` int(11) DEFAULT NULL,
   `level_id` int(11) DEFAULT NULL,
+  `payment_percent` decimal(4,2) NOT NULL,
   `dismiss_id` int(11) DEFAULT NULL,
   `dismiss_date` datetime(3) DEFAULT NULL,
   `dismiss_reason` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `update_id` int(11) DEFAULT NULL,
   `update_time` datetime(3) DEFAULT NULL,
-  `payment_percent` decimal(4,2) NOT NULL,
   PRIMARY KEY (`oid`),
   UNIQUE KEY `userI2` (`email`),
   UNIQUE KEY `userI4` (`phone_no`),
@@ -371,11 +682,26 @@ CREATE TABLE `user` (
   KEY `userI5` (`manager_id`),
   KEY `userI6` (`department_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*Table structure for table `user_role` */
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES
+(-1,'SYSTEM','crm@tip.com',NULL,NULL,NULL,NULL,10,-1,NOW(),NULL,NULL,NULL,0.00,NULL,NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_role`
+--
 
 DROP TABLE IF EXISTS `user_role`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_role` (
   `oid` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -383,58 +709,24 @@ CREATE TABLE `user_role` (
   PRIMARY KEY (`oid`),
   UNIQUE KEY `user_roleI1` (`user_id`,`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_role`
+--
+
+LOCK TABLES `user_role` WRITE;
+/*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-insert  into `configuration`(`oid`,`key`,`value`) values
-(1,'REGISTABLE','TRUE');
 
-insert  into `list_box`(`oid`,`category_name`,`name`,`display_name`,`sequence`,`entry_id`,`entry_time`,`update_id`,`update_time`,`dalete_id`,`delete_time`,`editable`) values
-(1,'CUSTOMER_STATUS','NEW_CUSTOMER','新客户',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(2,'CUSTOMER_STATUS','INTENTIONAL_CUSTOMER','意向客户',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(3,'CUSTOMER_STATUS','SIGNING_CUSTOMER','签约客户',3,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(4,'CUSTOMER_STATUS','EXPIRED_CUSTOMER','过期客户',4,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(5,'APPROVAL_STATUS','PENDING','待审批',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(6,'APPROVAL_STATUS','REJECT','驳回',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(7,'APPROVAL_STATUS','APPROVE','通过',3,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(8,'GOAL_TYPE','USER','员工目标',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(9,'GOAL_TYPE','DEPARTMENT','部门目标',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(10,'USER_STATUS','ACTIVE','正常',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(11,'USER_STATUS','FROZEN','冻结',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(12,'NOTIFICATION_TYPE','SYSTEM_NOTIFICATION','系统通知',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(13,'NOTIFICATION_TYPE','USER_NOTIFICATION','用户通知',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(14,'NOTIFICATION_READ_STATUS','READ','已读',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(15,'NOTIFICATION_READ_STATUS','UNREAD','未读',2,-1,NOW(),NULL,NULL,NULL,NULL,0);
-
-insert  into `menu`(`oid`,`name`,`display_name`,`icon`,`parent_id`,`permission`,`url`) values
-(12,'HOME','主页','home',NULL,NULL,'index'),
-(13,'MY_CUSTOMER','我的客户','team',NULL,NULL,'my/customer'),
-(14,'MY_SUMMARY','销售报表','pie-chart',NULL,NULL,'my/summary'),
-(15,'FINANCE','财务管理','pay-circle-o',NULL,NULL,'finance'),
-(16,'MATERIAL','资料库','file-text',NULL,NULL,'material'),
-(17,'SETTING','系统设置','setting',NULL,NULL,''),
-(18,'CUSTOMER_MANAGEMENT','客户管理','team',17,NULL,'management/customer'),
-(19,'USER_MANAGEMENT','员工管理','usergroup-add',17,'user:view','management/user'),
-(20,'APPROVAL_MANAGEMENT','审批管理','check-circle-o',17,NULL,'management/approval'),
-(21,'PERMISSION_MANAGEMENT','权限管理','unlock',17,NULL,'management/permission'),
-(22,'ROLE_MANAGEMENT','角色管理','solution',17,NULL,'management/role'),
-(23,'MATERIAL_MANAGEMENT','资料管理','book',17,NULL,'management/material');
-
-insert  into `permission`(`oid`,`group_name`,`name`,`value`,`display_name`,`entry_id`,`entry_time`,`update_id`,`update_time`,`delete_id`,`delete_time`) values
-(1,'客户管理','ADD_UPDATE_CUSTOMER','customer:add_update','添加/修改客户',-1,NOW(),NULL,NULL,NULL,NULL),
-(2,'客户管理','DELETE_CUSTOMER','customer:delete','删除客户',-1,NOW(),NULL,NULL,NULL,NULL),
-(3,'客户管理','TRANSFER_CUSTOMER','customer:transfer','转移客户',-1,NOW(),NULL,NULL,NULL,NULL),
-(4,'客户管理','APPROVAL_CUSTOMER','cusotmer:approval','审批客户',-1,NOW(),NULL,NULL,NULL,NULL),
-(5,'员工管理','USER_ADD','user:add_update','添加/修改员工',-1,NOW(),NULL,NULL,NULL,NULL),
-(6,'员工管理','USER_DELETE','user:delete','员工离职',-1,NOW(),NULL,NULL,NULL,NULL),
-(7,'角色与权限','ROLE_ADD','role:add','添加角色',-1,NOW(),NULL,NULL,NULL,NULL),
-(8,'角色与权限','ROLE_ASSIGN','role:assign','角色分配',-1,NOW(),NULL,NULL,NULL,NULL);
-
-insert  into `role`(`oid`,`name`,`display_name`,`entry_id`,`entry_time`,`update_id`,`update_time`,`delete_id`,`delete_time`,`editable`) values
-(1,'GENERAL_MANAGER','总经理',-1,NOW(),NULL,NULL,NULL,NULL,0),
-(2,'NORMAL','员工',-1,NOW(),NULL,NULL,NULL,NULL,0);
-
-insert  into `user`(`oid`,`username`,`email`,`id_card`,`birthday`,`phone_no`,`avatar`,`status`,`hire_id`,`hire_time`,`manager_id`,`department_id`,`level_id`,`dismiss_id`,`dismiss_date`,`dismiss_reason`,`update_id`,`update_time`,`payment_percent`) values
-(-1,'SYSTEM','crm@tip.com',NULL,NULL,NULL,NULL,10,-1,NOW(),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.00);
+-- Dump completed on 2018-02-14  8:43:38

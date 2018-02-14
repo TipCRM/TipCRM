@@ -1,5 +1,4 @@
 package com.tipcrm.service.impl;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -8,6 +7,7 @@ import com.google.common.collect.Lists;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.RegistBo;
+import com.tipcrm.constant.Levels;
 import com.tipcrm.constant.ListBoxCategory;
 import com.tipcrm.constant.Roles;
 import com.tipcrm.constant.UserStatus;
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
         if (registBo.getDepartmentId() != null) {
             department = departmentRepository.findOne(registBo.getDepartmentId());
         }
-        Level level = levelRepository.findByName(Roles.GENERAL_MANAGER.name());
+        Level level = levelRepository.findByName(Levels.NEW_USER.name());
         Role role = null;
         if (registBo.getTopManager()) {
             role = roleRepository.findByName(Roles.GENERAL_MANAGER.name());
@@ -101,6 +101,7 @@ public class UserServiceImpl implements UserService {
         user.setDepartment(department);
         user.setLevel(level);
         user.setRoles(Lists.newArrayList(role));
+        user.setPaymentPercent(level.getDefaultPaymentPercent());
         userRepository.save(user);
         Security security = new Security();
         security.setUserId(user.getId());

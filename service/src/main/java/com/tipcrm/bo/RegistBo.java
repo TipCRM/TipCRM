@@ -32,12 +32,12 @@ public class RegistBo {
         this.username = username;
     }
 
-    public Boolean getManager() {
+    public Boolean getTopManager() {
         return isTopManager;
     }
 
-    public void setManager(Boolean manager) {
-        isTopManager = manager;
+    public void setTopManager(Boolean topManager) {
+        isTopManager = topManager;
     }
 
     public Integer getManagerId() {
@@ -46,14 +46,6 @@ public class RegistBo {
 
     public void setManagerId(Integer managerId) {
         this.managerId = managerId;
-    }
-
-    public Boolean getTopManager() {
-        return isTopManager;
-    }
-
-    public void setTopManager(Boolean topManager) {
-        isTopManager = topManager;
     }
 
     public Integer getDepartmentId() {
