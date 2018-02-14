@@ -27,12 +27,14 @@ import com.tipcrm.dao.repository.LevelRepository;
 import com.tipcrm.dao.repository.RoleRepository;
 import com.tipcrm.dao.repository.SecurityRepository;
 import com.tipcrm.dao.repository.UserRepository;
+import com.tipcrm.exception.AccountException;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.service.ListBoxService;
 import com.tipcrm.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.slf4j.Logger;
@@ -74,6 +76,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     @CachePut(value = "user")
     public User save(User user) {
@@ -83,13 +88,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Cacheable(value = "user", key = "#userId")
     public User findOne(Integer userId) {
-        logger.debug("进入查询");
         return userRepository.findOne(userId);
     }
 
     @Override
+    @Cacheable(value = "user", key = "#userId")
     public User findByEmailOrPhoneNo(String key) {
-        logger.debug("通过Key查询");
         return userRepository.findByEmailOrPhoneNo(key);
     }
 
@@ -139,16 +143,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void login(LoginBo loginBo) throws Exception {
+    public void login(LoginBo loginBo) throws Exception{
         validateLoginInfo(loginBo);
         UsernamePasswordToken token = new UsernamePasswordToken(loginBo.getLoginKey(), loginBo.getPassword());
-        SecurityUtils.getSubject().login(token);
+        try {
+            SecurityUtils.getSubject().login(token);
+        } catch (AuthenticationException e) {
+            throw new AccountException(e.getMessage());
+        }
     }
 
     @Override
     public UserBo getUserByUserId(Integer userId) throws Exception {
-        System.out.println("内调用");
-        User user = findOne(userId);
+        User user = userService.findOne(userId);
         if (user == null) {
             throw new BizException("用户不存在");
         }
@@ -219,12 +226,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void validateLoginInfo(LoginBo loginBo) throws Exception {
+    private void validateLoginInfo(LoginBo loginBo) throws AccountException {
         if (StringUtils.isBlank(loginBo.getLoginKey())) {
-            throw new Exception("登陆名不能为空");
+            throw new AccountException("登陆名不能为空");
         }
         if (StringUtils.isBlank(loginBo.getPassword())) {
-            throw new Exception("密码不能为空");
+            throw new AccountException("密码不能为空");
         }
     }
 }

@@ -3,6 +3,7 @@ package com.tipcrm.web.handler;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tipcrm.exception.AccountException;
 import com.tipcrm.web.util.JsonEntity;
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authz.UnauthenticatedException;
@@ -38,6 +39,17 @@ public class GlobalExceptionHandler {
         jsonEntity.setMessage("未授权");
         return jsonEntity;
     }
+
+    // 捕捉AccountException
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(AccountException.class)
+    public JsonEntity handleAccountException(AccountException e) {
+        JsonEntity jsonEntity = new JsonEntity();
+        jsonEntity.setStatus(401);
+        jsonEntity.setMessage(e.getMessage());
+        return jsonEntity;
+    }
+
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UnauthenticatedException.class)
     public JsonEntity handleUnauthenticatedException() {
