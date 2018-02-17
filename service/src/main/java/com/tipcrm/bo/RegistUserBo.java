@@ -1,5 +1,5 @@
 package com.tipcrm.bo;
-public class RegistBo {
+public class RegistUserBo {
 
     private String email;
     private String password;

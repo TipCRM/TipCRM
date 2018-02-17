@@ -28,7 +28,7 @@ public class UserApi {
     private UserService userService;
 
     // @RequiresPermissions(value = "user:view")
-    @RequestMapping(value = "currentUserInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "user/me", method = RequestMethod.GET)
     @RequiresAuthentication
     public JsonEntity<UserBo> getUser() throws Exception {
         Integer userId = webContext.getCurrentUserId();

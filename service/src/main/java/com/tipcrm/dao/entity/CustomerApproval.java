@@ -2,18 +2,26 @@ package com.tipcrm.dao.entity;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-public class CustomerApproval extends BaseCreateEntity{
+@Entity
+@Table(name = "customer_approval")
+public class CustomerApproval extends BaseCreateEntity {
 
     @Id
     @GeneratedValue
     @Column(name = "id")
     private Integer id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "opt_type")
+    private ListBox optType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
@@ -48,7 +56,7 @@ public class CustomerApproval extends BaseCreateEntity{
     private Date reviewTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reviewer_status_id")
+    @JoinColumn(name = "review_status_id")
     private ListBox reviewStatus;
 
     @Column(name = "review_note")
@@ -60,6 +68,14 @@ public class CustomerApproval extends BaseCreateEntity{
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public ListBox getOptType() {
+        return optType;
+    }
+
+    public void setOptType(ListBox optType) {
+        this.optType = optType;
     }
 
     public Customer getCustomer() {

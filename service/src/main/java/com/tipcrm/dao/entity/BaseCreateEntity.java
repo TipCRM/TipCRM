@@ -2,21 +2,26 @@ package com.tipcrm.dao.entity;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 
+@MappedSuperclass
 public class BaseCreateEntity {
-
-    @Column(name = "entry_id")
-    private Long entryId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "entry_id")
+    private User entryUser;
 
     @Column(name = "entry_time")
     private Date entryTime;
 
-    public Long getEntryId() {
-        return entryId;
+    public User getEntryUser() {
+        return entryUser;
     }
 
-    public void setEntryId(Long entryId) {
-        this.entryId = entryId;
+    public void setEntryUser(User entryUser) {
+        this.entryUser = entryUser;
     }
 
     public Date getEntryTime() {

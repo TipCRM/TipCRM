@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "level")
-public class Level extends BaseAllEntity{
+public class Level extends BaseAllEntity {
 
     @Id
     @GeneratedValue

@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "customer")
-public class Customer extends BaseAllEntity{
+public class Customer extends BaseAllEntity {
 
     @Id
     @GeneratedValue

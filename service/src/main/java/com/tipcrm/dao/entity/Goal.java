@@ -14,7 +14,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "goal")
-public class Goal extends BaseCreateAndUpdateEntity{
+public class Goal extends BaseCreateAndUpdateEntity {
     @Id
     @GeneratedValue
     @Column(name = "id")

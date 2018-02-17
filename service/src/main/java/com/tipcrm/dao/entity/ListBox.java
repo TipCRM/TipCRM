@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "list_box")
-public class ListBox extends BaseAllEntity{
+public class ListBox extends BaseAllEntity {
 
     @Id
     @GeneratedValue

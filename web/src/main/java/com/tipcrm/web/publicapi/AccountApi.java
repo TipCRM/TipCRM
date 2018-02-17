@@ -1,13 +1,15 @@
 package com.tipcrm.web.publicapi;
 
+import com.tipcrm.bo.CreateUserBo;
 import com.tipcrm.bo.LoginBo;
-import com.tipcrm.bo.RegistBo;
-import com.tipcrm.exception.AccountException;
+import com.tipcrm.bo.RegistUserBo;
+import com.tipcrm.constant.Constants;
 import com.tipcrm.service.UserService;
 import com.tipcrm.web.util.JsonEntity;
 import com.tipcrm.web.util.ResponseHelper;
 import io.swagger.annotations.Api;
-import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +28,24 @@ public class AccountApi {
 
     private Logger logger = LoggerFactory.getLogger(AccountApi.class);
 
-    @RequestMapping(value = "login", method = {RequestMethod.POST})
+    @RequestMapping(value = "/login", method = {RequestMethod.POST})
     public JsonEntity<String> login(@RequestBody LoginBo loginBo) throws Exception {
         userService.login(loginBo);
         return ResponseHelper.createInstance("success");
     }
 
-    @RequestMapping(value = "regist", method = {RequestMethod.POST})
-    public JsonEntity<String> regist(@RequestBody RegistBo registBo) throws Exception {
-        String name = userService.regist(registBo);
-        return ResponseHelper.createInstance(name);
+    @RequestMapping(value = "/regist", method = {RequestMethod.POST})
+    public JsonEntity<String> regist(@RequestBody RegistUserBo registUserBo) throws Exception {
+        String email = userService.regist(registUserBo);
+        return ResponseHelper.createInstance(email);
+    }
+
+    @RequestMapping(value = "/user", method = {RequestMethod.POST})
+    @RequiresAuthentication
+    @RequiresPermissions(value = Constants.Permission.USER_ADD_UPDATE)
+    public JsonEntity<String> addUser(@RequestBody CreateUserBo saveUserBo) throws Exception {
+        String email = userService.saveUser(saveUserBo);
+        return ResponseHelper.createInstance(email);
     }
 
 }

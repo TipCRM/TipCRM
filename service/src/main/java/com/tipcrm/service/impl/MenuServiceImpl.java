@@ -15,7 +15,7 @@ import org.springframework.util.CollectionUtils;
 
 @Service
 @Transactional
-public class MenuServiceImpl implements MenuService{
+public class MenuServiceImpl implements MenuService {
 
     @Autowired
     private MenuRepository menuRepository;

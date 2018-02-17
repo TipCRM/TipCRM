@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "notification")
-public class Notification extends BaseCreateEntity{
+public class Notification extends BaseCreateEntity {
     @Id
     @GeneratedValue
     @Column(name = "id")

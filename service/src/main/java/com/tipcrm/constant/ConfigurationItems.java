@@ -1,4 +1,4 @@
 package com.tipcrm.constant;
-public enum  ConfigurationItems {
+public enum ConfigurationItems {
     REGISTABLE
 }

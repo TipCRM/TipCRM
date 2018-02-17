@@ -41,6 +41,9 @@ public class User {
     @Column(name = "avatar")
     private String avatar;
 
+    @Column(name = "motto")
+    private String motto;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status")
     private ListBox status;
@@ -138,6 +141,14 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getMotto() {
+        return motto;
+    }
+
+    public void setMotto(String motto) {
+        this.motto = motto;
     }
 
     public ListBox getStatus() {

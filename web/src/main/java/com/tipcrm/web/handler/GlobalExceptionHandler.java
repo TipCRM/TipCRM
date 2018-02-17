@@ -19,11 +19,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     private Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     // 捕捉shiro的异常
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ShiroException.class)
     public JsonEntity handle401(ShiroException e) {
-        logger.error("ERROR: " + e.getMessage(),e);
+        logger.error("ERROR: " + e.getMessage(), e);
         JsonEntity jsonEntity = new JsonEntity();
         jsonEntity.setStatus(401);
         jsonEntity.setMessage(e.getMessage());
@@ -63,7 +64,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public JsonEntity globalException(HttpServletRequest request, Throwable e) {
-        logger.error("ERROR: " + e.getMessage(),e);
+        logger.error("ERROR: " + e.getMessage(), e);
         JsonEntity jsonEntity = new JsonEntity();
         jsonEntity.setStatus(getStatus(request).value());
         jsonEntity.setMessage(e.getMessage());

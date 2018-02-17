@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "project")
-public class Project extends BaseAllEntity{
+public class Project extends BaseAllEntity {
 
     @Id
     @GeneratedValue

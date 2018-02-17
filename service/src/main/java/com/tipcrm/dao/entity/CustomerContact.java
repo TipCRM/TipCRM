@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "customer_contact")
-public class CustomerContact extends BaseCreateEntity{
+public class CustomerContact extends BaseCreateEntity {
 
     @Id
     @GeneratedValue
@@ -21,6 +21,10 @@ public class CustomerContact extends BaseCreateEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "approval_id")
+    private CustomerApproval customerApproval;
 
     @Column(name = "name")
     private String name;
@@ -54,6 +58,14 @@ public class CustomerContact extends BaseCreateEntity{
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public CustomerApproval getCustomerApproval() {
+        return customerApproval;
+    }
+
+    public void setCustomerApproval(CustomerApproval customerApproval) {
+        this.customerApproval = customerApproval;
     }
 
     public String getName() {

@@ -187,7 +187,8 @@ DROP TABLE IF EXISTS `customer_approval`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customer_approval` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `customer_id` int(11) NOT NULL,
+  `opt_type` int(11) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
   `name` varchar(100) COLLATE utf8_bin NOT NULL,
   `status_id` int(11) NOT NULL,
   `address` varchar(1000) COLLATE utf8_bin DEFAULT NULL,
@@ -205,6 +206,7 @@ CREATE TABLE `customer_approval` (
   KEY `customer_approvalI2` (`follow_user_id`),
   KEY `customer_approvalI3` (`follow_department_id`),
   KEY `customer_approvalI4` (`customer_id`)
+  KEY `customer_approvalI5` (`opt_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -226,7 +228,8 @@ DROP TABLE IF EXISTS `customer_contact`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customer_contact` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `customer_id` int(11) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `approval_id` int(11) DEFAULT NULL,
   `name` varchar(45) COLLATE utf8_bin NOT NULL,
   `phone_no` varchar(20) COLLATE utf8_bin NOT NULL,
   `email` varchar(50) COLLATE utf8_bin DEFAULT NULL,
@@ -238,6 +241,7 @@ CREATE TABLE `customer_contact` (
   PRIMARY KEY (`id`),
   KEY `customer_contactI1` (`customer_id`),
   KEY `customer_contactI2` (`name`,`phone_no`)
+  KEY `customer_contactI3` (`approval_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -387,8 +391,8 @@ INSERT INTO `list_box` VALUES
 (3,'CUSTOMER_STATUS','SIGNING_CUSTOMER','签约客户',3,-1,NOW(),NULL,NULL,NULL,NULL,0),
 (4,'CUSTOMER_STATUS','EXPIRED_CUSTOMER','过期客户',4,-1,NOW(),NULL,NULL,NULL,NULL,0),
 (5,'APPROVAL_STATUS','PENDING','待审批',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(6,'APPROVAL_STATUS','REJECT','驳回',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(7,'APPROVAL_STATUS','APPROVE','通过',3,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(6,'APPROVAL_STATUS','REJECTED','已驳回',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(7,'APPROVAL_STATUS','APPROVEED','已通过',3,-1,NOW(),NULL,NULL,NULL,NULL,0),
 (8,'GOAL_TYPE','USER','员工目标',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
 (9,'GOAL_TYPE','DEPARTMENT','部门目标',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
 (10,'USER_STATUS','ACTIVE','正常',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
@@ -397,6 +401,9 @@ INSERT INTO `list_box` VALUES
 (13,'NOTIFICATION_TYPE','USER_NOTIFICATION','用户通知',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
 (14,'NOTIFICATION_READ_STATUS','READ','已读',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
 (15,'NOTIFICATION_READ_STATUS','UNREAD','未读',2,-1,NOW(),NULL,NULL,NULL,NULL,0);
+(16,'OPERATION_TYPE','ADD','新增',1,-1,NOW(),NULL,NULL,NULL,NULL,0);
+(17,'OPERATION_TYPE','UPDATE','修改',2,-1,NOW(),NULL,NULL,NULL,NULL,0);
+(18,'OPERATION_TYPE','REMOVE','删除',3,-1,NOW(),NULL,NULL,NULL,NULL,0);
 /*!40000 ALTER TABLE `list_box` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -507,16 +514,17 @@ CREATE TABLE `permission` (
 LOCK TABLES `permission` WRITE;
 /*!40000 ALTER TABLE `permission` DISABLE KEYS */;
 INSERT INTO `permission` VALUES
-(1,'客户管理','ADD_UPDATE_CUSTOMER','customer:add_update','添加/修改客户',-1,NOW(),NULL,NULL,NULL,NULL),
-(2,'客户管理','DELETE_CUSTOMER','customer:delete','删除客户',-1,NOW(),NULL,NULL,NULL,NULL),
-(3,'客户管理','TRANSFER_CUSTOMER','customer:transfer','转移客户',-1,NOW(),NULL,NULL,NULL,NULL),
-(4,'客户管理','APPROVAL_CUSTOMER','cusotmer:approval','审批客户',-1,NOW(),NULL,NULL,NULL,NULL),
-(5,'员工管理','USER_ADD','user:add_update','添加/修改员工',-1,NOW(),NULL,NULL,NULL,NULL),
-(6,'员工管理','USER_DELETE','user:delete','员工离职',-1,NOW(),NULL,NULL,NULL,NULL),
-(7,'角色与权限','ROLE_ADD','role:add','添加角色',-1,NOW(),NULL,NULL,NULL,NULL),
-(8,'角色与权限','ROLE_ASSIGN','role:assign','角色分配',-1,NOW(),NULL,NULL,NULL,NULL),
-(9,'部门管理','DEPARTMENT_ADD_UPDATE','department:add_update','添加/修改部门',-1,NOW(),NULL,NULL,NULL,NULL),
-(10,'部门管理','DEPARTMENT_DELETE','department:delete','删除部门',-1,NOW(),NULL,NULL,NULL,NULL);
+(1,'客户管理','CUSTOMER_ADD_UPDATE','customer:add_update','添加/修改客户','-1',NOW(),NULL,NULL,NULL,NULL),
+(2,'客户管理','CUSTOMER_DELETE','customer:delete','删除客户','-1',NOW(),NULL,NULL,NULL,NULL),
+(3,'客户管理','CUSTOMER_TRANSFER','customer:transfer','转移客户','-1',NOW(),NULL,NULL,NULL,NULL),
+(4,'客户管理','CUSTOMER_APPROVAL','cusotmer:approval','审批客户','-1',NOW(),NULL,NULL,NULL,NULL),
+(5,'员工管理','USER_ADD_UPDATE','user:add_update','添加/修改员工','-1',NOW(),NULL,NULL,NULL,NULL),
+(6,'员工管理','USER_DELETE','user:delete','员工离职','-1',NOW(),NULL,NULL,NULL,NULL),
+(7,'角色与权限','ROLE_ADD','role:add','添加角色','-1',NOW(),NULL,NULL,NULL,NULL),
+(8,'角色与权限','ROLE_ASSIGN','role:assign','角色分配','-1',NOW(),NULL,NULL,NULL,NULL),
+(9,'部门管理','DEPARTMENT_ADD_UPDATE','department:add_update','添加/修改部门','-1',NOW(),NULL,NULL,NULL,NULL),
+(10,'部门管理','DEPARTMENT_DELETE','department:delete','删除部门','-1',NOW(),NULL,NULL,NULL,NULL);
+
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -620,6 +628,8 @@ INSERT INTO `role_permission` VALUES
 (6,1,6,0,-1,NOW()),
 (7,1,7,0,-1,NOW()),
 (8,1,8,0,-1,NOW());
+(9,1,9,0,-1,NOW());
+(10,1,10,0,-1,NOW());
 /*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -662,6 +672,7 @@ CREATE TABLE `user` (
   `birthday` datetime(3) DEFAULT NULL,
   `phone_no` varchar(20) COLLATE utf8_bin DEFAULT NULL,
   `avatar` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `motto` varchar(1000) COLLATE utf8_bin DEFAULT NULL,
   `status` int(11) NOT NULL,
   `hire_id` int(11) NOT NULL,
   `hire_time` datetime(3) NOT NULL,
@@ -689,7 +700,7 @@ CREATE TABLE `user` (
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` VALUES
-(-1,'SYSTEM','crm@tip.com',NULL,NULL,NULL,NULL,10,-1,NOW(),NULL,NULL,0.00,NULL,NULL,NULL,NULL,NULL);
+(-1,'SYSTEM','crm@tip.com',NULL,NULL,NULL,NULL,NULL,10,-1,NOW(),NULL,NULL,0.00,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 

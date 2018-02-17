@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "role_permission")
-public class RolePermission extends BaseCreateEntity{
+public class RolePermission extends BaseCreateEntity {
     @Id
     @GeneratedValue
     @Column(name = "id")

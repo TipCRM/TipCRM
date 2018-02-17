@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "communication")
-public class Communication extends BaseCreateAndUpdateEntity{
+public class Communication extends BaseCreateAndUpdateEntity {
 
     @Id
     @GeneratedValue
