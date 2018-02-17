@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class WebContextImpl implements WebContext{
+public class WebContextImpl implements WebContext {
 
     @Autowired
     private UserRepository userRepository;
@@ -21,7 +21,11 @@ public class WebContextImpl implements WebContext{
 
     @Override
     public User getCurrentUser() {
-        User user = userRepository.findOne(getCurrentUserId());
+        Integer userId = getCurrentUserId();
+        if (userId == null) {
+            return null;
+        }
+        User user = userRepository.findOne(userId);
         return user;
     }
 }

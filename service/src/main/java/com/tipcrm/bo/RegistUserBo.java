@@ -1,10 +1,11 @@
 package com.tipcrm.bo;
-public class RegistBo {
+public class RegistUserBo {
 
     private String email;
     private String password;
     private String username;
-    private Boolean isManager;
+    private Boolean isTopManager;
+    private Integer departmentId;
 
     public String getEmail() {
         return email;
@@ -30,11 +31,19 @@ public class RegistBo {
         this.username = username;
     }
 
-    public Boolean getManager() {
-        return isManager;
+    public Boolean getTopManager() {
+        return isTopManager;
     }
 
-    public void setManager(Boolean manager) {
-        isManager = manager;
+    public void setTopManager(Boolean topManager) {
+        isTopManager = topManager;
+    }
+
+    public Integer getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
     }
 }

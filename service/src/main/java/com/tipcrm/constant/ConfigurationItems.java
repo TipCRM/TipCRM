@@ -1,4 +1,4 @@
-package com.tipcrm.dao.enums;
+package com.tipcrm.constant;
 public enum ConfigurationItems {
     REGISTABLE
 }

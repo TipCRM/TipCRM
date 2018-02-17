@@ -26,7 +26,7 @@ public class MenuApi {
 
     @RequestMapping(value = "menu", method = RequestMethod.GET)
     @RequiresAuthentication
-    public JsonEntity<List<MenuBo>> getMenu(){
+    public JsonEntity<List<MenuBo>> getMenu() {
         Integer userId = webContext.getCurrentUserId();
         List<MenuBo> menuBos = menuService.findMenuByUserId(userId);
         return ResponseHelper.createInstance(menuBos);

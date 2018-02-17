@@ -23,3 +23,10 @@ spring:
       jpa:
          show-sql: true
          database-platform: org.hibernate.dialect.MySQL5Dialect
+      mail:
+        host: smtp.163.com
+        username: wan_neil@163.com
+        password: 
+        default-encoding: UTF-8
+mail:
+      from: wan_neil@163.com
