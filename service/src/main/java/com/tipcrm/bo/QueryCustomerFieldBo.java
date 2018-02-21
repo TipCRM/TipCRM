@@ -1,0 +1,10 @@
+package com.tipcrm.bo;
+public enum  QueryCustomerFieldBo {
+    CUSTOMER_NAME,
+    STATUS,
+    LAST_COMMUNICATE_TIME,
+    LAST_COMMUNICATE_CONTENT,
+    NEXT_COMMUNICATE_TIME,
+    FOLLOW_USER,
+    FOLLOW_DEPARTMENT
+}

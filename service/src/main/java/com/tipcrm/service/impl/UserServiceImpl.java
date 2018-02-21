@@ -2,6 +2,7 @@ package com.tipcrm.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.google.common.collect.Lists;
@@ -32,6 +33,7 @@ import com.tipcrm.exception.AccountException;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.service.ListBoxService;
 import com.tipcrm.service.MailService;
+import com.tipcrm.service.RoleService;
 import com.tipcrm.service.UserService;
 import com.tipcrm.service.WebContext;
 import org.apache.commons.lang3.StringUtils;
@@ -52,7 +54,6 @@ import org.springframework.util.CollectionUtils;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
-@CacheConfig(cacheNames = "user")
 public class UserServiceImpl implements UserService {
 
     private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -83,6 +84,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private RoleService roleService;
 
     @Override
     public String regist(RegistUserBo registUserBo) throws Exception {
@@ -193,6 +197,17 @@ public class UserServiceImpl implements UserService {
         }
         User user = userRepository.findOne(userId);
         return user != null;
+    }
+
+    @Override
+    public Boolean isGeneralManager(Integer userId) {
+        Set<String> roles = roleService.getRoleListByUserId(userId);
+        return roles.contains(Roles.GENERAL_MANAGER.name());
+    }
+
+    @Override
+    public List<User> findGeneralManager() {
+        return userRepository.findByRole(Roles.GENERAL_MANAGER.name());
     }
 
     private UserBo convertToUserBo(User user) {

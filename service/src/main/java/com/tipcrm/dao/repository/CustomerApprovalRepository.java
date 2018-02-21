@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CustomerApprovalRepository extends JpaRepository<CustomerApproval, Integer> {
 
-    CustomerApproval findByIdAndReviewTimeIsNull(Integer id);
+    CustomerApproval findByIdAndReviewStatusId(Integer customerApprovalId, Integer reviewStatusId);
 }

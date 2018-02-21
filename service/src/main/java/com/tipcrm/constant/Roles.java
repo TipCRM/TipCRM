@@ -1,5 +1,6 @@
 package com.tipcrm.constant;
 public enum Roles {
     GENERAL_MANAGER,
-    NORMAL
+    NORMAL,
+    DEPARTMENT_MANAGER
 }

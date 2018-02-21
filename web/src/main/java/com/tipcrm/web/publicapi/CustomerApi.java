@@ -1,9 +1,14 @@
 package com.tipcrm.web.publicapi;
 
 import com.tipcrm.bo.CreateCustomerBo;
+import com.tipcrm.bo.CustomerTransferRequestBo;
 import com.tipcrm.bo.OptCustomerResultBo;
+import com.tipcrm.bo.QueryCustomerBo;
+import com.tipcrm.bo.QueryRequestBo;
+import com.tipcrm.bo.QueryResultBo;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.exception.BizException;
+import com.tipcrm.exception.QueryException;
 import com.tipcrm.service.CustomerService;
 import com.tipcrm.web.util.JsonEntity;
 import com.tipcrm.web.util.ResponseHelper;
@@ -44,14 +49,25 @@ public class CustomerApi {
         return ResponseHelper.createInstance(customerService.deleteCustomer(customerId));
     }
 
-    @RequestMapping(value = "/transfer/customer/{customerId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/customer/transfer/out", method = RequestMethod.POST)
     @RequiresPermissions(Constants.Permission.CUSTOMER_TRANSFER)
-    public JsonEntity<String> transferCustomer(@PathVariable("customerId") Integer customerId) {
-        return null;
+    public JsonEntity<OptCustomerResultBo> transferCustomerOut(@RequestBody CustomerTransferRequestBo transferBo) throws BizException {
+        return ResponseHelper.createInstance(customerService.transferCustomer(transferBo));
     }
 
-    @RequestMapping(value = "/my/customers", method = RequestMethod.GET)
-    public JsonEntity myCustomers() {
-        return null;
+    @RequestMapping(value = "/my/customers", method = RequestMethod.POST)
+    public JsonEntity<QueryResultBo> myCustomers(@RequestBody QueryRequestBo requestBo) throws QueryException {
+        return ResponseHelper.createInstance(customerService.findMyCustomers(requestBo));
+    }
+
+    @RequestMapping(value = "/customer/openSea/myDepartment", method = RequestMethod.POST)
+    public JsonEntity<QueryResultBo<QueryCustomerBo>> findMyDepartmentOpenSea(@RequestBody QueryRequestBo requestBo) throws QueryException, BizException {
+        return ResponseHelper.createInstance(customerService.findByMyDepartmentOpenSea(requestBo));
+    }
+
+    @RequestMapping(value = "/customer/openSea/department/{departmentId}", method = RequestMethod.POST)
+    public JsonEntity<QueryResultBo<QueryCustomerBo>> findByDepartmentOpenSea(@PathVariable("departmentId") Integer departmentId,
+                                                                              @RequestBody QueryRequestBo requestBo) throws QueryException {
+        return ResponseHelper.createInstance(customerService.findByDepartmentOpenSea(departmentId, requestBo));
     }
 }

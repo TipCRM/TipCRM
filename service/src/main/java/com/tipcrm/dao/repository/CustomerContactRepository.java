@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface CustomerContactRepository extends JpaRepository<CustomerContact, Integer> {
 
     List<CustomerContact> findByCustomerApprovalId(Integer approvalId);
+
+    List<CustomerContact> findByCustomerIdOrderByEntryTimeDesc(Integer customerId);
 }
