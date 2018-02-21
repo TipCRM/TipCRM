@@ -124,6 +124,7 @@ public class CustomerServiceImpl implements CustomerService {
             Integer customerId = approveCustomer(approveBo, false);
             return new OptCustomerResultBo(OptCustomerResultType.CUSTOMER.name(), customerId);
         } else {
+            // todo : add notification
             return new OptCustomerResultBo(OptCustomerResultType.CUSTOMER_APPROVAL.name(), approval.getId());
         }
     }
@@ -304,6 +305,7 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerApproval approval = createCustomerByApprovalByRemoveMethod(customer);
         Set<String> permissions = permissionService.getPermissionValueListByUserId(webContext.getCurrentUserId());
         if (!permissions.contains(Constants.Permission.CUSTOMER_APPROVAL)) {
+            //todo : add notification
             return new OptCustomerResultBo(OptCustomerResultType.CUSTOMER_APPROVAL.name(), approval.getId());
         } else {
             // approve
@@ -495,11 +497,13 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BizException("您不属于任何一个部门，不允许进行客户转移操作");
         }
         validateTransferBo(transferBo);
+        // todo : refactor and add notification
         Set<String> permissions = permissionService.getPermissionValueListByUserId(webContext.getCurrentUserId());
         if (permissions.contains(Constants.Permission.CUSTOMER_APPROVAL)) {
             return new OptCustomerResultBo(OptCustomerResultType.CUSTOMER.name(), transferCustomerByApproval(transferBo));
+        } else {
+            return new OptCustomerResultBo(OptCustomerResultType.CUSTOMER_APPROVAL.name(), transferCustomerByNormal(transferBo));
         }
-        return new OptCustomerResultBo(OptCustomerResultType.CUSTOMER_APPROVAL.name(), transferCustomerByNormal(transferBo));
     }
 
     private void validateTransferBo(CustomerTransferRequestBo transferBo) throws BizException {
