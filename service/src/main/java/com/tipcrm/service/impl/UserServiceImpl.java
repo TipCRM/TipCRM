@@ -16,14 +16,12 @@ import com.tipcrm.constant.Levels;
 import com.tipcrm.constant.ListBoxCategory;
 import com.tipcrm.constant.Roles;
 import com.tipcrm.constant.UserStatus;
-import com.tipcrm.dao.entity.Configuration;
 import com.tipcrm.dao.entity.Department;
 import com.tipcrm.dao.entity.Level;
 import com.tipcrm.dao.entity.ListBox;
 import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.entity.Security;
 import com.tipcrm.dao.entity.User;
-import com.tipcrm.dao.repository.ConfigurationRepository;
 import com.tipcrm.dao.repository.DepartmentRepository;
 import com.tipcrm.dao.repository.LevelRepository;
 import com.tipcrm.dao.repository.RoleRepository;
@@ -31,6 +29,7 @@ import com.tipcrm.dao.repository.SecurityRepository;
 import com.tipcrm.dao.repository.UserRepository;
 import com.tipcrm.exception.AccountException;
 import com.tipcrm.exception.BizException;
+import com.tipcrm.service.ConfigurationService;
 import com.tipcrm.service.ListBoxService;
 import com.tipcrm.service.MailService;
 import com.tipcrm.service.RoleService;
@@ -46,7 +45,6 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +63,7 @@ public class UserServiceImpl implements UserService {
     private SecurityRepository securityRepository;
 
     @Autowired
-    private ConfigurationRepository configurationRepository;
+    private ConfigurationService configurationService;
 
     @Autowired
     private ListBoxService listBoxService;
@@ -90,8 +88,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String regist(RegistUserBo registUserBo) throws Exception {
-        Configuration registable = configurationRepository.findByKey(ConfigurationItems.REGISTABLE.name());
-        if (!Boolean.valueOf(registable.getValue())) {
+        String registable = configurationService.get(ConfigurationItems.REGISTABLE.name());
+        if (!Boolean.valueOf(registable)) {
             throw new Exception("管理员没有开放注册通道");
         }
 
@@ -152,7 +150,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         String randomPwd = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8);
         saveSecurity(user.getId(), randomPwd);
-        // todo: (send email to notify user)
         mailService.sendSimpleEmail(createUserBo.getEmail(), "注册通知", "管理员已为您分配帐号，初始密码是" + randomPwd + "，请尽快登陆系统修改密码。");
         return createUserBo.getEmail();
     }
