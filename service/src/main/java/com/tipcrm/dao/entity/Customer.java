@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -35,6 +36,10 @@ public class Customer extends BaseAllEntity {
     @ManyToOne
     @JoinColumn(name = "follow_department_id")
     private Department followDepartment;
+
+    @ManyToOne
+    @JoinColumn(name = "last_communication_id")
+    private Communication lastCommunication;
 
     @Column(name = "note")
     private String note;
@@ -85,6 +90,14 @@ public class Customer extends BaseAllEntity {
 
     public void setFollowDepartment(Department followDepartment) {
         this.followDepartment = followDepartment;
+    }
+
+    public Communication getLastCommunication() {
+        return lastCommunication;
+    }
+
+    public void setLastCommunication(Communication lastCommunication) {
+        this.lastCommunication = lastCommunication;
     }
 
     public String getNote() {

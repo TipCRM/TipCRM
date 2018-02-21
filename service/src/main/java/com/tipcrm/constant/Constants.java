@@ -1,4 +1,8 @@
 package com.tipcrm.constant;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
 public class Constants {
     public static final Integer HASH_ITERATIONS = 2;
 
@@ -35,6 +39,17 @@ public class Constants {
 
         public static class Content {
             public static final String NEW_CUSTOMER_APPROVAL = "您的客户操作申请已{0}! \n申请号：{1}\n审批人:{2}\n审批时间:{3}\n审批意见:{4}";
+        }
+    }
+    public static class QueryFieldName {
+        public static class Customer {
+            public static final String CUSTOMER_NAME = "customer_name";
+            public static final String STATUS = "status";
+            public static final String LAST_COMMUNICATION_TIME = "last_communication_time";
+            public static final String LAST_COMMUNICATION_CONTENT = "last_communication_content";
+            public static final String NEXT_COMMUNICATION_TIME = "next_communication_time";
+            public static final String FOLLOW_USER = "follow_user";
+            public static final String FOLLOW_DEPARTMENT = "follow_department";
         }
     }
 }
