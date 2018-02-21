@@ -7,7 +7,7 @@ public class Constants {
     public static final Integer HASH_ITERATIONS = 2;
 
     public static class User {
-        public static final String SYSTEM = "SYSTEM";
+        public static final String SYSTEM = "系统";
     }
 
     public static class Filter {

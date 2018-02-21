@@ -493,13 +493,13 @@ CREATE TABLE `notification` (
   `to_user_id` int(11) NOT NULL,
   `subject` varchar(100) DEFAULT NULL,
   `content` text,
-  `type` int(11) NOT NULL,
+  `type_id` int(11) NOT NULL,
   `read_status` int(11) NOT NULL,
   `entry_id` int(11) NOT NULL,
   `entry_time` datetime(3) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `notificationI1` (`to_user_id`),
-  KEY `notificationI2` (`type`),
+  KEY `notificationI2` (`type_id`),
   KEY `notificationI3` (`read_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

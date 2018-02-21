@@ -28,7 +28,7 @@ public class Notification extends BaseCreateEntity {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "type")
+    @JoinColumn(name = "type_id")
     private ListBox type;
 
     @ManyToOne(fetch = FetchType.LAZY)
