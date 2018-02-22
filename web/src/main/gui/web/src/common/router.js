@@ -122,6 +122,5 @@ export const getRouterData = (app) => {
       authority: routerConfig[item].authority || menuItem.authority,
     };
   });
-  console.log(routerData);
   return routerData;
 };

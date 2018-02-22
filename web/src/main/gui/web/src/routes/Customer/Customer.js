@@ -5,7 +5,8 @@ import React from 'react';
 import {connect} from 'dva';
 import {Spin, Icon, Table, Button, Popover, List, Input} from 'antd';
 import Loader from '../../components/Loader/Loader';
-import styles from '../Customer/Customer.less'
+import styles from '../Customer/Customer.less';
+import EditableItem from '../../components/EditableItem';
 
 @connect(({customer, loading})=>
   ({customer,
@@ -118,17 +119,22 @@ export default class Customer extends React.PureComponent{
           );
         },
       },
-      {title:'联系人',dataIndex:'contact'},
+      {title:'联系人',dataIndex:'contact',
+      render:((text) =>{
+        return (
+          <EditableItem value={text}/>
+        );
+      }),},
       {title:'联系电话',dataIndex:'phone'},
       {title:'最后一次沟通时间',dataIndex:'lastContactTime',},
-      {title:'拜访记录',dataIndex:'message',
+      {title:'拜访记录',dataIndex:'message', width:'18%',
         render:((text, record, index) =>{
           return(
             <Popover content={this.initPopover(record)} trigger="click" placement="bottom" >
               <div style={{cursor:'pointer'}}>{text}</div>
             </Popover>);}),className:styles.tableColumn},
       {title:'下次沟通',dataIndex:'nextContactTime'},
-      {title:'用户状态',dataIndex:'customerStatus', filters:[
+      {title:'客户状态',dataIndex:'customerStatus', filters:[
         {text:'意向客户',value:'意向客户'},
         {text:'签约客户',value:'签约客户'},
         {text:'新客户',value:'新客户'},

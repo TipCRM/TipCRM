@@ -218,7 +218,7 @@ const menuDatabase = [{
 const apis = {
   'POST /public/api/login':'http://www.potafish.com',
   'POST /public/api/regist':'http://www.potafish.com',
-  'GET /public/api/currentUserInfo':'http://www.potafish.com',
+  'GET /public/api/user/me':'http://www.potafish.com',
   'GET /api/currentUser': {
     $desc: "获取当前用户接口",
     $params: {

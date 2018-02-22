@@ -72,7 +72,6 @@ class BasicLayout extends React.PureComponent {
   }
   state = {
     isMobile,
-    state:[],
   };
   getChildContext() {
     const { location, routerData } = this.props;
@@ -81,12 +80,12 @@ class BasicLayout extends React.PureComponent {
       breadcrumbNameMap: routerData,
     };
   }
-  componentWillMount(){
-    console.log("start init menu");
-    this.props.dispatch({
-      type: 'global/fetchMenu',
-    });
-  }
+  //componentWillMount(){
+  //  console.log("start init menu");
+  //  this.props.dispatch({
+  //    type: 'global/fetchMenu',
+  //  });
+  //}
 
   componentDidMount() {
     enquireScreen((mobile) => {
@@ -171,9 +170,8 @@ class BasicLayout extends React.PureComponent {
   }
   render() {
     const {
-      currentUser, collapsed, fetchingNotices, notices, routerData, match, location, fetchingMenu
+      currentUser, collapsed, fetchingNotices, notices, routerData, match, location,
     } = this.props;
-    const {menu} = this.props;
     const links = [{
       key: 'help',
       title: '帮助',
@@ -190,20 +188,18 @@ class BasicLayout extends React.PureComponent {
     const bashRedirect = this.getBashRedirect();
     const layout = (
       <Layout>
-        <Spin spinning={fetchingMenu}>
-          <SiderMenu
-            logo={logo}
-            // 不带Authorized参数的情况下如果没有权限,会强制跳到403界面
-            // If you do not have the Authorized parameter
-            // you will be forced to jump to the 403 interface without permission
-            Authorized={Authorized}
-            menuData={getMenuData()}
-            collapsed={collapsed}
-            location={location}
-            isMobile={this.state.isMobile}
-            onCollapse={this.handleMenuCollapse}
-          />
-        </Spin>
+        <SiderMenu
+          logo={logo}
+          // 不带Authorized参数的情况下如果没有权限,会强制跳到403界面
+          // If you do not have the Authorized parameter
+          // you will be forced to jump to the 403 interface without permission
+          Authorized={Authorized}
+          menuData={getMenuData()}
+          collapsed={collapsed}
+          location={location}
+          isMobile={this.state.isMobile}
+          onCollapse={this.handleMenuCollapse}
+        />
         <Layout>
           <GlobalHeader
             logo={logo}
@@ -226,18 +222,19 @@ class BasicLayout extends React.PureComponent {
                   )
                 }
                 {
-                  getRoutes(match.path, routerData).map(item =>(
-                    <AuthorizedRoute
-                      key={item.key}
-                      path={item.path}
-                      component={item.component}
-                      exact={item.exact}
-                      authority={item.authority}
-                      redirectPath="/exception/403"
-                    />
-                  ))
+                  getRoutes(match.path, routerData).map(item =>
+                    (
+                      <AuthorizedRoute
+                        key={item.key}
+                        path={item.path}
+                        component={item.component}
+                        exact={item.exact}
+                        authority={item.authority}
+                        redirectPath="/exception/403"
+                      />
+                    )
+                  )
                 }
-                <Route exact path="/list/search/projects" component={routerData['/index'].component} />
                 <Redirect exact from="/" to={bashRedirect} />
                 <Route render={NotFound} />
               </Switch>
@@ -265,11 +262,11 @@ class BasicLayout extends React.PureComponent {
   }
 }
 
+//  fetchingMenu: loading.effects['global/fetchMenu'],
 export default connect(({ user, global, loading }) => ({
   currentUser: user.currentUser,
   collapsed: global.collapsed,
   fetchingNotices: loading.effects['global/fetchNotices'],
-  fetchingMenu: loading.effects['global/fetchMenu'],
   notices: global.notices,
   menu: global.menu,
 }))(BasicLayout);

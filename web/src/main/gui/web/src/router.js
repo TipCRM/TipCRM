@@ -6,7 +6,6 @@ import dynamic from 'dva/dynamic';
 import { getRouterData } from './common/router';
 import Authorized from './utils/Authorized';
 import styles from './index.less';
-import {connect} from 'dva';
 
 const { ConnectedRouter } = routerRedux;
 const { AuthorizedRoute } = Authorized;

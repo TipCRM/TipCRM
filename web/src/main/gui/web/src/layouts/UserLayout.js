@@ -52,7 +52,6 @@ class UserLayout extends React.PureComponent {
                 />
               )
             )}
-            <Route key="test" path={'/user/test'} c/>
             <Redirect exact from="/user" to="/user/login" />
           </Switch>
           <GlobalFooter className={styles.footer} links={links} copyright={copyright}/>

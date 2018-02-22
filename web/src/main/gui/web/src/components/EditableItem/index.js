@@ -40,12 +40,7 @@ export default class EditableItem extends PureComponent {
             </div>
           ) : (
             <div className={styles.wrapper}>
-              <span>{value || ' '}</span>
-              <Icon
-                type="edit"
-                className={styles.icon}
-                onClick={this.edit}
-              />
+              <span style={{cursor: 'pointer'}} onDoubleClick={this.edit}>{value || ' '}</span>
             </div>
           )
         }

@@ -14,7 +14,7 @@ import './index.less';
 const app = dva({
   history: createHistory(),
   onError (error) {
-    message.error(error.message)
+    message.error(error.message);
   },
 });
 
