@@ -110,6 +110,9 @@ export const getRouterData = (app) => {
     '/customer': {
       component: dynamicWrapper(app,['customer'],() => import ('../routes/Customer/Customer')),
     },
+    '/report': {
+      component:dynamicWrapper(app,[],() => import ('../routes/Report/Report')),
+    },
   };
   // Get name from ./menu.js or just set it in the router data.
   const menuData = getFlatMenuData(getMenuData());
