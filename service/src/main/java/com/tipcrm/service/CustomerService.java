@@ -17,11 +17,11 @@ public interface CustomerService {
 
     OptCustomerResultBo deleteCustomer(Integer customerId) throws BizException;
 
-    QueryResultBo<QueryCustomerBo> findMyCustomers(QueryRequestBo queryRequestBo) throws QueryException;
+    QueryResultBo<QueryCustomerBo> findMyCustomers(QueryRequestBo queryRequestBo) throws QueryException, BizException;
 
     QueryResultBo<QueryCustomerBo> findByMyDepartmentOpenSea(QueryRequestBo queryRequestBo) throws BizException, QueryException;
 
-    QueryResultBo<QueryCustomerBo> findByDepartmentOpenSea(Integer departmentId, QueryRequestBo queryRequestBo) throws QueryException;
+    QueryResultBo<QueryCustomerBo> findByDepartmentOpenSea(Integer departmentId, QueryRequestBo queryRequestBo) throws QueryException, BizException;
 
     OptCustomerResultBo transferCustomer(CustomerTransferRequestBo transferBo) throws BizException;
 }

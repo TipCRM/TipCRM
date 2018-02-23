@@ -56,7 +56,7 @@ public class CustomerApi {
     }
 
     @RequestMapping(value = "/my/customers", method = RequestMethod.POST)
-    public JsonEntity<QueryResultBo> myCustomers(@RequestBody QueryRequestBo requestBo) throws QueryException {
+    public JsonEntity<QueryResultBo> myCustomers(@RequestBody QueryRequestBo requestBo) throws QueryException, BizException {
         return ResponseHelper.createInstance(customerService.findMyCustomers(requestBo));
     }
 
@@ -67,7 +67,7 @@ public class CustomerApi {
 
     @RequestMapping(value = "/customer/openSea/department/{departmentId}", method = RequestMethod.POST)
     public JsonEntity<QueryResultBo<QueryCustomerBo>> findByDepartmentOpenSea(@PathVariable("departmentId") Integer departmentId,
-                                                                              @RequestBody QueryRequestBo requestBo) throws QueryException {
+                                                                              @RequestBody QueryRequestBo requestBo) throws QueryException, BizException {
         return ResponseHelper.createInstance(customerService.findByDepartmentOpenSea(departmentId, requestBo));
     }
 }

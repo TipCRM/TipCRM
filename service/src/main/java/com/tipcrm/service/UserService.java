@@ -23,4 +23,6 @@ public interface UserService {
     Boolean isGeneralManager(Integer userId);
 
     List<User> findGeneralManager();
+
+    User findSystemUser();
 }
