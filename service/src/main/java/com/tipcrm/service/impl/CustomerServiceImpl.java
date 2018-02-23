@@ -386,7 +386,8 @@ public class CustomerServiceImpl implements CustomerService {
                 page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize());
             } else {
                 page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize(),
-                                       new Sort(queryRequestBo.getSort().getDirection(), queryRequestBo.getSort().getFieldName()));
+                                       new Sort(querySortBo.getDirection(),
+                                                Constants.SortFieldName.Customer.fieldMap.get(querySortBo.getFieldName())));
             }
             Specification<Customer> specification = new CustomerSpecification(queryRequestBo);
             Page<Customer> customers = customerRepository.findAll(specification, page);
@@ -477,7 +478,8 @@ public class CustomerServiceImpl implements CustomerService {
                 page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize());
             } else {
                 page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize(),
-                                       new Sort(queryRequestBo.getSort().getDirection(), queryRequestBo.getSort().getFieldName()));
+                                       new Sort(querySortBo.getDirection(),
+                                                Constants.SortFieldName.Customer.fieldMap.get(querySortBo.getFieldName())));
             }
             Specification<Customer> specification = new CustomerSpecification(queryRequestBo);
             Page<Customer> customers = customerRepository.findAll(specification, page);
