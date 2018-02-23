@@ -1,4 +1,5 @@
 package com.tipcrm.service;
+import com.tipcrm.constant.UserStatus;
 import com.tipcrm.dao.entity.Security;
 import com.tipcrm.dao.entity.User;
 import com.tipcrm.dao.repository.SecurityRepository;
@@ -7,9 +8,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -22,7 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class TipCRMRealm extends AuthorizingRealm {
 
     @Autowired
-    private UserService userService;
+    private RoleService roleService;
+
+    @Autowired
+    private PermissionService permissionService;
 
     @Autowired
     private UserRepository userRepository;
@@ -34,18 +36,20 @@ public class TipCRMRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         Integer userId = (Integer) SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.setRoles(userService.getRoleListByUserId(userId));
-        info.setStringPermissions(userService.getPermissionValueListByUserId(userId));
+        info.setRoles(roleService.getRoleListByUserId(userId));
+        info.setStringPermissions(permissionService.getPermissionValueListByUserId(userId));
         return info;
     }
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String loginKey = (String) token.getPrincipal();
-        String password = String.valueOf((char[]) token.getCredentials());
         User user = userRepository.findByEmailOrPhoneNo(loginKey);
         if (user == null) {
-            throw new UnknownAccountException();
+            throw new AuthenticationException("帐号或密码错误");
+        }
+        if (UserStatus.FROZEN.name().equals(user.getStatus().getName())) {
+            throw new AuthenticationException("帐户被冻结");
         }
         Security security = securityRepository.findOne(user.getId());
         return new SimpleAuthenticationInfo(user.getId(), security.getPassword(), ByteSource.Util.bytes(security.getSalt()), getName());

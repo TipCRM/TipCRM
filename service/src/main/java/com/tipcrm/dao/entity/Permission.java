@@ -11,8 +11,11 @@ import javax.persistence.Table;
 public class Permission extends BaseAllEntity {
     @GeneratedValue
     @Id
-    @Column(name = "oid")
-    private  Long id;
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "group_name")
+    private String groupName;
 
     @Column(name = "name")
     private String name;
@@ -23,15 +26,20 @@ public class Permission extends BaseAllEntity {
     @Column(name = "display_name")
     private String displayName;
 
-    @Column(name = "editable")
-    private Boolean editable;
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     public String getName() {
@@ -42,14 +50,6 @@ public class Permission extends BaseAllEntity {
         this.name = name;
     }
 
-    public Boolean getEditable() {
-        return editable;
-    }
-
-    public void setEditable(Boolean editable) {
-        this.editable = editable;
-    }
-
     public String getDisplayName() {
         return displayName;
     }
@@ -58,11 +58,11 @@ public class Permission extends BaseAllEntity {
         this.displayName = displayName;
     }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     public String getValue() {
         return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

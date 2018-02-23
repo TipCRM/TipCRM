@@ -44,16 +44,16 @@
     function login() {
         $.ajax({
                 url: "public/api/login",
-                data: $("#login_form").serialize(),
+                data: JSON.stringify({
+                    loginKey: $('input[name="loginKey"]').val(),
+                    password: $('input[name="password"]').val()
+                }),
                 dataType: "JSON",
                 type: "POST",
+            contentType: "application/json",
                 success: function (res) {
                     if (res["status"] == 200) {
-                        var pathName = document.location.pathname;
-                        var index = pathName.substr(1).indexOf("/");
-                        var result = pathName.substr(0,index+1);
-                        result = result + res["data"];
-                        window.location.href=result;
+                        window.location.href="swagger-ui.html";
                     } else {
                         $("#error").html(res["data"]);
                     }

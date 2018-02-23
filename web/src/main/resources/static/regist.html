@@ -80,9 +80,14 @@
         }
         $.ajax({
                 url: "public/api/regist",
-                data: $("#regist_form").serialize(),
+                data: JSON.stringify({
+                    email: email,
+                    password: pwd,
+                    username: username
+                }),
                 dataType: "JSON",
                 type: "POST",
+                contentType: "application/json",
                 success: function (res) {
                     if (res["status"] == 200) {
                         alert("注册成功，前往登陆");

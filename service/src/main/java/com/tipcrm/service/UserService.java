@@ -1,13 +1,26 @@
 package com.tipcrm.service;
 import java.util.List;
-import java.util.Set;
+
+import com.tipcrm.bo.CreateUserBo;
+import com.tipcrm.bo.LoginBo;
+import com.tipcrm.bo.RegistUserBo;
+import com.tipcrm.bo.UserBo;
+import com.tipcrm.dao.entity.User;
+import com.tipcrm.exception.BizException;
 
 public interface UserService {
-    Set<String> getRoleListByUserId(Integer userId);
 
-    Set<String> getPermissionValueListByUserId(Integer userId);
+    String regist(RegistUserBo registUserBo) throws Exception;
 
-    String regist(String email, String password, String username, Boolean isManager) throws Exception;
+    String saveUser(CreateUserBo createUserBo) throws Exception;
 
-    void login(String loginKey, String password) throws Exception;
+    void login(LoginBo loginBo) throws Exception;
+
+    UserBo getUserByUserId(Integer userId) throws Exception;
+
+    Boolean isUserExist(Integer userId) throws BizException;
+
+    Boolean isGeneralManager(Integer userId);
+
+    List<User> findGeneralManager();
 }

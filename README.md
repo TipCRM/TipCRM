@@ -6,10 +6,9 @@
 ### Maintainer
 **Backend:**
  * Neil Wan (1051750377@qq.com) 
- * Moses Cheng (1285823170@qq.com)
  
 **Frontend:**
- * need you
+ * Moses Cheng (1285823170@qq.com)
  
 **Test:**
  * need you 

@@ -23,15 +23,10 @@ spring:
       jpa:
          show-sql: true
          database-platform: org.hibernate.dialect.MySQL5Dialect
-
-shiroFilter:
-  loginUrl: /login.html
-  successUrl: /swagger-ui.html
-  unauthorizedUrl: /401.html
-  filterChainDefinitionMap:
-    /public/api/login: anon
-    /public/api/regist: anon
-    /regist.html: anon
-    /login_assets/**: anon
-    /logout: logout
-    /**: authc
+      mail:
+        host: smtp.163.com
+        username: wan_neil@163.com
+        password: 
+        default-encoding: UTF-8
+mail:
+      from: wan_neil@163.com

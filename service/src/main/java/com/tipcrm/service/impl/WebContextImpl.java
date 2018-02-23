@@ -5,9 +5,12 @@ import com.tipcrm.service.WebContext;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class WebContextImpl implements WebContext{
+@Transactional
+public class WebContextImpl implements WebContext {
+
     @Autowired
     private UserRepository userRepository;
 
@@ -17,8 +20,12 @@ public class WebContextImpl implements WebContext{
     }
 
     @Override
-    public String getCurrentUserName() {
-        User user = userRepository.findOne(getCurrentUserId());
-        return user.getUserName();
+    public User getCurrentUser() {
+        Integer userId = getCurrentUserId();
+        if (userId == null) {
+            return null;
+        }
+        User user = userRepository.findOne(userId);
+        return user;
     }
 }

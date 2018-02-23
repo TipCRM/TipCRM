@@ -5,14 +5,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table(name = "configuration")
 @Entity
+@Table(name = "configuration")
 public class Configuration {
 
     @Id
-    @Column(name = "oid")
     @GeneratedValue
-    private Long id;
+    @Column(name = "id")
+    private Integer id;
 
     @Column(name = "key")
     private String key;
@@ -20,11 +20,11 @@ public class Configuration {
     @Column(name = "value")
     private String value;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -44,4 +44,3 @@ public class Configuration {
         this.value = value;
     }
 }
-
