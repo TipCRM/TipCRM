@@ -1,7 +1,7 @@
 /**
  * Created by Administrator on 2018/2/9.
  */
-import {queryCustomers} from '../services/api';
+import {queryMyCustomers} from '../services/api';
 
 export default {
   namespace: 'customer',
@@ -10,12 +10,12 @@ export default {
     data:[],
   },
   effects: {
-    *customers({payload},{call, put}){
+    *myCustomers({payload},{call, put}){
       console.log(payload);
-      const response = yield call(queryCustomers,payload);
+      const response = yield call(queryMyCustomers,payload);
       yield put({
         type:'listCustomers',
-        payload: response,
+        payload: response.data,
       });
     },
     *popoverData({payload},{call, put}){

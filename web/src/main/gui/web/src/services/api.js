@@ -82,8 +82,8 @@ export async function queryNotices() {
   return request('/api/notices');
 }
 
-export async function queryCustomers(params) {
-  return request('/public/api/customers',{
+export async function queryMyCustomers(params) {
+  return request('/public/api/my/customers',{
     method: 'POST',
     body: params,
   });

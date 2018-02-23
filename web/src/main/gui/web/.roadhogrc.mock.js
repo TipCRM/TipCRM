@@ -237,13 +237,14 @@ const apis = {
   'GET /public/api/menu':{
     $body:menuDatabase,
   },
-  'POST /public/api/customers':(req, res) => {
-    const reqData = req.body;
-    if (reqData.type == 'init'){
-      res.send(customerDatabase);
-    } else if (reqData.type == 'search'){
-      res.send(customerDatabase.filter(item => item.customer.indexOf(reqData.content) != -1));
-    }
-  },
+  'POST /public/api/my/customers':'http://www.potafish.com',
+  //  (req, res) => {
+  //  const reqData = req.body;
+  //  if (reqData.type == 'init'){
+  //    res.send(customerDatabase);
+  //  } else if (reqData.type == 'search'){
+  //    res.send(customerDatabase.filter(item => item.customer.indexOf(reqData.content) != -1));
+  //  }
+  //},
 };
 export default noProxy ? delay(apis,1000) : delay(proxy, 1000);
