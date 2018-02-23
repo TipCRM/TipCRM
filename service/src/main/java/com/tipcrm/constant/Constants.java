@@ -77,13 +77,13 @@ public class Constants {
         public static class Notification {
             public static final Map<String, String> fieldMap = Maps.newHashMap();
             static {
-                fieldMap.put(QueryFieldName.Notification.SENDER, "entryUser.id");
-                fieldMap.put(QueryFieldName.Notification.TYPE, "type.id");
+                fieldMap.put(QueryFieldName.Notification.SENDER, "entryUser.userName");
+                fieldMap.put(QueryFieldName.Notification.TYPE, "type.name");
                 fieldMap.put(QueryFieldName.Notification.SEND_TIME, "entryTime");
                 fieldMap.put(QueryFieldName.Notification.SUBJECT, "subject");
                 fieldMap.put(QueryFieldName.Notification.CONTENT, "content");
-                fieldMap.put(QueryFieldName.Notification.READ_STATUS, "readStatus.id");
-                fieldMap.put(QueryFieldName.Notification.RECEIVER, "toUser.id");
+                fieldMap.put(QueryFieldName.Notification.READ_STATUS, "readStatus.name");
+                fieldMap.put(QueryFieldName.Notification.RECEIVER, "toUser.userName");
             }
         }
     }
