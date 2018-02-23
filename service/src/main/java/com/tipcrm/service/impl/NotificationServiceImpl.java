@@ -247,7 +247,7 @@ public class NotificationServiceImpl implements NotificationService {
                     switch (criteria.getFieldName()) {
                         case Constants.QueryFieldName.Notification.SENDER:
                             path = root.get("entryUser").get("id");
-                            predicates.add(path.in(criteria.getValue()));
+                            predicates.add(path.in(((List) criteria.getValue()).toArray()));
                             break;
                         case Constants.QueryFieldName.Notification.SEND_TIME:
                             path = root.get("entryTime");
