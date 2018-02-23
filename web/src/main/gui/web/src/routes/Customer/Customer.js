@@ -19,14 +19,19 @@ export default class Customer extends React.PureComponent{
     filtered: false,
     currentPage: 1,
     pageSize: 10,
+    searchConditions:{},
+    sortCondition:{sort:{direction:'ASC', fieldName:'customer_name'}},
+    sortOrder: false,
   }
 
   componentDidMount(){
     console.log('init...');
     const {dispatch} = this.props;
+    let request = {page: this.state.currentPage, size: this.state.pageSize};
+    request = {...request, ...this.state.searchConditions, ...this.state.sortCondition};
     dispatch({
       type:'customer/myCustomers',
-      payload:{page: this.state.currentPage, size: this.state.pageSize, sort:{direction:'ASC', fieldName:'customer_name'}},
+      payload:request,
     });
     let {customer} = this.props;
     this.setState({
@@ -80,9 +85,31 @@ export default class Customer extends React.PureComponent{
   /**
    * search the customer by name
    */
-  onSearch = (page, pageSize) => {
+  onSearchByName = () =>{
     const {searchText} = this.state;
-    console.log(searchText);
+    const {dispatch} = this.props;
+    let condtion = {"criteria": [
+      {
+        "conjunction": "AND",
+        "fieldName": "customer_name",
+        "method": "LIKE",
+        "value": searchText
+      }],};
+    let request = {page: 1, size: this.state.pageSize};
+    request = { ...condtion, ...request,...this.state.sortCondition};
+    dispatch({
+      type:'customer/myCustomers',
+      payload:request,
+    });
+    this.setState({
+      filterDropdownVisible: false,
+      filtered:!!searchText,
+      searchConditions: condtion,
+    });
+  }
+
+  onPageChange = (page, pageSize) => {
+    const {searchText} = this.state;
     const {dispatch} = this.props;
     dispatch({
       type:'customer/myCustomers',
@@ -98,13 +125,30 @@ export default class Customer extends React.PureComponent{
 
   onSizeChange = (current, size) =>{
     const {dispatch} = this.props;
+    let request = {page: current, size: size};
+    request = {...this.state.searchConditions, ...request, ...this.state.sortCondition};
     dispatch({
       type:'customer/myCustomers',
-      payload:{page: current, size: size, sort:{direction:'ASC', fieldName:'customer_name'}},
+      payload: request,
     });
     this.setState({
       currentPage: current,
       pageSize: size,
+    });
+  }
+
+  sorterByStatus =() => {
+    const {dispatch} = this.props;
+    let sortOrder = this.state.sortOrder == 'ascend' ? 'ASC':'DESC';
+    let sortCondition = {sort:{direction:sortOrder, fieldName:'status'}};
+    let request = {page: this.state.currentPage, size: this.state.pageSize};
+    request = {...this.state.searchConditions, ...request, ...sortCondition};
+    dispatch({
+      type:'customer/myCustomers',
+      payload: request,
+    });
+    this.setState({
+      sortCondition: sortCondition,
     });
   }
 
@@ -122,10 +166,10 @@ export default class Customer extends React.PureComponent{
           placeholder="输入客户名称"
           value={this.state.searchText}
           onChange={this.onInputChange}
-          onPressEnter={this.onSearch}
+          onPressEnter={this.onSearchByName}
           style={{width:'50%', margiRight: '12px',marginLeft: '-43px',}}
         />
-        <Button size="small" type="primary" onClick={this.onSearch} style={{marginLeft: '3px',}}>搜索</Button>
+        <Button size="small" type="primary" onClick={this.onSearchByName} style={{marginLeft: '3px',}}>搜索</Button>
       </div>
     );
 
@@ -167,7 +211,8 @@ export default class Customer extends React.PureComponent{
         {text:'新客户',value:'新客户'},
         {text:'过期客户',value:'过期客户'},],
         onFilter:(value, record) => record.status.indexOf(value) === 0,
-        sorter:(a, b) => a.status.length - b.status.length,},
+        sorter:true,
+        sorterOrder: this.sorterByStatus,},
         {title:'意向金额', dataIndex:'intentionalAmount'},
         {title:'签约金额', dataIndex:'signAmount'},];
 
@@ -176,13 +221,13 @@ export default class Customer extends React.PureComponent{
                       current:this.state.currentPage, total: customers.totalElements,
                       showSizeChanger:{},
                       onShowSizeChange: this.onSizeChange,
-                      onChange:this.onSearch
+                      onChange:this.onPageChange
                       };
 
     const content = (
       <div style={{marginTop:'10px',background: '#fff'}}>
           <Button style={{margin: '8px 8px 8px 8px'}} type='primary'>添加客户</Button>
-          <Table style={{textAlign:'center'}} size={'small'}
+          <Table style={{textAlign:'center'}} size={'small'} rowKey={(record) => record.customerId}
                  columns={columns} dataSource={customers.data}
                  rowSelection={rowSelection} bordered
                  pagination={pagination}
