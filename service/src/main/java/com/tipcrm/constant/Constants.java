@@ -3,6 +3,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 public class Constants {
     public static final Integer HASH_ITERATIONS = 2;
 
@@ -50,6 +52,19 @@ public class Constants {
             public static final String NEXT_COMMUNICATION_TIME = "next_communication_time";
             public static final String FOLLOW_USER = "follow_user";
             public static final String FOLLOW_DEPARTMENT = "follow_department";
+        }
+    }
+    public static class SortFieldName {
+        public static class Customer {
+            public static final Map<String, String> fieldMap = Maps.newHashMap();
+            static  {
+                fieldMap.put("customer_name", "name");
+                fieldMap.put("status", "status.id");
+                fieldMap.put("follow_user", "followUser.userName");
+                fieldMap.put("follow_department", "followDepartment.name");
+                fieldMap.put("last_communication_time", "lastCommunication.communicateTime");
+                fieldMap.put("next_communication_time", "lastCommunication.nextCommunicateTime");
+            }
         }
     }
 }
