@@ -207,6 +207,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByRole(Roles.GENERAL_MANAGER.name());
     }
 
+    @Override
+    public User findSystemUser() {
+        User user = userRepository.findByUserName(Constants.User.SYSTEM).get(0);
+        return user;
+    }
+
     private UserBo convertToUserBo(User user) {
         UserBo userBo = new UserBo();
         userBo.setAvatar(user.getAvatar());

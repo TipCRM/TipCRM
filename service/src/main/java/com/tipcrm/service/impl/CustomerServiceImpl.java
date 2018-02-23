@@ -14,6 +14,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.tipcrm.bo.ApproveAction;
 import com.tipcrm.bo.ApproveBo;
 import com.tipcrm.bo.CreateCustomerBo;
@@ -220,7 +221,7 @@ public class CustomerServiceImpl implements CustomerService {
         request.setReviewTime(date);
         request.setReviewNote(approveBo.getNote());
         Integer customerId = null;
-        if (approveBo.getAction().equals(ApproveAction.REJECT.name())) {
+        if (ApproveAction.REJECT.name().equals(approveBo.getAction())) {
             ListBox rejectStatus = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.APPROVAL_STATUS.name(), ApprovalStatus.REJECTED.name());
             customerApproval.setReviewStatus(rejectStatus);
             customerApproval.setFinalApprovalTime(date);
@@ -233,7 +234,7 @@ public class CustomerServiceImpl implements CustomerService {
                                                        MessageUtil.getMessage(Constants.Notification.Subject.NEW_CUSTOMER_APPROVAL, "已驳回"),
                                                        MessageUtil.getMessage(Constants.Notification.Content.NEW_CUSTOMER_APPROVAL, "被驳回",
                                                                               customerApproval.getId().toString(), user.getUserName(),
-                                                                              dateFormat.format(date)/*, customerApproval.getReviewNote()*/),
+                                                                              dateFormat.format(date), request.getReviewNote()),
                                                        NotificationType.SYSTEM_NOTIFICATION);
             }
         } else {
@@ -279,9 +280,9 @@ public class CustomerServiceImpl implements CustomerService {
                 if (needNotify) {
                     notificationService.createNotification(customerApproval.getEntryUser().getId(),
                                                            MessageUtil.getMessage(Constants.Notification.Subject.NEW_CUSTOMER_APPROVAL, "已通过"),
-                                                           MessageUtil.getMessage(Constants.Notification.Content.NEW_CUSTOMER_APPROVAL, "被通过",
+                                                           MessageUtil.getMessage(Constants.Notification.Content.NEW_CUSTOMER_APPROVAL, "通过",
                                                                                   customerApproval.getId().toString(), user.getUserName(),
-                                                                                  dateFormat.format(date)/*, customerApproval.getReviewNote()*/),
+                                                                                  dateFormat.format(date), request.getReviewNote()),
                                                            NotificationType.SYSTEM_NOTIFICATION);
                 }
             }
@@ -351,15 +352,23 @@ public class CustomerServiceImpl implements CustomerService {
         if (customerApproval == null) {
             throw new BizException("审批目标不存在或者已经审批");
         }
-        if (Lists.newArrayList(ApprovalStatus.values()).contains(approveBo.getAction())) {
+        if (!ApproveAction.REJECT.name().equals(approveBo.getAction())
+            && !ApproveAction.APPROVE.name().equals(approveBo.getAction())) {
             throw new BizException("不支持的操作");
         }
     }
 
     @Override
-    public QueryResultBo<QueryCustomerBo> findMyCustomers(final QueryRequestBo queryRequestBo) throws QueryException {
+    public QueryResultBo<QueryCustomerBo> findMyCustomers(final QueryRequestBo queryRequestBo) throws QueryException, BizException {
         List<QueryCriteriaBo> queryCriteriaBos = queryRequestBo.getCriteria();
         if (!CollectionUtils.isEmpty(queryCriteriaBos)) {
+            Set<String> fieldSet = Sets.newHashSet();
+            for (QueryCriteriaBo queryCriteriaBo : queryCriteriaBos) {
+                fieldSet.add(queryCriteriaBo.getFieldName());
+            }
+            if (fieldSet.size() != queryCriteriaBos.size()) {
+                throw new BizException("查询字段有重复");
+            }
             Iterator<QueryCriteriaBo> iterator = queryCriteriaBos.iterator();
             while (iterator.hasNext()) {
                 QueryCriteriaBo queryCriteriaBo = iterator.next();
@@ -392,8 +401,8 @@ public class CustomerServiceImpl implements CustomerService {
             Specification<Customer> specification = new CustomerSpecification(queryRequestBo);
             Page<Customer> customers = customerRepository.findAll(specification, page);
             List<QueryCustomerBo> customerBos = convertToQueryCustomerResultBos(customers.getContent());
-            QueryResultBo<QueryCustomerBo> queryResultBo = new QueryResultBo<QueryCustomerBo>(customerBos, queryRequestBo.getPage(), queryRequestBo.getSize(),
-                                                                                              customers.getTotalElements(), customers.getTotalPages());
+            QueryResultBo<QueryCustomerBo> queryResultBo = new QueryResultBo<>(customerBos, queryRequestBo.getPage(), queryRequestBo.getSize(),
+                                                                               customers.getTotalElements(), customers.getTotalPages());
             return queryResultBo;
         } catch (Exception e) {
             throw new QueryException("查询条件错误", e);
@@ -450,9 +459,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public QueryResultBo<QueryCustomerBo> findByDepartmentOpenSea(Integer departmentId, QueryRequestBo queryRequestBo) throws QueryException {
+    public QueryResultBo<QueryCustomerBo> findByDepartmentOpenSea(Integer departmentId, QueryRequestBo queryRequestBo) throws QueryException, BizException {
         List<QueryCriteriaBo> queryCriteriaBos = queryRequestBo.getCriteria();
         if (!CollectionUtils.isEmpty(queryCriteriaBos)) {
+            Set<String> fieldSet = Sets.newHashSet();
+            for (QueryCriteriaBo queryCriteriaBo : queryCriteriaBos) {
+                fieldSet.add(queryCriteriaBo.getFieldName());
+            }
+            if (fieldSet.size() != queryCriteriaBos.size()) {
+                throw new BizException("查询字段有重复");
+            }
             Iterator<QueryCriteriaBo> iterator = queryCriteriaBos.iterator();
             while (iterator.hasNext()) {
                 QueryCriteriaBo queryCriteriaBo = iterator.next();
