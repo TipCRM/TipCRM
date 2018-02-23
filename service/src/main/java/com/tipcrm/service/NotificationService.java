@@ -16,4 +16,6 @@ public interface NotificationService {
     List<SimpleNotificationBo> getMyRealTimeNotifications();
 
     QueryResultBo<NotificationBo> getMyNotifications(QueryRequestBo queryRequestBo) throws QueryException, BizException;
+
+    NotificationBo getNotificationById(Integer notificationId) throws BizException;
 }

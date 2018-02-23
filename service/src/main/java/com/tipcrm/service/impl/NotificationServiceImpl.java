@@ -229,6 +229,19 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
+    @Override
+    public NotificationBo getNotificationById(Integer notificationId) throws BizException {
+        Notification notification = notificationRepository.findOne(notificationId);
+        if (notification == null) {
+            throw new BizException("通知不存在");
+        }
+        Integer currentUserId = webContext.getCurrentUserId();
+        if (!notification.getToUser().getId().equals(currentUserId) &&
+            !notification.getEntryUser().getId().equals(currentUserId)) {
+            throw new BizException("您没有权限查看该通知");
+        }
+        return convertToNotificationBo(notification);
+    }
 
     class NotificationSpecification implements Specification<Notification> {
         private QueryRequestBo queryRequestBo;
