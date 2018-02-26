@@ -19,23 +19,21 @@ export default class Customer extends React.PureComponent{
     filtered: false,
     currentPage: 1,
     pageSize: 10,
-    searchConditions:{},
-    sortCondition:{sort:{direction:'ASC', fieldName:'customer_name'}},
-    sortOrder: false,
+    filterCondition:{},
+    sorterCondition:{sort:{direction:'DESC', fieldName:'customer_name'}},
   }
 
   componentDidMount(){
-    console.log('init...');
     const {dispatch} = this.props;
     let request = {page: this.state.currentPage, size: this.state.pageSize};
-    request = {...request, ...this.state.searchConditions, ...this.state.sortCondition};
+    request = {...request, ...this.state.filterCondition, ...this.state.sorterCondition};
     dispatch({
       type:'customer/myCustomers',
       payload:request,
     });
     let {customer} = this.props;
     this.setState({
-      currentPage: customer.customers.page
+      currentPage: customer.customers.page,
     });
   }
 
@@ -51,8 +49,44 @@ export default class Customer extends React.PureComponent{
     });
   }
 
-  handlerOnChange(pagination, filters, sorter){
-    console.log('params', pagination, filters, sorter);
+  handlerOnChange=(pagination, filters, sorter) => {
+    const {dispatch} = this.props;
+    /** init filter condition **/
+    let filterCondition = {};
+    if (JSON.stringify(filters) == '{}'){
+      filterCondition = this.state.filterCondition;
+    } else {
+      filterCondition = {"criteria": [{
+          "conjunction": "AND",
+          "fieldName": 'status',
+          "method": "EQUALS",
+          "value": filters.status
+        }],};
+    }
+    /** init sorter condition **/
+    let field = sorter.field;
+    let sorterCondition = {};
+    if (field == null){
+      sorterCondition = this.state.sorterCondition;
+    } else {
+      let sortOrder = sorter.order == 'ascend' ? 'ASC':'DESC';
+      sorterCondition = {sort:{direction:sortOrder, fieldName: field}};
+    }
+    /** init page condition **/
+    let pageCondition = {page: pagination.current, size: pagination.pageSize};
+    /** init request **/
+    let request = {...filterCondition, ...pageCondition, ...sorterCondition};
+    dispatch({
+      type:'customer/myCustomers',
+      payload:request,
+    });
+    /** change state **/
+    this.setState({
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+      filterCondition: filterCondition,
+      sorterCondition: sorterCondition
+    });
   }
 
   initPopover(record){
@@ -88,7 +122,7 @@ export default class Customer extends React.PureComponent{
   onSearchByName = () =>{
     const {searchText} = this.state;
     const {dispatch} = this.props;
-    let condtion = {"criteria": [
+    let filterCondition = {"criteria": [
       {
         "conjunction": "AND",
         "fieldName": "customer_name",
@@ -96,7 +130,7 @@ export default class Customer extends React.PureComponent{
         "value": searchText
       }],};
     let request = {page: 1, size: this.state.pageSize};
-    request = { ...condtion, ...request,...this.state.sortCondition};
+    request = { ...filterCondition, ...request,...this.state.sorterCondition};
     dispatch({
       type:'customer/myCustomers',
       payload:request,
@@ -104,51 +138,7 @@ export default class Customer extends React.PureComponent{
     this.setState({
       filterDropdownVisible: false,
       filtered:!!searchText,
-      searchConditions: condtion,
-    });
-  }
-
-  onPageChange = (page, pageSize) => {
-    const {searchText} = this.state;
-    const {dispatch} = this.props;
-    dispatch({
-      type:'customer/myCustomers',
-      payload:{page: page, size: pageSize, sort:{direction:'ASC', fieldName:'customer_name'}},
-    });
-    this.setState({
-      filterDropdownVisible: false,
-      filtered:!!searchText,
-      currentPage: page,
-      pageSize: pageSize,
-    });
-  }
-
-  onSizeChange = (current, size) =>{
-    const {dispatch} = this.props;
-    let request = {page: current, size: size};
-    request = {...this.state.searchConditions, ...request, ...this.state.sortCondition};
-    dispatch({
-      type:'customer/myCustomers',
-      payload: request,
-    });
-    this.setState({
-      currentPage: current,
-      pageSize: size,
-    });
-  }
-
-  sorterByStatus =() => {
-    const {dispatch} = this.props;
-    let sortOrder = this.state.sortOrder == 'ascend' ? 'ASC':'DESC';
-    let sortCondition = {sort:{direction:sortOrder, fieldName:'status'}};
-    let request = {page: this.state.currentPage, size: this.state.pageSize};
-    request = {...this.state.searchConditions, ...request, ...sortCondition};
-    dispatch({
-      type:'customer/myCustomers',
-      payload: request,
-    });
-    this.setState({
-      sortCondition: sortCondition,
+      filterCondition: filterCondition,
     });
   }
 
@@ -157,7 +147,6 @@ export default class Customer extends React.PureComponent{
     // const {loading} = this.props;
     const {loading, customer} = this.props;
     const customers = customer.customers;
-    console.log(customer);
     const searchDropdown = (
       <div className="custom-filter-dropdown">
         <Input
@@ -206,23 +195,17 @@ export default class Customer extends React.PureComponent{
             </Popover>);}),className:styles.tableColumn},
       {title:'下次沟通',dataIndex:'nextCommunicationTime'},
       {title:'客户状态',dataIndex:'status', filters:[
-        {text:'意向客户',value:'意向客户'},
-        {text:'签约客户',value:'签约客户'},
-        {text:'新客户',value:'新客户'},
-        {text:'过期客户',value:'过期客户'},],
-        onFilter:(value, record) => record.status.indexOf(value) === 0,
-        sorter:true,
-        sorterOrder: this.sorterByStatus,},
+        {text:'意向客户',value:1},
+        {text:'签约客户',value:2},
+        {text:'新客户',value:3},
+        {text:'过期客户',value:4},], sorter: true},
         {title:'意向金额', dataIndex:'intentionalAmount'},
         {title:'签约金额', dataIndex:'signAmount'},];
 
     const rowSelection = {};
-    const pagination = {defaultCurrent:1, pageSize:customers.size,
+    const pagination = {defaultCurrent:1, pageSize: this.state.pageSize,
                       current:this.state.currentPage, total: customers.totalElements,
-                      showSizeChanger:{},
-                      onShowSizeChange: this.onSizeChange,
-                      onChange:this.onPageChange
-                      };
+                      showSizeChanger:{},};
 
     const content = (
       <div style={{marginTop:'10px',background: '#fff'}}>
@@ -231,7 +214,7 @@ export default class Customer extends React.PureComponent{
                  columns={columns} dataSource={customers.data}
                  rowSelection={rowSelection} bordered
                  pagination={pagination}
-                 onChange={this.handlerOnChange}
+                 onChange={this.handlerOnChange.bind(this)}
           />
       </div>);
     return(
