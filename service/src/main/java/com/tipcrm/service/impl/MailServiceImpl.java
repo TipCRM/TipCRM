@@ -19,7 +19,7 @@ public class MailServiceImpl implements MailService {
     private String from;
 
     @Override
-    public void sendSimpleEmail(String to, String subject, String content) throws BizException {
+    public void sendSimpleEmail(String to, String subject, String content) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);
         message.setTo(to);

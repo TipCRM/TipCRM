@@ -7,8 +7,6 @@ import com.tipcrm.bo.QueryCustomerBo;
 import com.tipcrm.bo.QueryRequestBo;
 import com.tipcrm.bo.QueryResultBo;
 import com.tipcrm.constant.Constants;
-import com.tipcrm.exception.BizException;
-import com.tipcrm.exception.QueryException;
 import com.tipcrm.service.CustomerService;
 import com.tipcrm.web.util.JsonEntity;
 import com.tipcrm.web.util.ResponseHelper;
@@ -33,7 +31,7 @@ public class CustomerApi {
 
     @RequestMapping(value = "/customer", method = RequestMethod.POST)
     @RequiresPermissions(Constants.Permission.CUSTOMER_ADD_UPDATE)
-    public JsonEntity<OptCustomerResultBo> createNewCustomer(@RequestBody CreateCustomerBo createCustomerBo) throws BizException {
+    public JsonEntity<OptCustomerResultBo> createNewCustomer(@RequestBody CreateCustomerBo createCustomerBo) {
         return ResponseHelper.createInstance(customerService.createNewCustomer(createCustomerBo));
     }
 
@@ -45,29 +43,29 @@ public class CustomerApi {
 
     @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.DELETE)
     @RequiresPermissions(Constants.Permission.CUSTOMER_DELETE)
-    public JsonEntity<OptCustomerResultBo> deleteCustomer(@PathVariable("customerId") Integer customerId) throws BizException {
+    public JsonEntity<OptCustomerResultBo> deleteCustomer(@PathVariable("customerId") Integer customerId) {
         return ResponseHelper.createInstance(customerService.deleteCustomer(customerId));
     }
 
     @RequestMapping(value = "/customer/transfer/out", method = RequestMethod.POST)
     @RequiresPermissions(Constants.Permission.CUSTOMER_TRANSFER)
-    public JsonEntity<OptCustomerResultBo> transferCustomerOut(@RequestBody CustomerTransferRequestBo transferBo) throws BizException {
+    public JsonEntity<OptCustomerResultBo> transferCustomerOut(@RequestBody CustomerTransferRequestBo transferBo) {
         return ResponseHelper.createInstance(customerService.transferCustomer(transferBo));
     }
 
     @RequestMapping(value = "/my/customers", method = RequestMethod.POST)
-    public JsonEntity<QueryResultBo> myCustomers(@RequestBody QueryRequestBo requestBo) throws QueryException {
+    public JsonEntity<QueryResultBo> myCustomers(@RequestBody QueryRequestBo requestBo) {
         return ResponseHelper.createInstance(customerService.findMyCustomers(requestBo));
     }
 
     @RequestMapping(value = "/customer/openSea/myDepartment", method = RequestMethod.POST)
-    public JsonEntity<QueryResultBo<QueryCustomerBo>> findMyDepartmentOpenSea(@RequestBody QueryRequestBo requestBo) throws QueryException, BizException {
+    public JsonEntity<QueryResultBo<QueryCustomerBo>> findMyDepartmentOpenSea(@RequestBody QueryRequestBo requestBo) {
         return ResponseHelper.createInstance(customerService.findByMyDepartmentOpenSea(requestBo));
     }
 
     @RequestMapping(value = "/customer/openSea/department/{departmentId}", method = RequestMethod.POST)
     public JsonEntity<QueryResultBo<QueryCustomerBo>> findByDepartmentOpenSea(@PathVariable("departmentId") Integer departmentId,
-                                                                              @RequestBody QueryRequestBo requestBo) throws QueryException {
+                                                                              @RequestBody QueryRequestBo requestBo) {
         return ResponseHelper.createInstance(customerService.findByDepartmentOpenSea(departmentId, requestBo));
     }
 }

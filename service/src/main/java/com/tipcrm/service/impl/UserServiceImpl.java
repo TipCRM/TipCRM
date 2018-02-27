@@ -87,16 +87,16 @@ public class UserServiceImpl implements UserService {
     private RoleService roleService;
 
     @Override
-    public String regist(RegistUserBo registUserBo) throws Exception {
+    public String regist(RegistUserBo registUserBo) {
         String registable = configurationService.get(ConfigurationItems.REGISTABLE.name());
         if (!Boolean.valueOf(registable)) {
-            throw new Exception("管理员没有开放注册通道");
+            throw new BizException("管理员没有开放注册通道");
         }
 
         ListBox userStatusActive = listBoxService.findByCategoryAndName(ListBoxCategory.USER_STATUS.name(), UserStatus.ACTIVE.name());
         List<User> users = userRepository.findByUserName(Constants.User.SYSTEM);
         if (CollectionUtils.isEmpty(users)) {
-            throw new Exception("系统用户丢失，请联系运维人员修复数据库");
+            throw new BizException("系统用户丢失，请联系运维人员修复数据库");
         }
         User hirer = users.get(0);
         Department department = null;
@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String saveUser(CreateUserBo createUserBo) throws Exception {
+    public String saveUser(CreateUserBo createUserBo) {
         ListBox userStatusActive = listBoxService.findByCategoryAndName(ListBoxCategory.USER_STATUS.name(), UserStatus.ACTIVE.name());
         User hirer = webContext.getCurrentUser();
         Department department = null;
@@ -165,7 +165,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void login(LoginBo loginBo) throws Exception {
+    public void login(LoginBo loginBo) {
         validateLoginInfo(loginBo);
         UsernamePasswordToken token = new UsernamePasswordToken(loginBo.getLoginKey(), loginBo.getPassword());
         try {
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserBo getUserByUserId(Integer userId) throws Exception {
+    public UserBo getUserByUserId(Integer userId) {
         User user = userRepository.findOne(userId);
         if (user == null) {
             throw new BizException("用户不存在");
@@ -188,7 +188,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean isUserExist(Integer userId) throws BizException {
+    public Boolean isUserExist(Integer userId) {
         if (userId == null) {
             throw new BizException("用户Id不能为空");
         }
@@ -205,6 +205,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findGeneralManager() {
         return userRepository.findByRole(Roles.GENERAL_MANAGER.name());
+    }
+
+    @Override
+    public User findSystemUser() {
+        User user = userRepository.findByUserName(Constants.User.SYSTEM).get(0);
+        return user;
     }
 
     private UserBo convertToUserBo(User user) {
@@ -244,53 +250,53 @@ public class UserServiceImpl implements UserService {
         return userBo;
     }
 
-    private void validateRegistUser(RegistUserBo registUserBo) throws Exception {
+    private void validateRegistUser(RegistUserBo registUserBo) {
         if (StringUtils.isBlank(registUserBo.getEmail())) {
-            throw new Exception("邮箱不能为空");
+            throw new BizException("邮箱不能为空");
         }
         if (!EmailValidator.getInstance().isValid(registUserBo.getEmail())) {
-            throw new Exception("邮箱格式不正确");
+            throw new BizException("邮箱格式不正确");
         }
         if (StringUtils.isBlank(registUserBo.getPassword())) {
-            throw new Exception("密码不能为空");
+            throw new BizException("密码不能为空");
         }
         if (registUserBo.getPassword().length() < 6) {
-            throw new Exception("密码不能小于6位");
+            throw new BizException("密码不能小于6位");
         }
         if (StringUtils.isBlank(registUserBo.getUsername())) {
-            throw new Exception("姓名不能为空");
+            throw new BizException("姓名不能为空");
         }
         if (Constants.User.SYSTEM.equals(registUserBo.getUsername())) {
-            throw new Exception("非法用户名");
+            throw new BizException("非法用户名");
         }
         // 1. validate user exist
         User user = userRepository.findByEmailOrPhoneNo(registUserBo.getEmail());
         if (user != null) {
-            throw new Exception("用户已存在");
+            throw new BizException("用户已存在");
         }
     }
 
-    private void validateSaveUserBo(CreateUserBo createUserBo) throws Exception {
+    private void validateSaveUserBo(CreateUserBo createUserBo) {
         if (StringUtils.isBlank(createUserBo.getEmail())) {
-            throw new Exception("邮箱不能为空");
+            throw new BizException("邮箱不能为空");
         }
         if (!EmailValidator.getInstance().isValid(createUserBo.getEmail())) {
-            throw new Exception("邮箱格式不正确");
+            throw new BizException("邮箱格式不正确");
         }
         if (StringUtils.isBlank(createUserBo.getUsername())) {
-            throw new Exception("姓名不能为空");
+            throw new BizException("姓名不能为空");
         }
         if (Constants.User.SYSTEM.equals(createUserBo.getUsername())) {
-            throw new Exception("非法用户名");
+            throw new BizException("非法用户名");
         }
         // 1. validate user exist
         User user = userRepository.findByEmailOrPhoneNo(createUserBo.getEmail());
         if (user != null) {
-            throw new Exception("用户已存在");
+            throw new BizException("用户已存在");
         }
     }
 
-    private void validateLoginInfo(LoginBo loginBo) throws AccountException {
+    private void validateLoginInfo(LoginBo loginBo) {
         if (StringUtils.isBlank(loginBo.getLoginKey())) {
             throw new AccountException("登陆名不能为空");
         }

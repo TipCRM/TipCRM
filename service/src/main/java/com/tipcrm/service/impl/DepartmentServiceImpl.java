@@ -42,7 +42,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Integer createNewDepartment(CreateDepartmentBo createDepartmentBo) throws BizException {
+    public Integer createNewDepartment(CreateDepartmentBo createDepartmentBo) {
         validateCreateDepartmentBo(createDepartmentBo);
         Department department = convertToDepartment(createDepartmentBo);
         department = departmentRepository.save(department);
@@ -55,7 +55,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Integer updateDepartment(Integer departmentId, CreateDepartmentBo createDepartmentBo) throws BizException {
+    public Integer updateDepartment(Integer departmentId, CreateDepartmentBo createDepartmentBo) {
         validateUpdateDepartment(departmentId, createDepartmentBo);
         Department department = departmentRepository.findOne(departmentId);
         department.setName(createDepartmentBo.getName());
@@ -71,7 +71,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         return department.getId();
     }
 
-    private void validateUpdateDepartment(Integer departmentId, CreateDepartmentBo createDepartmentBo) throws BizException {
+    private void validateUpdateDepartment(Integer departmentId, CreateDepartmentBo createDepartmentBo) {
         if (departmentId == null) {
             throw new BizException("部门Id不能为空");
         }
@@ -89,7 +89,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Boolean isDepartmentExist(Integer departmentId) throws BizException {
+    public Boolean isDepartmentExist(Integer departmentId) {
         if (departmentId == null) {
             throw new BizException("部门Id不能为空");
         }
@@ -98,7 +98,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public void deleteDepartmentById(Integer departmentId) throws BizException {
+    public void deleteDepartmentById(Integer departmentId) {
         if (!isDepartmentExist(departmentId)) {
             throw new BizException("部门不存在");
         }
@@ -108,7 +108,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentRepository.save(department);
     }
 
-    public Boolean isDepartmentExist(String name) throws BizException {
+    public Boolean isDepartmentExist(String name) {
         if (StringUtils.isBlank(name)) {
             throw new BizException("部门名称不能为空");
         }
@@ -116,7 +116,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         return department != null;
     }
 
-    private void validateCreateDepartmentBo(CreateDepartmentBo createDepartmentBo) throws BizException {
+    private void validateCreateDepartmentBo(CreateDepartmentBo createDepartmentBo) {
         if (isDepartmentExist(createDepartmentBo.getName())) {
             throw new BizException("部门已存在");
         }

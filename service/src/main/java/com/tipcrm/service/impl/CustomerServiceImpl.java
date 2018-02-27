@@ -14,6 +14,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.tipcrm.bo.ApproveAction;
 import com.tipcrm.bo.ApproveBo;
 import com.tipcrm.bo.CreateCustomerBo;
@@ -114,7 +115,7 @@ public class CustomerServiceImpl implements CustomerService {
     private static Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
     @Override
-    public OptCustomerResultBo createNewCustomer(CreateCustomerBo createCustomerBo) throws BizException {
+    public OptCustomerResultBo createNewCustomer(CreateCustomerBo createCustomerBo) {
         validateCreateNewCustomer(createCustomerBo);
         CustomerApproval approval = createNewCustomerApprovalByAddMethod(createCustomerBo);
         if (hasPermissionToApproveCustomer(approval.getId())) {
@@ -161,7 +162,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerApproval;
     }
 
-    public void validateCreateNewCustomer(CreateCustomerBo createCustomerBo) throws BizException {
+    public void validateCreateNewCustomer(CreateCustomerBo createCustomerBo) {
         if (StringUtils.isBlank(createCustomerBo.getName())) {
             throw new BizException("客户名不能为空");
         }
@@ -176,11 +177,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Integer approveCustomer(ApproveBo approveBo) throws BizException {
+    public Integer approveCustomer(ApproveBo approveBo) {
         return approveCustomer(approveBo, true);
     }
 
-    private Integer approveCustomer(ApproveBo approveBo, Boolean needNotify) throws BizException {
+    private Integer approveCustomer(ApproveBo approveBo, Boolean needNotify) {
         validateApproveBo(approveBo);
         if (!hasPermissionToApproveCustomer(approveBo.getTargetId())) {
             throw new BizException("您没有权限审批这个申请");
@@ -193,7 +194,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    private Boolean hasPermissionToApproveCustomer(Integer approvalId) throws BizException {
+    private Boolean hasPermissionToApproveCustomer(Integer approvalId) {
         ListBox approvalType = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.APPROVAL_TYPE.name(), ApprovalType.CUSTOMER.name());
         User currentUser = webContext.getCurrentUser();
         List<ApprovalRequest> approvalRequests = approvalRequestRepository.findByApprovalTypeIdAndApprovalId(approvalType.getId(), approvalId);
@@ -209,7 +210,7 @@ public class CustomerServiceImpl implements CustomerService {
         return false;
     }
 
-    private Integer approvalCustomerByFast(ApproveBo approveBo, Boolean needNotify) throws BizException {
+    private Integer approvalCustomerByFast(ApproveBo approveBo, Boolean needNotify) {
         Date date = new Date();
         User user = webContext.getCurrentUser();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -220,7 +221,7 @@ public class CustomerServiceImpl implements CustomerService {
         request.setReviewTime(date);
         request.setReviewNote(approveBo.getNote());
         Integer customerId = null;
-        if (approveBo.getAction().equals(ApproveAction.REJECT.name())) {
+        if (ApproveAction.REJECT.name().equals(approveBo.getAction())) {
             ListBox rejectStatus = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.APPROVAL_STATUS.name(), ApprovalStatus.REJECTED.name());
             customerApproval.setReviewStatus(rejectStatus);
             customerApproval.setFinalApprovalTime(date);
@@ -233,7 +234,7 @@ public class CustomerServiceImpl implements CustomerService {
                                                        MessageUtil.getMessage(Constants.Notification.Subject.NEW_CUSTOMER_APPROVAL, "已驳回"),
                                                        MessageUtil.getMessage(Constants.Notification.Content.NEW_CUSTOMER_APPROVAL, "被驳回",
                                                                               customerApproval.getId().toString(), user.getUserName(),
-                                                                              dateFormat.format(date)/*, customerApproval.getReviewNote()*/),
+                                                                              dateFormat.format(date), request.getReviewNote()),
                                                        NotificationType.SYSTEM_NOTIFICATION);
             }
         } else {
@@ -279,9 +280,9 @@ public class CustomerServiceImpl implements CustomerService {
                 if (needNotify) {
                     notificationService.createNotification(customerApproval.getEntryUser().getId(),
                                                            MessageUtil.getMessage(Constants.Notification.Subject.NEW_CUSTOMER_APPROVAL, "已通过"),
-                                                           MessageUtil.getMessage(Constants.Notification.Content.NEW_CUSTOMER_APPROVAL, "被通过",
+                                                           MessageUtil.getMessage(Constants.Notification.Content.NEW_CUSTOMER_APPROVAL, "通过",
                                                                                   customerApproval.getId().toString(), user.getUserName(),
-                                                                                  dateFormat.format(date)/*, customerApproval.getReviewNote()*/),
+                                                                                  dateFormat.format(date), request.getReviewNote()),
                                                            NotificationType.SYSTEM_NOTIFICATION);
                 }
             }
@@ -294,7 +295,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public OptCustomerResultBo deleteCustomer(Integer customerId) throws BizException {
+    public OptCustomerResultBo deleteCustomer(Integer customerId) {
         Customer customer = customerRepository.findOne(customerId);
         if (customer == null) {
             throw new BizException("客户不存在");
@@ -342,7 +343,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerApproval;
     }
 
-    private void validateApproveBo(ApproveBo approveBo) throws BizException {
+    private void validateApproveBo(ApproveBo approveBo) {
         if (approveBo.getTargetId() == null) {
             throw new BizException("审批目标为空");
         }
@@ -351,15 +352,23 @@ public class CustomerServiceImpl implements CustomerService {
         if (customerApproval == null) {
             throw new BizException("审批目标不存在或者已经审批");
         }
-        if (Lists.newArrayList(ApprovalStatus.values()).contains(approveBo.getAction())) {
+        if (!ApproveAction.REJECT.name().equals(approveBo.getAction())
+            && !ApproveAction.APPROVE.name().equals(approveBo.getAction())) {
             throw new BizException("不支持的操作");
         }
     }
 
     @Override
-    public QueryResultBo<QueryCustomerBo> findMyCustomers(final QueryRequestBo queryRequestBo) throws QueryException {
+    public QueryResultBo<QueryCustomerBo> findMyCustomers(final QueryRequestBo queryRequestBo) {
         List<QueryCriteriaBo> queryCriteriaBos = queryRequestBo.getCriteria();
         if (!CollectionUtils.isEmpty(queryCriteriaBos)) {
+            Set<String> fieldSet = Sets.newHashSet();
+            for (QueryCriteriaBo queryCriteriaBo : queryCriteriaBos) {
+                fieldSet.add(queryCriteriaBo.getFieldName());
+            }
+            if (fieldSet.size() != queryCriteriaBos.size()) {
+                throw new BizException("查询字段有重复");
+            }
             Iterator<QueryCriteriaBo> iterator = queryCriteriaBos.iterator();
             while (iterator.hasNext()) {
                 QueryCriteriaBo queryCriteriaBo = iterator.next();
@@ -392,8 +401,8 @@ public class CustomerServiceImpl implements CustomerService {
             Specification<Customer> specification = new CustomerSpecification(queryRequestBo);
             Page<Customer> customers = customerRepository.findAll(specification, page);
             List<QueryCustomerBo> customerBos = convertToQueryCustomerResultBos(customers.getContent());
-            QueryResultBo<QueryCustomerBo> queryResultBo = new QueryResultBo<QueryCustomerBo>(customerBos, queryRequestBo.getPage(), queryRequestBo.getSize(),
-                                                                                              customers.getTotalElements(), customers.getTotalPages());
+            QueryResultBo<QueryCustomerBo> queryResultBo = new QueryResultBo<>(customerBos, queryRequestBo.getPage(), queryRequestBo.getSize(),
+                                                                               customers.getTotalElements(), customers.getTotalPages());
             return queryResultBo;
         } catch (Exception e) {
             throw new QueryException("查询条件错误", e);
@@ -439,7 +448,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public QueryResultBo<QueryCustomerBo> findByMyDepartmentOpenSea(QueryRequestBo queryRequestBo) throws BizException, QueryException {
+    public QueryResultBo<QueryCustomerBo> findByMyDepartmentOpenSea(QueryRequestBo queryRequestBo) {
         User user = webContext.getCurrentUser();
         Department department = user.getDepartment();
         if (department == null) {
@@ -450,9 +459,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public QueryResultBo<QueryCustomerBo> findByDepartmentOpenSea(Integer departmentId, QueryRequestBo queryRequestBo) throws QueryException {
+    public QueryResultBo<QueryCustomerBo> findByDepartmentOpenSea(Integer departmentId, QueryRequestBo queryRequestBo) {
         List<QueryCriteriaBo> queryCriteriaBos = queryRequestBo.getCriteria();
         if (!CollectionUtils.isEmpty(queryCriteriaBos)) {
+            Set<String> fieldSet = Sets.newHashSet();
+            for (QueryCriteriaBo queryCriteriaBo : queryCriteriaBos) {
+                fieldSet.add(queryCriteriaBo.getFieldName());
+            }
+            if (fieldSet.size() != queryCriteriaBos.size()) {
+                throw new BizException("查询字段有重复");
+            }
             Iterator<QueryCriteriaBo> iterator = queryCriteriaBos.iterator();
             while (iterator.hasNext()) {
                 QueryCriteriaBo queryCriteriaBo = iterator.next();
@@ -493,7 +509,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public OptCustomerResultBo transferCustomer(CustomerTransferRequestBo transferBo) throws BizException {
+    public OptCustomerResultBo transferCustomer(CustomerTransferRequestBo transferBo) {
         User currentUser = webContext.getCurrentUser();
         if (currentUser.getDepartment() == null && !userService.isGeneralManager(currentUser.getId())) {
             throw new BizException("您不属于任何一个部门，不允许进行客户转移操作");
@@ -508,7 +524,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    private void validateTransferBo(CustomerTransferRequestBo transferBo) throws BizException {
+    private void validateTransferBo(CustomerTransferRequestBo transferBo) {
         User currentUser = webContext.getCurrentUser();
         if (transferBo.getTarget() == null) {
             throw new BizException("没有提供转移目标类型");

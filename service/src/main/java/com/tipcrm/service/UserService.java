@@ -6,21 +6,22 @@ import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.RegistUserBo;
 import com.tipcrm.bo.UserBo;
 import com.tipcrm.dao.entity.User;
-import com.tipcrm.exception.BizException;
 
 public interface UserService {
 
-    String regist(RegistUserBo registUserBo) throws Exception;
+    String regist(RegistUserBo registUserBo);
 
-    String saveUser(CreateUserBo createUserBo) throws Exception;
+    String saveUser(CreateUserBo createUserBo);
 
-    void login(LoginBo loginBo) throws Exception;
+    void login(LoginBo loginBo);
 
-    UserBo getUserByUserId(Integer userId) throws Exception;
+    UserBo getUserByUserId(Integer userId);
 
-    Boolean isUserExist(Integer userId) throws BizException;
+    Boolean isUserExist(Integer userId);
 
     Boolean isGeneralManager(Integer userId);
 
     List<User> findGeneralManager();
+
+    User findSystemUser();
 }

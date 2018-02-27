@@ -548,7 +548,7 @@ INSERT INTO `permission` VALUES
 (1,'客户管理','CUSTOMER_ADD_UPDATE','customer:add_update','添加/修改客户',-1,NOW(),NULL,NULL,NULL,NULL),
 (2,'客户管理','CUSTOMER_DELETE','customer:delete','删除客户',-1,NOW(),NULL,NULL,NULL,NULL),
 (3,'客户管理','CUSTOMER_TRANSFER','customer:transfer','转移客户',-1,NOW(),NULL,NULL,NULL,NULL),
-(4,'客户管理','CUSTOMER_APPROVAL','cusotmer:approval','审批客户',-1,NOW(),NULL,NULL,NULL,NULL),
+(4,'客户管理','CUSTOMER_APPROVAL','customer:approval','审批客户',-1,NOW(),NULL,NULL,NULL,NULL),
 (5,'员工管理','USER_ADD_UPDATE','user:add_update','添加/修改员工',-1,NOW(),NULL,NULL,NULL,NULL),
 (6,'员工管理','USER_DELETE','user:delete','员工离职',-1,NOW(),NULL,NULL,NULL,NULL),
 (7,'角色与权限','ROLE_ADD','role:add','添加角色',-1,NOW(),NULL,NULL,NULL,NULL),

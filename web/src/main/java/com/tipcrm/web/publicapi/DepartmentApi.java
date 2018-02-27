@@ -4,7 +4,6 @@ import java.util.List;
 import com.tipcrm.bo.CreateDepartmentBo;
 import com.tipcrm.bo.DepartmentBo;
 import com.tipcrm.constant.Constants;
-import com.tipcrm.exception.BizException;
 import com.tipcrm.service.DepartmentService;
 import com.tipcrm.web.util.JsonEntity;
 import com.tipcrm.web.util.ResponseHelper;
@@ -39,20 +38,20 @@ public class DepartmentApi {
 
     @RequestMapping(value = "/department", method = RequestMethod.POST)
     @RequiresPermissions(value = Constants.Permission.DEPARTMENT_ADD_UPDATE)
-    public JsonEntity<Integer> addDepartment(@RequestBody CreateDepartmentBo createDepartmentBo) throws BizException {
+    public JsonEntity<Integer> addDepartment(@RequestBody CreateDepartmentBo createDepartmentBo) {
         return ResponseHelper.createInstance(departmentService.createNewDepartment(createDepartmentBo));
     }
 
     @RequestMapping(value = "/department/{departmentId}", method = RequestMethod.PUT)
     @RequiresPermissions(value = Constants.Permission.DEPARTMENT_ADD_UPDATE)
     public JsonEntity<Integer> updateDepartment(@PathVariable("departmentId") Integer departmentId, @RequestBody CreateDepartmentBo createDepartmentBo)
-        throws BizException {
+        {
         return ResponseHelper.createInstance(departmentService.updateDepartment(departmentId, createDepartmentBo));
     }
 
     @RequestMapping(value = "/department/{departmentId}", method = RequestMethod.DELETE)
     @RequiresPermissions(value = Constants.Permission.DEPARTMENT_DELETE)
-    public JsonEntity<String> deleteDepartmentById(@PathVariable("departmentId") Integer departmentId) throws BizException {
+    public JsonEntity<String> deleteDepartmentById(@PathVariable("departmentId") Integer departmentId) {
         departmentService.deleteDepartmentById(departmentId);
         return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
     }
