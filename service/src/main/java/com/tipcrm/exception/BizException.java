@@ -1,6 +1,6 @@
 package com.tipcrm.exception;
 
-public class BizException extends Exception {
+public class BizException extends RuntimeException {
 
     public BizException() {
     }

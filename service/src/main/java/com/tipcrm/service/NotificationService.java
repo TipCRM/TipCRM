@@ -6,8 +6,6 @@ import com.tipcrm.bo.QueryRequestBo;
 import com.tipcrm.bo.QueryResultBo;
 import com.tipcrm.bo.SimpleNotificationBo;
 import com.tipcrm.constant.NotificationType;
-import com.tipcrm.exception.BizException;
-import com.tipcrm.exception.QueryException;
 
 public interface NotificationService {
 
@@ -15,5 +13,7 @@ public interface NotificationService {
 
     List<SimpleNotificationBo> getMyRealTimeNotifications();
 
-    QueryResultBo<NotificationBo> getMyNotifications(QueryRequestBo queryRequestBo) throws QueryException, BizException;
+    QueryResultBo<NotificationBo> getMyNotifications(QueryRequestBo queryRequestBo);
+
+    NotificationBo getNotificationById(Integer notificationId);
 }

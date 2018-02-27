@@ -115,7 +115,7 @@ public class CustomerServiceImpl implements CustomerService {
     private static Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
     @Override
-    public OptCustomerResultBo createNewCustomer(CreateCustomerBo createCustomerBo) throws BizException {
+    public OptCustomerResultBo createNewCustomer(CreateCustomerBo createCustomerBo) {
         validateCreateNewCustomer(createCustomerBo);
         CustomerApproval approval = createNewCustomerApprovalByAddMethod(createCustomerBo);
         if (hasPermissionToApproveCustomer(approval.getId())) {
@@ -162,7 +162,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerApproval;
     }
 
-    public void validateCreateNewCustomer(CreateCustomerBo createCustomerBo) throws BizException {
+    public void validateCreateNewCustomer(CreateCustomerBo createCustomerBo) {
         if (StringUtils.isBlank(createCustomerBo.getName())) {
             throw new BizException("客户名不能为空");
         }
@@ -177,11 +177,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Integer approveCustomer(ApproveBo approveBo) throws BizException {
+    public Integer approveCustomer(ApproveBo approveBo) {
         return approveCustomer(approveBo, true);
     }
 
-    private Integer approveCustomer(ApproveBo approveBo, Boolean needNotify) throws BizException {
+    private Integer approveCustomer(ApproveBo approveBo, Boolean needNotify) {
         validateApproveBo(approveBo);
         if (!hasPermissionToApproveCustomer(approveBo.getTargetId())) {
             throw new BizException("您没有权限审批这个申请");
@@ -194,7 +194,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    private Boolean hasPermissionToApproveCustomer(Integer approvalId) throws BizException {
+    private Boolean hasPermissionToApproveCustomer(Integer approvalId) {
         ListBox approvalType = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.APPROVAL_TYPE.name(), ApprovalType.CUSTOMER.name());
         User currentUser = webContext.getCurrentUser();
         List<ApprovalRequest> approvalRequests = approvalRequestRepository.findByApprovalTypeIdAndApprovalId(approvalType.getId(), approvalId);
@@ -210,7 +210,7 @@ public class CustomerServiceImpl implements CustomerService {
         return false;
     }
 
-    private Integer approvalCustomerByFast(ApproveBo approveBo, Boolean needNotify) throws BizException {
+    private Integer approvalCustomerByFast(ApproveBo approveBo, Boolean needNotify) {
         Date date = new Date();
         User user = webContext.getCurrentUser();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -295,7 +295,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public OptCustomerResultBo deleteCustomer(Integer customerId) throws BizException {
+    public OptCustomerResultBo deleteCustomer(Integer customerId) {
         Customer customer = customerRepository.findOne(customerId);
         if (customer == null) {
             throw new BizException("客户不存在");
@@ -343,7 +343,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerApproval;
     }
 
-    private void validateApproveBo(ApproveBo approveBo) throws BizException {
+    private void validateApproveBo(ApproveBo approveBo) {
         if (approveBo.getTargetId() == null) {
             throw new BizException("审批目标为空");
         }
@@ -359,7 +359,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public QueryResultBo<QueryCustomerBo> findMyCustomers(final QueryRequestBo queryRequestBo) throws QueryException, BizException {
+    public QueryResultBo<QueryCustomerBo> findMyCustomers(final QueryRequestBo queryRequestBo) {
         List<QueryCriteriaBo> queryCriteriaBos = queryRequestBo.getCriteria();
         if (!CollectionUtils.isEmpty(queryCriteriaBos)) {
             Set<String> fieldSet = Sets.newHashSet();
@@ -448,7 +448,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public QueryResultBo<QueryCustomerBo> findByMyDepartmentOpenSea(QueryRequestBo queryRequestBo) throws BizException, QueryException {
+    public QueryResultBo<QueryCustomerBo> findByMyDepartmentOpenSea(QueryRequestBo queryRequestBo) {
         User user = webContext.getCurrentUser();
         Department department = user.getDepartment();
         if (department == null) {
@@ -459,7 +459,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public QueryResultBo<QueryCustomerBo> findByDepartmentOpenSea(Integer departmentId, QueryRequestBo queryRequestBo) throws QueryException, BizException {
+    public QueryResultBo<QueryCustomerBo> findByDepartmentOpenSea(Integer departmentId, QueryRequestBo queryRequestBo) {
         List<QueryCriteriaBo> queryCriteriaBos = queryRequestBo.getCriteria();
         if (!CollectionUtils.isEmpty(queryCriteriaBos)) {
             Set<String> fieldSet = Sets.newHashSet();
@@ -509,7 +509,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public OptCustomerResultBo transferCustomer(CustomerTransferRequestBo transferBo) throws BizException {
+    public OptCustomerResultBo transferCustomer(CustomerTransferRequestBo transferBo) {
         User currentUser = webContext.getCurrentUser();
         if (currentUser.getDepartment() == null && !userService.isGeneralManager(currentUser.getId())) {
             throw new BizException("您不属于任何一个部门，不允许进行客户转移操作");
@@ -524,7 +524,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    private void validateTransferBo(CustomerTransferRequestBo transferBo) throws BizException {
+    private void validateTransferBo(CustomerTransferRequestBo transferBo) {
         User currentUser = webContext.getCurrentUser();
         if (transferBo.getTarget() == null) {
             throw new BizException("没有提供转移目标类型");

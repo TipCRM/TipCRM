@@ -1,7 +1,6 @@
 package com.tipcrm.web.publicapi;
 import com.tipcrm.bo.ApproveBo;
 import com.tipcrm.constant.Constants;
-import com.tipcrm.exception.BizException;
 import com.tipcrm.service.CustomerService;
 import com.tipcrm.web.util.JsonEntity;
 import com.tipcrm.web.util.ResponseHelper;
@@ -25,7 +24,7 @@ public class ApprovalApi {
 
     @RequestMapping(value = "/approval/customer", method = RequestMethod.POST)
     @RequiresPermissions(Constants.Permission.CUSTOMER_APPROVAL)
-    public JsonEntity<String> approveCustomer(@RequestBody ApproveBo approveBo) throws BizException {
+    public JsonEntity<String> approveCustomer(@RequestBody ApproveBo approveBo) {
         customerService.approveCustomer(approveBo);
         return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
     }

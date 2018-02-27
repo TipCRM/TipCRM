@@ -6,22 +6,20 @@ import com.tipcrm.bo.OptCustomerResultBo;
 import com.tipcrm.bo.QueryCustomerBo;
 import com.tipcrm.bo.QueryRequestBo;
 import com.tipcrm.bo.QueryResultBo;
-import com.tipcrm.exception.BizException;
-import com.tipcrm.exception.QueryException;
 
 public interface CustomerService {
 
-    OptCustomerResultBo createNewCustomer(CreateCustomerBo createCustomerBo) throws BizException;
+    OptCustomerResultBo createNewCustomer(CreateCustomerBo createCustomerBo);
 
-    Integer approveCustomer(ApproveBo approveBo) throws BizException;
+    Integer approveCustomer(ApproveBo approveBo);
 
-    OptCustomerResultBo deleteCustomer(Integer customerId) throws BizException;
+    OptCustomerResultBo deleteCustomer(Integer customerId);
 
-    QueryResultBo<QueryCustomerBo> findMyCustomers(QueryRequestBo queryRequestBo) throws QueryException, BizException;
+    QueryResultBo<QueryCustomerBo> findMyCustomers(QueryRequestBo queryRequestBo);
 
-    QueryResultBo<QueryCustomerBo> findByMyDepartmentOpenSea(QueryRequestBo queryRequestBo) throws BizException, QueryException;
+    QueryResultBo<QueryCustomerBo> findByMyDepartmentOpenSea(QueryRequestBo queryRequestBo);
 
-    QueryResultBo<QueryCustomerBo> findByDepartmentOpenSea(Integer departmentId, QueryRequestBo queryRequestBo) throws QueryException, BizException;
+    QueryResultBo<QueryCustomerBo> findByDepartmentOpenSea(Integer departmentId, QueryRequestBo queryRequestBo);
 
-    OptCustomerResultBo transferCustomer(CustomerTransferRequestBo transferBo) throws BizException;
+    OptCustomerResultBo transferCustomer(CustomerTransferRequestBo transferBo);
 }

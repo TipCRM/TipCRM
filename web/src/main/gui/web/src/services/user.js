@@ -5,5 +5,5 @@ export async function query() {
 }
 
 export async function queryCurrent() {
-  return request('/public/api/currentUserInfo');
+  return request('/public/api/user/me');
 }
