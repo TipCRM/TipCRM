@@ -14,4 +14,6 @@ public interface NotificationService {
     List<SimpleNotificationBo> getMyRealTimeNotifications();
 
     QueryResultBo<NotificationBo> getMyNotifications(QueryRequestBo queryRequestBo);
+
+    NotificationBo getNotificationById(Integer notificationId);
 }
