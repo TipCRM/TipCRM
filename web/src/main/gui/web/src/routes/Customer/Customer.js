@@ -3,14 +3,20 @@
  */
 import React from 'react';
 import {connect} from 'dva';
-import {Spin, Icon, Table, Button, Popover, List, Input} from 'antd';
+import {Spin, Icon, Table, Button, Popover, List, Input, Tooltip, Modal, Form, Row, message} from 'antd';
 import Loader from '../../components/Loader/Loader';
 import styles from '../Customer/Customer.less';
 import EditableItem from '../../components/EditableItem';
 
+const FormItem = Form.Item;
+/**
+ * @author brotherlu
+ * @date 2018-2-3
+ */
 @connect(({customer, loading})=>
   ({customer,
     loading: loading.models.customer}))
+@Form.create()
 export default class Customer extends React.PureComponent{
 
   state={
@@ -21,19 +27,16 @@ export default class Customer extends React.PureComponent{
     pageSize: 10,
     filterCondition:{},
     sorterCondition:{sort:{direction:'DESC', fieldName:'customer_name'}},
+    showModal: false,
   }
 
   componentDidMount(){
     const {dispatch} = this.props;
-    let request = {page: this.state.currentPage, size: this.state.pageSize};
-    request = {...request, ...this.state.filterCondition, ...this.state.sorterCondition};
+    let pageCondition = {page: this.state.currentPage, size: this.state.pageSize};
+    let request = {...pageCondition, ...this.state.filterCondition, ...this.state.sorterCondition};
     dispatch({
       type:'customer/myCustomers',
       payload:request,
-    });
-    let {customer} = this.props;
-    this.setState({
-      currentPage: customer.customers.page,
     });
   }
 
@@ -49,7 +52,13 @@ export default class Customer extends React.PureComponent{
     });
   }
 
+  /**
+   *  when the table change, include: pagination/filter/sorter.
+   *  the method will use, but not include the filter defined by
+   *  user.
+   */
   handlerOnChange=(pagination, filters, sorter) => {
+    console.log(">>>>>>filter: "+JSON.stringify(filters));
     const {dispatch} = this.props;
     /** init filter condition **/
     let filterCondition = {};
@@ -90,7 +99,6 @@ export default class Customer extends React.PureComponent{
   }
 
   initPopover(record){
-   // this.initPopoverData(record.key);
     const data = [
       {title:'2018-1-5', desc: '2018-1-5 去他家拜访'},
       {title:'2018-1-2', desc: '2018-1-2 电话开始联系'},
@@ -142,10 +150,48 @@ export default class Customer extends React.PureComponent{
     });
   }
 
+  /**
+   * add customer
+   */
+  createCustomer = () =>{
+    this.setState({
+      showModal: true,
+    });
+  }
+
+  /**
+   * give up create customer
+   */
+  cancelCreateCustomer =()=>{
+    this.setState({
+      showModal: false,
+    });
+  }
+
+  /**
+   * sure create customer
+   */
+  sureCreateCustomer=(e)=>{
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((errors, values) => {
+      if (errors) {
+        return;
+      }
+      this.props.dispatch(
+        { type: 'customer/createCustomer',
+          payload: values
+        });
+    });
+    this.setState({
+      showModal: false,
+    });
+
+    message.success("创建客户信息成功，已提交审核");
+  }
+
   render(){
-    // const loadingIcon =(<Icon type="loading" style={{ size: 30 }}/>);
-    // const {loading} = this.props;
-    const {loading, customer} = this.props;
+    const {loading, customer, form} = this.props;
+    const {getFieldDecorator} = form;
     const customers = customer.customers;
     const searchDropdown = (
       <div className="custom-filter-dropdown">
@@ -199,8 +245,27 @@ export default class Customer extends React.PureComponent{
         {text:'签约客户',value:2},
         {text:'新客户',value:3},
         {text:'过期客户',value:4},], sorter: true},
-        {title:'意向金额', dataIndex:'intentionalAmount'},
-        {title:'签约金额', dataIndex:'signAmount'},];
+      {title:'意向金额', dataIndex:'intentionalAmount'},
+      {title:'签约金额', dataIndex:'signAmount'},
+      {title:'操作', dataIndex:'operation',
+        render:((text, record) => {
+          return(
+            <div>
+              <Tooltip placement="top" title={record.customerId}>
+                <Button size="small">
+                  <Icon type="logout" style={{ fontSize: 16, color: '#08c' }}/>
+                </Button>
+              </Tooltip>
+              <Tooltip placement="top" title={'提交审核'}>
+                <Button size="small" style={{ marginLeft:5}}>
+                  <Icon type="export" style={{ fontSize: 18, color: '#08c'}}/>
+                </Button>
+              </Tooltip>
+            </div>
+          );
+        }),
+      }
+    ];
 
     const rowSelection = {};
     const pagination = {defaultCurrent:1, pageSize: this.state.pageSize,
@@ -209,7 +274,71 @@ export default class Customer extends React.PureComponent{
 
     const content = (
       <div style={{marginTop:'10px',background: '#fff'}}>
-          <Button style={{margin: '8px 8px 8px 8px'}} type='primary'>添加客户</Button>
+          <Button style={{margin: '8px 8px 8px 8px'}} type='primary' onClick={this.createCustomer}>添加客户</Button>
+        <Modal visible={this.state.showModal}
+              title="新建客户" width="330px"
+              onCancel={this.cancelCreateCustomer} footer={null}
+            >
+            <Form>
+              <FormItem hasFeedback>
+                {getFieldDecorator('name', {
+                  rules: [
+                    {
+                      required: true,
+                      message:'客户名称不能为空'
+                    },
+                  ],
+                })(<Input onPressEnter={this.sureCreateCustomer} placeholder="客户名称" prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
+              </FormItem>
+              <FormItem hasFeedback>
+                {getFieldDecorator('contactName', {
+                  rules: [
+                    {
+                      required: true,
+                      message:'联系人名字不能为空'
+                    },
+                  ],
+                })(<Input onPressEnter={this.sureCreateCustomer} placeholder="联系人名字" prefix={<Icon type="contacts" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
+              </FormItem>
+              <FormItem hasFeedback>
+                {getFieldDecorator('contactPhone', {
+                  rules: [
+                    {
+                      required: true,
+                      message: '请输入手机号！',
+                    },
+                    {
+                      pattern: /^1\d{10}$/,
+                      message: '手机号格式错误！',
+                    },
+                  ],
+                })(
+                  <Input
+                    placeholder="联系人11位手机号"
+                    prefix={<Icon type="mobile" style={{ color: 'rgba(0,0,0,.25)' }}/>}
+                  />
+                )}
+              </FormItem>
+              <FormItem hasFeedback>
+                {getFieldDecorator('address', {
+                  rules: [
+                    {
+                      required: true,
+                      message:'客户地址不能为空'
+                    },
+                  ],
+                })(<Input onPressEnter={this.sureCreateCustomer} placeholder="客户地址" prefix={<Icon type="home" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
+              </FormItem>
+              <FormItem>
+                <Row>
+                  <Button key="back" onClick={this.sureCreateCustomer} style={{width:'48%'}}>取消</Button>
+                  <Button key="submit" type="primary" loading={loading} onClick={this.sureCreateCustomer} style={{width:'48%', marginLeft:'4%'}}>
+                    保存
+                  </Button>
+                </Row>
+              </FormItem>
+            </Form>
+            </Modal>
           <Table style={{textAlign:'center'}} size={'small'} rowKey={(record) => record.customerId}
                  columns={columns} dataSource={customers.data}
                  rowSelection={rowSelection} bordered

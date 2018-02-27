@@ -1,7 +1,7 @@
 /**
  * Created by Administrator on 2018/2/9.
  */
-import {queryMyCustomers} from '../services/api';
+import {queryMyCustomers, createCustomer} from '../services/api';
 
 export default {
   namespace: 'customer',
@@ -17,6 +17,11 @@ export default {
         type:'listCustomers',
         payload: response.data,
       });
+    },
+    *createCustomer({payload}, {call, put}){
+      console.log(payload);
+      const response = yield call(createCustomer, payload);
+      console.log(response);
     },
     *popoverData({payload},{call, put}){
       console.log('id'+payload);

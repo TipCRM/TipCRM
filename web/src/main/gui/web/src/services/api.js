@@ -89,6 +89,12 @@ export async function queryMyCustomers(params) {
   });
 }
 
+export async function createCustomer(params){
+  return request('/public/api/customer',{
+    method: 'POST',
+    body: params,
+  });
+}
 export async function queryMenu() {
   return request('/public/api/menu');
 }
