@@ -1,9 +1,9 @@
 import * as React from 'react';
 export interface NoticeIconData {
   avatar?: string;
-  title?: React.ReactNode;
+  subject?: React.ReactNode;
+  time?: React.ReactNode;
   description?: React.ReactNode;
-  datetime?: React.ReactNode;
   extra?: React.ReactNode;
   style?: React.CSSProperties;
 }

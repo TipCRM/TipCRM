@@ -80,12 +80,13 @@ class BasicLayout extends React.PureComponent {
       breadcrumbNameMap: routerData,
     };
   }
-  //componentWillMount(){
-  //  console.log("start init menu");
-  //  this.props.dispatch({
-  //    type: 'global/fetchMenu',
-  //  });
-  //}
+  componentWillMount(){
+    console.log("start init fetchCurrent");
+    this.props.dispatch({
+      type: 'global/fetchNotices',
+      payload: {page: 1, size: 1},
+    });
+  }
 
   componentDidMount() {
     enquireScreen((mobile) => {
@@ -93,10 +94,11 @@ class BasicLayout extends React.PureComponent {
         isMobile: mobile,
       });
     });
-    // console.log("start init fetchCurrent");
+    //console.log("start init fetchCurrent");
     this.props.dispatch({
       type: 'user/fetchCurrent',
     });
+
   }
   getPageTitle() {
     const { routerData, location } = this.props;
@@ -145,6 +147,7 @@ class BasicLayout extends React.PureComponent {
     if (visible) {
       this.props.dispatch({
         type: 'global/fetchNotices',
+        payload: {page: 1, size: 100},
       });
     }
   }
@@ -170,8 +173,9 @@ class BasicLayout extends React.PureComponent {
   }
   render() {
     const {
-      currentUser, collapsed, fetchingNotices, notices, routerData, match, location,
+      currentUser, collapsed, fetchingNotices, notices, routerData, match, location
     } = this.props;
+    console.log(notices);
     const links = [{
       key: 'help',
       title: '帮助',
@@ -205,7 +209,7 @@ class BasicLayout extends React.PureComponent {
             logo={logo}
             currentUser={currentUser}
             fetchingNotices={fetchingNotices}
-            notices={notices}
+            notices={notices.data}
             collapsed={collapsed}
             isMobile={this.state.isMobile}
             onNoticeClear={this.handleNoticeClear}
