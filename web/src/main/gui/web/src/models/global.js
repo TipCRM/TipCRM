@@ -17,8 +17,9 @@ export default {
         payload: response,
       });
     },
-    *fetchNotices(_, { call, put }) {
-      const data = yield call(queryNotices);
+    *fetchNotices({payload}, { call, put }) {
+      console.log(payload);
+      const data = yield call(queryNotices, payload);
       yield put({
         type: 'saveNotices',
         payload: data,

@@ -6,7 +6,7 @@ import styles from './NoticeList.less';
 export default function NoticeList({
   data = [], onClick, onClear, title, locale, emptyText, emptyImage,
 }) {
-  if (data.length === 0) {
+  if (data == null || data.length === 0) {
     return (
       <div className={styles.notFound}>
         {emptyImage ? (
@@ -30,17 +30,16 @@ export default function NoticeList({
                 avatar={item.avatar ? <Avatar className={styles.avatar} src={item.avatar} /> : null}
                 title={
                   <div className={styles.title}>
-                    {item.title}
-                    <div className={styles.extra}>{item.extra}</div>
+                    {item.subject}
                   </div>
                 }
-                description={
+                description={item.description ?
                   <div>
                     <div className={styles.description} title={item.description}>
                       {item.description}
                     </div>
-                    <div className={styles.datetime}>{item.datetime}</div>
-                  </div>
+                    <div className={styles.datetime}>{item.time}</div>
+                  </div> : <div className={styles.datetime}>{item.time}</div>
                 }
               />
             </List.Item>

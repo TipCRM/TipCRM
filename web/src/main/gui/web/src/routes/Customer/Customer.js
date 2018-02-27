@@ -181,18 +181,18 @@ export default class Customer extends React.PureComponent{
         { type: 'customer/createCustomer',
           payload: values
         });
+      this.setState({
+        showModal: false,
+      });
+      message.success("创建客户信息成功，已提交审核");
     });
-    this.setState({
-      showModal: false,
-    });
-
-    message.success("创建客户信息成功，已提交审核");
   }
 
   render(){
     const {loading, customer, form} = this.props;
     const {getFieldDecorator} = form;
     const customers = customer.customers;
+    /** customer name dropdown **/
     const searchDropdown = (
       <div className="custom-filter-dropdown">
         <Input
@@ -207,9 +207,81 @@ export default class Customer extends React.PureComponent{
         <Button size="small" type="primary" onClick={this.onSearchByName} style={{marginLeft: '3px',}}>搜索</Button>
       </div>
     );
+    /** create customer info form **/
+    const modalTitle = (<div>
+      <font>添加新客户</font>
+      <Tooltip placement="rightBottom" title="新添加的用户需要上级审核通过后才会录入客户数据库" mouseLeaveDelay="0.3">
+        <Icon type="info-circle-o" style={{color:'#faad14',marginLeft:'3px'}} size="small"/>
+      </Tooltip>
+    </div>);
+    const newCustomerModal = (
+      <Modal visible={this.state.showModal}
+             title={modalTitle} width="330px"
+             onCancel={this.cancelCreateCustomer} footer={null}>
+        <Form>
+          <FormItem hasFeedback>
+            {getFieldDecorator('name', {
+              rules: [
+                {
+                  required: true,
+                  message:'客户名称不能为空'
+                },
+              ],
+            })(<Input onPressEnter={this.sureCreateCustomer} placeholder="客户名称" prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
+          </FormItem>
+          <FormItem hasFeedback>
+            {getFieldDecorator('contactName', {
+              rules: [
+                {
+                  required: true,
+                  message:'联系人名字不能为空'
+                },
+              ],
+            })(<Input onPressEnter={this.sureCreateCustomer} placeholder="联系人名字" prefix={<Icon type="contacts" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
+          </FormItem>
+          <FormItem hasFeedback>
+            {getFieldDecorator('contactPhone', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入手机号！',
+                },
+                {
+                  pattern: /^1\d{10}$/,
+                  message: '手机号格式错误！',
+                },
+              ],
+            })(
+              <Input
+                placeholder="联系人11位手机号"
+                prefix={<Icon type="mobile" style={{ color: 'rgba(0,0,0,.25)' }}/>}
+              />
+            )}
+          </FormItem>
+          <FormItem hasFeedback>
+            {getFieldDecorator('address', {
+              rules: [
+                {
+                  required: true,
+                  message:'客户地址不能为空'
+                },
+              ],
+            })(<Input onPressEnter={this.sureCreateCustomer} placeholder="客户地址" prefix={<Icon type="home" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
+          </FormItem>
+          <FormItem>
+            <Row>
+              <Button key="back" onClick={this.cancelCreateCustomer} style={{width:'48%'}}>取消</Button>
+              <Button key="submit" type="primary" loading={loading} onClick={this.sureCreateCustomer} style={{width:'48%', marginLeft:'4%'}}>
+                保存
+              </Button>
+            </Row>
+          </FormItem>
+        </Form>
+      </Modal>
+    );
 
     const columns=[
-      {title:'公司名称',dataIndex:'customerName',key:'customerId',
+      {title:'公司名称',dataIndex:'customerName',key:'customerId',width: '10%',
         filterDropdown:searchDropdown,
         filterIcon:<Icon type="search" style={{ color: this.state.filtered ? '#108ee9' : '#aaa' }}/>,
         filterDropdownVisible: this.state.filterDropdownVisible,
@@ -232,22 +304,22 @@ export default class Customer extends React.PureComponent{
             <EditableItem value={text} type="contactPhone"/>
           );
       }),},
-      {title:'最后一次沟通时间',dataIndex:'lastCommunicationTime',},
-      {title:'拜访记录',dataIndex:'lastCommunicationContent', width:'18%',
+      {title:'最后一次沟通时间',dataIndex:'lastCommunicationTime',width: '14%',},
+      {title:'拜访记录',dataIndex:'lastCommunicationContent', width:'15%',
         render:((text, record) =>{
           return(
             <Popover content={this.initPopover(record)} trigger="click" placement="bottom" >
               <div style={{cursor:'pointer'}}>{text}</div>
             </Popover>);}),className:styles.tableColumn},
-      {title:'下次沟通',dataIndex:'nextCommunicationTime'},
-      {title:'客户状态',dataIndex:'status', filters:[
+      {title:'下次沟通',dataIndex:'nextCommunicationTime',width: '14%',},
+      {title:'客户状态',dataIndex:'status',width: '10%', filters:[
         {text:'意向客户',value:1},
         {text:'签约客户',value:2},
         {text:'新客户',value:3},
         {text:'过期客户',value:4},], sorter: true},
       {title:'意向金额', dataIndex:'intentionalAmount'},
       {title:'签约金额', dataIndex:'signAmount'},
-      {title:'操作', dataIndex:'operation',
+      {title:'操作', dataIndex:'operation',width: '8%',
         render:((text, record) => {
           return(
             <div>
@@ -275,71 +347,8 @@ export default class Customer extends React.PureComponent{
     const content = (
       <div style={{marginTop:'10px',background: '#fff'}}>
           <Button style={{margin: '8px 8px 8px 8px'}} type='primary' onClick={this.createCustomer}>添加客户</Button>
-        <Modal visible={this.state.showModal}
-              title="新建客户" width="330px"
-              onCancel={this.cancelCreateCustomer} footer={null}
-            >
-            <Form>
-              <FormItem hasFeedback>
-                {getFieldDecorator('name', {
-                  rules: [
-                    {
-                      required: true,
-                      message:'客户名称不能为空'
-                    },
-                  ],
-                })(<Input onPressEnter={this.sureCreateCustomer} placeholder="客户名称" prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
-              </FormItem>
-              <FormItem hasFeedback>
-                {getFieldDecorator('contactName', {
-                  rules: [
-                    {
-                      required: true,
-                      message:'联系人名字不能为空'
-                    },
-                  ],
-                })(<Input onPressEnter={this.sureCreateCustomer} placeholder="联系人名字" prefix={<Icon type="contacts" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
-              </FormItem>
-              <FormItem hasFeedback>
-                {getFieldDecorator('contactPhone', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入手机号！',
-                    },
-                    {
-                      pattern: /^1\d{10}$/,
-                      message: '手机号格式错误！',
-                    },
-                  ],
-                })(
-                  <Input
-                    placeholder="联系人11位手机号"
-                    prefix={<Icon type="mobile" style={{ color: 'rgba(0,0,0,.25)' }}/>}
-                  />
-                )}
-              </FormItem>
-              <FormItem hasFeedback>
-                {getFieldDecorator('address', {
-                  rules: [
-                    {
-                      required: true,
-                      message:'客户地址不能为空'
-                    },
-                  ],
-                })(<Input onPressEnter={this.sureCreateCustomer} placeholder="客户地址" prefix={<Icon type="home" style={{ color: 'rgba(0,0,0,.25)' }} />}/>)}
-              </FormItem>
-              <FormItem>
-                <Row>
-                  <Button key="back" onClick={this.sureCreateCustomer} style={{width:'48%'}}>取消</Button>
-                  <Button key="submit" type="primary" loading={loading} onClick={this.sureCreateCustomer} style={{width:'48%', marginLeft:'4%'}}>
-                    保存
-                  </Button>
-                </Row>
-              </FormItem>
-            </Form>
-            </Modal>
-          <Table style={{textAlign:'center'}} size={'small'} rowKey={(record) => record.customerId}
+          {newCustomerModal}
+          <Table style={{textAlign:'center'}} size="small" rowKey={(record) => record.customerId}
                  columns={columns} dataSource={customers.data}
                  rowSelection={rowSelection} bordered
                  pagination={pagination}

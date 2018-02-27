@@ -78,8 +78,11 @@ export async function fakeRegister(params) {
   });
 }
 
-export async function queryNotices() {
-  return request('/api/notices');
+export async function queryNotices(params) {
+  return request('/public/api/notification/my',{
+    method:'POST',
+    body:params,
+  });
 }
 
 export async function queryMyCustomers(params) {
