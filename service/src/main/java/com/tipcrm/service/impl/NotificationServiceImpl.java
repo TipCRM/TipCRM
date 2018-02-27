@@ -2,7 +2,6 @@ package com.tipcrm.service.impl;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -148,7 +147,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public QueryResultBo<NotificationBo> getMyNotifications(QueryRequestBo queryRequestBo) throws QueryException, BizException {
+    public QueryResultBo<NotificationBo> getMyNotifications(QueryRequestBo queryRequestBo) {
 
         if (CollectionUtils.isEmpty(queryRequestBo.getCriteria())) {
             queryRequestBo.setCriteria(Lists.newArrayList());

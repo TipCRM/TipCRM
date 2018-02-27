@@ -27,10 +27,9 @@ public class UserApi {
     @Autowired
     private UserService userService;
 
-    // @RequiresPermissions(value = "user:view")
     @RequestMapping(value = "user/me", method = RequestMethod.GET)
     @RequiresAuthentication
-    public JsonEntity<UserBo> getUser() throws Exception {
+    public JsonEntity<UserBo> getUser() {
         Integer userId = webContext.getCurrentUserId();
         return ResponseHelper.createInstance(userService.getUserByUserId(userId));
     }
