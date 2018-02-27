@@ -65,7 +65,7 @@ export default class Login extends React.PureComponent{
             <Button type="primary"
                     onClick={this.handleSubmit}
                     loading={loading}
-                    htmlType="submit">
+                    >
               登录
             </Button>
           </FormItem>

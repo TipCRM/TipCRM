@@ -13,7 +13,7 @@ describe('Login', () => {
   });
 
   it('should login with failure', async () => {
-    await page.type('#userName', 'mockuser')
+    await page.type('#loginKey', 'mockuser')
       .type('#password', 'wrong_password')
       .click('button[type="submit"]')
       .wait('.ant-alert-error') // should display error

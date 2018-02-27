@@ -10,8 +10,10 @@ export default {
 
   effects: {
     *login({ payload }, { call, put }) {
+      console.log(">>>>>>>>>>>start login>>>>>>>>>>>>>");
       const response = yield call(fakeAccountLogin, payload);
       let res;
+      console.log(response);
       if (response.status >= 400){
         res = {...response,...{currentAuthority:'guest'}};
       } else{
@@ -30,7 +32,7 @@ export default {
         // yield put(routerRedux.push('/'));
         window.location.reload();
       } else {
-        throw res.data;
+        throw res.message;
       }
     },
     *logout(_, { put, select }) {
