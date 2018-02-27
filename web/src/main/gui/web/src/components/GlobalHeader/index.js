@@ -66,7 +66,7 @@ export default class GlobalHeader extends PureComponent {
     );
     const noticeData = this.getNoticeData();
     /** todo remove this hardcode **/
-    currentUser.avatar = 'https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png';
+    currentUser.avatar = currentUser.avatar ? currentUser.avatar:'https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png';
     return (
       <Header className={styles.header}>
         {isMobile && (
