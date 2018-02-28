@@ -64,6 +64,7 @@ export async function queryFakeList(params) {
   return request(`/api/fake_list?${stringify(params)}`);
 }
 
+/** api for Tip crm **/
 export async function fakeAccountLogin(params) {
   return request('/public/api/login', {
     method: 'POST',

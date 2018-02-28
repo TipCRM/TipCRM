@@ -295,13 +295,13 @@ export default class Customer extends React.PureComponent{
       {title:'联系人',dataIndex:'contactName',
       render:((text) =>{
         return (
-          <EditableItem value={text}/>
+          <EditableItem value={text} showSaveIcon={true}/>
         );
       }),},
       {title:'联系电话',dataIndex:'phone',
         render:((text) =>{
           return (
-            <EditableItem value={text} type="contactPhone"/>
+            <EditableItem value={text} type="contactPhone" showSaveIcon={true}/>
           );
       }),},
       {title:'最后一次沟通时间',dataIndex:'lastCommunicationTime',width: '14%',},

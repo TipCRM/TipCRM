@@ -25,10 +25,10 @@ const codeMessage = {
   504: '网关超时',
 };
 function checkStatus(response) {
+  console.log(response);
   if (response.status >= 200 && response.status < 400 ) {
     return response;
   }
-  console.log(response);
   const errortext = codeMessage[response.status] || response.statusText;
   notification.error({
     message: `请求错误 ${response.status}: ${response.url}`,

@@ -5,7 +5,7 @@ import styles from './index.less';
 export default class EditableItem extends PureComponent {
   state = {
     value: this.props.value,
-    editable: false,
+    editable: this.props.editing ? this.props.editing : false,
   };
   handleChange = (e) => {
     const { value } = e.target;
@@ -33,26 +33,31 @@ export default class EditableItem extends PureComponent {
     this.setState({ editable: true });
   }
   render() {
+    const {editing, showSaveIcon} = this.props;
     const { value, editable } = this.state;
+    const edit = (editing == null ? editable: editing);
     return (
       <div className={styles.editableItem}>
         {
-          editable ? (
+          edit ? (
             <div className={styles.wrapper}>
               <Input
+                size="small"
                 value={value}
                 onChange={this.handleChange}
                 onPressEnter={this.check}
               />
-              <Icon
-                type="check"
-                className={styles.icon}
-                onClick={this.check}
-              />
+              {
+                showSaveIcon ? <Icon
+                    type="save"
+                    className={styles.icon}
+                    onClick={this.check}
+                  /> : ""
+              }
             </div>
           ) : (
             <div className={styles.wrapper}>
-              <span style={{cursor: 'pointer'}} onDoubleClick={this.edit}>{value || ' '}</span>
+              <span style={{cursor: 'pointer'}} onDoubleClick={this.edit}>{value||'--'}</span>
             </div>
           )
         }

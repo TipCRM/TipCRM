@@ -29,7 +29,7 @@ export default {
       if (payload == 1){
         response = {...response,...{desc:'1997-12-11 拜访麻花藤'}};
       } else if (payload == 2){
-        response = {...response,...{desc:'1993-12-11 拜访Jack Ma', desc:'2003-12-1 再次相会于西湖'}};
+        response = {...response,...{desc:'1993-12-11 拜访Jack Ma'}};
       } else {
         response = {...response,...{desc:'1900-12-11 美国留学深造'}};
       }
