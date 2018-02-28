@@ -5,6 +5,7 @@ import React from 'react';
 import {connect} from 'dva';
 import {Bar, Pie, yuan} from '../../components/Charts';
 import {Spin, Row, Col, Card} from 'antd';
+import styles from './Index.less';
 
 @connect(({loading}) =>({loading}))
 export default class Index extends React.PureComponent{
@@ -46,8 +47,29 @@ export default class Index extends React.PureComponent{
 
     const {loading} = this.props;
 
+    const Info = ({ title, value, bordered }) => (
+      <div className={styles.headerInfo}>
+        <span>{title}</span>
+        <p>{value}</p>
+        {bordered && <em />}
+      </div>
+    );
+
     return(
       <div >
+        <Card bordered={false}>
+          <Row>
+            <Col sm={8} xs={24}>
+              <Info title="我的待办" value="8个任务" bordered />
+            </Col>
+            <Col sm={8} xs={24}>
+              <Info title="本周任务平均处理时间" value="32分钟" bordered />
+            </Col>
+            <Col sm={8} xs={24}>
+              <Info title="本周完成任务数" value="24个任务" />
+            </Col>
+          </Row>
+        </Card>
           <Spin size={'default'}  tip="正在加载..." style={{fontSize:14,marginTop:'10%'}} spinning={false}>
             <div style={{marginTop:'10px',textAlign:'center'}}>
               <h1>主页</h1>
