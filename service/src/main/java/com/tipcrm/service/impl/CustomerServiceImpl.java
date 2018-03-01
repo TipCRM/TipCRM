@@ -593,7 +593,7 @@ public class CustomerServiceImpl implements CustomerService {
                             break;
                         case Constants.QueryFieldName.Customer.STATUS:
                             path = root.get("status").get("id");
-                            predicates.add(criteriaBuilder.equal(path, criteria.getValue()));
+                            predicates.add(path.in(((List)criteria.getValue()).toArray()));
                             break;
                         case Constants.QueryFieldName.Customer.LAST_COMMUNICATION_TIME:
                             path = root.get("lastCommunication").get("communicateTime");
