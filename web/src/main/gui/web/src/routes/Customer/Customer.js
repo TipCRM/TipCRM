@@ -298,7 +298,7 @@ export default class Customer extends React.PureComponent{
           <EditableItem value={text} showSaveIcon={true}/>
         );
       }),},
-      {title:'联系电话',dataIndex:'phone',
+      {title:'联系电话',dataIndex:'contactPhone',width: '11%',
         render:((text) =>{
           return (
             <EditableItem value={text} type="contactPhone" showSaveIcon={true}/>
