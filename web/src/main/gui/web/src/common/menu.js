@@ -24,7 +24,7 @@ const menuData = [{
   icon:'home',
   path:'index',
 },{
-  name:'我的客户',
+  name:'客户管理',
   icon:'team',
   path:'customer',
 },{
@@ -40,39 +40,14 @@ const menuData = [{
   icon:'file-text',
   path:'data',
 },{
-    name:'系统设置',
-    icon:'setting',
-    path:'system',
-    children:[{
-      name:'客户管理',
-      icon:'usergroup-add',
-      path:'customer',
-    },
-      {
-        name:'员工管理',
-        icon:'user',
-        path:'employee',
-      },
-      {
-        name:'审批管理',
-        icon:'exception',
-        path:'approve',
-      },
-      {
-        name:'权限管理',
-        icon:'lock',
-        path:'permission',
-      },
-      {
-        name:'财务管理',
-        icon:'red-envelope',
-        path:'finance',
-      },{
-        name:'资料管理',
-        icon:'copy',
-        path:'data',
-      },],
-  },];
+  name:'个人中心',
+  icon:'file-text',
+  path:'user_center',
+},{
+  name:'系统设置',
+  icon:'setting',
+  path:'system',}
+];
 
 function formatter(data, parentPath = '', parentAuthority) {
   return data.map((item) => {

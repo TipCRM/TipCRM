@@ -72,7 +72,6 @@ class BasicLayout extends React.PureComponent {
   }
   state = {
     isMobile,
-    state:[],
   };
   getChildContext() {
     const { location, routerData } = this.props;
@@ -82,9 +81,10 @@ class BasicLayout extends React.PureComponent {
     };
   }
   componentWillMount(){
-    console.log("start init menu");
+    console.log("start init fetchCurrent");
     this.props.dispatch({
-      type: 'global/fetchMenu',
+      type: 'global/fetchNotices',
+      payload: {page: 1, size: 1},
     });
   }
 
@@ -94,10 +94,11 @@ class BasicLayout extends React.PureComponent {
         isMobile: mobile,
       });
     });
-    // console.log("start init fetchCurrent");
+    //console.log("start init fetchCurrent");
     this.props.dispatch({
       type: 'user/fetchCurrent',
     });
+
   }
   getPageTitle() {
     const { routerData, location } = this.props;
@@ -112,10 +113,14 @@ class BasicLayout extends React.PureComponent {
     // According to the url parameter to redirect
     // 这里是重定向的,重定向到 url 的 redirect 参数所示地址
     const urlParams = new URL(window.location.href);
-    const redirect = urlParams.searchParams.get('redirect') || '/index';
+    const redirect = urlParams.searchParams.get('redirect');
     // Remove the parameters in the url
-    urlParams.searchParams.delete('redirect');
-    window.history.pushState(null, 'redirect', urlParams.href);
+    if (redirect) {
+      urlParams.searchParams.delete('redirect');
+      window.history.replaceState(null, 'redirect', urlParams.href);
+    } else {
+      return '/index';
+    }
     return redirect;
   }
   handleMenuCollapse = (collapsed) => {
@@ -136,6 +141,10 @@ class BasicLayout extends React.PureComponent {
       this.props.dispatch(routerRedux.push('/exception/trigger'));
       return;
     }
+    if (key === 'userCenter'){
+      this.props.dispatch(routerRedux.push('/user_center'));
+      return;
+    }
     if (key === 'logout') {
       this.props.dispatch({
         type: 'login/logout',
@@ -146,6 +155,7 @@ class BasicLayout extends React.PureComponent {
     if (visible) {
       this.props.dispatch({
         type: 'global/fetchNotices',
+        payload: {page: 1, size: 100},
       });
     }
   }
@@ -171,9 +181,9 @@ class BasicLayout extends React.PureComponent {
   }
   render() {
     const {
-      currentUser, collapsed, fetchingNotices, notices, routerData, match, location, fetchingMenu
+      currentUser, collapsed, fetchingNotices, notices, routerData, match, location
     } = this.props;
-    const {menu} = this.props;
+    console.log(notices);
     const links = [{
       key: 'help',
       title: '帮助',
@@ -190,26 +200,24 @@ class BasicLayout extends React.PureComponent {
     const bashRedirect = this.getBashRedirect();
     const layout = (
       <Layout>
-        <Spin spinning={fetchingMenu}>
-          <SiderMenu
-            logo={logo}
-            // 不带Authorized参数的情况下如果没有权限,会强制跳到403界面
-            // If you do not have the Authorized parameter
-            // you will be forced to jump to the 403 interface without permission
-            Authorized={Authorized}
-            menuData={getMenuData()}
-            collapsed={collapsed}
-            location={location}
-            isMobile={this.state.isMobile}
-            onCollapse={this.handleMenuCollapse}
-          />
-        </Spin>
+        <SiderMenu
+          logo={logo}
+          // 不带Authorized参数的情况下如果没有权限,会强制跳到403界面
+          // If you do not have the Authorized parameter
+          // you will be forced to jump to the 403 interface without permission
+          Authorized={Authorized}
+          menuData={getMenuData()}
+          collapsed={collapsed}
+          location={location}
+          isMobile={this.state.isMobile}
+          onCollapse={this.handleMenuCollapse}
+        />
         <Layout>
           <GlobalHeader
             logo={logo}
             currentUser={currentUser}
             fetchingNotices={fetchingNotices}
-            notices={notices}
+            notices={notices.data}
             collapsed={collapsed}
             isMobile={this.state.isMobile}
             onNoticeClear={this.handleNoticeClear}
@@ -226,18 +234,19 @@ class BasicLayout extends React.PureComponent {
                   )
                 }
                 {
-                  getRoutes(match.path, routerData).map(item =>(
-                    <AuthorizedRoute
-                      key={item.key}
-                      path={item.path}
-                      component={item.component}
-                      exact={item.exact}
-                      authority={item.authority}
-                      redirectPath="/exception/403"
-                    />
-                  ))
+                  getRoutes(match.path, routerData).map(item =>
+                    (
+                      <AuthorizedRoute
+                        key={item.key}
+                        path={item.path}
+                        component={item.component}
+                        exact={item.exact}
+                        authority={item.authority}
+                        redirectPath="/exception/403"
+                      />
+                    )
+                  )
                 }
-                <Route exact path="/list/search/projects" component={routerData['/index'].component} />
                 <Redirect exact from="/" to={bashRedirect} />
                 <Route render={NotFound} />
               </Switch>
@@ -265,11 +274,11 @@ class BasicLayout extends React.PureComponent {
   }
 }
 
+//  fetchingMenu: loading.effects['global/fetchMenu'],
 export default connect(({ user, global, loading }) => ({
   currentUser: user.currentUser,
   collapsed: global.collapsed,
   fetchingNotices: loading.effects['global/fetchNotices'],
-  fetchingMenu: loading.effects['global/fetchMenu'],
   notices: global.notices,
   menu: global.menu,
 }))(BasicLayout);

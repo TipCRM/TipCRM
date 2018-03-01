@@ -64,6 +64,7 @@ export async function queryFakeList(params) {
   return request(`/api/fake_list?${stringify(params)}`);
 }
 
+/** api for Tip crm **/
 export async function fakeAccountLogin(params) {
   return request('/public/api/login', {
     method: 'POST',
@@ -78,17 +79,26 @@ export async function fakeRegister(params) {
   });
 }
 
-export async function queryNotices() {
-  return request('/api/notices');
+export async function queryNotices(params) {
+  return request('/public/api/notification/my',{
+    method:'POST',
+    body:params,
+  });
 }
 
-export async function queryCustomers(params) {
-  return request('/public/api/customers',{
+export async function queryMyCustomers(params) {
+  return request('/public/api/my/customers',{
     method: 'POST',
     body: params,
   });
 }
 
+export async function createCustomer(params){
+  return request('/public/api/customer',{
+    method: 'POST',
+    body: params,
+  });
+}
 export async function queryMenu() {
   return request('/public/api/menu');
 }

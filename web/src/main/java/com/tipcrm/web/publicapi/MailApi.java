@@ -1,6 +1,5 @@
 package com.tipcrm.web.publicapi;
 
-import com.tipcrm.exception.BizException;
 import com.tipcrm.service.MailService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,7 @@ public class MailApi {
     private MailService mailService;
 
     @RequestMapping(value = "mail", method = RequestMethod.GET)
-    public String sendMail(@RequestParam("to") String to, @RequestParam("subject") String subject, @RequestParam("content") String content)
-        throws BizException {
+    public String sendMail(@RequestParam("to") String to, @RequestParam("subject") String subject, @RequestParam("content") String content) {
         mailService.sendSimpleEmail(to, subject, content);
         return "success";
     }

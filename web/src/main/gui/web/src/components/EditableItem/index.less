@@ -3,8 +3,8 @@
 .editableItem {
   line-height: @input-height-base;
   display: table;
-  width: 100%;
-  margin-top: (@font-size-base * @line-height-base - @input-height-base) / 2;
+  width: 60%;
+  margin-top: (@font-size-base * @line-height-base - @input-height-base) / 1.5;
 
   .wrapper {
     display: table-row;
@@ -14,12 +14,17 @@
     }
 
     & > *:first-child {
-      width: 85%;
+      width: 95%;
     }
 
     .icon {
       cursor: pointer;
-      text-align: right;
+      text-align: left;
+      margin-left: 5px;
+    }
+
+    .span {
+      cursor: pointer;
     }
   }
 }

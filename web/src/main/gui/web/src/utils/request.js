@@ -25,7 +25,8 @@ const codeMessage = {
   504: '网关超时',
 };
 function checkStatus(response) {
-  if (response.status >= 200 && response.status < 300) {
+  console.log(response);
+  if (response.status >= 200 && response.status < 400 ) {
     return response;
   }
   const errortext = codeMessage[response.status] || response.statusText;
@@ -81,7 +82,7 @@ export default function request(url, options) {
         return;
       }
       if (e.name <= 504 && e.name >= 500) {
-        dispatch(routerRedux.push('/exception/500'));
+        //dispatch(routerRedux.push('/exception/500'));
         return;
       }
       if (e.name >= 404 && e.name < 422) {

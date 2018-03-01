@@ -218,7 +218,7 @@ const menuDatabase = [{
 const apis = {
   'POST /public/api/login':'http://www.potafish.com',
   'POST /public/api/regist':'http://www.potafish.com',
-  'GET /public/api/currentUserInfo':'http://www.potafish.com',
+  'GET /public/api/user/me':'http://www.potafish.com',
   'GET /api/currentUser': {
     $desc: "获取当前用户接口",
     $params: {
@@ -237,13 +237,8 @@ const apis = {
   'GET /public/api/menu':{
     $body:menuDatabase,
   },
-  'POST /public/api/customers':(req, res) => {
-    const reqData = req.body;
-    if (reqData.type == 'init'){
-      res.send(customerDatabase);
-    } else if (reqData.type == 'search'){
-      res.send(customerDatabase.filter(item => item.customer.indexOf(reqData.content) != -1));
-    }
-  },
+  'POST /public/api/my/customers':'http://www.potafish.com',
+  'POST /public/api/customer': 'http://www.potafish.com',
+  'POST /public/api/notification/my' : 'http://www.potafish.com',
 };
 export default noProxy ? delay(apis,1000) : delay(proxy, 1000);

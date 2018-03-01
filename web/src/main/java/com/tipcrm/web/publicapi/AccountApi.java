@@ -29,13 +29,13 @@ public class AccountApi {
     private Logger logger = LoggerFactory.getLogger(AccountApi.class);
 
     @RequestMapping(value = "/login", method = {RequestMethod.POST})
-    public JsonEntity<String> login(@RequestBody LoginBo loginBo) throws Exception {
+    public JsonEntity<String> login(@RequestBody LoginBo loginBo) {
         userService.login(loginBo);
         return ResponseHelper.createInstance("success");
     }
 
     @RequestMapping(value = "/regist", method = {RequestMethod.POST})
-    public JsonEntity<String> regist(@RequestBody RegistUserBo registUserBo) throws Exception {
+    public JsonEntity<String> regist(@RequestBody RegistUserBo registUserBo) {
         String email = userService.regist(registUserBo);
         return ResponseHelper.createInstance(email);
     }
@@ -43,7 +43,7 @@ public class AccountApi {
     @RequestMapping(value = "/user", method = {RequestMethod.POST})
     @RequiresAuthentication
     @RequiresPermissions(value = Constants.Permission.USER_ADD_UPDATE)
-    public JsonEntity<String> addUser(@RequestBody CreateUserBo saveUserBo) throws Exception {
+    public JsonEntity<String> addUser(@RequestBody CreateUserBo saveUserBo) {
         String email = userService.saveUser(saveUserBo);
         return ResponseHelper.createInstance(email);
     }
