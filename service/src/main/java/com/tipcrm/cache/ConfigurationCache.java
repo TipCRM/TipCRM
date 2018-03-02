@@ -17,6 +17,7 @@ public class ConfigurationCache {
     }
     public static void pushConfiguration(String key, String value) {
         Map<String, String> configuration = new HashMap<>();
+        configuration.put(key, value);
         pushConfigurations(configuration);
     }
     public static String get(String key){
