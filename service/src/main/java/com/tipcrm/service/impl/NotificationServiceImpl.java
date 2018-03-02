@@ -36,6 +36,7 @@ import com.tipcrm.exception.QueryException;
 import com.tipcrm.service.NotificationService;
 import com.tipcrm.service.UserService;
 import com.tipcrm.service.WebContext;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -259,33 +260,51 @@ public class NotificationServiceImpl implements NotificationService {
                     switch (criteria.getFieldName()) {
                         case Constants.QueryFieldName.Notification.SENDER:
                             path = root.get("entryUser").get("id");
-                            predicates.add(path.in(((List) criteria.getValue()).toArray()));
+                            List entryUsers = (List) criteria.getValue();
+                            if (!CollectionUtils.isEmpty(entryUsers)) {
+                                predicates.add(path.in(entryUsers.toArray()));
+                            }
                             break;
                         case Constants.QueryFieldName.Notification.SEND_TIME:
                             path = root.get("entryTime");
-                            try {
-                                Date from = sdf.parse((String) ((List) criteria.getValue()).get(0));
-                                Date to = sdf.parse((String) ((List) criteria.getValue()).get(1));
-                                predicates.add(criteriaBuilder.between(path, from, to));
-                            } catch (ParseException e) {
-                                logger.error("日期转换失败，略过该查询条件", e);
+                            List<String> entryTime = (List<String>) criteria.getValue();
+                            if (!CollectionUtils.isEmpty(entryTime) && entryTime.size() == 2) {
+                                try {
+                                    Date from = sdf.parse(entryTime.get(0));
+                                    Date to = sdf.parse(entryTime.get(1));
+                                    predicates.add(criteriaBuilder.between(path, from, to));
+                                } catch (ParseException e) {
+                                    logger.error("日期转换失败，略过该查询条件", e);
+                                }
                             }
                             break;
                         case Constants.QueryFieldName.Notification.SUBJECT:
                             path = root.get("subject");
-                            predicates.add(criteriaBuilder.like(path, "%" + criteria.getValue() + "%"));
+                            String subject = (String) criteria.getValue();
+                            if (StringUtils.isNotBlank(subject)) {
+                                predicates.add(criteriaBuilder.like(path, "%" + subject + "%"));
+                            }
                             break;
                         case Constants.QueryFieldName.Notification.CONTENT:
                             path = root.get("content");
-                            predicates.add(criteriaBuilder.like(path, "%" + criteria.getValue() + "%"));
+                            String content = (String) criteria.getValue();
+                            if (StringUtils.isNotBlank(content)) {
+                                predicates.add(criteriaBuilder.like(path, "%" + content + "%"));
+                            }
                             break;
                         case Constants.QueryFieldName.Notification.READ_STATUS:
                             path = root.get("readStatus").get("id");
-                            predicates.add(criteriaBuilder.equal(path, criteria.getValue()));
+                            Integer readStatus = (Integer) criteria.getValue();
+                            if (readStatus != null) {
+                                predicates.add(criteriaBuilder.equal(path, readStatus));
+                            }
                             break;
                         case Constants.QueryFieldName.Notification.RECEIVER:
                             path = root.get("toUser").get("id");
-                            predicates.add(path.in(((List) criteria.getValue()).toArray()));
+                            List toUsers = (List) criteria.getValue();
+                            if (!CollectionUtils.isEmpty(toUsers)) {
+                                predicates.add(path.in(toUsers.toArray()));
+                            }
                             break;
                     }
                 }
