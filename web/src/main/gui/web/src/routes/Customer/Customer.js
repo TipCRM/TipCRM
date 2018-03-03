@@ -13,8 +13,9 @@ const FormItem = Form.Item;
  * @author brotherlu
  * @date 2018-2-3
  */
-@connect(({customer, loading})=>
+@connect(({customer, config, loading})=>
   ({customer,
+    config,
     loading: loading.models.customer}))
 @Form.create()
 export default class Customer extends React.PureComponent{
@@ -28,6 +29,15 @@ export default class Customer extends React.PureComponent{
     filterCondition:{},
     sorterCondition:{sort:{direction:'DESC', fieldName:'customer_name'}},
     showModal: false,
+    statusFilters: [],
+  }
+
+  componentWillMount(){
+    const {dispatch} = this.props;
+    /** init the filters **/
+    dispatch({
+      type: 'config/customerStatus',
+    });
   }
 
   componentDidMount(){
@@ -189,9 +199,13 @@ export default class Customer extends React.PureComponent{
   }
 
   render(){
-    const {loading, customer, form} = this.props;
+    const {loading, customer, form, config} = this.props;
     const {getFieldDecorator} = form;
     const customers = customer.customers;
+    const resStatus = config.status ? config.status : [{text: "Test", value:1}];
+    console.log(">>>>>>>>>>response: "+resStatus);
+    const status = resStatus.map(s => ({text: s.displayName, value: s.id}));
+    console.log(status);
     /** customer name dropdown **/
     const searchDropdown = (
       <div className="custom-filter-dropdown">
@@ -312,11 +326,7 @@ export default class Customer extends React.PureComponent{
               <div style={{cursor:'pointer'}}>{text}</div>
             </Popover>);}),className:styles.tableColumn},
       {title:'下次沟通',dataIndex:'nextCommunicationTime',width: '14%',},
-      {title:'客户状态',dataIndex:'status',width: '10%', filters:[
-        {text:'意向客户',value:1},
-        {text:'签约客户',value:2},
-        {text:'新客户',value:3},
-        {text:'过期客户',value:4},], sorter: true},
+      {title:'客户状态',dataIndex:'status',width: '10%', filters:{status}, sorter: true},
       {title:'意向金额', dataIndex:'intentionalAmount'},
       {title:'签约金额', dataIndex:'signAmount'},
       {title:'操作', dataIndex:'operation',width: '8%',

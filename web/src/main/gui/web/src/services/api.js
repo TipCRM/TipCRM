@@ -102,3 +102,7 @@ export async function createCustomer(params){
 export async function queryMenu() {
   return request('/public/api/menu');
 }
+
+export async function queryCustomerStatus(){
+  return request("/public/api/type/customerStatus");
+}
