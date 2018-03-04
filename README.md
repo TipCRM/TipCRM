@@ -1,7 +1,7 @@
 # Tip CRM
 **The project of Tip CRM**
 
-* DEV environment: http://www.potafish.com/swagger-ui.html
+* DEV environment: http://www.potafish.com
 * Production environment: coming soon
 ### Maintainer
 **Backend:**
