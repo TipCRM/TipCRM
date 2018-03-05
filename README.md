@@ -32,3 +32,12 @@ Prerequisite:
         ```
         $ java -jar tipcrm*.jar 
         ```
+ 3. Run in docker:
+    * Rull docker image:
+       ```
+       docker pull hub.c.163.com/neilwan/tipcrm:latest
+       ```
+    * Run:
+       ```
+       docker run -d --name tipcrm -p 80:80 -v /logs/tipcrm:/logs/tipcrm hub.c.163.com/neilwan/tipcrm:latest
+       ```
