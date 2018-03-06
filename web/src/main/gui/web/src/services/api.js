@@ -99,6 +99,14 @@ export async function createCustomer(params){
     body: params,
   });
 }
+
+export async function transferOutCustomer(params){
+  return request('/public/api/customer/transfer/out',{
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function queryMenu() {
   return request('/public/api/menu');
 }
