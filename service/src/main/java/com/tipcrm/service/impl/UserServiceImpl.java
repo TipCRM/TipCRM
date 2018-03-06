@@ -304,4 +304,9 @@ public class UserServiceImpl implements UserService {
             throw new AccountException("密码不能为空");
         }
     }
+
+    @Override
+    public void logout() {
+        SecurityUtils.getSubject().logout();
+    }
 }

@@ -24,4 +24,6 @@ public interface UserService {
     List<User> findGeneralManager();
 
     User findSystemUser();
+
+    void logout();
 }
