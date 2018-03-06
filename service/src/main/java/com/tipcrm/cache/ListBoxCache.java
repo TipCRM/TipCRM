@@ -1,6 +1,7 @@
 package com.tipcrm.cache;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -28,7 +29,7 @@ public class ListBoxCache {
     }
 
     public static ListBox findByCategoryAndName(String categoryName, String name) {
-        if (listBoxCache != null) {
+        if (listBoxCache == null) {
             return null;
         }
         for (Map.Entry<Integer, ListBox> entry : listBoxCache.entrySet()) {
@@ -39,6 +40,14 @@ public class ListBoxCache {
         }
         return null;
     }
+
+    public static List<ListBox> findByCategory(String category) {
+        if (listBoxCache == null) {
+            return null;
+        }
+        return listBoxCache.values().stream().filter(listBox -> listBox.getCategoryName().equals(category)).collect(Collectors.toList());
+    }
+
     public static List<ListBox> findAll() {
         return Lists.newArrayList(listBoxCache.values());
     }

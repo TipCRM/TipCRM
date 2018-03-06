@@ -589,43 +589,64 @@ public class CustomerServiceImpl implements CustomerService {
                     switch (criteria.getFieldName()) {
                         case Constants.QueryFieldName.Customer.CUSTOMER_NAME:
                             path = root.get("name");
-                            predicates.add(criteriaBuilder.like(path, "%" + criteria.getValue() + "%"));
+                            String name = (String) criteria.getValue();
+                            if (StringUtils.isNotBlank(name)) {
+                                predicates.add(criteriaBuilder.like(path, "%" + name + "%"));
+                            }
                             break;
                         case Constants.QueryFieldName.Customer.STATUS:
                             path = root.get("status").get("id");
-                            predicates.add(criteriaBuilder.equal(path, criteria.getValue()));
+                            List statuses = (List)criteria.getValue();
+                            if (!CollectionUtils.isEmpty(statuses)) {
+                                predicates.add(path.in(statuses.toArray()));
+                            }
                             break;
                         case Constants.QueryFieldName.Customer.LAST_COMMUNICATION_TIME:
                             path = root.get("lastCommunication").get("communicateTime");
-                            try {
-                                Date from = sdf.parse((String) ((List) criteria.getValue()).get(0));
-                                Date to = sdf.parse((String) ((List) criteria.getValue()).get(1));
-                                predicates.add(criteriaBuilder.between(path, from, to));
-                            } catch (ParseException e) {
-                                logger.error("日期转换失败，略过该查询条件", e);
+                            List<String> lastCommunicationTime = (List<String>) criteria.getValue();
+                            if (!CollectionUtils.isEmpty(lastCommunicationTime) && lastCommunicationTime.size() == 2) {
+                                try {
+                                    Date from = sdf.parse(lastCommunicationTime.get(0));
+                                    Date to = sdf.parse(lastCommunicationTime.get(1));
+                                    predicates.add(criteriaBuilder.between(path, from, to));
+                                } catch (ParseException e) {
+                                    logger.error("日期转换失败，略过该查询条件", e);
+                                }
                             }
                             break;
                         case Constants.QueryFieldName.Customer.LAST_COMMUNICATION_CONTENT:
                             path = root.get("lastCommunication").get("note");
-                            predicates.add(criteriaBuilder.like(path, "%" + criteria.getValue() + "%"));
+                            String lastCommunicationNote = (String) criteria.getValue();
+                            if (StringUtils.isNotBlank(lastCommunicationNote)) {
+                                predicates.add(criteriaBuilder.like(path, "%" + lastCommunicationNote + "%"));
+                            }
                             break;
                         case Constants.QueryFieldName.Customer.NEXT_COMMUNICATION_TIME:
                             path = root.get("lastCommunication").get("nextCommunicateTime");
-                            try {
-                                Date from = sdf.parse((String) ((List) criteria.getValue()).get(0));
-                                Date to = sdf.parse((String) ((List) criteria.getValue()).get(1));
-                                predicates.add(criteriaBuilder.between(path, from, to));
-                            } catch (ParseException e) {
-                                logger.error("日期转换失败，略过该查询条件", e);
+                            List<String> nextCommunicateTime = (List<String>) criteria.getValue();
+                            if (!CollectionUtils.isEmpty(nextCommunicateTime) && nextCommunicateTime.size() == 2) {
+                                try {
+                                    Date from = sdf.parse(nextCommunicateTime.get(0));
+                                    Date to = sdf.parse(nextCommunicateTime.get(1));
+                                    predicates.add(criteriaBuilder.between(path, from, to));
+                                } catch (ParseException e) {
+                                    logger.error("日期转换失败，略过该查询条件", e);
+                                }
                             }
                             break;
                         case Constants.QueryFieldName.Customer.FOLLOW_USER:
                             path = root.get("followUser").get("id");
-                            predicates.add(criteriaBuilder.equal(path, criteria.getValue()));
+                            Integer followUserId = (Integer) criteria.getValue();
+                            if (followUserId != null) {
+                                predicates.add(criteriaBuilder.equal(path, followUserId));
+                            }
                             break;
                         case Constants.QueryFieldName.Customer.FOLLOW_DEPARTMENT:
                             path = root.get("followDepartment").get("id");
-                            predicates.add(criteriaBuilder.equal(path, criteria.getValue()));
+                            Integer followDepartmentId = (Integer) criteria.getValue();
+                            if (followDepartmentId != null) {
+                                predicates.add(criteriaBuilder.equal(path, followDepartmentId));
+                            }
                             break;
                     }
                 }
