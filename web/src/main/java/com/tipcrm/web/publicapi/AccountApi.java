@@ -40,6 +40,13 @@ public class AccountApi {
         return ResponseHelper.createInstance(email);
     }
 
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @RequiresAuthentication
+    public JsonEntity<String> logout() {
+        userService.logout();
+        return ResponseHelper.createInstance("success");
+    }
+
     @RequestMapping(value = "/user", method = {RequestMethod.POST})
     @RequiresAuthentication
     @RequiresPermissions(value = Constants.Permission.USER_ADD_UPDATE)
