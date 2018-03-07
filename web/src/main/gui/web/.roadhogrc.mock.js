@@ -227,5 +227,6 @@ const apis = {
   'POST /public/api/notification/my' : 'http://www.potafish.com',
   'GET /public/api/type/customerStatus' : 'http://www.potafish.com',
   'POST /public/api/customer/transfer/out' : 'http://www.potafish.com',
+  'GET /public/api/logout' : 'http://www.potafish.com',
 };
 export default noProxy ? delay(apis,1000) : delay(proxy, 1000);

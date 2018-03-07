@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import {connect} from 'dva';
-import {Spin, Icon, Table, Button, Popover, List, Input, Tooltip, Modal, Form, Row, message} from 'antd';
+import {Spin, Icon, Table, Button, Popover, List, Input, Tooltip, Modal, Form, Row, message, Card} from 'antd';
 import Loader from '../../components/Loader/Loader';
 import styles from '../Customer/Customer.less';
 import EditableItem from '../../components/EditableItem';
@@ -326,7 +326,7 @@ export default class Customer extends React.PureComponent{
               <div style={{cursor:'pointer'}}>{text}</div>
             </Popover>);}),className:styles.tableColumn},
       {title:'下次沟通',dataIndex:'nextCommunicationTime',width: '14%',},
-      {title:'客户状态',dataIndex:'status',width: '10%', filters:{status}, sorter: true},
+      {title:'客户状态',dataIndex:'status',width: '10%', filters:[{text:'新客户',value:1},{text:'意向客户',value:2},{text:'签约客户',value:3},{text:'过期客户',value:4}], sorter: true},
       {title:'意向金额', dataIndex:'intentionalAmount'},
       {title:'签约金额', dataIndex:'signAmount'},
       {title:'操作', dataIndex:'operation',width: '8%',
@@ -355,7 +355,7 @@ export default class Customer extends React.PureComponent{
                       showSizeChanger:{},};
 
     const content = (
-      <div style={{marginTop:'10px',background: '#fff'}}>
+      <div style={{marginTop:'10px'}}>
           <Button style={{margin: '8px 8px 8px 8px'}} type='primary' onClick={this.createCustomer}>添加客户</Button>
           {newCustomerModal}
           <Table style={{textAlign:'center'}} size="small" rowKey={(record) => record.customerId}
@@ -366,12 +366,12 @@ export default class Customer extends React.PureComponent{
           />
       </div>);
     return(
-      <div >
+      <Card >
           <Loader spinning={false} fullScreen={false}/>
           <Spin size={'default'}  tip="加载中..." style={{fontSize:14}} spinning={loading}>
             {content}
           </Spin>
-      </div>
+      </Card>
     );
   }
 
