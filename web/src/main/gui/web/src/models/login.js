@@ -1,4 +1,4 @@
-import { fakeAccountLogin } from '../services/api';
+import { login, logout } from '../services/api';
 import { setAuthority } from '../utils/authority';
 
 export default {
@@ -11,7 +11,7 @@ export default {
   effects: {
     *login({ payload }, { call, put }) {
       console.log(">>>>>>>>>>>start login>>>>>>>>>>>>>");
-      const response = yield call(fakeAccountLogin, payload);
+      const response = yield call(login, payload);
       let res;
       console.log(response);
       if (response.status >= 400){
@@ -35,8 +35,9 @@ export default {
         throw res.message;
       }
     },
-    *logout(_, { put, select }) {
+    *logout(_, { call, put, select }) {
       try {
+        yield call(logout);
         // get location pathname
         const urlParams = new URL(window.location.href);
         const pathname = yield select(state => state.routing.location.pathname);
