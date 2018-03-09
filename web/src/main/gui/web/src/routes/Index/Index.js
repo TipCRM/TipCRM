@@ -57,68 +57,46 @@ export default class Index extends React.PureComponent{
 
     return(
       <div >
-        <Card bordered={false}>
+        <Card>
           <Row>
-            <Col sm={8} xs={24}>
-              <Info title="我的待办" value="8个任务" bordered />
+            <Col sm={6} xs={24}>
+              <Info title="当月目标" value="￥20,000" bordered />
             </Col>
-            <Col sm={8} xs={24}>
-              <Info title="本周任务平均处理时间" value="32分钟" bordered />
+            <Col sm={6} xs={24}>
+              <Info title="销售排名" value="1/20" bordered />
             </Col>
-            <Col sm={8} xs={24}>
-              <Info title="本周完成任务数" value="24个任务" />
+            <Col sm={6} xs={24}>
+              <Info title="销售额" value="￥25,000" bordered/>
+            </Col>
+            <Col sm={6} xs={24}>
+              <Info title="意向金额" value="￥25,000" />
             </Col>
           </Row>
         </Card>
           <Spin size={'default'}  tip="正在加载..." style={{fontSize:14,marginTop:'10%'}} spinning={false}>
-            <div style={{marginTop:'10px',textAlign:'center'}}>
-              <h1>主页</h1>
-
-              <Row gutter={24}>
-                <Col span={6}>
-                  <Spin size={'default'}  tip="加载中..." style={{fontSize:14, marginLeft:'-120px'}} spinning={loading}>
-                    <Card title="当月目标">
-                      <h3>￥20,000</h3>
-                    </Card>
-                  </Spin>
-                </Col>
-                <Col span={6}>
-                  <Card title="销售排名">
-                    <h3>团队1</h3>
-                  </Card>
-                </Col>
-                <Col span={6}>
-                  <Card title="销售额">
-                    <h3>￥12,000</h3>
-                  </Card>
-                </Col>
-                <Col span={6}>
-                  <Card title="意向金额">
-                    <h3>￥12,000</h3>
-                  </Card>
-                </Col>
-              </Row>
-
-              <Row gutter={32}>
-                <Col span={12} style={{marginTop:'15px',background: '#fff'}}>
-                  <Bar
-                    height={200}
-                    title="销售额趋势"
-                    data={salesData}/>
-                </Col>
-                <Col span={12} style={{marginTop:'15px',background: '#fff'}}>
-                  <Pie
-                    hasLegend
-                    title="销售额"
-                    subTitle="销售额"
-                    total={yuan(salesPieData.reduce((pre, now) => now.y + pre, 0))}
-                    data={salesPieData}
-                    valueFormat={val => yuan(val)}
-                    height={200}
-                  />
-                </Col>
-              </Row>
-            </div>
+            <Card style={{marginTop:'10px'}}>
+              <div style={{marginTop:'10px',textAlign:'center'}}>
+                <Row gutter={32}>
+                  <Col span={12} style={{marginTop:'15px',background: '#fff'}}>
+                    <Bar
+                      height={200}
+                      title="销售额趋势"
+                      data={salesData}/>
+                  </Col>
+                  <Col span={12} style={{marginTop:'15px',background: '#fff'}}>
+                    <Pie
+                      hasLegend
+                      title="销售额"
+                      subTitle="销售额"
+                      total={yuan(salesPieData.reduce((pre, now) => now.y + pre, 0))}
+                      data={salesPieData}
+                      valueFormat={val => yuan(val)}
+                      height={200}
+                    />
+                  </Col>
+                </Row>
+              </div>
+            </Card>
           </Spin>
       </div>
     );

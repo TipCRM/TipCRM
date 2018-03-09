@@ -1,4 +1,4 @@
-import { fakeRegister } from '../services/api';
+import { register } from '../services/api';
 
 export default {
   namespace: 'register',
@@ -11,7 +11,7 @@ export default {
     *submit({ payload }, { call, put }) {
       payload = {...payload,...{manager:false}}
       console.log(payload);
-      const response = yield call(fakeRegister, payload);
+      const response = yield call(register, payload);
       yield put({
         type: 'registerHandle',
         payload: response,

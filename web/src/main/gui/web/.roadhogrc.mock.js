@@ -219,26 +219,14 @@ const apis = {
   'POST /public/api/login':'http://www.potafish.com',
   'POST /public/api/regist':'http://www.potafish.com',
   'GET /public/api/user/me':'http://www.potafish.com',
-  'GET /api/currentUser': {
-    $desc: "获取当前用户接口",
-    $params: {
-      pageSize: {
-        desc: '分页',
-        exp: 2,
-      },
-    },
-    $body: {
-      name: 'Brother Lu',
-      avatar: '/favicon.png',
-      userid: '00000001',
-      notifyCount: 12,
-    },
-  },
   'GET /public/api/menu':{
-    $body:menuDatabase,
+    $body : menuDatabase,
   },
   'POST /public/api/my/customers':'http://www.potafish.com',
   'POST /public/api/customer': 'http://www.potafish.com',
   'POST /public/api/notification/my' : 'http://www.potafish.com',
+  'GET /public/api/type/customerStatus' : 'http://www.potafish.com',
+  'POST /public/api/customer/transfer/out' : 'http://www.potafish.com',
+  'GET /public/api/logout' : 'http://www.potafish.com',
 };
 export default noProxy ? delay(apis,1000) : delay(proxy, 1000);
