@@ -1,14 +1,14 @@
 import React from 'react';
 import {Link} from 'dva/router';
 import { connect } from 'dva';
-import { Button, Row, Form, Input, Icon } from 'antd'
+import { Button, Row, Form, Input, Icon } from 'antd';
 import styles from './Index.less';
 import logo from '../../assets/logo.svg';
 
 const FormItem = Form.Item;
 
 @connect(({loading}) =>
-  ({loading: loading.effects['login/login'],})
+  ({loading: loading.effects['user/login'],})
 )
 @Form.create()
 export default class Login extends React.PureComponent{
@@ -16,7 +16,7 @@ export default class Login extends React.PureComponent{
   /**
    * user login action
    * @param e
-     */
+   */
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((errors, values) => {
@@ -24,7 +24,7 @@ export default class Login extends React.PureComponent{
         return;
       }
       this.props.dispatch(
-        { type: 'login/login',
+        { type: 'user/login',
           payload: values
         });
     })
@@ -41,7 +41,7 @@ export default class Login extends React.PureComponent{
           <span>{'客户信息管理系统'}</span>
         </div>
         <form>
-          <FormItem>
+          <FormItem style={{marginBottom:'15px'}}>
             {getFieldDecorator('loginKey', {
               rules: [
                 {
@@ -65,15 +65,12 @@ export default class Login extends React.PureComponent{
             <Button type="primary"
                     onClick={this.handleSubmit}
                     loading={loading}
-                    >
+            >
               登录
             </Button>
           </FormItem>
           <Row>
             <span>1051750377@qq.com/tipcrm</span>
-            <Link className={styles.login} to="/user/register">
-              马上注册
-            </Link>
           </Row>
         </form>
       </div>

@@ -11,7 +11,6 @@ export default {
   },
   effects: {
     *myCustomers({payload},{call, put}){
-      console.log(payload);
       const response = yield call(queryMyCustomers,payload);
       yield put({
         type:'listCustomers',

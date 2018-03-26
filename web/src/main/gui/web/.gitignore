@@ -2,18 +2,12 @@
 
 # dependencies
 /node_modules
-# roadhog-api-doc ignore
-/src/utils/request-temp.js
-_roadhog-api-doc
 
 # production
 /dist
+# idea file
+/.idea
 
 # misc
-.DS_Store
+# .DS_Store
 npm-debug.log*
-yarn-error.log
-
-/coverage
-.idea
-yarn.lock

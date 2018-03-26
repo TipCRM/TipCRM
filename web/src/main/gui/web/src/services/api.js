@@ -1,93 +1,23 @@
-import { stringify } from 'qs';
-import request from '../utils/request';
-
 /**
- * the common api used by the routes
- * @returns {Object}
+ * Created by Administrator on 2018/3/20.
  */
-export async function queryProjectNotice() {
-  return request('/api/project/notice');
-}
-
-export async function queryActivities() {
-  return request('/api/activities');
-}
-
-export async function queryRule(params) {
-  return request(`/api/rule?${stringify(params)}`);
-}
-
-export async function removeRule(params) {
-  return request('/api/rule', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'delete',
-    },
-  });
-}
-
-export async function addRule(params) {
-  return request('/api/rule', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'post',
-    },
-  });
-}
-
-export async function fakeSubmitForm(params) {
-  return request('/api/forms', {
-    method: 'POST',
-    body: params,
-  });
-}
-
-export async function fakeChartData() {
-  return request('/api/fake_chart_data');
-}
-
-export async function queryTags() {
-  return request('/api/tags');
-}
-
-export async function queryBasicProfile() {
-  return request('/api/profile/basic');
-}
-
-export async function queryAdvancedProfile() {
-  return request('/api/profile/advanced');
-}
-
-export async function queryFakeList(params) {
-  return request(`/api/fake_list?${stringify(params)}`);
-}
-
-/** api for Tip crm **/
-export async function login(params) {
+import request from '../utils/request';
+/**
+ * user loign
+ */
+export function userLogin(params) {
   return request('/public/api/login', {
     method: 'POST',
     body: params,
   });
 }
 
-export async function logout(){
-  return request("/public/api/logout");
+export async function fetchCurrentUser(){
+  return request('/public/api/user/me');
 }
 
-export async function register(params) {
-  return request('/public/api/regist', {
-    method: 'POST',
-    body: params,
-  });
-}
-
-export async function queryNotices(params) {
-  return request('/public/api/notification/my',{
-    method:'POST',
-    body:params,
-  });
+export async function fakeGetMenu(){
+  return request('/public/api/menu');
 }
 
 export async function queryMyCustomers(params) {
@@ -111,10 +41,9 @@ export async function transferOutCustomer(params){
   });
 }
 
-export async function queryMenu() {
-  return request('/public/api/menu');
-}
-
-export async function queryCustomerStatus(){
-  return request("/public/api/type/customerStatus");
+export async function fetchMyNotifictions(params){
+  return request('/public/api/notification/my',{
+    method:'POST',
+    body: params,
+  });
 }
