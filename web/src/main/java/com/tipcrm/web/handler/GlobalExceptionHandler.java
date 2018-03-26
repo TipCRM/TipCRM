@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     }
 
     // 捕捉AccountException
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(AccountException.class)
     public JsonEntity handleAccountException(AccountException e) {
         JsonEntity jsonEntity = new JsonEntity();
