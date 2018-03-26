@@ -1,41 +1,21 @@
 import React from 'react';
-import { routerRedux, Switch } from 'dva/router';
-import { LocaleProvider, Spin } from 'antd';
-import zhCN from 'antd/lib/locale-provider/zh_CN';
-import dynamic from 'dva/dynamic';
-import { getRouterData } from './common/router';
-import Authorized from './utils/Authorized';
-import styles from './index.less';
+import { Router, Route, Switch } from 'dva/router';
+import Login from './routes/User/Login';
+import MainMenu from './routes/MainMenu/MainMenu';
+import { LocaleProvider } from 'antd';
+import zh_CN from 'antd/lib/locale-provider/zh_CN';
+import 'moment/locale/zh-cn';
 
-const { ConnectedRouter } = routerRedux;
-const { AuthorizedRoute } = Authorized;
-dynamic.setDefaultLoadingComponent(() => {
-  return <Spin size="large" className={styles.globalSpin} />;
-});
-
-function RouterConfig({ history, app }) {
-  const routerData = getRouterData(app);
-  const UserLayout = routerData['/user'].component;
-  const BasicLayout = routerData['/'].component;
+function RouterConfig({ history }) {
   return (
-    <LocaleProvider locale={zhCN}>
-      <ConnectedRouter history={history}>
-        <Switch>
-          <AuthorizedRoute
-            path="/user"
-            render={props => <UserLayout {...props} />}
-            authority="guest"
-            redirectPath="/"
-          />
-          <AuthorizedRoute
-            path="/"
-            render={props => <BasicLayout {...props} />}
-            authority={['admin', 'user']}
-            redirectPath="/user/login"
-          />
-        </Switch>
-      </ConnectedRouter>
-    </LocaleProvider>
+  <LocaleProvider locale={zh_CN}>
+    <Router history={history}>
+      <Switch>
+        <Route path="/login" exact component={Login} />
+        <Route path="/index" exact component={MainMenu} />
+      </Switch>
+    </Router>
+  </LocaleProvider>
   );
 }
 

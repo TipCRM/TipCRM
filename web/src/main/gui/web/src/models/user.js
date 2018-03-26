@@ -1,52 +1,48 @@
-import { query as queryUsers, queryCurrent } from '../services/user';
+import { userLogin, fetchCurrentUser } from '../services/api';
+import {message} from 'antd';
+import {routerRedux} from 'dva/router';
 
 export default {
   namespace: 'user',
-
   state: {
-    list: [],
     currentUser: {},
   },
-
   effects: {
-    *fetch(_, { call, put }) {
-      const response = yield call(queryUsers);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+    *login({ payload }, { call, put }) {
+      const response = yield call(userLogin, payload);
+      console.log(response);
+      // Login successfully
+      if (response.status === 200) {
+        yield put(routerRedux.push('/index'));
+      } else {
+        message.error(response.message);
+      }
     },
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
-      console.log(response.data);
+    *logout(_, { put, select }) {
+    },
+    *getCurrentUser(_,{call, put}){
+      const respone = yield call(fetchCurrentUser);
       yield put({
         type: 'saveCurrentUser',
-        payload: response,
+        payload: respone,
       });
-    },
+    }
   },
 
   reducers: {
-    save(state, action) {
+    changeLoginStatus(state, { payload }) {
       return {
         ...state,
-        list: action.payload,
+        status: payload.status,
+        type: payload.type,
+        data: payload.data,
       };
     },
-    saveCurrentUser(state, action) {
-      return {
+    saveCurrentUser(state, {payload}){
+      return{
         ...state,
-        currentUser: action.payload.data,
-      };
-    },
-    changeNotifyCount(state, action) {
-      return {
-        ...state,
-        currentUser: {
-          ...state.currentUser,
-          notifyCount: action.payload,
-        },
-      };
-    },
+        currentUser: payload.data,
+      }
+    }
   },
 };
