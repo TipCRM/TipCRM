@@ -23,7 +23,7 @@ export default {
     saveMenus(state, {payload}){
       return{
         ...state,
-        menus: payload,
+        menus: payload.data,
       }
     }
   }

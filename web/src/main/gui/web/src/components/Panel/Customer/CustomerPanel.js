@@ -22,16 +22,19 @@ export default class CustomerPanel extends React.Component{
     customer: {},
     currentPage: 1,
     pageSize: 5,
-    filterCondition:{},
+    filterCondition:{"criteria":[]},
     sorterCondition:{sort:{direction:'DESC', fieldName:'customer_name'}},
     showModal: false,
     statusFilters: [],
+    onlyIntentCustomerTagChecked: false,
+    onlyNewCustomerTagChecked: false,
   };
 
   componentDidMount(){
     const {dispatch} = this.props;
-    let pageCondition = {page: this.state.currentPage, size: this.state.pageSize};
-    let request = {...pageCondition, ...this.state.filterCondition, ...this.state.sorterCondition};
+    const {currentPage, pageSize, filterCondition, sorterCondition} = this.state;
+    let pageCondition = {page: currentPage, size: pageSize};
+    let request = {...pageCondition, ...filterCondition, ...sorterCondition};
     dispatch({
       type:'customer/myCustomers',
       payload:request,
@@ -55,15 +58,15 @@ export default class CustomerPanel extends React.Component{
     });
   }
   handlerOnSearch(value){
-    let filterCondition = {"criteria": [
-      {
+    let condition = {
         "conjunction": "AND",
         "fieldName": "customer_name",
         "method": "LIKE",
-        "value": value
-      }],};
-    const { sorterCondition, page, size} = this.state;
-    const pageCondition = {page: 1, size: 5};
+        "value": value};
+    var { sorterCondition, currentPage, pageSize, filterCondition} = this.state;
+    filterCondition['criteria'] = filterCondition['criteria'].filter(item => item.fieldName != 'customer_name');
+    filterCondition['criteria'].push(condition);
+    const pageCondition = {page: currentPage, size: pageSize};
     let request = {...filterCondition, ...pageCondition, ...sorterCondition};
     this.props.dispatch({
       type:'customer/myCustomers',
@@ -114,6 +117,58 @@ export default class CustomerPanel extends React.Component{
     });
   }
 
+  handleOnlyShowNewCustomerTagChange(checked){
+    var {currentPage, pageSize, sorterCondition, filterCondition} = this.state;
+    const {dispatch} = this.props;
+    let pageCondition = {page: currentPage, size: pageSize};
+    if (checked){
+      let condition = {
+        "conjunction": "AND",
+        "fieldName": 'status',
+        "method": "EQUALS",
+        "value": 1};
+      filterCondition['criteria'].push(condition);
+    } else {
+      filterCondition['criteria'] = filterCondition['criteria'].filter(item => item.fieldName != 'status' && item.value === 1);
+    }
+    const request = {...filterCondition, ...pageCondition, ...sorterCondition};
+    dispatch({
+      type:'customer/myCustomers',
+      payload:request,
+    });
+
+    this.setState({
+      onlyNewCustomerTagChecked: checked,
+      filterCondition: filterCondition,
+    });
+  }
+
+  handleOnlyShowIntentCustomerTagChange(checked){
+    var {currentPage, pageSize, sorterCondition, filterCondition} = this.state;
+    const {dispatch} = this.props;
+    let pageCondition = {page: currentPage, size: pageSize};
+    if (checked){
+      let condition = {
+        "conjunction": "AND",
+        "fieldName": 'status',
+        "method": "EQUALS",
+        "value": 2};
+      filterCondition['criteria'].push(condition);
+    } else {
+      filterCondition['criteria'] = filterCondition['criteria'].filter(item => item.fieldName != 'status' && item.value === 2);
+    }
+    const request = {...filterCondition, ...pageCondition, ...sorterCondition};
+    dispatch({
+      type:'customer/myCustomers',
+      payload:request,
+    });
+
+    this.setState({
+      onlyIntentCustomerTagChecked: checked,
+      filterCondition: filterCondition,
+    });
+  }
+
   render(){
     const columns = [{title:'公司名称',dataIndex:'customerName',key:'customerId',width: '10%',},
                       {title:'联系人',dataIndex:'contactName',},
@@ -127,14 +182,13 @@ export default class CustomerPanel extends React.Component{
                       {title:'操作', dataIndex:'operation',width: '8%'}];
     //todo get the columns from remote
     const {customer, loading, children, tableColumns} = this.props;
+    const {currentPage, pageSize, onlyIntentCustomerTagChecked, onlyNewCustomerTagChecked} = this.state;
     const {data, totalElements} =customer.customers;
-    const tablePagination ={defaultCurrent:1, pageSize: this.state.pageSize,
-      current:this.state.currentPage, total: totalElements,pageSizeOptions:['5','10','20'],
-      showSizeChanger:{},};
+    const tablePagination ={defaultCurrent:1, pageSize: pageSize, current: currentPage,
+      total: totalElements,pageSizeOptions:['5','10','20'], showSizeChanger:{},};
     const tags = [
-      {content: "最近一次拜访", checked: true},
-      {content: "意向客户", checked: false},
-      {content: "新客户", checked: true}];
+      {content: "意向客户", checked: onlyIntentCustomerTagChecked, handleTagChange: this.handleOnlyShowIntentCustomerTagChange.bind(this)},
+      {content: "新客户", checked: onlyNewCustomerTagChecked, handleTagChange: this.handleOnlyShowNewCustomerTagChange.bind(this)},];
 
     const searchContent =(<CustomerSearchCell onQuickSearch={this.handlerOnSearch.bind(this)} tags={tags}/>);
 
