@@ -5,15 +5,19 @@ import java.util.List;
 public class MenuBo {
 
     private String name;
+    private String title;
+    private String content;
     private String icon;
     private String url;
-    private List<MenuBo> menuBos = new ArrayList<MenuBo>();
+    private List<MenuBo> children = new ArrayList<MenuBo>();
 
-    public MenuBo(String name, String icon, String url, List<MenuBo> menuBos) {
+    public MenuBo(String name, String title, String content, String icon, String url, List<MenuBo> children) {
         this.name = name;
+        this.title = title;
+        this.content = content;
         this.icon = icon;
         this.url = url;
-        this.menuBos = menuBos;
+        this.children = children;
     }
 
     public MenuBo() {
@@ -25,6 +29,14 @@ public class MenuBo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getIcon() {
@@ -43,11 +55,19 @@ public class MenuBo {
         this.url = url;
     }
 
-    public List<MenuBo> getMenuBos() {
-        return menuBos;
+    public List<MenuBo> getChildren() {
+        return children;
     }
 
-    public void setMenuBos(List<MenuBo> menuBos) {
-        this.menuBos = menuBos;
+    public void setChildren(List<MenuBo> children) {
+        this.children = children;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }
