@@ -1,4 +1,8 @@
 package com.tipcrm.service;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import com.tipcrm.bo.RoleBo;
 import com.tipcrm.constant.UserStatus;
 import com.tipcrm.dao.entity.Security;
 import com.tipcrm.dao.entity.User;
@@ -14,6 +18,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +41,10 @@ public class TipCRMRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         Integer userId = (Integer) SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.setRoles(roleService.getRoleListByUserId(userId));
+        Set<RoleBo> roles = roleService.getRolesByUserId(userId);
+        if (!CollectionUtils.isEmpty(roles)) {
+            info.setRoles(roles.stream().map(role -> role.getName()).collect(Collectors.toSet()));
+        }
         info.setStringPermissions(permissionService.getPermissionValueListByUserId(userId));
         return info;
     }

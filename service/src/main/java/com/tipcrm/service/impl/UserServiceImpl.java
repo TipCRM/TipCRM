@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.tipcrm.bo.CreateUserBo;
 import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.RegistUserBo;
+import com.tipcrm.bo.RoleBo;
 import com.tipcrm.bo.UserBo;
 import com.tipcrm.constant.ConfigurationItems;
 import com.tipcrm.constant.Constants;
@@ -198,8 +199,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean isGeneralManager(Integer userId) {
-        Set<String> roles = roleService.getRoleListByUserId(userId);
-        return roles.contains(Roles.GENERAL_MANAGER.name());
+        Set<RoleBo> roles = roleService.getRolesByUserId(userId);
+        for (RoleBo roleBo : roles) {
+            if (roleBo.getName().equals(Roles.GENERAL_MANAGER.name())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

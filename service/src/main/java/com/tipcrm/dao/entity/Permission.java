@@ -14,7 +14,7 @@ public class Permission extends BaseAllEntity {
     @GeneratedValue
     @Id
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "group_id", referencedColumnName = "id")
@@ -29,11 +29,11 @@ public class Permission extends BaseAllEntity {
     @Column(name = "display_name")
     private String displayName;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
