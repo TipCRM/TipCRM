@@ -1,24 +1,19 @@
 import fetch from 'dva/fetch';
 import store from '../index';
 import {routerRedux} from 'dva/router';
+import  {NotificationUtil} from 'util';
+import {notification} from 'antd';
 
 function parseJSON(response) {
   return response.json();
 }
 
-function checkStatus(response) {
-  //if (response.status === 401){
-  //  const {dispatch} = store;
-  //  dispatch(routerRedux.push('/login'));
-  //  return;
-  //}
-  if (response.status >= 200 && response.status < 300) {
-    return response;
+function checkStatus(response){
+  if (response.status < 200 || response.status >= 500){
+    const content = (<div>错误代码：{response.status} <br/> 错误原因：{response.message}</div>);
+    notification.error({message:'执行操作时发生错误', description: content, duration:0});
   }
-
-  //const error = new Error(response.statusText);
-  //error.response = response;
-  //throw error;
+  return response;
 }
 
 /**
@@ -43,7 +38,7 @@ export default function request(url, options) {
   }
 
   return fetch(url, newOptions)
-    .then(checkStatus)
     .then(parseJSON)
-    .catch(err => ({ err }));
+    .then(checkStatus)
+    .catch(err => ({}));
 }

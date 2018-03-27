@@ -126,10 +126,10 @@ export default class CustomerPanel extends React.Component{
         "conjunction": "AND",
         "fieldName": 'status',
         "method": "EQUALS",
-        "value": 1};
+        "value": [1]};
       filterCondition['criteria'].push(condition);
     } else {
-      filterCondition['criteria'] = filterCondition['criteria'].filter(item => item.fieldName != 'status' && item.value === 1);
+      filterCondition['criteria'] = filterCondition['criteria'].filter(item => item.fieldName != 'status' && item.value[0] === 1);
     }
     const request = {...filterCondition, ...pageCondition, ...sorterCondition};
     dispatch({
@@ -152,10 +152,10 @@ export default class CustomerPanel extends React.Component{
         "conjunction": "AND",
         "fieldName": 'status',
         "method": "EQUALS",
-        "value": 2};
+        "value": [2]};
       filterCondition['criteria'].push(condition);
     } else {
-      filterCondition['criteria'] = filterCondition['criteria'].filter(item => item.fieldName != 'status' && item.value === 2);
+      filterCondition['criteria'] = filterCondition['criteria'].filter(item => item.fieldName != 'status' && item.value[0] === 2);
     }
     const request = {...filterCondition, ...pageCondition, ...sorterCondition};
     dispatch({
