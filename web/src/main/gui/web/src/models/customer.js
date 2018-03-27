@@ -14,7 +14,7 @@ export default {
       const response = yield call(queryMyCustomers,payload);
       yield put({
         type:'listCustomers',
-        payload: response.data,
+        payload: response.data ? response.data : [],
       });
     },
     *createCustomer({payload}, {call, put}){
