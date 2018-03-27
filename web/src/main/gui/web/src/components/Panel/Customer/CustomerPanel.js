@@ -28,6 +28,7 @@ export default class CustomerPanel extends React.Component{
     statusFilters: [],
     onlyIntentCustomerTagChecked: false,
     onlyNewCustomerTagChecked: false,
+    orderByNextContactTagChecked: false,
   };
 
   componentDidMount(){
@@ -169,6 +170,26 @@ export default class CustomerPanel extends React.Component{
     });
   }
 
+  handleOrderByNextContactTagChange(checked){
+    var {currentPage, pageSize, sorterCondition, filterCondition} = this.state;
+    if (checked){
+      sorterCondition.sort = {direction:'DESC', fieldName:'next_communication_time'};
+    } else {
+      sorterCondition.sort = {direction:'DESC', fieldName:'customer_name'};
+    }
+    const {dispatch} = this.props;
+    let pageCondition = {page: currentPage, size: pageSize};
+    const request = {...filterCondition, ...pageCondition, ...sorterCondition};
+    dispatch({
+      type:'customer/myCustomers',
+      payload:request,
+    });
+    this.setState({
+      orderByNextContactTagChecked: checked,
+      sorterCondition: sorterCondition,
+    });
+  }
+
   render(){
     const columns = [{title:'公司名称',dataIndex:'customerName',key:'customerId',width: '10%',},
                       {title:'联系人',dataIndex:'contactName',},
@@ -182,13 +203,14 @@ export default class CustomerPanel extends React.Component{
                       {title:'操作', dataIndex:'operation',width: '8%'}];
     //todo get the columns from remote
     const {customer, loading, children, tableColumns} = this.props;
-    const {currentPage, pageSize, onlyIntentCustomerTagChecked, onlyNewCustomerTagChecked} = this.state;
+    const {currentPage, pageSize, onlyIntentCustomerTagChecked, onlyNewCustomerTagChecked, orderByNextContactTagChecked} = this.state;
     const {data, totalElements} =customer.customers;
     const tablePagination ={defaultCurrent:1, pageSize: pageSize, current: currentPage,
       total: totalElements,pageSizeOptions:['5','10','20'], showSizeChanger:{},};
     const tags = [
       {content: "意向客户", checked: onlyIntentCustomerTagChecked, handleTagChange: this.handleOnlyShowIntentCustomerTagChange.bind(this)},
-      {content: "新客户", checked: onlyNewCustomerTagChecked, handleTagChange: this.handleOnlyShowNewCustomerTagChange.bind(this)},];
+      {content: "新客户", checked: onlyNewCustomerTagChecked, handleTagChange: this.handleOnlyShowNewCustomerTagChange.bind(this)},
+      {content: "下一次沟通排序", checked: orderByNextContactTagChecked, handleTagChange: this.handleOrderByNextContactTagChange.bind(this)}];
 
     const searchContent =(<CustomerSearchCell onQuickSearch={this.handlerOnSearch.bind(this)} tags={tags}/>);
 
