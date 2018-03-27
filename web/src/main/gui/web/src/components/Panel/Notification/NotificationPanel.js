@@ -46,7 +46,7 @@ export default class NotificationPanel extends React.Component{
     } else {
       filterCondition = {"criteria": [{
         "conjunction": "AND",
-        "fieldName": 'status',
+        "fieldName": 'read_status',
         "method": "EQUALS",
         "value": filters.status
       }],};
@@ -85,12 +85,12 @@ export default class NotificationPanel extends React.Component{
     if (checked){
       let condition = {
         "conjunction": "AND",
-        "fieldName": 'status',
+        "fieldName": 'read_status',
         "method": "EQUALS",
         "value": 15};
       filterCondition['criteria'].push(condition);
     } else {
-      filterCondition['criteria'] = filterCondition['criteria'].filter(item => item.fieldName != 'status');
+      filterCondition['criteria'] = filterCondition['criteria'].filter(item => item.fieldName != 'read_status');
     }
     const request = {...filterCondition, ...pageCondition, ...sorterCondition};
     dispatch({
