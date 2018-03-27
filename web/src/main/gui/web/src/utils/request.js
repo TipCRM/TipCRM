@@ -11,7 +11,7 @@ function parseJSON(response) {
 function checkStatus(response){
   if (response.status < 200 || response.status >= 500){
     const content = (<div>错误代码：{response.status} <br/> 错误原因：{response.message}</div>);
-    notification.error({message:'System Error', description: content, duration:0});
+    notification.error({message:'执行操作时发生错误', description: content, duration:0});
   }
   return response;
 }
