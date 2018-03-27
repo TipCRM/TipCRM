@@ -516,13 +516,28 @@ UNLOCK TABLES;
 --
 -- Table structure for table `permission`
 --
+CREATE TABLE `TIP_CRM`.`permission_group` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+`entry_id` int(11) NOT NULL,
+  `entry_time` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;;
+
+INSERT INTO `TIP_CRM`.`permission_group` (`id`, `name`, `entry_id`, `entry_time`) VALUES
+(1, '客户管理', '-1', NOW()),
+(2, '员工管理', '-1',NOW()),
+(3, '角色', '-1',NOW()),
+(4, '权限', '-1',NOW()),
+(5, '部门管理', '-1',NOW());
+
 
 DROP TABLE IF EXISTS `permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `permission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `group_name` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  `group_id` INT(11) NOT NULL,
   `name` varchar(50) COLLATE utf8_bin NOT NULL,
   `value` varchar(50) COLLATE utf8_bin NOT NULL,
   `display_name` varchar(50) COLLATE utf8_bin DEFAULT NULL,
@@ -545,16 +560,38 @@ CREATE TABLE `permission` (
 LOCK TABLES `permission` WRITE;
 /*!40000 ALTER TABLE `permission` DISABLE KEYS */;
 INSERT INTO `permission` VALUES
-(1,'客户管理','CUSTOMER_ADD_UPDATE','customer:add_update','添加/修改客户',-1,NOW(),NULL,NULL,NULL,NULL),
-(2,'客户管理','CUSTOMER_DELETE','customer:delete','删除客户',-1,NOW(),NULL,NULL,NULL,NULL),
-(3,'客户管理','CUSTOMER_TRANSFER','customer:transfer','转移客户',-1,NOW(),NULL,NULL,NULL,NULL),
-(4,'客户管理','CUSTOMER_APPROVAL','customer:approval','审批客户',-1,NOW(),NULL,NULL,NULL,NULL),
-(5,'员工管理','USER_ADD_UPDATE','user:add_update','添加/修改员工',-1,NOW(),NULL,NULL,NULL,NULL),
-(6,'员工管理','USER_DELETE','user:delete','员工离职',-1,NOW(),NULL,NULL,NULL,NULL),
-(7,'角色与权限','ROLE_ADD','role:add','添加角色',-1,NOW(),NULL,NULL,NULL,NULL),
-(8,'角色与权限','ROLE_ASSIGN','role:assign','角色分配',-1,NOW(),NULL,NULL,NULL,NULL),
-(9,'部门管理','DEPARTMENT_ADD_UPDATE','department:add_update','添加/修改部门',-1,NOW(),NULL,NULL,NULL,NULL),
-(10,'部门管理','DEPARTMENT_DELETE','department:delete','删除部门',-1,NOW(),NULL,NULL,NULL,NULL);
+(1,1,'CUSTOMER_ADD','customer:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
+(2,1,'CUSTOMER_UPDATE','customer:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
+(3,1,'CUSTOMER_DELETE','customer:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL),
+(4,1,'CUSTOMER_TRANSFER','customer:transfer','转移',-1,NOW(),NULL,NULL,NULL,NULL),
+(5,1,'CUSTOMER_APPROVAL','customer:approval','审批',-1,NOW(),NULL,NULL,NULL,NULL),
+(6,2,'USER_ADD','user:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
+(7,2,'USER_UPDATE','user:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
+(8,2,'USER_DELETE','user:delete','离职',-1,NOW(),NULL,NULL,NULL,NULL),
+(9,3,'ROLE_ADD','role:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
+(10,3,'ROLE_UPDATE','role:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
+(11,3,'ROLE_DELETE','role:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL),
+(12,3,'ROLE_ASSIGN','role:assign','分配',-1,NOW(),NULL,NULL,NULL,NULL),
+(13,4,'PERMISSION','permission:assign','分配',-1,NOW(),NULL,NULL,NULL,NULL),
+(14,5,'DEPARTMENT_ADD','department:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
+(15,5,'DEPARTMENT_UPDATE','department:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
+(16,5,'DEPARTMENT_DELETE','department:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL);INSERT INTO `permission` VALUES
+(1,1,'CUSTOMER_ADD','customer:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
+(2,1,'CUSTOMER_UPDATE','customer:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
+(3,1,'CUSTOMER_DELETE','customer:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL),
+(4,1,'CUSTOMER_TRANSFER','customer:transfer','转移',-1,NOW(),NULL,NULL,NULL,NULL),
+(5,1,'CUSTOMER_APPROVAL','customer:approval','审批',-1,NOW(),NULL,NULL,NULL,NULL),
+(6,2,'USER_ADD','user:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
+(7,2,'USER_UPDATE','user:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
+(8,2,'USER_DELETE','user:delete','离职',-1,NOW(),NULL,NULL,NULL,NULL),
+(9,3,'ROLE_ADD','role:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
+(10,3,'ROLE_UPDATE','role:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
+(11,3,'ROLE_DELETE','role:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL),
+(12,3,'ROLE_ASSIGN','role:assign','分配',-1,NOW(),NULL,NULL,NULL,NULL),
+(13,4,'PERMISSION','permission:assign','分配',-1,NOW(),NULL,NULL,NULL,NULL),
+(14,5,'DEPARTMENT_ADD','department:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
+(15,5,'DEPARTMENT_UPDATE','department:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
+(16,5,'DEPARTMENT_DELETE','department:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL);
 
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 UNLOCK TABLES;
