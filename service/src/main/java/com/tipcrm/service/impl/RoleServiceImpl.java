@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Sets;
 import com.tipcrm.bo.PermissionBo;
+import com.tipcrm.bo.RoleBasicBo;
 import com.tipcrm.bo.RoleBo;
 import com.tipcrm.cache.RoleCache;
 import com.tipcrm.dao.entity.Permission;
@@ -34,11 +35,11 @@ public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
 
     @Override
-    public Set<RoleBo> getRolesByUserId(Integer userId) {
-        Set<RoleBo> roles = RoleCache.getRoles(userId);
+    public Set<RoleBasicBo> getRolesByUserId(Integer userId) {
+        Set<RoleBasicBo> roles = RoleCache.getRoles(userId);
         if (CollectionUtils.isEmpty(roles)) {
             User user = userRepository.findOne(userId);
-            roles = Sets.newHashSet(RoleBo.toRoleBos(user.getRoles()));
+            roles = Sets.newHashSet(RoleBasicBo.toRoleBasicBos(user.getRoles()));
             RoleCache.addOrUpdateRoles(userId, roles);
         }
         return roles;
@@ -57,5 +58,11 @@ public class RoleServiceImpl implements RoleService {
             rolePermissions.put(role.getId(), Sets.newHashSet(PermissionBo.toPermissionBos(permissions)));
         }
         return rolePermissions;
+    }
+
+    @Override
+    public List<RoleBo> getAllRoles() {
+        List<Role> roles = roleRepository.findAll();
+        return RoleBo.toRoleBos(roles);
     }
 }

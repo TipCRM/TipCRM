@@ -49,7 +49,7 @@ public class AccountApi {
 
     @RequestMapping(value = "/user", method = {RequestMethod.POST})
     @RequiresAuthentication
-    @RequiresPermissions(value = Constants.Permission.USER_ADD_UPDATE)
+    @RequiresPermissions(value = Constants.Permission.USER_UPDATE)
     public JsonEntity<String> addUser(@RequestBody CreateUserBo saveUserBo) {
         String email = userService.saveUser(saveUserBo);
         return ResponseHelper.createInstance(email);

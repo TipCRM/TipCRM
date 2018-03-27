@@ -1,60 +1,50 @@
 package com.tipcrm.bo;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import com.tipcrm.dao.entity.Role;
 import org.springframework.util.CollectionUtils;
 
-public class RoleBo {
-    private Integer id;
+public class RoleBo extends RoleBasicBo {
+    private String entryUser;
 
-    private String name;
+    private Date entryDatetime;
 
-    private String displayName;
+    private String updateUser;
 
-    public Integer getId() {
-        return id;
+    private Date updateDate;
+
+    public String getEntryUser() {
+        return entryUser;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setEntryUser(String entryUser) {
+        this.entryUser = entryUser;
     }
 
-    public String getName() {
-        return name;
+    public Date getEntryDatetime() {
+        return entryDatetime;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEntryDatetime(Date entryDatetime) {
+        this.entryDatetime = entryDatetime;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getUpdateUser() {
+        return updateUser;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setUpdateUser(String updateUser) {
+        this.updateUser = updateUser;
     }
 
-    @Override
-    public int hashCode() {
-        return id;
+    public Date getUpdateDate() {
+        return updateDate;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if ((obj == null) || (obj.getClass() != this.getClass())) {
-            return false;
-        }
-        if (id == ((RoleBo) obj).id) {
-            return true;
-        } else {
-            return false;
-        }
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     public static List<RoleBo> toRoleBos(List<Role> roles) {
@@ -78,6 +68,13 @@ public class RoleBo {
         roleBo.setId(role.getId());
         roleBo.setName(role.getName());
         roleBo.setDisplayName(role.getDisplayName());
+        roleBo.setEntryUser(role.getEntryUser().getUserName());
+        roleBo.setEntryDatetime(role.getEntryTime());
+        if (role.getUpdateUser() != null) {
+            roleBo.setUpdateUser(role.getUpdateUser().getUserName());
+            roleBo.setUpdateDate(role.getUpdateTime());
+        }
         return roleBo;
     }
+
 }
