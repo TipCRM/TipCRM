@@ -1,25 +1,17 @@
 package com.tipcrm.web.initializer;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.tipcrm.bo.PermissionBo;
 import com.tipcrm.bo.PermissionGroupBo;
-import com.tipcrm.bo.RoleBo;
+import com.tipcrm.bo.RoleBasicBo;
 import com.tipcrm.cache.ConfigurationCache;
 import com.tipcrm.cache.ListBoxCache;
 import com.tipcrm.cache.PermissionCache;
 import com.tipcrm.cache.RoleCache;
 import com.tipcrm.dao.entity.Configuration;
 import com.tipcrm.dao.entity.ListBox;
-import com.tipcrm.dao.entity.Permission;
 import com.tipcrm.dao.entity.Role;
-import com.tipcrm.dao.entity.RolePermission;
 import com.tipcrm.dao.repository.ConfigurationRepository;
 import com.tipcrm.dao.repository.ListBoxRepository;
 import com.tipcrm.dao.repository.RoleRepository;
@@ -83,7 +75,7 @@ public class CacheInitializer implements CommandLineRunner {
     private void initRoleAndPermissionCache() {
         logger.info("Initializing role and permission cache data...");
         List<Role> roles = roleRepository.findAll();
-        List<RoleBo> roleBos = RoleBo.toRoleBos(roles);
+        List<RoleBasicBo> roleBos = RoleBasicBo.toRoleBasicBos(roles);
         RoleCache.setAllRole(roleBos);
 
         PermissionCache.setRolePermissions(roleService.getAllRolePermissionMap());

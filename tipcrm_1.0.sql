@@ -569,29 +569,14 @@ INSERT INTO `permission` VALUES
 (7,2,'USER_UPDATE','user:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
 (8,2,'USER_DELETE','user:delete','离职',-1,NOW(),NULL,NULL,NULL,NULL),
 (9,3,'ROLE_ADD','role:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
-(10,3,'ROLE_UPDATE','role:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
-(11,3,'ROLE_DELETE','role:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL),
-(12,3,'ROLE_ASSIGN','role:assign','分配',-1,NOW(),NULL,NULL,NULL,NULL),
-(13,4,'PERMISSION','permission:assign','分配',-1,NOW(),NULL,NULL,NULL,NULL),
-(14,5,'DEPARTMENT_ADD','department:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
-(15,5,'DEPARTMENT_UPDATE','department:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
-(16,5,'DEPARTMENT_DELETE','department:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL);INSERT INTO `permission` VALUES
-(1,1,'CUSTOMER_ADD','customer:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
-(2,1,'CUSTOMER_UPDATE','customer:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
-(3,1,'CUSTOMER_DELETE','customer:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL),
-(4,1,'CUSTOMER_TRANSFER','customer:transfer','转移',-1,NOW(),NULL,NULL,NULL,NULL),
-(5,1,'CUSTOMER_APPROVAL','customer:approval','审批',-1,NOW(),NULL,NULL,NULL,NULL),
-(6,2,'USER_ADD','user:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
-(7,2,'USER_UPDATE','user:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
-(8,2,'USER_DELETE','user:delete','离职',-1,NOW(),NULL,NULL,NULL,NULL),
-(9,3,'ROLE_ADD','role:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
-(10,3,'ROLE_UPDATE','role:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
-(11,3,'ROLE_DELETE','role:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL),
-(12,3,'ROLE_ASSIGN','role:assign','分配',-1,NOW(),NULL,NULL,NULL,NULL),
-(13,4,'PERMISSION','permission:assign','分配',-1,NOW(),NULL,NULL,NULL,NULL),
-(14,5,'DEPARTMENT_ADD','department:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
-(15,5,'DEPARTMENT_UPDATE','department:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
-(16,5,'DEPARTMENT_DELETE','department:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL);
+(10,3,'ROLE_REVIEW','role:view','查看',-1,NOW(),NULL,NULL,NULL,NULL),
+(11,3,'ROLE_UPDATE','role:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
+(12,3,'ROLE_DELETE','role:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL),
+(13,3,'ROLE_ASSIGN','role:assign','分配',-1,NOW(),NULL,NULL,NULL,NULL),
+(14,4,'PERMISSION_ASSIGN','permission:assign','分配',-1,NOW(),NULL,NULL,NULL,NULL),
+(15,5,'DEPARTMENT_ADD','department:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
+(16,5,'DEPARTMENT_UPDATE','department:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
+(17,5,'DEPARTMENT_DELETE','department:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL);
 
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 UNLOCK TABLES;

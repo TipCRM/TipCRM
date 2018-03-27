@@ -15,15 +15,22 @@ public class Constants {
     }
 
     public static class Permission {
-        public static final String CUSTOMER_ADD_UPDATE = "customer:add_update";
+        public static final String CUSTOMER_ADD = "customer:add";
+        public static final String CUSTOMER_UPDATE = "customer:update";
         public static final String CUSTOMER_DELETE = "customer:delete";
         public static final String CUSTOMER_TRANSFER = "customer:transfer";
         public static final String CUSTOMER_APPROVAL = "customer:approval";
-        public static final String USER_ADD_UPDATE = "user:add_update";
+        public static final String USER_ADD = "user:add";
+        public static final String USER_UPDATE = "user:update";
         public static final String USER_DELETE = "user:delete";
+        public static final String ROLE_VIEW = "role:view";
         public static final String ROLE_ADD = "role:add";
+        public static final String ROLE_UPDATE = "role:update";
+        public static final String ROLE_DELETE = "role:delete";
         public static final String ROLE_ASSIGN = "role:assign";
-        public static final String DEPARTMENT_ADD_UPDATE = "department:add_update";
+        public static final String PERMISSION_ASSIGN = "permission:assign";
+        public static final String DEPARTMENT_ADD = "department:add";
+        public static final String DEPARTMENT_UPDATE = "department:update";
         public static final String DEPARTMENT_DELETE = "department:delete";
     }
 

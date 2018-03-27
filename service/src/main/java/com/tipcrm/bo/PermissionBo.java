@@ -9,6 +9,7 @@ import org.springframework.util.CollectionUtils;
 public class PermissionBo implements Serializable{
     private Integer id;
     private String name;
+    private String value;
     private String displayName;
     private Boolean checked = false;
 
@@ -42,6 +43,14 @@ public class PermissionBo implements Serializable{
 
     public void setChecked(Boolean checked) {
         this.checked = checked;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     @Override
@@ -84,6 +93,7 @@ public class PermissionBo implements Serializable{
         PermissionBo bo = new PermissionBo();
         bo.setId(permission.getId());
         bo.setName(permission.getName());
+        bo.setValue(permission.getValue());
         bo.setDisplayName(permission.getDisplayName());
         return bo;
     }

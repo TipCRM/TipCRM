@@ -11,4 +11,8 @@ public interface PermissionService {
     List<PermissionGroupBo> getAllGroup();
 
     List<PermissionGroupBo> getPermissionsByUserId(Integer userId);
+
+    List<PermissionGroupBo> getPermissionsByRoleId(Integer roleId);
+
+
 }

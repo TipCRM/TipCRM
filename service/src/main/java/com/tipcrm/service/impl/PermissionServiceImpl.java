@@ -1,19 +1,21 @@
 package com.tipcrm.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.tipcrm.bo.PermissionBo;
 import com.tipcrm.bo.PermissionGroupBo;
-import com.tipcrm.bo.RoleBo;
+import com.tipcrm.bo.RoleBasicBo;
 import com.tipcrm.cache.PermissionCache;
 import com.tipcrm.dao.entity.PermissionGroup;
 import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.entity.RolePermission;
 import com.tipcrm.dao.entity.User;
 import com.tipcrm.dao.repository.PermissionGroupRepository;
+import com.tipcrm.dao.repository.RoleRepository;
 import com.tipcrm.dao.repository.UserRepository;
 import com.tipcrm.service.PermissionService;
 import com.tipcrm.service.RoleService;
@@ -35,19 +37,19 @@ public class PermissionServiceImpl implements PermissionService {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     @Override
     public Set<String> getPermissionValueListByUserId(Integer userId) {
-        Set<PermissionBo> permissions = PermissionCache.getPermissions(userId);
-        if (CollectionUtils.isEmpty(permissions)) {
-            User user = userRepository.findOne(userId);
-            for (Role role : user.getRoles()) {
-                for (RolePermission rolePermission : role.getRolePermissions()) {
-                    permissions.add(PermissionBo.toPermissionBo(rolePermission.getPermission()));
-                }
+        List<PermissionGroupBo> groups = getPermissionsByUserId(userId);
+        Set<String> permissions = new HashSet<>();
+        if (!CollectionUtils.isEmpty(groups)) {
+            for (PermissionGroupBo group : groups) {
+                permissions.addAll(group.getPermissions().stream().filter(p ->p.getChecked()).map(p -> p.getValue()).collect(Collectors.toList()));
             }
-            PermissionCache.addOrUpdatePermissions(userId, permissions);
         }
-        return permissions.stream().map(permission -> permission.getName()).collect(Collectors.toSet());
+        return permissions;
     }
 
     @Override
@@ -60,17 +62,32 @@ public class PermissionServiceImpl implements PermissionService {
     public List<PermissionGroupBo> getPermissionsByUserId(Integer userId) {
         List<PermissionGroupBo> groupBos = PermissionCache.getAllPermissionGroups();
         List<PermissionBo> allPermission = flatPermissionGroup(groupBos);
-        Set<RoleBo> myRoles = roleService.getRolesByUserId(userId);
+        Set<RoleBasicBo> myRoles = roleService.getRolesByUserId(userId);
         if (!CollectionUtils.isEmpty(myRoles)) {
             Set<PermissionBo> myPermissions = PermissionCache.getPermissions(myRoles.stream().map(role -> role.getId()).collect(Collectors.toList()));
-            for (PermissionBo myPermission: myPermissions) {
+            for (PermissionBo myPermission : myPermissions) {
                 for (PermissionBo permission : allPermission) {
                     if (myPermission.getId().equals(permission.getId())) {
                         permission.setChecked(true);
                         break;
                     }
                 }
+            }
+        }
+        return groupBos;
+    }
 
+    @Override
+    public List<PermissionGroupBo> getPermissionsByRoleId(Integer roleId) {
+        List<PermissionGroupBo> groupBos = PermissionCache.getAllPermissionGroups();
+        List<PermissionBo> allPermission = flatPermissionGroup(groupBos);
+        Set<PermissionBo> myPermissions = PermissionCache.getPermissions(roleId);
+        for (PermissionBo myPermission : myPermissions) {
+            for (PermissionBo permission : allPermission) {
+                if (myPermission.getId().equals(permission.getId())) {
+                    permission.setChecked(true);
+                    break;
+                }
             }
         }
         return groupBos;
@@ -78,7 +95,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     private List<PermissionBo> flatPermissionGroup(List<PermissionGroupBo> groups) {
         List<PermissionBo> permissionBos = new ArrayList<>();
-        for (PermissionGroupBo group: groups) {
+        for (PermissionGroupBo group : groups) {
             permissionBos.addAll(group.getPermissions());
         }
         return permissionBos;

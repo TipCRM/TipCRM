@@ -37,13 +37,13 @@ public class DepartmentApi {
     }
 
     @RequestMapping(value = "/department", method = RequestMethod.POST)
-    @RequiresPermissions(value = Constants.Permission.DEPARTMENT_ADD_UPDATE)
+    @RequiresPermissions(value = Constants.Permission.DEPARTMENT_ADD)
     public JsonEntity<Integer> addDepartment(@RequestBody CreateDepartmentBo createDepartmentBo) {
         return ResponseHelper.createInstance(departmentService.createNewDepartment(createDepartmentBo));
     }
 
     @RequestMapping(value = "/department/{departmentId}", method = RequestMethod.PUT)
-    @RequiresPermissions(value = Constants.Permission.DEPARTMENT_ADD_UPDATE)
+    @RequiresPermissions(value = Constants.Permission.DEPARTMENT_UPDATE)
     public JsonEntity<Integer> updateDepartment(@PathVariable("departmentId") Integer departmentId, @RequestBody CreateDepartmentBo createDepartmentBo)
         {
         return ResponseHelper.createInstance(departmentService.updateDepartment(departmentId, createDepartmentBo));
