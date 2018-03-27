@@ -42,7 +42,7 @@ public class MenuServiceImpl implements MenuService {
             }
             if ((currentParentId == null && parentId == null)
                 || (parentId != null && parentId.equals(currentParentId))) {
-                menuBos.add(new MenuBo(menu.getDisplayName(), menu.getIcon(), menu.getUrl(), convertToMenuBo(menus, menu.getId())));
+                menuBos.add(new MenuBo(menu.getName(), menu.getDisplayName(),null, menu.getIcon(), menu.getUrl(), convertToMenuBo(menus, menu.getId())));
             }
         }
         return menuBos;

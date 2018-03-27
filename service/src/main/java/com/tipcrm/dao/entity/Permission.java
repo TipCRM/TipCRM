@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -12,10 +14,11 @@ public class Permission extends BaseAllEntity {
     @GeneratedValue
     @Id
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
-    @Column(name = "group_name")
-    private String groupName;
+    @ManyToOne
+    @JoinColumn(name = "group_id", referencedColumnName = "id")
+    private PermissionGroup group;
 
     @Column(name = "name")
     private String name;
@@ -26,20 +29,20 @@ public class Permission extends BaseAllEntity {
     @Column(name = "display_name")
     private String displayName;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getGroupName() {
-        return groupName;
+    public PermissionGroup getGroup() {
+        return group;
     }
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
+    public void setGroup(PermissionGroup group) {
+        this.group = group;
     }
 
     public String getName() {
