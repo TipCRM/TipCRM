@@ -35,7 +35,7 @@ export default class MainMenu extends React.Component{
     console.log(currentUser);
     const menus = main.menus;
     const finalMenus = menus ? menus.map(item => {
-        return {...item, content: item.content ? item.content : menuComponentConstant(item.children)[item.name]};
+        return {...item, content: item.active ? menuComponentConstant(item.children)[item.name] : item.content};
       }
     ) : menus;
     return(
@@ -53,7 +53,7 @@ export default class MainMenu extends React.Component{
             <List dataSource={finalMenus}
                   grid={{ gutter: 20, column: 8 }}
                   renderItem={item=>(<List.Item style={{marginTop:"20px"}}>
-                  <CardCell title={item.title} content={item.content}/>
+                  <CardCell title={item.title} content={item.content} active={item.active}/>
                   </List.Item>)}
             />
           </CommonSpin>

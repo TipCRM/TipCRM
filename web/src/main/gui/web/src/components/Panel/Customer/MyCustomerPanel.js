@@ -220,7 +220,7 @@ export default class MyCustomerPanel extends React.Component{
     const customerDetailPanels =children ? children.map(panel =>{
       return {title:(<Badge count={5} dot>{panel.title}</Badge>),
             id: panel.id,
-            content: panel.content ? panel.content : myCustomerComponentConstant(selectCustomer.customerId)[panel.name]};
+            content: panel.active ? myCustomerComponentConstant(selectCustomer.customerId)[panel.name]:  panel.content };
     }) : children;
 
     return((<div>

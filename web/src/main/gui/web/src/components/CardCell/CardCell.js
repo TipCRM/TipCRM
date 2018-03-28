@@ -12,7 +12,7 @@ export default class CardCell extends React.Component{
     showModal: false,
   };
 
-  handlerCardClick(){
+  handlerCardClick(active){
     this.setState({
       showModal: true,
     });
@@ -24,14 +24,14 @@ export default class CardCell extends React.Component{
   }
 
   render(){
-    const {title, content} = this.props;
-    const iconUrl = "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png";
+    const {title, content, active} = this.props;
+    const iconUrl = active ? "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" : "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png";
     const {showModal} = this.state;
-    const icon = (<img src={iconUrl} className={styles.iconStyle}/>);
+    const icon = (<img src={iconUrl} className={styles.iconStyle}/>) ;
     const titles = (<div className={styles.titleStyle}>{title}</div>);
     return(
-      <div>
-        <Card  onClick={this.handlerCardClick.bind(this)} className={styles.cardStyle} cover={icon}>
+      <div className={active ? '' : styles.disabelCell}>
+        <Card  onClick={active ? this.handlerCardClick.bind(this) : {}} className={styles.cardStyle} cover={icon}>
           {titles}
         </Card>
         <Modal width="80%" title={title}

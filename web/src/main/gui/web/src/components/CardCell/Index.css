@@ -25,3 +25,14 @@
   border-radius: 20px;
   backgroundColor: none;
 }
+
+.disabelCell {
+  width: 100%;
+  height: 100%;
+  filter: alpha(opacity=50);
+  -moz-opacity: 0.5;
+  opacity: 0.3;
+  left: 0px;
+  top: 0px;
+  z-index: 100;
+}

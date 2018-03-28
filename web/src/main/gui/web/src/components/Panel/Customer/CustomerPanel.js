@@ -10,7 +10,7 @@ export default class CustomerPanel extends React.Component{
   render(){
     const {children} = this.props;
     const panels = children ? children.map(item => {
-      return item.content ? item : {...item, content: customerComponentConstant(item.children)[item.name]};
+      return item.active ?  {...item, content: customerComponentConstant(item.children)[item.name]} : item ;
     }) : children;
     return(
       <div>
