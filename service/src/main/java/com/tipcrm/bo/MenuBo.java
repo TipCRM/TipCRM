@@ -4,6 +4,7 @@ import java.util.List;
 
 public class MenuBo {
 
+    private Integer id;
     private String name;
     private String title;
     private String content;
@@ -11,7 +12,8 @@ public class MenuBo {
     private String url;
     private List<MenuBo> children = new ArrayList<MenuBo>();
 
-    public MenuBo(String name, String title, String content, String icon, String url, List<MenuBo> children) {
+    public MenuBo(Integer id, String name, String title, String content, String icon, String url, List<MenuBo> children) {
+        this.id = id;
         this.name = name;
         this.title = title;
         this.content = content;
@@ -21,6 +23,14 @@ public class MenuBo {
     }
 
     public MenuBo() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
