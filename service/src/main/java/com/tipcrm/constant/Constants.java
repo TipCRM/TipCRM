@@ -15,15 +15,27 @@ public class Constants {
     }
 
     public static class Permission {
+        public static final String CUSTOMER_DEPARTMENT_VIEW = "customer:department:view";
+        public static final String CUSTOMER_COMPANY_VIEW = "customer:company:view";
         public static final String CUSTOMER_ADD = "customer:add";
-        public static final String CUSTOMER_UPDATE = "customer:update";
-        public static final String CUSTOMER_DELETE = "customer:delete";
-        public static final String CUSTOMER_TRANSFER = "customer:transfer";
+        public static final String CUSTOMER_MY_UPDATE = "customer:my:update";
+        public static final String CUSTOMER_DEPARTMENT_UPDATE = "customer:department:update";
+        public static final String CUSTOMER_COMPANY_UPDATE = "customer:company:update";
+        public static final String CUSTOMER_COMMUNICATION_ADD = "customer:communication:add";
+        public static final String CUSTOMER_STATUS_CHANGE = "customer:status:change";
+        public static final String CUSTOMER_MY_DELETE = "customer:my:delete";
+        public static final String CUSTOMER_DEPARTMENT_DELETE = "customer:department:delete";
+        public static final String CUSTOMER_COMPANY_DELETE = "customer:company:delete";
+        public static final String CUSTOMER_DEPARTMENT_TRANSFER_TO_USER = "customer:department:transfer_to_user";
+        public static final String CUSTOMER_MY_TRANSFER_TO_USER = "customer:my:transfer_to_user";
+        public static final String CUSTOMER_COMPANY_TRANSFER_TO_DEPARTMENT = "customer:company:transfer_to_department";
+        public static final String CUSTOMER_MY_TRANSFER_TO_DEPARTMENT = "customer:my:transfer_to_department";
         public static final String CUSTOMER_APPROVAL = "customer:approval";
+        public static final String USER_DEPARTMENT_VIEW = "user:department:view";
+        public static final String USER_COMPANY_VIEW = "user:company:view";
         public static final String USER_ADD = "user:add";
         public static final String USER_UPDATE = "user:update";
         public static final String USER_DELETE = "user:delete";
-        public static final String ROLE_VIEW = "role:view";
         public static final String ROLE_ADD = "role:add";
         public static final String ROLE_UPDATE = "role:update";
         public static final String ROLE_DELETE = "role:delete";
@@ -32,6 +44,13 @@ public class Constants {
         public static final String DEPARTMENT_ADD = "department:add";
         public static final String DEPARTMENT_UPDATE = "department:update";
         public static final String DEPARTMENT_DELETE = "department:delete";
+        public static final String CONTRACT_DEPARTMENT_VIEW = "contract:department:view";
+        public static final String CONTRACT_COMPANY_VIEW = "contract:company:view";
+        public static final String CONTRACT_UPDATE = "contract:update";
+        public static final String CONTRACT_APPROVAL = "contract:approval";
+        public static final String PRODUCTION_ADD = "production:add";
+        public static final String PRODUCTION_UPDATE = "production:update";
+        public static final String PRODUCTION_DELETE = "production:delete";
     }
 
     public static class RequestResult {
