@@ -14,5 +14,5 @@ public interface PermissionService {
 
     List<PermissionGroupBo> getPermissionsByRoleId(Integer roleId);
 
-
+    void updateRolePermissions(Integer roleId, Set<Integer> permissionIds);
 }

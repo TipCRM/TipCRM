@@ -1,5 +1,6 @@
 package com.tipcrm.web.publicapi;
 import java.util.List;
+import java.util.Set;
 
 import com.tipcrm.bo.PermissionGroupBo;
 import com.tipcrm.constant.Constants;
@@ -12,6 +13,7 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,4 +41,13 @@ public class PermissionApi {
     public JsonEntity<List<PermissionGroupBo>> getRolePermissions(@PathVariable(value = "roleId") Integer roleId) {
         return ResponseHelper.createInstance(permissionService.getPermissionsByRoleId(roleId));
     }
+
+    @RequestMapping(value = "permission/role/{roleId}", method = RequestMethod.PUT)
+    @RequiresPermissions(Constants.Permission.ROLE_VIEW)
+    public JsonEntity<String> getRolePermissions(@PathVariable(value = "roleId") Integer roleId,
+                                                                  @RequestBody Set<Integer> permissionIds) {
+        permissionService.updateRolePermissions(roleId, permissionIds);
+        return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
+    }
+
 }
