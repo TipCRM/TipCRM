@@ -36,6 +36,9 @@ public class Menu {
     @Column(name = "url")
     private String url;
 
+    @Column(name = "active")
+    private Boolean active;
+
     public Integer getId() {
         return id;
     }
@@ -90,5 +93,13 @@ public class Menu {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
