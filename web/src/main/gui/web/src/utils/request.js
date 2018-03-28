@@ -9,10 +9,16 @@ function parseJSON(response) {
 }
 
 function checkStatus(response){
-  if (response.status < 200 || response.status >= 500){
+  if (response.status === 401){
+    const error = new Error(response.message);
+    throw error;
+  }
+  if (response.status < 200 || response.status >= 400){
     const content = (<div>错误代码：{response.status} <br/> 错误原因：{response.message}</div>);
     notification.error({message:'执行操作时发生错误', description: content, duration:0});
   }
+  response.data = response.data ? response.data : [];
+  console.log(response);
   return response;
 }
 
@@ -40,5 +46,9 @@ export default function request(url, options) {
   return fetch(url, newOptions)
     .then(parseJSON)
     .then(checkStatus)
-    .catch(err => ({}));
+    .catch(err => {
+      const {dispatch} = store;
+      dispatch(routerRedux.push('/login'));
+      return;
+    });
 }

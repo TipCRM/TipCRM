@@ -1,0 +1,26 @@
+.iconStyle{
+  width: 150px;
+  height: 150px;
+  border:0px solid;
+  border-radius: 25px;
+}
+
+.titleStyle{
+  font-size: 12px;
+  text-align: center;
+  margin-top: -15px;
+  border: 0px solid;
+  border-radius: 18px;
+  background-color: #eee;
+}
+
+.cardStyle{
+  cursor: pointer;
+  min-width: 80px;
+  min-height: 80px;
+  width: 150px;
+  height: 150px;
+  border: 0px solid;
+  border-radius: 25px;
+  backgroundColor: none;
+}
