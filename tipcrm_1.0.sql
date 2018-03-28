@@ -147,29 +147,29 @@ LOCK TABLES `contract` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `contract_project`
+-- Table structure for table `contract_production`
 --
 
-DROP TABLE IF EXISTS `contract_project`;
+DROP TABLE IF EXISTS `contract_production`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `contract_project` (
+CREATE TABLE `contract_production` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `contract_id` int(11) NOT NULL,
-  `project_id` int(11) NOT NULL,
+  `production_id` int(11) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `contract_projectI1` (`contract_id`,`project_id`)
+  UNIQUE KEY `contract_productionI1` (`contract_id`,`production_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `contract_project`
+-- Dumping data for table `contract_production`
 --
 
-LOCK TABLES `contract_project` WRITE;
-/*!40000 ALTER TABLE `contract_project` DISABLE KEYS */;
-/*!40000 ALTER TABLE `contract_project` ENABLE KEYS */;
+LOCK TABLES `contract_production` WRITE;
+/*!40000 ALTER TABLE `contract_production` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contract_production` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -431,9 +431,9 @@ INSERT INTO `list_box` VALUES
 (12,'NOTIFICATION_TYPE','SYSTEM_NOTIFICATION','系统通知',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
 (13,'NOTIFICATION_TYPE','USER_NOTIFICATION','用户通知',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
 (14,'NOTIFICATION_READ_STATUS','READ','已读',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
-(15,'NOTIFICATION_READ_STATUS','UNREAD','未读',2,-1,NOW(),NULL,NULL,NULL,NULL,0);
-(16,'OPERATION_TYPE','ADD','新增',1,-1,NOW(),NULL,NULL,NULL,NULL,0);
-(17,'OPERATION_TYPE','UPDATE','修改',2,-1,NOW(),NULL,NULL,NULL,NULL,0);
+(15,'NOTIFICATION_READ_STATUS','UNREAD','未读',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(16,'OPERATION_TYPE','ADD','新增',1,-1,NOW(),NULL,NULL,NULL,NULL,0),
+(17,'OPERATION_TYPE','UPDATE','修改',2,-1,NOW(),NULL,NULL,NULL,NULL,0),
 (18,'OPERATION_TYPE','REMOVE','删除',3,-1,NOW(),NULL,NULL,NULL,NULL,0);
 /*!40000 ALTER TABLE `list_box` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -527,9 +527,10 @@ CREATE TABLE `TIP_CRM`.`permission_group` (
 INSERT INTO `TIP_CRM`.`permission_group` (`id`, `name`, `entry_id`, `entry_time`) VALUES
 (1, '客户管理', '-1', NOW()),
 (2, '员工管理', '-1',NOW()),
-(3, '角色', '-1',NOW()),
-(4, '权限', '-1',NOW()),
-(5, '部门管理', '-1',NOW());
+(3, '角色与权限', '-1',NOW()),
+(4, '部门管理', '-1',NOW()),
+(5, '合同管理', '-1',NOW()),
+(6, '产品管理', '-1',NOW());
 
 
 DROP TABLE IF EXISTS `permission`;
@@ -541,6 +542,7 @@ CREATE TABLE `permission` (
   `name` varchar(50) COLLATE utf8_bin NOT NULL,
   `value` varchar(50) COLLATE utf8_bin NOT NULL,
   `display_name` varchar(50) COLLATE utf8_bin DEFAULT NULL,
+  `note` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `entry_id` int(11) NOT NULL,
   `entry_time` datetime(3) NOT NULL,
   `update_id` int(11) DEFAULT NULL,
@@ -560,35 +562,54 @@ CREATE TABLE `permission` (
 LOCK TABLES `permission` WRITE;
 /*!40000 ALTER TABLE `permission` DISABLE KEYS */;
 INSERT INTO `permission` VALUES
-(1,1,'CUSTOMER_ADD','customer:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
-(2,1,'CUSTOMER_UPDATE','customer:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
-(3,1,'CUSTOMER_DELETE','customer:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL),
-(4,1,'CUSTOMER_TRANSFER','customer:transfer','转移',-1,NOW(),NULL,NULL,NULL,NULL),
-(5,1,'CUSTOMER_APPROVAL','customer:approval','审批',-1,NOW(),NULL,NULL,NULL,NULL),
-(6,2,'USER_ADD','user:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
-(7,2,'USER_UPDATE','user:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
-(8,2,'USER_DELETE','user:delete','离职',-1,NOW(),NULL,NULL,NULL,NULL),
-(9,3,'ROLE_ADD','role:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
-(10,3,'ROLE_REVIEW','role:view','查看',-1,NOW(),NULL,NULL,NULL,NULL),
-(11,3,'ROLE_UPDATE','role:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
-(12,3,'ROLE_DELETE','role:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL),
-(13,3,'ROLE_ASSIGN','role:assign','分配',-1,NOW(),NULL,NULL,NULL,NULL),
-(14,4,'PERMISSION_ASSIGN','permission:assign','分配',-1,NOW(),NULL,NULL,NULL,NULL),
-(15,5,'DEPARTMENT_ADD','department:add','添加',-1,NOW(),NULL,NULL,NULL,NULL),
-(16,5,'DEPARTMENT_UPDATE','department:update','修改',-1,NOW(),NULL,NULL,NULL,NULL),
-(17,5,'DEPARTMENT_DELETE','department:delete','删除',-1,NOW(),NULL,NULL,NULL,NULL);
+(1,1,'CUSTOMER_DEPARTMENT_VIEW','customer:department:view','查看部门公海',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(2,1,'CUSTOMER_COMPANY_VIEW','customer:company:view','查看公司公海',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(3,1,'CUSTOMER_ADD','customer:add','添加客户',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(4,1,'CUSTOMER_MY_UPDATE','customer:my:update','修改我的客户',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(5,1,'CUSTOMER_DEPARTMENT_UPDATE','customer:department:update','修改部门客户',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(6,1,'CUSTOMER_COMPANY_UPDATE','customer:company:update','修改公司客户',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(7,1,'CUSTOMER_COMMUNICATION_ADD','customer:communication:add','添加拜访记录',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(8,1,'CUSTOMER_STATUS_CHANGE','customer:status:change','状态转换','用于客户状态之间的转换（如新客户转换到意向客户）',-1,NOW(),NULL,NULL,NULL,NULL),
+(9,1,'CUSTOMER_MY_DELETE','customer:my:delete','删除我的客户',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(10,1,'CUSTOMER_DEPARTMENT_DELETE','customer:department:delete','删除部门客户',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(11,1,'CUSTOMER_COMPANY_DELETE','customer:company:delete','删除公司客户',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(12,1,'CUSTOMER_DEPARTMENT_TRANSFER_TO_USER','customer:department:transfer_to_user','转入到员工','从部门公海中将客户转移至部门内部员工',-1,NOW(),NULL,NULL,NULL,NULL),
+(13,1,'CUSTOMER_MY_TRANSFER_TO_USER','customer:my:transfer_to_user','转出到员工','将其客户转移至部门内部员工',-1,NOW(),NULL,NULL,NULL,NULL),
+(14,1,'CUSTOMER_COMPANY_TRANSFER_TO_DEPARTMENT','customer:company:transfer_to_department','转入到部门','将公司公海中的客户转移至员工所属的部门',-1,NOW(),NULL,NULL,NULL,NULL),
+(15,1,'CUSTOMER_MY_TRANSFER_TO_DEPARTMENT','customer:my:transfer_to_department','转出到部门','将其客户转移至部门公海',-1,NOW(),NULL,NULL,NULL,NULL),
+(16,1,'CUSTOMER_APPROVAL','customer:approval','审批客户',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(17,2,'USER_DEPARTMENT_VIEW','user:department:view','查看部门员工',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(18,2,'USER_COMPANY_VIEW','user:company:view','查看公司员工',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(19,2,'USER_ADD','user:add','添加员工',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(20,2,'USER_UPDATE','user:update','修改员工',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(21,2,'USER_DELETE','user:delete','员工离职',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(22,3,'ROLE_ADD','role:add','添加角色',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(23,3,'ROLE_UPDATE','role:update','修改角色',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(24,3,'ROLE_DELETE','role:delete','删除角色',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(25,3,'ROLE_ASSIGN','role:assign','分配角色','为员工分配角色',-1,NOW(),NULL,NULL,NULL,NULL),
+(26,3,'PERMISSION_ASSIGN','permission:assign','分配权限','为角色分配权限',-1,NOW(),NULL,NULL,NULL,NULL),
+(27,4,'DEPARTMENT_ADD','department:add','添加部门',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(28,4,'DEPARTMENT_UPDATE','department:update','修改部门',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(29,4,'DEPARTMENT_DELETE','department:delete','删除部门',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(30,5,'CONTRACT_DEPARTMENT_VIEW','contract:department:view','查看部门合同',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(31,5,'CONTRACT_COMPANY_VIEW','contract:company:view','查看公司合同',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(32,5,'CONTRACT_UPDATE','contract:update','修改合同','只能修改未生效的合同',-1,NOW(),NULL,NULL,NULL,NULL),
+(33,5,'CONTRACT_APPROVAL','contract:approval','审批合同',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(34,6,'PRODUCTION_ADD','production:add','添加产品',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(35,6,'PRODUCTION_UPDATE','production:update','修改产品',NULL,-1,NOW(),NULL,NULL,NULL,NULL),
+(36,6,'PRODUCTION_DELETE','production:delete','删除产品',NULL,-1,NOW(),NULL,NULL,NULL,NULL);
 
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `project`
+-- Table structure for table `production`
 --
 
-DROP TABLE IF EXISTS `project`;
+DROP TABLE IF EXISTS `production`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `project` (
+CREATE TABLE `production` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `note` varchar(255) DEFAULT NULL,
@@ -599,17 +620,17 @@ CREATE TABLE `project` (
   `delete_id` int(11) DEFAULT NULL,
   `delete_time` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `projectI1` (`name`)
+  UNIQUE KEY `productionI1` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `project`
+-- Dumping data for table `production`
 --
 
-LOCK TABLES `project` WRITE;
-/*!40000 ALTER TABLE `project` DISABLE KEYS */;
-/*!40000 ALTER TABLE `project` ENABLE KEYS */;
+LOCK TABLES `production` WRITE;
+/*!40000 ALTER TABLE `production` DISABLE KEYS */;
+/*!40000 ALTER TABLE `production` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

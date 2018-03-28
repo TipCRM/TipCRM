@@ -24,7 +24,6 @@ public class RoleApi {
     private RoleService roleService;
 
     @RequestMapping(value = "roles", method = RequestMethod.GET)
-    @RequiresPermissions(Constants.Permission.ROLE_VIEW)
     public JsonEntity<List<RoleBo>> getRoles() {
         return ResponseHelper.createInstance(roleService.getAllRoles());
     }

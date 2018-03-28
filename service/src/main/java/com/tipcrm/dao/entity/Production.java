@@ -7,8 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "project")
-public class Project extends BaseAllEntity {
+@Table(name = "production")
+public class Production extends BaseAllEntity {
 
     @Id
     @GeneratedValue

@@ -37,13 +37,12 @@ public class PermissionApi {
     }
 
     @RequestMapping(value = "permission/role/{roleId}", method = RequestMethod.GET)
-    @RequiresPermissions(Constants.Permission.ROLE_VIEW)
     public JsonEntity<List<PermissionGroupBo>> getRolePermissions(@PathVariable(value = "roleId") Integer roleId) {
         return ResponseHelper.createInstance(permissionService.getPermissionsByRoleId(roleId));
     }
 
     @RequestMapping(value = "permission/role/{roleId}", method = RequestMethod.PUT)
-    @RequiresPermissions(Constants.Permission.ROLE_VIEW)
+    @RequiresPermissions(Constants.Permission.ROLE_UPDATE)
     public JsonEntity<String> getRolePermissions(@PathVariable(value = "roleId") Integer roleId,
                                                                   @RequestBody Set<Integer> permissionIds) {
         permissionService.updateRolePermissions(roleId, permissionIds);
