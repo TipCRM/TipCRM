@@ -453,6 +453,7 @@ CREATE TABLE `menu` (
   `parent_id` int(11) DEFAULT NULL,
   `permission` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `url` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `active` TINYINT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `menuI1` (`name`),
   KEY `menuI2` (`permission`)
@@ -466,18 +467,18 @@ CREATE TABLE `menu` (
 LOCK TABLES `menu` WRITE;
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
 INSERT INTO `menu` VALUES
-(1,'HOME','主页','home',NULL,NULL,'index'),
-(2,'MY_CUSTOMER','我的客户','team',NULL,NULL,'my/customer'),
-(3,'MY_SUMMARY','销售报表','pie-chart',NULL,NULL,'my/summary'),
-(4,'FINANCE','财务管理','pay-circle-o',NULL,NULL,'finance'),
-(5,'MATERIAL','资料库','file-text',NULL,NULL,'material'),
-(6,'SETTING','系统设置','setting',NULL,NULL,''),
-(7,'CUSTOMER_MANAGEMENT','客户管理','team',6,NULL,'management/customer'),
-(8,'USER_MANAGEMENT','员工管理','usergroup-add',6,'user:view','management/user'),
-(9,'APPROVAL_MANAGEMENT','审批管理','check-circle-o',6,NULL,'management/approval'),
-(10,'PERMISSION_MANAGEMENT','权限管理','unlock',6,NULL,'management/permission'),
-(11,'ROLE_MANAGEMENT','角色管理','solution',6,NULL,'management/role'),
-(12,'MATERIAL_MANAGEMENT','资料管理','book',6,NULL,'management/material');
+(1,'HOME','主页','home',NULL,NULL,'index',1),
+(2,'MY_CUSTOMER','我的客户','team',NULL,NULL,'my/customer',1),
+(3,'MY_SUMMARY','销售报表','pie-chart',NULL,NULL,'my/summary',1),
+(4,'FINANCE','财务管理','pay-circle-o',NULL,NULL,'finance',1),
+(5,'MATERIAL','资料库','file-text',NULL,NULL,'material',1),
+(6,'SETTING','系统设置','setting',NULL,NULL,'',1),
+(7,'CUSTOMER_MANAGEMENT','客户管理','team',6,NULL,'management/customer',1),
+(8,'USER_MANAGEMENT','员工管理','usergroup-add',6,'user:view','management/user',1),
+(9,'APPROVAL_MANAGEMENT','审批管理','check-circle-o',6,NULL,'management/approval',1),
+(10,'PERMISSION_MANAGEMENT','权限管理','unlock',6,NULL,'management/permission',1),
+(11,'ROLE_MANAGEMENT','角色管理','solution',6,NULL,'management/role',1),
+(12,'MATERIAL_MANAGEMENT','资料管理','book',6,NULL,'management/material',1);
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
