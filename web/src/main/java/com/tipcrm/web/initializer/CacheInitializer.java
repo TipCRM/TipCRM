@@ -54,13 +54,13 @@ public class CacheInitializer implements CommandLineRunner {
         initRoleAndPermissionCache();
     }
 
-    private void initListBoxCache() {
+    public void initListBoxCache() {
         logger.info("Initializing list box cache data...");
         List<ListBox> listBoxes = listBoxRepository.findAll();
         ListBoxCache.addOrUpdateCache(listBoxes);
     }
 
-    private void initConfigurationCache() {
+    public void initConfigurationCache() {
         logger.info("Initializing configuration cache data...");
         Map<String, String> configurationMap = Maps.newHashMap();
         List<Configuration> configurations = configurationRepository.findAll();
@@ -72,7 +72,7 @@ public class CacheInitializer implements CommandLineRunner {
         ConfigurationCache.pushConfigurations(configurationMap);
     }
 
-    private void initRoleAndPermissionCache() {
+    public void initRoleAndPermissionCache() {
         logger.info("Initializing role and permission cache data...");
         List<Role> roles = roleRepository.findAll();
         List<RoleBasicBo> roleBos = RoleBasicBo.toRoleBasicBos(roles);

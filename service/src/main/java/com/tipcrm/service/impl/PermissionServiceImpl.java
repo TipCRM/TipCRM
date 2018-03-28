@@ -23,20 +23,19 @@ import com.tipcrm.dao.repository.PermissionRepository;
 import com.tipcrm.dao.repository.RolePermissionRepository;
 import com.tipcrm.dao.repository.RoleRepository;
 import com.tipcrm.dao.repository.UserRepository;
+import com.tipcrm.exception.BizException;
 import com.tipcrm.service.PermissionService;
 import com.tipcrm.service.RoleService;
 import com.tipcrm.service.WebContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 public class PermissionServiceImpl implements PermissionService {
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private PermissionGroupRepository permissionGroupRepository;
@@ -98,11 +97,16 @@ public class PermissionServiceImpl implements PermissionService {
         List<PermissionGroupBo> groupBos = PermissionCache.getAllPermissionGroups();
         List<PermissionBo> allPermission = flatPermissionGroup(groupBos);
         Set<PermissionBo> myPermissions = PermissionCache.getPermissions(roleId);
-        for (PermissionBo myPermission : myPermissions) {
-            for (PermissionBo permission : allPermission) {
-                if (myPermission.getId().equals(permission.getId())) {
-                    permission.setChecked(true);
-                    break;
+        if (myPermissions == null) {
+            throw new BizException("角色不存在");
+        }
+        if (!CollectionUtils.isEmpty(myPermissions)) {
+            for (PermissionBo myPermission : myPermissions) {
+                for (PermissionBo permission : allPermission) {
+                    if (myPermission.getId().equals(permission.getId())) {
+                        permission.setChecked(true);
+                        break;
+                    }
                 }
             }
         }
@@ -120,7 +124,6 @@ public class PermissionServiceImpl implements PermissionService {
         }
         Set<Integer> needRemove = new HashSet<>();
         Set<Integer> needAdd = new HashSet<>();
-        Iterator<Integer> it = needRemove.iterator();
         for (Integer exist : existIds) {
             if (!permissionIds.contains(exist)) {
                 needRemove.add(exist);
@@ -132,7 +135,7 @@ public class PermissionServiceImpl implements PermissionService {
             }
         }
         if (!CollectionUtils.isEmpty(needRemove)) {
-            rolePermissionRepository.deleteByRoleIdAndPermissionIdInAndDeletableIsTrue(roleId, needRemove);
+            rolePermissionRepository.deleteByRoleIdAndPermissionId(roleId, needRemove);
             PermissionCache.popPermissions(roleId, needRemove);
         }
         if (!CollectionUtils.isEmpty(needAdd)) {
