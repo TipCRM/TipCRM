@@ -9,6 +9,7 @@ import CustomerPanel from '../../components/Panel/Customer/CustomerPanel';
 import CommonSpin from '../../components/Common/CommonSpin';
 import NotificationPanel from '../../components/Panel/Notification/NotificationPanel';
 import styles from './Index.less';
+import {menuComponentConstant} from '../../utils/Constant';
 import {Layout, List, Avatar, Card, Row, Divider} from 'antd';
 const {Content, Footer, Header} = Layout;
 const {Meta} = Card;
@@ -34,12 +35,7 @@ export default class MainMenu extends React.Component{
     console.log(currentUser);
     const menus = main.menus;
     const finalMenus = menus ? menus.map(item => {
-      if (item.title === '客户管理'){
-        return {...item, content:(<CustomerPanel children={item.children}/>)}
-      } else if (item.title === '通知中心'){
-        return {...item, content:(<NotificationPanel children={item.children}/>)}
-      }
-      return item;
+        return {...item, content: item.content ? item.content : menuComponentConstant(item.children)[item.name]};
       }
     ) : menus;
     return(
@@ -55,7 +51,7 @@ export default class MainMenu extends React.Component{
 
           <CommonSpin spinning={loading}>
             <List dataSource={finalMenus}
-                  grid={{ gutter: 20, column: 5 }}
+                  grid={{ gutter: 20, column: 8 }}
                   renderItem={item=>(<List.Item style={{marginTop:"20px"}}>
                   <CardCell title={item.title} content={item.content}/>
                   </List.Item>)}

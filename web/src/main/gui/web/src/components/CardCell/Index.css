@@ -1,6 +1,6 @@
 .iconStyle{
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   border:0px solid;
   border-radius: 25px;
 }
@@ -10,17 +10,18 @@
   text-align: center;
   margin-top: -15px;
   border: 0px solid;
-  border-radius: 18px;
+  border-radius: 8px;
   background-color: #eee;
+  width: 100%;
 }
 
 .cardStyle{
   cursor: pointer;
   min-width: 80px;
   min-height: 80px;
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   border: 0px solid;
-  border-radius: 25px;
+  border-radius: 20px;
   backgroundColor: none;
 }

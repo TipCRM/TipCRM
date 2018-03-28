@@ -34,7 +34,10 @@ export default class CardCell extends React.Component{
         <Card  onClick={this.handlerCardClick.bind(this)} className={styles.cardStyle} cover={icon}>
           {titles}
         </Card>
-        <Modal width="80%" title={title} visible={showModal} onCancel={this.handlerModalCancel.bind(this)} footer={null} destroyOnClose={true}>
+        <Modal width="80%" title={title}
+               visible={showModal}
+               onCancel={this.handlerModalCancel.bind(this)}
+               footer={null} destroyOnClose={true}>
           {content}
         </Modal>
       </div>);
