@@ -28,5 +28,15 @@ spring:
         username: wan_neil@163.com
         password: 
         default-encoding: UTF-8
+        properties:
+          mail:
+            smtp:
+              auth: true
+              starttls:
+                enable: true
+                required: true
+              ssl:
+                enable: true
+        port: 465
 mail:
       from: wan_neil@163.com
