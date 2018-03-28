@@ -13,7 +13,7 @@ export default {
       const response = yield call(fetchMyNotifictions, payload);
       yield put({
         type: 'saveMyNotification',
-        payload: response,
+        payload: response.data,
       });
     }
   },
@@ -21,7 +21,7 @@ export default {
     saveMyNotification(state, {payload}){
       return{
         ...state,
-        notifications: payload.data,
+        notifications: payload,
       }
     }
   }

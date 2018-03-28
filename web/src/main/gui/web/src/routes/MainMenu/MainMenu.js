@@ -44,24 +44,20 @@ export default class MainMenu extends React.Component{
     ) : menus;
     return(
       <Layout className={styles.layout}>
+        <Header style={{height: '40px'}}>
+          <div style={{textAlign: 'right', marginRight: '20%'}}>
+            <div style={{color:'#eeee'}}>{currentUser ? currentUser.userName : '加载中...'}</div>
+          </div>
+        </Header>
         <Content className={styles.content}>
           <CommonSpin spinning={userInfoLoading}>
-            <div >
-              <div>
-                <Avatar size="large" style={{width:'80px', height:'80px'}} src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"/>
-              </div>
-              <Row> 用户名： {currentUser ? currentUser.userName : '加载中...'} </Row>
-              <Row> 部门： {currentUser ? currentUser.department : '加载中...'} </Row>
-              <Row> 职位： {currentUser ? currentUser.level : '加载中...'} </Row>
-              <Row> 入职时间： {currentUser ? currentUser.hireTime : '加载中...'} </Row>
-            </div>
           </CommonSpin>
-          <Divider></Divider>
+
           <CommonSpin spinning={loading}>
-            <List dataSource={finalMenus} style={{ marginTop:'20px'}}
-                  grid={{ gutter: 20, column: 4 }}
-                  renderItem={item=>(<List.Item>
-                  <CardCell menu={item.title} content={item.content}/>
+            <List dataSource={finalMenus}
+                  grid={{ gutter: 20, column: 5 }}
+                  renderItem={item=>(<List.Item style={{marginTop:"20px"}}>
+                  <CardCell title={item.title} content={item.content}/>
                   </List.Item>)}
             />
           </CommonSpin>
