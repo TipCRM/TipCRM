@@ -11,6 +11,7 @@ import {Badge} from 'antd';
 import CustomerSearchCell from './CustomerSearchCell';
 import CustomerContactCell from './CustomerContactCell';
 import CommonSpin from '../../Common/CommonSpin';
+import CustomerTansferCell from './CustomerTansferCell';
 import {myCustomerComponentConstant} from '../../../utils/Constant';
 
 @connect(({loading, customer}) =>({
@@ -233,7 +234,7 @@ export default class MyCustomerPanel extends React.Component{
             tableColumns={columns}
             tableData={data}
             searchContent={searchContent}
-            tableFooter={()=>(<div style={{textAlign:'center'}}>累计成交金额：10,000元  意向金额：1,000元</div>)}
+            tableFooter={()=>(<div> <CustomerTansferCell/> <div style={{textAlign:'center'}}>累计成交金额：10,000元  意向金额：1,000元</div></div>)}
             onTableRow={this.onTableRow.bind(this)}
             tablePagination={tablePagination}
             onTableChange={this.handlerTableChange.bind(this)}/>
