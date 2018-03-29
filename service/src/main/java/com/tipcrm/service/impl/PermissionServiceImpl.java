@@ -176,4 +176,26 @@ public class PermissionServiceImpl implements PermissionService {
         }
         return permissionBos;
     }
+
+    @Override
+    public List<Permission> flatPermission(List<Permission> permissions) {
+        List<Permission> all = permissionRepository.findAll();
+        List<Permission> flat = new ArrayList<>();
+        for (Permission permission : permissions) {
+            flat.add(permission);
+            flat.addAll(getChildren(all, permission));
+        }
+        return flat;
+    }
+
+    public List<Permission> getChildren(List<Permission> permissions, Permission permission) {
+        List<Permission> permissionList = new ArrayList<>();
+        for (Permission per : permissions) {
+            if (per.getDependence() != null && per.getDependence().getId().equals(permission.getId())) {
+                permissionList.add(permission);
+                permissionList.addAll(getChildren(permissions, per));
+            }
+        }
+        return permissionList;
+    }
 }

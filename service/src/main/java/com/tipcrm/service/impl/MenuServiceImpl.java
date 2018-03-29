@@ -48,4 +48,35 @@ public class MenuServiceImpl implements MenuService {
         }
         return menuBos;
     }
+
+    @Override
+    public List<Menu> findDeactiveFlatMenu() {
+        List<Menu> all = menuRepository.findAll();
+        List<Menu> menus = menuRepository.findMenuByActiveIsFalse();
+        return flatMenu(all, menus);
+    }
+
+    private List<Menu> flatMenu(List<Menu> all, List<Menu> menus) {
+        List<Menu> menuList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(all) && !CollectionUtils.isEmpty(menus)) {
+            for (Menu menu : menus) {
+                menuList.add(menu);
+                menuList.addAll(findChildren(all, menu));
+            }
+        }
+        return menuList;
+    }
+
+    public List<Menu> findChildren(List<Menu> menus, Menu menu) {
+        List<Menu> menusList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(menus)) {
+            for (Menu m: menus) {
+                if (m.getParent() != null && m.getParent().getId().equals(menu.getId())) {
+                    menusList.add(m);
+                    menusList.addAll(findChildren(menus, m));
+                }
+            }
+        }
+        return menusList;
+    }
 }

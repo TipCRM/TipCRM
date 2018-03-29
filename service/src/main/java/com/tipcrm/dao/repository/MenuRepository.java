@@ -13,4 +13,6 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
     @Query("SELECT m FROM Menu m where m.permission is null or m.permission.id in :permissions")
     List<Menu> findMenuByPermissionIds(@Param("permissions") Set<Integer> permissions);
+
+    List<Menu> findMenuByActiveIsFalse();
 }

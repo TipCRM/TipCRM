@@ -31,7 +31,7 @@ public class Permission extends BaseAllEntity {
 
     @ManyToOne
     @JoinColumn(name = "dependence_id", referencedColumnName = "id")
-    private Permission permission;
+    private Permission dependence;
 
     public Integer getId() {
         return id;
@@ -73,11 +73,11 @@ public class Permission extends BaseAllEntity {
         this.value = value;
     }
 
-    public Permission getPermission() {
-        return permission;
+    public Permission getDependence() {
+        return dependence;
     }
 
-    public void setPermission(Permission permission) {
-        this.permission = permission;
+    public void setDependence(Permission dependence) {
+        this.dependence = dependence;
     }
 }
