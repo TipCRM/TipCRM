@@ -1,5 +1,5 @@
 package com.tipcrm.bo;
-public enum  QueryCustomerFieldBo {
+public enum QueryCustomerFieldBo {
     CUSTOMER_NAME,
     STATUS,
     LAST_COMMUNICATE_TIME,

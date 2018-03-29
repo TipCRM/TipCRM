@@ -11,8 +11,6 @@ public interface PermissionService {
 
     Set<Integer> getPermissionIdsByUserId(Integer userId);
 
-    List<PermissionGroupBo> getAllGroup();
-
     List<PermissionGroupBo> getPermissionsByUserId(Integer userId);
 
     List<PermissionGroupBo> getPermissionsByRoleId(Integer roleId);
@@ -20,4 +18,6 @@ public interface PermissionService {
     void updateRolePermissions(Integer roleId, Set<Integer> permissionIds);
 
     List<Permission> flatPermission(List<Permission> permissions);
+
+    List<Permission> getAllPermissions();
 }

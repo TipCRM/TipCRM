@@ -71,16 +71,16 @@ public class CustomerApproval extends BaseCreateEntity {
         return optType;
     }
 
+    public void setOptType(ListBox optType) {
+        this.optType = optType;
+    }
+
     public ListBox getReviewType() {
         return reviewType;
     }
 
     public void setReviewType(ListBox reviewType) {
         this.reviewType = reviewType;
-    }
-
-    public void setOptType(ListBox optType) {
-        this.optType = optType;
     }
 
     public Customer getCustomer() {

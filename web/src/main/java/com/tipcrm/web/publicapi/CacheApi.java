@@ -45,7 +45,7 @@ public class CacheApi {
 
     @RequestMapping(value = "cache/refresh/menu", method = RequestMethod.POST)
     public JsonEntity<String> refreshMenuCache() {
-        cacheInitializer.initDeactiveCache();
+        cacheInitializer.initMenuCache();
         return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
     }
 

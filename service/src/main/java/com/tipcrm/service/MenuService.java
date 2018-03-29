@@ -8,5 +8,5 @@ public interface MenuService {
 
     List<MenuBo> findMenuByUserId(Integer userId);
 
-    List<Menu> findDeactiveFlatMenu();
+    List<Menu> flatMenu(List<Menu> all, List<Menu> menus);
 }

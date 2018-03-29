@@ -3,15 +3,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.tipcrm.bo.PermissionBo;
-import com.tipcrm.bo.RoleBasicBo;
 import com.tipcrm.bo.RoleBo;
+import com.tipcrm.dao.entity.Permission;
+import com.tipcrm.dao.entity.Role;
 
 public interface RoleService {
 
-    Set<RoleBasicBo> getRolesByUserId(Integer userId);
+    Set<Role> getRolesByUserId(Integer userId);
 
-    Map<Integer, Set<PermissionBo>> getAllRolePermissionMap();
+    Map<Integer, Set<Permission>> getAllRolePermissionMap();
 
     List<RoleBo> getAllRoles();
 }

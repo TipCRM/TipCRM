@@ -6,12 +6,37 @@ import java.util.List;
 import com.tipcrm.dao.entity.Permission;
 import org.springframework.util.CollectionUtils;
 
-public class PermissionBo implements Serializable{
+public class PermissionBo implements Serializable {
     private Integer id;
     private String name;
     private String value;
     private String displayName;
     private Boolean checked = false;
+
+    public static List<PermissionBo> toPermissionBos(List<Permission> permissions) {
+        List<PermissionBo> bos = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(permissions)) {
+            for (Permission permission : permissions) {
+                PermissionBo permissionBo = toPermissionBo(permission);
+                if (permissionBo != null) {
+                    bos.add(permissionBo);
+                }
+            }
+        }
+        return bos;
+    }
+
+    public static PermissionBo toPermissionBo(Permission permission) {
+        if (permission == null) {
+            return null;
+        }
+        PermissionBo bo = new PermissionBo();
+        bo.setId(permission.getId());
+        bo.setName(permission.getName());
+        bo.setValue(permission.getValue());
+        bo.setDisplayName(permission.getDisplayName());
+        return bo;
+    }
 
     public Integer getId() {
         return id;
@@ -71,30 +96,5 @@ public class PermissionBo implements Serializable{
         } else {
             return false;
         }
-    }
-
-    public static List<PermissionBo> toPermissionBos(List<Permission> permissions) {
-        List<PermissionBo> bos = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(permissions)){
-            for (Permission permission : permissions){
-                PermissionBo permissionBo = toPermissionBo(permission);
-                if (permissionBo != null) {
-                    bos.add(permissionBo);
-                }
-            }
-        }
-        return bos;
-    }
-
-    public static PermissionBo toPermissionBo(Permission permission) {
-        if (permission == null) {
-            return null;
-        }
-        PermissionBo bo = new PermissionBo();
-        bo.setId(permission.getId());
-        bo.setName(permission.getName());
-        bo.setValue(permission.getValue());
-        bo.setDisplayName(permission.getDisplayName());
-        return bo;
     }
 }

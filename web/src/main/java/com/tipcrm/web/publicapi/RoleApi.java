@@ -2,13 +2,11 @@ package com.tipcrm.web.publicapi;
 import java.util.List;
 
 import com.tipcrm.bo.RoleBo;
-import com.tipcrm.constant.Constants;
 import com.tipcrm.service.RoleService;
 import com.tipcrm.web.util.JsonEntity;
 import com.tipcrm.web.util.ResponseHelper;
 import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

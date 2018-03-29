@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class NotificationBo {
     private Integer id;
-    private String  subject;
-    private String  content;
-    private String  sender;
+    private String subject;
+    private String content;
+    private String sender;
     private Date time;
-    private String  status;
+    private String status;
 
     public String getContent() {
         return content;

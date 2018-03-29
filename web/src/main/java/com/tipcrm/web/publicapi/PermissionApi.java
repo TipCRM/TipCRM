@@ -44,7 +44,7 @@ public class PermissionApi {
     @RequestMapping(value = "permission/role/{roleId}", method = RequestMethod.PUT)
     @RequiresPermissions(Constants.Permission.ROLE_UPDATE)
     public JsonEntity<String> updateRolePermissions(@PathVariable(value = "roleId") Integer roleId,
-                                                                  @RequestBody Set<Integer> permissionIds) {
+                                                    @RequestBody Set<Integer> permissionIds) {
         permissionService.updateRolePermissions(roleId, permissionIds);
         return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
     }
