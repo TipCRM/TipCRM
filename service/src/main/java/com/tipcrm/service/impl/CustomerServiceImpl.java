@@ -76,43 +76,31 @@ import org.springframework.util.CollectionUtils;
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
 
+    private static Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
     @Autowired
     private CustomerRepository customerRepository;
-
     @Autowired
     private CustomerApprovalRepository customerApprovalRepository;
-
     @Autowired
     private CustomerContactRepository customerContactRepository;
-
     @Autowired
     private PermissionService permissionService;
-
     @Autowired
     private WebContext webContext;
-
     @Autowired
     private ListBoxRepository listBoxRepository;
-
     @Autowired
     private NotificationService notificationService;
-
     @Autowired
     private DepartmentRepository departmentRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private ApprovalService approvalService;
-
     @Autowired
     private ApprovalRequestRepository approvalRequestRepository;
-
-    private static Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
     @Override
     public OptCustomerResultBo createNewCustomer(CreateCustomerBo createCustomerBo) {
@@ -596,7 +584,7 @@ public class CustomerServiceImpl implements CustomerService {
                             break;
                         case Constants.QueryFieldName.Customer.STATUS:
                             path = root.get("status").get("id");
-                            List statuses = (List)criteria.getValue();
+                            List statuses = (List) criteria.getValue();
                             if (!CollectionUtils.isEmpty(statuses)) {
                                 predicates.add(path.in(statuses.toArray()));
                             }

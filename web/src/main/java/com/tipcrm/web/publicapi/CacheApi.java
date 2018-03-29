@@ -42,4 +42,11 @@ public class CacheApi {
         cacheInitializer.initRoleAndPermissionCache();
         return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
     }
+
+    @RequestMapping(value = "cache/refresh/menu", method = RequestMethod.POST)
+    public JsonEntity<String> refreshMenuCache() {
+        cacheInitializer.initMenuCache();
+        return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
+    }
+
 }

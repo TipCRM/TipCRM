@@ -10,14 +10,12 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Sets;
 import com.tipcrm.bo.PermissionBo;
 import com.tipcrm.bo.PermissionGroupBo;
-import com.tipcrm.bo.RoleBasicBo;
 import com.tipcrm.cache.PermissionCache;
 import com.tipcrm.dao.entity.Permission;
 import com.tipcrm.dao.entity.PermissionGroup;
 import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.entity.RolePermission;
 import com.tipcrm.dao.entity.User;
-import com.tipcrm.dao.repository.PermissionGroupRepository;
 import com.tipcrm.dao.repository.PermissionRepository;
 import com.tipcrm.dao.repository.RolePermissionRepository;
 import com.tipcrm.dao.repository.RoleRepository;
@@ -34,9 +32,6 @@ import org.springframework.util.CollectionUtils;
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
 public class PermissionServiceImpl implements PermissionService {
-
-    @Autowired
-    private PermissionGroupRepository permissionGroupRepository;
 
     @Autowired
     private RoleService roleService;
@@ -78,19 +73,14 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<PermissionGroupBo> getAllGroup() {
-        List<PermissionGroup> groups = permissionGroupRepository.findAll();
-        return PermissionGroupBo.toPermissionGroupBos(groups);
-    }
-
-    @Override
     public List<PermissionGroupBo> getPermissionsByUserId(Integer userId) {
-        List<PermissionGroupBo> groupBos = PermissionCache.getAllPermissionGroups();
-        List<PermissionBo> allPermission = flatPermissionGroup(groupBos);
-        Set<RoleBasicBo> myRoles = roleService.getRolesByUserId(userId);
+        List<PermissionGroup> groups = PermissionCache.getAllPermissionGroups();
+        List<PermissionGroupBo> groupBos = PermissionGroupBo.toPermissionGroupBos(groups);
+        List<PermissionBo> allPermission = flatPermissionGroupBo(groupBos);
+        Set<Role> myRoles = roleService.getRolesByUserId(userId);
         if (!CollectionUtils.isEmpty(myRoles)) {
-            Set<PermissionBo> myPermissions = PermissionCache.getPermissions(myRoles.stream().map(role -> role.getId()).collect(Collectors.toList()));
-            for (PermissionBo myPermission : myPermissions) {
+            Set<Permission> myPermissions = PermissionCache.getPermissions(myRoles.stream().map(role -> role.getId()).collect(Collectors.toList()));
+            for (Permission myPermission : myPermissions) {
                 for (PermissionBo permission : allPermission) {
                     if (myPermission.getId().equals(permission.getId())) {
                         permission.setChecked(true);
@@ -104,14 +94,15 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public List<PermissionGroupBo> getPermissionsByRoleId(Integer roleId) {
-        List<PermissionGroupBo> groupBos = PermissionCache.getAllPermissionGroups();
-        List<PermissionBo> allPermission = flatPermissionGroup(groupBos);
-        Set<PermissionBo> myPermissions = PermissionCache.getPermissions(roleId);
+        List<PermissionGroup> groups = PermissionCache.getAllPermissionGroups();
+        List<PermissionGroupBo> groupBos = PermissionGroupBo.toPermissionGroupBos(groups);
+        List<PermissionBo> allPermission = flatPermissionGroupBo(groupBos);
+        Set<Permission> myPermissions = PermissionCache.getPermissions(roleId);
         if (myPermissions == null) {
             throw new BizException("角色不存在");
         }
         if (!CollectionUtils.isEmpty(myPermissions)) {
-            for (PermissionBo myPermission : myPermissions) {
+            for (Permission myPermission : myPermissions) {
                 for (PermissionBo permission : allPermission) {
                     if (myPermission.getId().equals(permission.getId())) {
                         permission.setChecked(true);
@@ -126,7 +117,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public void updateRolePermissions(Integer roleId, Set<Integer> permissionIds) {
         List<PermissionGroupBo> permissionGroupBos = getPermissionsByRoleId(roleId);
-        List<PermissionBo> permissionBos = flatPermissionGroup(permissionGroupBos);
+        List<PermissionBo> permissionBos = flatPermissionGroupBo(permissionGroupBos);
         Set<Integer> existIds = new HashSet<>();
         if (!CollectionUtils.isEmpty(permissionBos)) {
             existIds = permissionBos.stream().filter(permissionBo -> permissionBo.getChecked()).map(permissionBo -> permissionBo.getId()).collect(
@@ -165,15 +156,64 @@ public class PermissionServiceImpl implements PermissionService {
                 rolePermissionList.add(rolePermission);
             }
             rolePermissionRepository.save(rolePermissionList);
-            PermissionCache.pushPermissions(roleId, Sets.newHashSet(PermissionBo.toPermissionBos(permissions)));
+            PermissionCache.pushPermissions(roleId, Sets.newHashSet(permissions));
         }
     }
 
-    private List<PermissionBo> flatPermissionGroup(List<PermissionGroupBo> groups) {
+    @Override
+    public List<Permission> flatPermission(List<Permission> permissions) {
+        List<Permission> allPermission = getAllPermissions();
+        List<Permission> flat = new ArrayList<>();
+        for (Permission permission : permissions) {
+            flat.add(permission);
+            flat.addAll(getChildren(allPermission, permission));
+        }
+        return flat;
+    }
+
+    private List<PermissionBo> flatPermissionGroupBo(List<PermissionGroupBo> groups) {
         List<PermissionBo> permissionBos = new ArrayList<>();
         for (PermissionGroupBo group : groups) {
             permissionBos.addAll(group.getPermissions());
         }
         return permissionBos;
+    }
+
+    private List<Permission> flatPermissionGroup(List<PermissionGroup> groups) {
+        List<Permission> permissions = new ArrayList<>();
+        for (PermissionGroup group : groups) {
+            permissions.addAll(group.getPermissions());
+        }
+        return permissions;
+    }
+
+    private List<Permission> flatAllPermission(List<Permission> permissions) {
+        List<Permission> flat = new ArrayList<>();
+        for (Permission permission : permissions) {
+            flat.add(permission);
+            flat.addAll(getChildren(permissions, permission));
+        }
+        return flat;
+    }
+
+    public List<Permission> getChildren(List<Permission> permissions, Permission permission) {
+        List<Permission> permissionList = new ArrayList<>();
+        for (Permission per : permissions) {
+            if (per.getDependence() != null && per.getDependence().getId().equals(permission.getId())) {
+                permissionList.add(permission);
+                permissionList.addAll(getChildren(permissions, per));
+            }
+        }
+        return permissionList;
+    }
+
+    @Override
+    public List<Permission> getAllPermissions() {
+        List<PermissionGroup> groups = PermissionCache.getAllPermissionGroups();
+        List<Permission> permissions = new ArrayList<>();
+        for (PermissionGroup group : groups) {
+            permissions.addAll(flatAllPermission(group.getPermissions()));
+        }
+        return permissions;
     }
 }

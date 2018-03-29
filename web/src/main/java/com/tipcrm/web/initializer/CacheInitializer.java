@@ -1,20 +1,26 @@
 package com.tipcrm.web.initializer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.tipcrm.bo.PermissionGroupBo;
-import com.tipcrm.bo.RoleBasicBo;
 import com.tipcrm.cache.ConfigurationCache;
 import com.tipcrm.cache.ListBoxCache;
+import com.tipcrm.cache.MenuCache;
 import com.tipcrm.cache.PermissionCache;
 import com.tipcrm.cache.RoleCache;
 import com.tipcrm.dao.entity.Configuration;
 import com.tipcrm.dao.entity.ListBox;
+import com.tipcrm.dao.entity.Menu;
+import com.tipcrm.dao.entity.Permission;
+import com.tipcrm.dao.entity.PermissionGroup;
 import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.repository.ConfigurationRepository;
 import com.tipcrm.dao.repository.ListBoxRepository;
+import com.tipcrm.dao.repository.MenuRepository;
+import com.tipcrm.dao.repository.PermissionGroupRepository;
 import com.tipcrm.dao.repository.RoleRepository;
+import com.tipcrm.service.MenuService;
 import com.tipcrm.service.PermissionService;
 import com.tipcrm.service.RoleService;
 import org.slf4j.Logger;
@@ -39,10 +45,19 @@ public class CacheInitializer implements CommandLineRunner {
     private PermissionService permissionService;
 
     @Autowired
+    private PermissionGroupRepository permissionGroupRepository;
+
+    @Autowired
     private RoleRepository roleRepository;
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private MenuService menuService;
+
+    @Autowired
+    private MenuRepository menuRepository;
 
     private Logger logger = LoggerFactory.getLogger(CacheInitializer.class);
 
@@ -51,6 +66,7 @@ public class CacheInitializer implements CommandLineRunner {
         logger.info("Initializing cache data...");
         initListBoxCache();
         initConfigurationCache();
+        initMenuCache();
         initRoleAndPermissionCache();
     }
 
@@ -72,14 +88,41 @@ public class CacheInitializer implements CommandLineRunner {
         ConfigurationCache.pushConfigurations(configurationMap);
     }
 
+    public void initMenuCache() {
+        logger.info("Initializing menu cache data...");
+        List<Menu> menus = menuRepository.findAll();
+        List<Menu> deactiveMenus = new ArrayList<>();
+        for (Menu menu : menus) {
+            if (!menu.getActive()) {
+                deactiveMenus.add(menu);
+            }
+        }
+        deactiveMenus = menuService.flatMenu(menus, deactiveMenus);
+        MenuCache.setMenus(menus);
+        MenuCache.setDeactiveMenus(deactiveMenus);
+    }
+
     public void initRoleAndPermissionCache() {
         logger.info("Initializing role and permission cache data...");
         List<Role> roles = roleRepository.findAll();
-        List<RoleBasicBo> roleBos = RoleBasicBo.toRoleBasicBos(roles);
-        RoleCache.setAllRole(roleBos);
+        RoleCache.setAllRole(roles);
 
         PermissionCache.setRolePermissions(roleService.getAllRolePermissionMap());
-        List<PermissionGroupBo> groupBos = permissionService.getAllGroup();
-        PermissionCache.setAllPermissionGroups(groupBos);
+        List<PermissionGroup> groups = permissionGroupRepository.findAll();
+        PermissionCache.setAllPermissionGroups(groups);
+
+        List<Menu> menus = MenuCache.getDeactiveMenus();
+        if (CollectionUtils.isEmpty(menus)) {
+            return;
+        }
+        List<Permission> permissions = new ArrayList<>();
+        for (Menu menu : menus) {
+            if (menu.getPermission() != null) {
+                permissions.add(menu.getPermission());
+            }
+        }
+        List<Permission> allPermissions = permissionService.flatPermission(permissions);
+        PermissionCache.setDeactivePermissions(allPermissions);
     }
+
 }

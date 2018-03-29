@@ -8,32 +8,33 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.tipcrm.bo.RoleBasicBo;
+import com.tipcrm.dao.entity.Role;
 import org.springframework.util.CollectionUtils;
 
 public class RoleCache {
 
-    private static List<RoleBasicBo> allRole = new ArrayList<>();
+    private static List<Role> allRole = new ArrayList<>();
 
     /**
      * Map <userId, roles>
      */
-    private static Map<Integer, Set<RoleBasicBo>> userRoles = Maps.newHashMap();
+    private static Map<Integer, Set<Role>> userRoles = Maps.newHashMap();
 
-    public static void addOrUpdateRoles(Integer userId, Set<RoleBasicBo> roles) {
+    public static void addOrUpdateRoles(Integer userId, Set<Role> roles) {
         if (CollectionUtils.isEmpty(userRoles)) {
             userRoles = Maps.newHashMap();
         }
         userRoles.put(userId, roles);
     }
 
-    public static void addOrUpdateRoles(Integer userId, RoleBasicBo role) {
+    public static void addOrUpdateRoles(Integer userId, Role role) {
         addOrUpdateRoles(userId, Sets.newHashSet(role));
     }
 
-    public static void pushRoles(Integer userId, Set<RoleBasicBo> roles) {
+    public static void pushRoles(Integer userId, Set<Role> roles) {
         if (CollectionUtils.isEmpty(userRoles)) {
-            userRoles = Maps.newHashMap();;
+            userRoles = Maps.newHashMap();
+            ;
         }
         if (CollectionUtils.isEmpty(userRoles.get(userId))) {
             addOrUpdateRoles(userId, roles);
@@ -46,11 +47,11 @@ public class RoleCache {
         if (CollectionUtils.isEmpty(userRoles)) {
             return;
         }
-        Set<RoleBasicBo> currentRoles = userRoles.get(userId);
+        Set<Role> currentRoles = userRoles.get(userId);
         if (CollectionUtils.isEmpty(currentRoles)) {
             return;
         }
-        Iterator<RoleBasicBo> it = currentRoles.iterator();
+        Iterator<Role> it = currentRoles.iterator();
         while (it.hasNext()) {
             if (roleIds.contains(it.next().getId())) {
                 it.remove();
@@ -58,26 +59,26 @@ public class RoleCache {
         }
     }
 
-    public static Set<RoleBasicBo> getRoles(Integer userId) {
+    public static Set<Role> getRoles(Integer userId) {
         if (CollectionUtils.isEmpty(userRoles)) {
             return new HashSet<>();
         }
         return userRoles.get(userId);
     }
 
-    public static List<RoleBasicBo> getAllRole() {
+    public static List<Role> getAllRole() {
         return allRole;
     }
 
-    public static void setAllRole(List<RoleBasicBo> allRole) {
+    public static void setAllRole(List<Role> allRole) {
         RoleCache.allRole = allRole;
     }
 
-    public static Map<Integer, Set<RoleBasicBo>> getUserRoles() {
+    public static Map<Integer, Set<Role>> getUserRoles() {
         return userRoles;
     }
 
-    public static void setUserRoles(Map<Integer, Set<RoleBasicBo>> userRoles) {
+    public static void setUserRoles(Map<Integer, Set<Role>> userRoles) {
         RoleCache.userRoles = userRoles;
     }
 }

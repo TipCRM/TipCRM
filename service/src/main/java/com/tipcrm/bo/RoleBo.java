@@ -15,6 +15,36 @@ public class RoleBo extends RoleBasicBo {
 
     private Date updateDate;
 
+    public static List<RoleBo> toRoleBos(List<Role> roles) {
+        List<RoleBo> roleBos = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(roles)) {
+            for (Role role : roles) {
+                RoleBo roleBo = toRoleBo(role);
+                if (roleBo != null) {
+                    roleBos.add(roleBo);
+                }
+            }
+        }
+        return roleBos;
+    }
+
+    public static RoleBo toRoleBo(Role role) {
+        if (role == null) {
+            return null;
+        }
+        RoleBo roleBo = new RoleBo();
+        roleBo.setId(role.getId());
+        roleBo.setName(role.getName());
+        roleBo.setDisplayName(role.getDisplayName());
+        roleBo.setEntryUser(role.getEntryUser().getUserName());
+        roleBo.setEntryDatetime(role.getEntryTime());
+        if (role.getUpdateUser() != null) {
+            roleBo.setUpdateUser(role.getUpdateUser().getUserName());
+            roleBo.setUpdateDate(role.getUpdateTime());
+        }
+        return roleBo;
+    }
+
     public String getEntryUser() {
         return entryUser;
     }
@@ -45,36 +75,6 @@ public class RoleBo extends RoleBasicBo {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
-    }
-
-    public static List<RoleBo> toRoleBos(List<Role> roles) {
-        List<RoleBo> roleBos = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(roles)) {
-            for (Role role : roles) {
-                RoleBo roleBo = toRoleBo(role);
-                if (roleBo != null) {
-                    roleBos.add(roleBo);
-                }
-            }
-        }
-        return roleBos;
-    }
-
-    public static RoleBo toRoleBo(Role role) {
-        if (role == null) {
-            return null;
-        }
-        RoleBo roleBo = new RoleBo();
-        roleBo.setId(role.getId());
-        roleBo.setName(role.getName());
-        roleBo.setDisplayName(role.getDisplayName());
-        roleBo.setEntryUser(role.getEntryUser().getUserName());
-        roleBo.setEntryDatetime(role.getEntryTime());
-        if (role.getUpdateUser() != null) {
-            roleBo.setUpdateUser(role.getUpdateUser().getUserName());
-            roleBo.setUpdateDate(role.getUpdateTime());
-        }
-        return roleBo;
     }
 
 }

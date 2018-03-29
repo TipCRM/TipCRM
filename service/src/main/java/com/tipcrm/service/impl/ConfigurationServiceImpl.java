@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class ConfigurationServiceImpl implements ConfigurationService{
+public class ConfigurationServiceImpl implements ConfigurationService {
 
     @Autowired
     private ConfigurationRepository configurationRepository;

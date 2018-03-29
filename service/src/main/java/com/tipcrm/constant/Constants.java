@@ -67,6 +67,7 @@ public class Constants {
             public static final String NEW_CUSTOMER_APPROVAL = "您的客户操作申请已{0}! \n申请号：{1}\n审批人:{2}\n审批时间:{3}\n审批意见:{4}";
         }
     }
+
     public static class QueryFieldName {
         public static class Customer {
             public static final String CUSTOMER_NAME = "customer_name";
@@ -77,6 +78,7 @@ public class Constants {
             public static final String FOLLOW_USER = "follow_user";
             public static final String FOLLOW_DEPARTMENT = "follow_department";
         }
+
         public static class Notification {
             public static final String SENDER = "sender";
             public static final String TYPE = "type";
@@ -87,10 +89,12 @@ public class Constants {
             public static final String RECEIVER = "receiver";
         }
     }
+
     public static class SortFieldName {
         public static class Customer {
             public static final Map<String, String> fieldMap = Maps.newHashMap();
-            static  {
+
+            static {
                 fieldMap.put(QueryFieldName.Customer.CUSTOMER_NAME, "name");
                 fieldMap.put(QueryFieldName.Customer.STATUS, "status.id");
                 fieldMap.put(QueryFieldName.Customer.FOLLOW_USER, "followUser.userName");
@@ -102,6 +106,7 @@ public class Constants {
 
         public static class Notification {
             public static final Map<String, String> fieldMap = Maps.newHashMap();
+
             static {
                 fieldMap.put(QueryFieldName.Notification.SENDER, "entryUser.userName");
                 fieldMap.put(QueryFieldName.Notification.TYPE, "type.name");

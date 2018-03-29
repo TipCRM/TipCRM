@@ -1,15 +1,13 @@
 package com.tipcrm.service.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Sets;
-import com.tipcrm.bo.PermissionBo;
-import com.tipcrm.bo.RoleBasicBo;
 import com.tipcrm.bo.RoleBo;
 import com.tipcrm.cache.RoleCache;
 import com.tipcrm.dao.entity.Permission;
@@ -35,34 +33,34 @@ public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
 
     @Override
-    public Set<RoleBasicBo> getRolesByUserId(Integer userId) {
-        Set<RoleBasicBo> roles = RoleCache.getRoles(userId);
+    public Set<Role> getRolesByUserId(Integer userId) {
+        Set<Role> roles = RoleCache.getRoles(userId);
         if (CollectionUtils.isEmpty(roles)) {
             User user = userRepository.findOne(userId);
-            roles = Sets.newHashSet(RoleBasicBo.toRoleBasicBos(user.getRoles()));
+            roles = Sets.newHashSet(user.getRoles());
             RoleCache.addOrUpdateRoles(userId, roles);
         }
         return roles;
     }
 
     @Override
-    public Map<Integer, Set<PermissionBo>> getAllRolePermissionMap(){
+    public Map<Integer, Set<Permission>> getAllRolePermissionMap() {
         List<Role> roles = roleRepository.findAll();
-        Map<Integer,Set<PermissionBo>> rolePermissions = new HashMap<>();
+        Map<Integer, Set<Permission>> rolePermissions = new HashMap<>();
         for (Role role : roles) {
-            List<Permission> permissions = new ArrayList<>();
+            Set<Permission> permissions = new HashSet<>();
             List<RolePermission> rolePermissionList = role.getRolePermissions();
             if (!CollectionUtils.isEmpty(rolePermissionList)) {
                 permissions.addAll(rolePermissionList.stream().map(rp -> rp.getPermission()).collect(Collectors.toList()));
             }
-            rolePermissions.put(role.getId(), Sets.newHashSet(PermissionBo.toPermissionBos(permissions)));
+            rolePermissions.put(role.getId(), permissions);
         }
         return rolePermissions;
     }
 
     @Override
     public List<RoleBo> getAllRoles() {
-        List<Role> roles = roleRepository.findAll();
+        List<Role> roles = RoleCache.getAllRole();
         return RoleBo.toRoleBos(roles);
     }
 }

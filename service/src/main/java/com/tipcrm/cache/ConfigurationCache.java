@@ -15,12 +15,14 @@ public class ConfigurationCache {
         }
         configurations.putAll(configurationMap);
     }
+
     public static void pushConfiguration(String key, String value) {
         Map<String, String> configuration = new HashMap<>();
         configuration.put(key, value);
         pushConfigurations(configuration);
     }
-    public static String get(String key){
+
+    public static String get(String key) {
         if (StringUtils.isNotBlank(key)) {
             return configurations.get(key);
         }

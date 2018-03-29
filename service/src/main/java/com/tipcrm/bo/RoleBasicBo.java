@@ -12,6 +12,30 @@ public class RoleBasicBo {
 
     private String displayName;
 
+    public static List<RoleBasicBo> toRoleBasicBos(List<Role> roles) {
+        List<RoleBasicBo> roleBos = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(roles)) {
+            for (Role role : roles) {
+                RoleBasicBo roleBo = toRoleBasicBo(role);
+                if (roleBo != null) {
+                    roleBos.add(roleBo);
+                }
+            }
+        }
+        return roleBos;
+    }
+
+    public static RoleBasicBo toRoleBasicBo(Role role) {
+        if (role == null) {
+            return null;
+        }
+        RoleBasicBo roleBo = new RoleBasicBo();
+        roleBo.setId(role.getId());
+        roleBo.setName(role.getName());
+        roleBo.setDisplayName(role.getDisplayName());
+        return roleBo;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -54,29 +78,5 @@ public class RoleBasicBo {
         } else {
             return false;
         }
-    }
-
-    public static List<RoleBasicBo> toRoleBasicBos(List<Role> roles) {
-        List<RoleBasicBo> roleBos = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(roles)) {
-            for (Role role : roles) {
-                RoleBasicBo roleBo = toRoleBasicBo(role);
-                if (roleBo != null) {
-                    roleBos.add(roleBo);
-                }
-            }
-        }
-        return roleBos;
-    }
-
-    public static RoleBasicBo toRoleBasicBo(Role role) {
-        if (role == null) {
-            return null;
-        }
-        RoleBasicBo roleBo = new RoleBasicBo();
-        roleBo.setId(role.getId());
-        roleBo.setName(role.getName());
-        roleBo.setDisplayName(role.getDisplayName());
-        return roleBo;
     }
 }

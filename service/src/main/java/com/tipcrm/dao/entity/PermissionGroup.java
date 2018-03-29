@@ -2,7 +2,6 @@ package com.tipcrm.dao.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "permission_group")
-public class PermissionGroup extends BaseCreateEntity{
+public class PermissionGroup extends BaseCreateEntity {
     @Id
     @GeneratedValue
     @Column(name = "id")

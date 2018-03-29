@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.tipcrm.bo.MenuBo;
+import com.tipcrm.cache.MenuCache;
 import com.tipcrm.dao.entity.Menu;
 import com.tipcrm.dao.repository.MenuRepository;
 import com.tipcrm.service.MenuService;
@@ -23,10 +24,25 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private PermissionService permissionService;
 
+    public List<Menu> findMenuByPermissionIds(Set<Integer> permissionIds ) {
+        List<Menu> all = MenuCache.getMenus();
+        List<Menu> res = new ArrayList<>();
+        for (Menu menu : all) {
+            if (menu.getPermission() == null || permissionIds.contains(menu.getPermission().getId())) {
+                res.add(menu);
+            }
+        }
+        return all;
+    }
+
+
     @Override
     public List<MenuBo> findMenuByUserId(Integer userId) {
         Set<Integer> permissions = permissionService.getPermissionIdsByUserId(userId);
-        List<Menu> menus = menuRepository.findMenuByPermissionIds(permissions);
+        List<Menu> menus = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(permissions)) {
+            menus = findMenuByPermissionIds(permissions);
+        }
         if (CollectionUtils.isEmpty(menus)) {
             return new ArrayList<>();
         }
@@ -43,9 +59,37 @@ public class MenuServiceImpl implements MenuService {
             if ((currentParentId == null && parentId == null)
                 || (parentId != null && parentId.equals(currentParentId))) {
                 menuBos.add(
-                    new MenuBo(menu.getId(), menu.getName(), menu.getDisplayName(), null, menu.getIcon(), menu.getUrl(), convertToMenuBo(menus, menu.getId()), menu.getActive()));
+                    new MenuBo(menu.getId(), menu.getName(), menu.getDisplayName(), null, menu.getIcon(), menu.getUrl(), convertToMenuBo(menus, menu.getId()),
+                               menu.getActive()));
             }
         }
         return menuBos;
     }
+
+    @Override
+    public List<Menu> flatMenu(List<Menu> all, List<Menu> menus) {
+        List<Menu> menuList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(all) && !CollectionUtils.isEmpty(menus)) {
+            for (Menu menu : menus) {
+                menuList.add(menu);
+                menuList.addAll(findChildren(all, menu));
+            }
+        }
+        return menuList;
+    }
+
+    public List<Menu> findChildren(List<Menu> menus, Menu menu) {
+        List<Menu> menusList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(menus)) {
+            for (Menu m : menus) {
+                if (m.getParent() != null && m.getParent().getId().equals(menu.getId())) {
+                    menusList.add(m);
+                    menusList.addAll(findChildren(menus, m));
+                }
+            }
+        }
+        return menusList;
+    }
+
+
 }
