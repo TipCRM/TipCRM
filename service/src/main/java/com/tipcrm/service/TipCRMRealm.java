@@ -45,7 +45,7 @@ public class TipCRMRealm extends AuthorizingRealm {
         if (!CollectionUtils.isEmpty(roles)) {
             info.setRoles(roles.stream().map(role -> role.getName()).collect(Collectors.toSet()));
         }
-        info.setStringPermissions(permissionService.getPermissionValueListByUserId(userId));
+        info.setStringPermissions(permissionService.getPermissionValuesByUserId(userId));
         return info;
     }
 

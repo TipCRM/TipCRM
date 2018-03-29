@@ -29,6 +29,10 @@ public class Permission extends BaseAllEntity {
     @Column(name = "display_name")
     private String displayName;
 
+    @ManyToOne
+    @JoinColumn(name = "dependence_id", referencedColumnName = "id")
+    private Permission permission;
+
     public Integer getId() {
         return id;
     }
@@ -67,5 +71,13 @@ public class Permission extends BaseAllEntity {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public Permission getPermission() {
+        return permission;
+    }
+
+    public void setPermission(Permission permission) {
+        this.permission = permission;
     }
 }

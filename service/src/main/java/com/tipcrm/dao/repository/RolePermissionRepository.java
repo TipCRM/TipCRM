@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface RolePermissionRepository extends JpaRepository<RolePermission, Integer> {
 
     @Modifying
+    @Transactional
     @Query(value = "DELETE FROM RolePermission rp where rp.role.id = :roleId and rp.permission.id in :permissionIds")
     void deleteByRoleIdAndPermissionId(@Param("roleId") Integer roleId, @Param("permissionIds") Set<Integer> permissionIds);
 }

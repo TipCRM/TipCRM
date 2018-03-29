@@ -25,16 +25,16 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuBo> findMenuByUserId(Integer userId) {
-        Set<String> permissions = permissionService.getPermissionValueListByUserId(userId);
-        List<Menu> menus = menuRepository.findMenuByPermission(permissions);
+        Set<Integer> permissions = permissionService.getPermissionIdsByUserId(userId);
+        List<Menu> menus = menuRepository.findMenuByPermissionIds(permissions);
         if (CollectionUtils.isEmpty(menus)) {
-            return new ArrayList<MenuBo>();
+            return new ArrayList<>();
         }
         return convertToMenuBo(menus, null);
     }
 
     public List<MenuBo> convertToMenuBo(List<Menu> menus, Integer parentId) {
-        List<MenuBo> menuBos = new ArrayList<MenuBo>();
+        List<MenuBo> menuBos = new ArrayList<>();
         for (Menu menu : menus) {
             Integer currentParentId = null;
             if (menu.getParent() != null) {
@@ -42,7 +42,8 @@ public class MenuServiceImpl implements MenuService {
             }
             if ((currentParentId == null && parentId == null)
                 || (parentId != null && parentId.equals(currentParentId))) {
-                menuBos.add(new MenuBo(menu.getId(), menu.getName(), menu.getDisplayName(),null, menu.getIcon(), menu.getUrl(), convertToMenuBo(menus, menu.getId()), menu.getActive()));
+                menuBos.add(
+                    new MenuBo(menu.getId(), menu.getName(), menu.getDisplayName(), null, menu.getIcon(), menu.getUrl(), convertToMenuBo(menus, menu.getId())));
             }
         }
         return menuBos;
