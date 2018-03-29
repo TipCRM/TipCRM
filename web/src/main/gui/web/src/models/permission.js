@@ -1,7 +1,8 @@
 /**
  * Created by mosesc on 03/29/18.
  */
-import {listRolePermissions} from '../services/api';
+import {listRolePermissions, changeRolePermissions} from '../services/api';
+import {message} from 'antd';
 
 export default {
   namespace: 'permission',
@@ -15,6 +16,12 @@ export default {
         type: 'saveRolePermissions',
         payload: response.data,
       });
+    },
+    *changeRolePermissions({payload}, {call}){
+      const response = yield call(changeRolePermissions, payload);
+      if (response.status === 200){
+        message.info("保存更改成功");
+      }
     }
   },
   reducers:{

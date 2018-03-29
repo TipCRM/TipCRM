@@ -7,7 +7,8 @@ const apis = {
   'POST /public/api/notification/my' : 'http://www.potafish.com',
   'GET /public/api/roles' : 'http://www.potafish.com',
   'GET /public/api/permission/role/*': 'http://www.potafish.com',
-  'GET /public/api/menu' : {status: 200, data:[
+  'PUT /public/api/permission/role/*': 'http://www.potafish.com',
+  'GET /public/api/menus' : {status: 200, data:[
     {title:'客户管理',name:'CUSTOMER', active: true, children:[
       {title:'我的所有客户', id: 1, name: 'MY_CUSTOMER', active: true,
         children:[
@@ -33,7 +34,7 @@ const apis = {
     {title:'报表管理', content:"维护中..."},
     {title:'安全退出', content:"维护中..."},
     {title:'安全退出Test'},]},
-  'GET /public/api/menus' :'http://www.potafish.com',
+  'GET /public/api/menu' :'http://www.potafish.com',
 };
 
 export default delay(apis, 1000);

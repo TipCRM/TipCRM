@@ -63,7 +63,7 @@ export default class RoleAndPermissionPanel extends React.Component{
       <Modal visible={showPermissionPanel} title="权限" footer="" width="60%"
              destroyOnClose={true} onCancel={this.handleClosePermissionPanel.bind(this)}
       >
-        <PermissionPanel role={selectRole} canEdit={true} canConfigPermission={true}/>
+        <PermissionPanel role={selectRole} canEdit={false} canConfigPermission={true}/>
       </Modal>
     </div>);
   }

@@ -55,3 +55,10 @@ export async function listRoles(){
 export async function listRolePermissions(params){
   return request('/public/api/permission/role/'+params.id);
 }
+
+export async function changeRolePermissions(params) {
+  return request('/public/api/permission/role/'+params.id,{
+    method: 'PUT',
+    body: params.permissions
+  });
+}

@@ -14,15 +14,17 @@ import DynamicPanel from '../components/Common/DynamicPanel';
  */
 export function menuComponentConstant(children){
   const menu2Component = {
-    CUSTOMER: (<DynamicPanel children={children} childrenPanels= {customerComponentConstant(children.children)}/>),
-    NOTIFICATION: (<DynamicPanel children={children} childrenPanels= {notificationComponentConstant(children.children)}/>),
-    ROLE_PERMISSION: (<DynamicPanel children={children} childrenPanels= {roleAndPermissionComponentConstant(children.children)}/>)};
+    CUSTOMER_MANAGEMENT: (<DynamicPanel children={children} childrenPanels= {customerComponentConstant(children.children)}/>),
+    NOTIFICATION_CENTER: (<DynamicPanel children={children} childrenPanels= {notificationComponentConstant(children.children)}/>),
+    ROLE_AND_PERMISSION: (<DynamicPanel children={children} childrenPanels= {roleAndPermissionComponentConstant(children.children)}/>)};
   return menu2Component;
 }
 
 export function customerComponentConstant(children){
   const customer2Component = {
     MY_CUSTOMER: (<MyCustomerPanel children={children}/>),
+    DEPARTMENT_OPEN_SEA: (<div>全力开发中，敬请期待...</div>),
+    COMPANY_OPEN_SEA: (<div>全力开发中，敬请期待...</div>),
   };
   return customer2Component;
 }
@@ -42,14 +44,16 @@ export function myCustomerComponentConstant(customerId){
 
 export function notificationComponentConstant(children){
   const notification2Component = {
-    CUSTOMER_NOTIFICATION : (<CustomerNotificationPanel children={children} />),
+    SYSTEM_NOTIFICATION : (<CustomerNotificationPanel children={children} />),
+    USER_NOTIFICATION: (<div>全力开发中，敬请期待...</div>),
   };
   return notification2Component;
 }
 
 export function roleAndPermissionComponentConstant(children){
   const roleAndPermissionComponent = {
-    ROLE_PERMISSION : (<RoleAndPermissionPanel children={children}/>),
+    ROLES : (<RoleAndPermissionPanel children={children}/>),
+    MY_ROLE_AND_PERMISSION: (<div>全力开发中，敬请期待...</div>),
   };
   return roleAndPermissionComponent;
 }
