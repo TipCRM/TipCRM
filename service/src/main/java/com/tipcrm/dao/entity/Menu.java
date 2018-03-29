@@ -30,8 +30,9 @@ public class Menu {
     @JoinColumn(name = "parent_id")
     private Menu parent;
 
-    @Column(name = "permission")
-    private String permission;
+    @ManyToOne
+    @JoinColumn(name = "permission_id", referencedColumnName = "id")
+    private Permission permission;
 
     @Column(name = "url")
     private String url;
@@ -79,11 +80,11 @@ public class Menu {
         this.parent = parent;
     }
 
-    public String getPermission() {
+    public Permission getPermission() {
         return permission;
     }
 
-    public void setPermission(String permission) {
+    public void setPermission(Permission permission) {
         this.permission = permission;
     }
 

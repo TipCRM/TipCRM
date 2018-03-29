@@ -3,7 +3,6 @@ package com.tipcrm.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,7 +21,6 @@ import com.tipcrm.dao.repository.PermissionGroupRepository;
 import com.tipcrm.dao.repository.PermissionRepository;
 import com.tipcrm.dao.repository.RolePermissionRepository;
 import com.tipcrm.dao.repository.RoleRepository;
-import com.tipcrm.dao.repository.UserRepository;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.service.PermissionService;
 import com.tipcrm.service.RoleService;
@@ -56,12 +54,24 @@ public class PermissionServiceImpl implements PermissionService {
     private WebContext webContext;
 
     @Override
-    public Set<String> getPermissionValueListByUserId(Integer userId) {
+    public Set<String> getPermissionValuesByUserId(Integer userId) {
         List<PermissionGroupBo> groups = getPermissionsByUserId(userId);
         Set<String> permissions = new HashSet<>();
         if (!CollectionUtils.isEmpty(groups)) {
             for (PermissionGroupBo group : groups) {
                 permissions.addAll(group.getPermissions().stream().filter(p -> p.getChecked()).map(p -> p.getValue()).collect(Collectors.toList()));
+            }
+        }
+        return permissions;
+    }
+
+    @Override
+    public Set<Integer> getPermissionIdsByUserId(Integer userId) {
+        List<PermissionGroupBo> groups = getPermissionsByUserId(userId);
+        Set<Integer> permissions = new HashSet<>();
+        if (!CollectionUtils.isEmpty(groups)) {
+            for (PermissionGroupBo group : groups) {
+                permissions.addAll(group.getPermissions().stream().filter(p -> p.getChecked()).map(p -> p.getId()).collect(Collectors.toList()));
             }
         }
         return permissions;

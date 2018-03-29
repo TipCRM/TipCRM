@@ -6,7 +6,9 @@ import com.tipcrm.bo.PermissionGroupBo;
 
 public interface PermissionService {
 
-    Set<String> getPermissionValueListByUserId(Integer userId);
+    Set<String> getPermissionValuesByUserId(Integer userId);
+
+    Set<Integer> getPermissionIdsByUserId(Integer userId);
 
     List<PermissionGroupBo> getAllGroup();
 

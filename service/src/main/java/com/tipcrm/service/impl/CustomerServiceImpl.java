@@ -304,7 +304,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BizException("客户已删除");
         }
         CustomerApproval approval = createCustomerByApprovalByRemoveMethod(customer);
-        Set<String> permissions = permissionService.getPermissionValueListByUserId(webContext.getCurrentUserId());
+        Set<String> permissions = permissionService.getPermissionValuesByUserId(webContext.getCurrentUserId());
         if (!permissions.contains(Constants.Permission.CUSTOMER_APPROVAL)) {
             //todo : add notification
             return new OptCustomerResultBo(OptCustomerResultType.CUSTOMER_APPROVAL.name(), approval.getId());
@@ -516,7 +516,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
         validateTransferBo(transferBo);
         // todo : refactor and add notification
-        Set<String> permissions = permissionService.getPermissionValueListByUserId(webContext.getCurrentUserId());
+        Set<String> permissions = permissionService.getPermissionValuesByUserId(webContext.getCurrentUserId());
         if (permissions.contains(Constants.Permission.CUSTOMER_APPROVAL)) {
             return new OptCustomerResultBo(OptCustomerResultType.CUSTOMER.name(), transferCustomerByApproval(transferBo));
         } else {
