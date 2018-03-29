@@ -2,22 +2,24 @@
  * Created by mosesc on 03/28/18.
  */
 import React from 'react';
-import {Menu, Button, Dropdown, Icon} from 'antd';
-const MenuItem = Menu.Item;
+import {Select, Button} from 'antd';
+const {Option} = Select;
 
 export default class CustomerTansferCell extends React.Component{
   render(){
-    const menu = (<Menu>
-      <MenuItem key="1">经理</MenuItem>
-      <MenuItem key="2">小李</MenuItem>
-      <MenuItem key="3">叔叔</MenuItem>
-    </Menu>)
-    return(<div>转移选中客户到：
-      <Dropdown overlay={menu}>
-        <Button style={{ marginLeft: 8 }}>
-          请选择 <Icon type="down" />
-        </Button>
-      </Dropdown>
-    </div>);
+    const {options, handleSelectOnChange, handleStartTransfer, enable} = this.props;
+    if (!enable){
+      return(<div></div>);
+    }
+    return enable ? (<div>选择转移用户
+        <Select size="small" onChange={handleSelectOnChange} defaultValue ={options[0].name} >
+          {
+            options.map(item => {
+              return (<Option value={item.name}>{item.title}</Option>);
+            })
+          }
+        </Select>
+        <Button size="small" onClick={handleStartTransfer}>转移</Button>
+      </div>) : (<div></div>);
   }
 }

@@ -1,21 +1,22 @@
 /**
  * Created by mosesc on 03/28/18.
  */
-import CustomerPanel from '../components/Panel/Customer/CustomerPanel';
 import MyCustomerPanel from '../components/Panel/Customer/MyCustomerPanel';
 import CustomerInfoCell from '../components/Panel/Customer/CustomerInfoCell';
 import CustomerContactCell from '../components/Panel/Customer/CustomerContactCell';
-
-import NotificationPanel from '../components/Panel/Notification/NotificationPanel';
 import CustomerNotificationPanel from '../components/Panel/Notification/CustomerNotificationPanel';
+import RoleAndPermissionPanel from '../components/Panel/RoleAndPermission/RoleAndPermissionPanel';
+
+import DynamicPanel from '../components/Common/DynamicPanel';
 /**
  * the menu's component
  * @returns {*[]}
  */
 export function menuComponentConstant(children){
   const menu2Component = {
-    CUSTOMER: (<CustomerPanel children={children}/>),
-    NOTIFICATION: (<NotificationPanel children={children}/>),};
+    CUSTOMER: (<DynamicPanel children={children} childrenPanels= {customerComponentConstant(children.children)}/>),
+    NOTIFICATION: (<DynamicPanel children={children} childrenPanels= {notificationComponentConstant(children.children)}/>),
+    ROLE_PERMISSION: (<DynamicPanel children={children} childrenPanels= {roleAndPermissionComponentConstant(children.children)}/>)};
   return menu2Component;
 }
 
@@ -44,4 +45,11 @@ export function notificationComponentConstant(children){
     CUSTOMER_NOTIFICATION : (<CustomerNotificationPanel children={children} />),
   };
   return notification2Component;
+}
+
+export function roleAndPermissionComponentConstant(children){
+  const roleAndPermissionComponent = {
+    ROLE_PERMISSION : (<RoleAndPermissionPanel children={children}/>),
+  };
+  return roleAndPermissionComponent;
 }

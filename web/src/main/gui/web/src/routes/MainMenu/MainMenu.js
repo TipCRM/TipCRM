@@ -5,7 +5,6 @@ import React from 'react';
 import { connect } from 'dva';
 import CardCell from '../../components/CardCell/CardCell';
 import CommonTab from '../../components/Common/CommonTab';
-import CustomerPanel from '../../components/Panel/Customer/CustomerPanel';
 import CommonSpin from '../../components/Common/CommonSpin';
 import NotificationPanel from '../../components/Panel/Notification/NotificationPanel';
 import styles from './Index.less';

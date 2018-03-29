@@ -120,6 +120,11 @@ export default class MyCustomerPanel extends React.Component{
     });
   }
 
+  handleTableRowSelected(selectedRowKeys, selectedRows){
+    console.log(selectedRowKeys);
+    console.log(selectedRows);
+  }
+
   handleOnlyShowNewCustomerTagChange(checked){
     var {currentPage, pageSize, sorterCondition, filterCondition} = this.state;
     const {dispatch} = this.props;
@@ -193,7 +198,7 @@ export default class MyCustomerPanel extends React.Component{
   }
 
   render(){
-    const columns = [{title:'公司名称',dataIndex:'customerName',key:'customerId',width: '10%',},
+    const columns = [{title:'公司名称',dataIndex:'customerName',width: '10%',},
       {title:'联系人',dataIndex:'contactName',},
       {title:'联系电话',dataIndex:'contactPhone',width: '11%',},
       {title:'最后一次沟通时间',dataIndex:'lastCommunicationTime',width: '14%',},
@@ -213,6 +218,7 @@ export default class MyCustomerPanel extends React.Component{
       {content: "意向客户", checked: onlyIntentCustomerTagChecked, handleTagChange: this.handleOnlyShowIntentCustomerTagChange.bind(this)},
       {content: "新客户", checked: onlyNewCustomerTagChecked, handleTagChange: this.handleOnlyShowNewCustomerTagChange.bind(this)},
       {content: "下一次沟通排序", checked: orderByNextContactTagChecked, handleTagChange: this.handleOrderByNextContactTagChange.bind(this)}];
+    const tableRowSelection = {onChange: this.handleTableRowSelected};
 
     const searchContent =(<CustomerSearchCell onQuickSearch={this.handlerOnSearch.bind(this)} tags={tags}/>);
 
@@ -224,6 +230,10 @@ export default class MyCustomerPanel extends React.Component{
             content: panel.active ? myCustomerComponentConstant(selectCustomer.customerId)[panel.name]:  panel.content };
     }) : children;
 
+    //init transfer select
+    const options = [{name:'A' , title:'公海'}];
+    const enable = true;
+
     return((<div>
         <CustomerDetailPanel visible={this.state.showCustomerDetail}
                              title={this.state.customer.customerName}
@@ -233,11 +243,13 @@ export default class MyCustomerPanel extends React.Component{
           <SearchTable
             tableColumns={columns}
             tableData={data}
+            tableRowKey = "customerId"
             searchContent={searchContent}
-            tableFooter={()=>(<div> <CustomerTansferCell/> <div style={{textAlign:'center'}}>累计成交金额：10,000元  意向金额：1,000元</div></div>)}
+            tableFooter={()=>(<div> <CustomerTansferCell options={options} enable={enable}/> <div style={{textAlign:'center'}}>累计成交金额：10,000元  意向金额：1,000元</div></div>)}
             onTableRow={this.onTableRow.bind(this)}
             tablePagination={tablePagination}
-            onTableChange={this.handlerTableChange.bind(this)}/>
+            onTableChange={this.handlerTableChange.bind(this)}
+            tableRowSelection = {tableRowSelection}/>
         </CommonSpin>
     </div>));
   }

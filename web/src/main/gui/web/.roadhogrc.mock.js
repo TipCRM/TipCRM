@@ -5,6 +5,8 @@ const apis = {
   'GET /public/api/user/me':'http://www.potafish.com',
   'POST /public/api/my/customers' :'http://www.potafish.com',
   'POST /public/api/notification/my' : 'http://www.potafish.com',
+  'GET /public/api/roles' : 'http://www.potafish.com',
+  'GET /public/api/permission/role/*': 'http://www.potafish.com',
   'GET /public/api/menu' : {status: 200, data:[
     {title:'客户管理',name:'CUSTOMER', active: true, children:[
       {title:'我的所有客户', id: 1, name: 'MY_CUSTOMER', active: true,
@@ -23,9 +25,9 @@ const apis = {
     {title:'财务管理', content:"维护中..."},
     {title:'员工管理', content:"维护中..."},
     {title:'产品管理', content:"维护中..."},
-    {title:'角色&权限',content:"维护中...", children:[
-      {title:'角色管理', key: 1},
-      {title:'权限管理', key: 2},
+    {title:'角色&权限',content:"维护中...", active: true, name:'ROLE_PERMISSION', children:[
+      {title:'角色管理',name:'ROLE_PERMISSION', active: true, id: 1},
+      {title:'权限管理', id: 2},
     ]},
     {title:'客户公海', content:"维护中..."},
     {title:'报表管理', content:"维护中..."},

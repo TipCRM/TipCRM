@@ -18,6 +18,8 @@ app.model(require('./models/user').default);
 app.model(require('./models/main').default);
 app.model(require('./models/customer').default);
 app.model(require('./models/notification').default);
+app.model(require('./models/role').default);
+app.model(require('./models/permission').default);
 
 // 4. Router
 app.router(require('./router').default);
