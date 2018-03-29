@@ -1,0 +1,9 @@
+.table{
+  width: 60%;
+  margin: 0 auto;
+}
+
+.permissionPanel{
+  border: 0 solid;
+  border-radius: 2px;
+}

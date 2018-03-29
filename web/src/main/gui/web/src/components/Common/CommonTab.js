@@ -11,7 +11,7 @@ export default class CommonTab extends React.Component{
     return(
       <Tabs type="card">
         {panels.map(item =>(
-          <TabPane tab={item.title} key={item.key}>
+          <TabPane tab={item.title} key={item.id}>
             {item.content}
           </TabPane>))}
       </Tabs>
