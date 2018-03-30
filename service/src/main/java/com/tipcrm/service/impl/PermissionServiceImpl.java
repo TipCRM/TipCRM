@@ -140,9 +140,9 @@ public class PermissionServiceImpl implements PermissionService {
             PermissionCache.popPermissions(roleId, needRemove);
         }
         if (!CollectionUtils.isEmpty(needAdd)) {
-            Role role = roleRepository.findOne(roleId);
+            Role role = roleService.findById(roleId);
 
-            List<Permission> permissions = permissionRepository.findByIdIn(needAdd);
+            List<Permission> permissions = findByIdIn(needAdd);
             User user = webContext.getCurrentUser();
             Date date = new Date();
             List<RolePermission> rolePermissionList = new ArrayList<>();
@@ -158,6 +158,17 @@ public class PermissionServiceImpl implements PermissionService {
             rolePermissionRepository.save(rolePermissionList);
             PermissionCache.pushPermissions(roleId, Sets.newHashSet(permissions));
         }
+    }
+
+    @Override
+    public List<Permission> findByIdIn(Set<Integer> ids) {
+        List<Permission> res = new ArrayList<>();
+        for (Permission p : getAllPermissions()) {
+            if (ids.contains(p.getId())) {
+                res.add(p);
+            }
+        }
+        return res;
     }
 
     @Override

@@ -21,6 +21,9 @@ public class MenuCache {
     }
 
     public static void setDeactiveMenus(List<Menu> deactiveMenus) {
+        for (Menu menu : deactiveMenus) {
+            menu.setActive(false);
+        }
         MenuCache.deactiveMenus = deactiveMenus;
     }
 }

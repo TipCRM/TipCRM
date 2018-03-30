@@ -11,6 +11,8 @@ public interface RoleService {
 
     Set<Role> getRolesByUserId(Integer userId);
 
+    Role findById(Integer roleId);
+
     Map<Integer, Set<Permission>> getAllRolePermissionMap();
 
     List<RoleBo> getAllRoles();

@@ -17,6 +17,8 @@ public interface PermissionService {
 
     void updateRolePermissions(Integer roleId, Set<Integer> permissionIds);
 
+    List<Permission> findByIdIn(Set<Integer> ids);
+
     List<Permission> flatPermission(List<Permission> permissions);
 
     List<Permission> getAllPermissions();

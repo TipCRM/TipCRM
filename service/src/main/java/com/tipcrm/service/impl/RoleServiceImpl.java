@@ -44,6 +44,17 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public Role findById(Integer roleId) {
+        List<Role> roles = RoleCache.getAllRole();
+        for (Role role : roles) {
+            if (role.getId().equals(roleId)){
+                return role;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public Map<Integer, Set<Permission>> getAllRolePermissionMap() {
         List<Role> roles = roleRepository.findAll();
         Map<Integer, Set<Permission>> rolePermissions = new HashMap<>();
