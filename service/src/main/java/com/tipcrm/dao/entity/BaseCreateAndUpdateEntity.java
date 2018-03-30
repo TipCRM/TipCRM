@@ -29,6 +29,6 @@ public class BaseCreateAndUpdateEntity extends BaseCreateEntity {
     }
 
     public void setUpdateTime(Date updateTime) {
-        this.updateTime = (Date) updateTime.clone();
+        this.updateTime = updateTime == null ? null : (Date) updateTime.clone();
     }
 }

@@ -3,11 +3,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tipcrm.dao.entity.Menu;
+import com.tipcrm.dao.entity.MenuPermission;
 
 public class MenuCache {
+    /**
+     * Flat menus
+     */
     private static List<Menu> menus = new ArrayList<>();
     private static List<Menu> deactiveMenus = new ArrayList<>();
-
+    private static List<MenuPermission> menuPermissions = new ArrayList<>();
+    /**
+     * Get Flat menus
+     */
     public static List<Menu> getMenus() {
         return menus;
     }
@@ -25,5 +32,13 @@ public class MenuCache {
             menu.setActive(false);
         }
         MenuCache.deactiveMenus = deactiveMenus;
+    }
+
+    public static List<MenuPermission> getMenuPermissions() {
+        return menuPermissions;
+    }
+
+    public static void setMenuPermissions(List<MenuPermission> menuPermissions) {
+        MenuCache.menuPermissions = menuPermissions;
     }
 }

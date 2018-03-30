@@ -39,8 +39,6 @@ public class Constants {
         public static final String ROLE_ADD = "role:add";
         public static final String ROLE_UPDATE = "role:update";
         public static final String ROLE_DELETE = "role:delete";
-        public static final String ROLE_ASSIGN = "role:assign";
-        public static final String PERMISSION_ASSIGN = "permission:assign";
         public static final String DEPARTMENT_ADD = "department:add";
         public static final String DEPARTMENT_UPDATE = "department:update";
         public static final String DEPARTMENT_DELETE = "department:delete";
@@ -51,6 +49,11 @@ public class Constants {
         public static final String PRODUCTION_ADD = "production:add";
         public static final String PRODUCTION_UPDATE = "production:update";
         public static final String PRODUCTION_DELETE = "production:delete";
+        public static final String SYSTEM_CONFIGURE = "system:configure";
+        public static final String DEPARTMENT_GOAL_VIEW = "department_goal:view";
+        public static final String DEPARTMENT_GOAL_ASSIGN = "department_goal:assign";
+        public static final String USER_GOAL_VIEW = "user_goal:view";
+        public static final String USER_GOAL_ASSIGN = "user_goal:assign";
     }
 
     public static class RequestResult {

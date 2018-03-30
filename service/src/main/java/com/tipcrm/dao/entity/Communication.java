@@ -76,11 +76,11 @@ public class Communication extends BaseCreateAndUpdateEntity {
     }
 
     public Date getCommunicateTime() {
-        return (Date) communicateTime.clone();
+        return communicateTime == null ? null : (Date) communicateTime.clone();
     }
 
     public void setCommunicateTime(Date communicateTime) {
-        this.communicateTime = (Date) communicateTime.clone();
+        this.communicateTime = communicateTime == null ? null : (Date) communicateTime.clone();
     }
 
     public String getNote() {
@@ -92,11 +92,11 @@ public class Communication extends BaseCreateAndUpdateEntity {
     }
 
     public Date getNextCommunicateTime() {
-        return (Date) nextCommunicateTime.clone();
+        return nextCommunicateTime == null ? null : (Date) nextCommunicateTime.clone();
     }
 
     public void setNextCommunicateTime(Date nextCommunicateTime) {
-        this.nextCommunicateTime = (Date) nextCommunicateTime.clone();
+        this.nextCommunicateTime = nextCommunicateTime == null ? null : (Date) nextCommunicateTime.clone();
     }
 
     public Boolean getOnSide() {

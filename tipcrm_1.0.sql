@@ -517,7 +517,7 @@ CREATE TABLE `menu` (
   `active`        TINYINT                      NULL     DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `menuI1` (`name`),
-  KEY `menuI2` (`permission`)
+  KEY `menuI2` (`permission_id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8
@@ -697,6 +697,52 @@ INSERT INTO `permission` VALUES
 /*!40000 ALTER TABLE `permission`
   ENABLE KEYS */;
 UNLOCK TABLES;
+
+CREATE TABLE `TIP_CRM`.`menu_permission` (
+  `id`            INT(11) NOT NULL AUTO_INCREMENT,
+  `menu_id`       INT(11) NOT NULL,
+  `permission_id` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `permission_menuI1` (`menu_id` ASC, `permission_id` ASC)
+);
+
+INSERT INTO `TIP_CRM`.`menu_permission` (`menu_id`, `permission_id`) VALUES
+  (1, 1),
+  (1, 2),
+  (3, 1),
+  (3, 5),
+  (3, 10),
+  (3, 12),
+  (4, 2),
+  (4, 6),
+  (4, 11),
+  (4, 14),
+  (5, 32),
+  (5, 33),
+  (5, 34),
+  (6, 28),
+  (6, 29),
+  (8, 28),
+  (8, 30),
+  (8, 31),
+  (9, 29),
+  (9, 30),
+  (9, 31),
+  (10, 17),
+  (10, 18),
+  (11, 17),
+  (11, 19),
+  (11, 20),
+  (11, 21),
+  (12, 18),
+  (12, 19),
+  (12, 20),
+  (12, 21),
+  (15, 22),
+  (15, 23),
+  (15, 24),
+  (20, 35),
+  (22, 35);
 
 --
 -- Table structure for table `production`

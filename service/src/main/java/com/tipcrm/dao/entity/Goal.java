@@ -50,11 +50,11 @@ public class Goal extends BaseCreateAndUpdateEntity {
     }
 
     public Date getGoalTime() {
-        return (Date) goalTime.clone();
+        return goalTime == null ? null : (Date) goalTime.clone();
     }
 
     public void setGoalTime(Date goalTime) {
-        this.goalTime = (Date) goalTime.clone();
+        this.goalTime = goalTime == null ? null : (Date) goalTime.clone();
     }
 
     public ListBox getEntityType() {
