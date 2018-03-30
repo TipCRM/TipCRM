@@ -19,11 +19,11 @@ public class NotificationBo {
     }
 
     public Date getTime() {
-        return time;
+        return time == null ? null : (Date) time.clone();
     }
 
     public void setTime(Date time) {
-        this.time = time;
+        this.time = time == null ? null : (Date) time.clone();
     }
 
     public String getSender() {
@@ -58,6 +58,3 @@ public class NotificationBo {
         this.subject = subject;
     }
 }
-
-
-//~ Formatted by Jindent --- http://www.jindent.com

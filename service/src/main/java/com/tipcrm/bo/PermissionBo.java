@@ -88,10 +88,10 @@ public class PermissionBo implements Serializable {
         if (this == obj) {
             return true;
         }
-        if ((obj == null) || (obj.getClass() != this.getClass())) {
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
-        if (id == ((PermissionBo) obj).id) {
+        if (id.equals(((PermissionBo) obj).getId())) {
             return true;
         } else {
             return false;

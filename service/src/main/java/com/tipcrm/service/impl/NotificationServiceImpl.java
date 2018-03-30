@@ -168,9 +168,6 @@ public class NotificationServiceImpl implements NotificationService {
             QueryCriteriaBo queryCriteriaBo = it.next();
             if (Constants.QueryFieldName.Notification.TYPE.equals(queryCriteriaBo.getFieldName())) {
                 notificationType = NotificationType.valueOf((String) queryCriteriaBo.getValue());
-                if (notificationType == null) {
-                    throw new BizException("查询条件有误，请检查" + queryCriteriaBo.getValue() + "的拼写");
-                }
                 it.remove();
                 break;
             }
@@ -196,9 +193,6 @@ public class NotificationServiceImpl implements NotificationService {
         }
         Integer systemId = userService.findSystemUser().getId();
         if (NotificationType.SYSTEM_NOTIFICATION.equals(notificationType)) {
-            if (queryCriteriaBo == null) {
-                queryCriteriaBo = new QueryCriteriaBo();
-            }
             queryCriteriaBo.setFieldName(Constants.QueryFieldName.Notification.SENDER);
             queryCriteriaBo.setValue(Lists.newArrayList(systemId));
         } else {
@@ -305,6 +299,8 @@ public class NotificationServiceImpl implements NotificationService {
                             if (!CollectionUtils.isEmpty(toUsers)) {
                                 predicates.add(path.in(toUsers.toArray()));
                             }
+                            break;
+                        default:
                             break;
                     }
                 }

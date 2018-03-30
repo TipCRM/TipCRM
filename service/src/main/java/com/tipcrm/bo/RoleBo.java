@@ -54,11 +54,11 @@ public class RoleBo extends RoleBasicBo {
     }
 
     public Date getEntryDatetime() {
-        return entryDatetime;
+        return entryDatetime == null ? null : (Date) entryDatetime.clone();
     }
 
     public void setEntryDatetime(Date entryDatetime) {
-        this.entryDatetime = entryDatetime;
+        this.entryDatetime = entryDatetime == null ? null : (Date) entryDatetime.clone();
     }
 
     public String getUpdateUser() {
@@ -70,11 +70,20 @@ public class RoleBo extends RoleBasicBo {
     }
 
     public Date getUpdateDate() {
-        return updateDate;
+        return updateDate == null ? null : (Date) updateDate.clone();
     }
 
     public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
+        this.updateDate = updateDate == null ? null : (Date) updateDate.clone();
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 }

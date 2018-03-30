@@ -70,10 +70,10 @@ public class RoleBasicBo {
         if (this == obj) {
             return true;
         }
-        if ((obj == null) || (obj.getClass() != this.getClass())) {
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
-        if (id == ((RoleBasicBo) obj).id) {
+        if (id.equals(((RoleBasicBo) obj).getId())) {
             return true;
         } else {
             return false;

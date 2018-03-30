@@ -16,9 +16,7 @@ import com.tipcrm.dao.entity.PermissionGroup;
 import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.entity.RolePermission;
 import com.tipcrm.dao.entity.User;
-import com.tipcrm.dao.repository.PermissionRepository;
 import com.tipcrm.dao.repository.RolePermissionRepository;
-import com.tipcrm.dao.repository.RoleRepository;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.service.PermissionService;
 import com.tipcrm.service.RoleService;
@@ -37,13 +35,7 @@ public class PermissionServiceImpl implements PermissionService {
     private RoleService roleService;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
     private RolePermissionRepository rolePermissionRepository;
-
-    @Autowired
-    private PermissionRepository permissionRepository;
 
     @Autowired
     private WebContext webContext;

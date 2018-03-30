@@ -47,7 +47,7 @@ public class RoleServiceImpl implements RoleService {
     public Role findById(Integer roleId) {
         List<Role> roles = RoleCache.getAllRole();
         for (Role role : roles) {
-            if (role.getId().equals(roleId)){
+            if (role.getId().equals(roleId)) {
                 return role;
             }
         }

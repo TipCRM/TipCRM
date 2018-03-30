@@ -25,10 +25,10 @@ public class BaseAllEntity extends BaseCreateAndUpdateEntity {
     }
 
     public Date getDeleteTime() {
-        return deleteTime;
+        return this.deleteTime == null ? null : (Date) deleteTime.clone();
     }
 
     public void setDeleteTime(Date deleteTime) {
-        this.deleteTime = deleteTime;
+        this.deleteTime = deleteTime == null ? null : (Date) deleteTime.clone();
     }
 }

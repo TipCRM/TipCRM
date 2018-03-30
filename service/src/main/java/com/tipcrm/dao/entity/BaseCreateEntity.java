@@ -25,10 +25,10 @@ public class BaseCreateEntity {
     }
 
     public Date getEntryTime() {
-        return entryTime;
+        return this.entryTime == null ? null : (Date) entryTime.clone();
     }
 
     public void setEntryTime(Date entryTime) {
-        this.entryTime = entryTime;
+        this.entryTime = entryTime == null ? null : (Date) entryTime.clone();
     }
 }

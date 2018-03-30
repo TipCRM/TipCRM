@@ -34,7 +34,6 @@ public class RoleCache {
     public static void pushRoles(Integer userId, Set<Role> roles) {
         if (CollectionUtils.isEmpty(userRoles)) {
             userRoles = Maps.newHashMap();
-            ;
         }
         if (CollectionUtils.isEmpty(userRoles.get(userId))) {
             addOrUpdateRoles(userId, roles);

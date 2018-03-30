@@ -10,8 +10,6 @@ import com.tipcrm.web.util.ResponseHelper;
 import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +23,6 @@ public class AccountApi {
 
     @Autowired
     private UserService userService;
-
-    private Logger logger = LoggerFactory.getLogger(AccountApi.class);
 
     @RequestMapping(value = "/login", method = {RequestMethod.POST})
     public JsonEntity<String> login(@RequestBody LoginBo loginBo) {
