@@ -11,4 +11,6 @@ public interface MenuService {
     List<MenuBo> findMenuByUserId(Integer userId);
 
     List<Menu> flatMenu(List<Menu> all, List<Menu> menus);
+
+    void deactiveMenu(List<Integer> ids);
 }

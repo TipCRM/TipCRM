@@ -1,13 +1,12 @@
 package com.tipcrm.service.impl;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import com.tipcrm.bo.MenuBo;
 import com.tipcrm.cache.MenuCache;
 import com.tipcrm.dao.entity.Menu;
-import com.tipcrm.dao.entity.MenuPermission;
+import com.tipcrm.dao.repository.MenuRepository;
 import com.tipcrm.service.MenuService;
 import com.tipcrm.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,9 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     private PermissionService permissionService;
+
+    @Autowired
+    private MenuRepository menuRepository;
 
     public List<Menu> findMenuByPermissionIds(Set<Integer> permissionIds) {
         List<Menu> all = MenuCache.getMenus();
@@ -80,6 +82,34 @@ public class MenuServiceImpl implements MenuService {
             }
         }
         return menuList;
+    }
+
+    @Override
+    public void deactiveMenu(List<Integer> ids) {
+        List<Menu> menus = MenuCache.getMenus();
+        List<Menu> deactiveMenus = new ArrayList<>();
+        for (Menu menu : menus) {
+            if (ids.contains(menu.getId())) {
+                deactiveMenus.addAll(deactiveOrActiveMenu(menus, menu, false));
+            } else {
+                deactiveOrActiveMenu(menus, menu, true);
+            }
+        }
+        MenuCache.setMenus(menus);
+        MenuCache.setDeactiveMenus(deactiveMenus);
+        menuRepository.save(menus);
+    }
+
+    private List<Menu> deactiveOrActiveMenu(List<Menu> menus, Menu parentMenu, Boolean active) {
+        List<Menu> res = new ArrayList<>();
+        parentMenu.setActive(active);
+        res.add(parentMenu);
+        for (Menu menu :menus) {
+            if (menu.getParent() != null && menu.getParent().getId().equals(parentMenu.getId())) {
+                res.addAll(deactiveOrActiveMenu(menus, menu, active));
+            }
+        }
+        return res;
     }
 
     public List<Menu> findChildren(List<Menu> menus, Menu menu) {
