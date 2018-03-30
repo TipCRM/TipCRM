@@ -36,11 +36,10 @@ export default class RoleAndPermissionPanel extends React.Component{
   handlePermissionEdit(record){
     this.props.dispatch({
       type:'role/saveSelectRole',
-      payload: record,
+      payload: {selectRole: record, createNew: record.id ? false: true,}
     });
     this.setState({
       showPermissionPanel: true,
-      createNew: record.id ? false: true,
     });
   }
 
@@ -51,7 +50,6 @@ export default class RoleAndPermissionPanel extends React.Component{
     this.setState({
       showPermissionPanel: false,
       selectRole: {},
-      createNew: true,
     });
   }
 
@@ -61,19 +59,18 @@ export default class RoleAndPermissionPanel extends React.Component{
       onDoubleClick:() =>{
         this.props.dispatch({
           type:'role/saveSelectRole',
-          payload: record,
+          payload: {selectRole: record, createNew: record.id ? false: true,}
         });
         this.setState({
           showPermissionPanel: true,
-          createNew: false,
         });
       }
     };
   }
 
   render(){
-    const {loading, roles, menuPermissions, loadingPermission, selectRole} = this.props;
-    const {showPermissionPanel, createNew} = this.state;
+    const {loading, roles, menuPermissions, loadingPermission, createNew} = this.props;
+    const {showPermissionPanel} = this.state;
     //init permissions
     const {permissions} = menuPermissions;
     const enableEdit = permissions.filter(item => item === getPermission('ROLE_EDIT')).length > 0;
@@ -103,7 +100,7 @@ export default class RoleAndPermissionPanel extends React.Component{
           enableAdd ? <Button
             style={{marginLeft: '20%', marginBottom: '8px'}}
             size="small" type="primary"
-            onClick={this.handlePermissionEdit.bind(this)}>添加角色</Button> : <div></div>
+            onClick={this.handlePermissionEdit.bind(this, {})}>添加角色</Button> : <div></div>
         }
       </CommonSpin>
       <CommonSpin spinning={loading}>

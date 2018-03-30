@@ -13,11 +13,13 @@ import TipEditableCell from '../../Common/TipEditableCell';
   loading: loading.models.permission,
   roleLoading: loading.models.role,
   permissions: permission.permissions,
-  selectRole: role.selectRole
+  selectRole: role.selectRole,
+  createNew: role.createNew,
 }))
 export default class PermissionPanel extends React.Component{
   state={
     editingRole: this.props.createNew,
+    editingPermission: false,
   };
   componentDidMount(){
     const {dispatch, selectRole} = this.props;
@@ -54,50 +56,70 @@ export default class PermissionPanel extends React.Component{
   }
 
   handleSaveChange(role, permissions){
-    const {dispatch} = this.props;
-    var permissionsArray = [];
-    if (permissions){
-      permissions.map(item => {
-        item.permissions.map(permission =>{
-          if (permission.checked){
-            permissionsArray.push(permission.id)
-          }
+    const {editingPermission} = this.state;
+    if (editingPermission){
+      const {dispatch} = this.props;
+      var permissionsArray = [];
+      if (permissions){
+        permissions.map(item => {
+          item.permissions.map(permission =>{
+            if (permission.checked){
+              permissionsArray.push(permission.id)
+            }
+          })
         })
-      })
+      }
+      dispatch({
+        type:'permission/changeRolePermissions',
+        payload: {id: role.id, permissions: permissionsArray},
+      });
+      this.setState({
+        editingPermission: false,
+      });
+    } else {
+      this.setState({
+        editingPermission: true,
+      });
     }
-    dispatch({
-      type:'permission/changeRolePermissions',
-      payload: {id: role.id, permissions: permissionsArray},
-    });
   }
 
   handleSaveRoleChange(createNew, selectRole, e){
-    console.log(e.target.value)
-    const {dispatch} = this.props;
-    if (createNew){
-      dispatch({
-        type: 'role/createNewRole',
-        payload: {name: e.target.value}
+    if (!this.state.editingRole){
+      this.setState({
+        editingRole: true,
       });
     } else {
-      dispatch({
-        type: 'role/changeRole',
-        payload: {id: selectRole.id, name: e.target.value, permissions:[]}
+      const {dispatch} = this.props;
+      if (createNew){
+        dispatch({
+          type: 'role/createNewRole',
+          payload: {name: e.target.value}
+        });
+      } else {
+        dispatch({
+          type: 'role/changeRole',
+          payload: {selectRole: selectRole, newName: e.target.value}
+        });
+      }
+      this.setState({
+        editingRole: false,
       });
     }
   }
 
   render(){
     const {selectRole, enableEdit, loading, permissions, createNew, roleLoading} = this.props;
-    var {editingRole} = this.state;
+    var {editingRole, editingPermission} = this.state;
 
     return(<CommonSpin spinning={loading}>
       <div className={styles.permissionPanel}>
         <CommonSpin spinning={roleLoading}>
           <Row><TipEditableCell
+            handleEditSaveClick = {this.handleSaveRoleChange.bind(this, createNew, selectRole)}
             addonBefore="角色名称"
             value={selectRole.displayName}
             enableEdit={enableEdit}
+            createNew = {createNew}
             editing={editingRole}
             handleChangeValueSave={this.handleSaveRoleChange.bind(this, createNew, selectRole)}
             style={{with:'25px'}}/></Row>
@@ -108,7 +130,7 @@ export default class PermissionPanel extends React.Component{
               {enableEdit ? <Button
                 shape="circle"
                 style={{float: 'right'}}
-                size="small" icon="setting"
+                size="small" icon={editingPermission ? 'save' : 'edit'}
                 onClick={this.handleSaveChange.bind(this, selectRole, permissions, createNew)}/> : <div></div>}
             </Row>
             <div style={{border:'1px solid', borderRadius:'2px', lineHeight:'15px'}}>
@@ -117,7 +139,7 @@ export default class PermissionPanel extends React.Component{
                 {
                   const newPermissions = item.permissions ? item.permissions.map(permission =>
                   {
-                    return {...permission, handleTagChange: enableEdit ? this.handlePermissionChecked.bind(this, item, permission, permissions) : null};
+                    return {...permission, handleTagChange: (enableEdit && editingPermission) ? this.handlePermissionChecked.bind(this, item, permission, permissions) : null};
                   }): [];
                   const newItem = {...item, permissions: newPermissions};
                   return  <PermissionCell permission={newItem}/>;

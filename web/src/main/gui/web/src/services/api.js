@@ -74,6 +74,13 @@ export async function createNewRole(params){
   });
 }
 
+export async function updateRow(params) {
+  return request('/public/api/role',{
+    method: 'PUT',
+    body: params,
+  });
+}
+
 // cache
 export async function flushRoleCache(){
   return request('/public/api/cache/refresh/roleAndPermission', {
