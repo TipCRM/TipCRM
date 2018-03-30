@@ -5,7 +5,6 @@ import java.util.List;
 public class SaveRoleBo {
     private Integer id;
     private String name;
-    private List<Integer> permissions = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -23,11 +22,4 @@ public class SaveRoleBo {
         this.name = name;
     }
 
-    public List<Integer> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(List<Integer> permissions) {
-        this.permissions = permissions;
-    }
 }
