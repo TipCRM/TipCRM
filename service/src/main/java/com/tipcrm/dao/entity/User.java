@@ -120,11 +120,11 @@ public class User {
     }
 
     public Date getBirthday() {
-        return (Date) birthday.clone();
+        return birthday == null ? null : (Date) birthday.clone();
     }
 
     public void setBirthday(Date birthday) {
-        this.birthday = (Date) birthday.clone();
+        this.birthday = birthday == null ? null : (Date) birthday.clone();
     }
 
     public String getPhoneNo() {
@@ -168,11 +168,11 @@ public class User {
     }
 
     public Date getHireTime() {
-        return (Date) hireTime.clone();
+        return hireTime == null ? null : (Date) hireTime.clone();
     }
 
     public void setHireTime(Date hireTime) {
-        this.hireTime = (Date) hireTime.clone();
+        this.hireTime = hireTime == null ? null : (Date) hireTime.clone();
     }
 
     public Department getDepartment() {
@@ -200,11 +200,11 @@ public class User {
     }
 
     public Date getDismissTime() {
-        return (Date) dismissTime.clone();
+        return dismissTime == null ? null : (Date) dismissTime.clone();
     }
 
     public void setDismissTime(Date dismissTime) {
-        this.dismissTime = (Date) dismissTime.clone();
+        this.dismissTime = dismissTime == null ? null : (Date) dismissTime.clone();
     }
 
     public String getDismissReason() {
@@ -224,11 +224,11 @@ public class User {
     }
 
     public Date getUpdateTime() {
-        return (Date) updateTime.clone();
+        return updateTime == null ? null : (Date) updateTime.clone();
     }
 
     public void setUpdateTime(Date updateTime) {
-        this.updateTime = (Date) updateTime.clone();
+        this.updateTime = updateTime == null ? null : (Date) updateTime.clone();
     }
 
     public List<Role> getRoles() {

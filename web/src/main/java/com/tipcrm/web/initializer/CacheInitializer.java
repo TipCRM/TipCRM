@@ -12,11 +12,13 @@ import com.tipcrm.cache.RoleCache;
 import com.tipcrm.dao.entity.Configuration;
 import com.tipcrm.dao.entity.ListBox;
 import com.tipcrm.dao.entity.Menu;
+import com.tipcrm.dao.entity.MenuPermission;
 import com.tipcrm.dao.entity.Permission;
 import com.tipcrm.dao.entity.PermissionGroup;
 import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.repository.ConfigurationRepository;
 import com.tipcrm.dao.repository.ListBoxRepository;
+import com.tipcrm.dao.repository.MenuPermissionRepository;
 import com.tipcrm.dao.repository.MenuRepository;
 import com.tipcrm.dao.repository.PermissionGroupRepository;
 import com.tipcrm.dao.repository.RoleRepository;
@@ -59,6 +61,9 @@ public class CacheInitializer implements CommandLineRunner {
     @Autowired
     private MenuRepository menuRepository;
 
+    @Autowired
+    private MenuPermissionRepository menuPermissionRepository;
+
     private Logger logger = LoggerFactory.getLogger(CacheInitializer.class);
 
     @Override
@@ -100,6 +105,8 @@ public class CacheInitializer implements CommandLineRunner {
         deactiveMenus = menuService.flatMenu(menus, deactiveMenus);
         MenuCache.setMenus(menus);
         MenuCache.setDeactiveMenus(deactiveMenus);
+        List<MenuPermission> menuPermissions = menuPermissionRepository.findAll();
+        MenuCache.setMenuPermissions(menuPermissions);
     }
 
     public void initRoleAndPermissionCache() {

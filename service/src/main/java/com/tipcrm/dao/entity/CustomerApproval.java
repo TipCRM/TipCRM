@@ -148,10 +148,10 @@ public class CustomerApproval extends BaseCreateEntity {
     }
 
     public Date getFinalApprovalTime() {
-        return (Date) finalApprovalTime.clone();
+        return finalApprovalTime == null ? null : (Date) finalApprovalTime.clone();
     }
 
     public void setFinalApprovalTime(Date finalApprovalTime) {
-        this.finalApprovalTime = (Date) finalApprovalTime.clone();
+        this.finalApprovalTime = finalApprovalTime == null ? null : (Date) finalApprovalTime.clone();
     }
 }

@@ -1,11 +1,13 @@
 package com.tipcrm.service.impl;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import com.tipcrm.bo.MenuBo;
 import com.tipcrm.cache.MenuCache;
 import com.tipcrm.dao.entity.Menu;
+import com.tipcrm.dao.entity.MenuPermission;
 import com.tipcrm.service.MenuService;
 import com.tipcrm.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,12 @@ public class MenuServiceImpl implements MenuService {
         return res;
     }
 
+
+    @Override
+    public List<MenuBo> getAllMenus() {
+        List<Menu> menus = MenuCache.getMenus();
+        return convertToMenuBo(menus, null);
+    }
 
     @Override
     public List<MenuBo> findMenuByUserId(Integer userId) {
