@@ -17,7 +17,7 @@ export async function fetchCurrentUser(){
 }
 
 export async function fakeGetMenu(){
-  return request('/public/api/menu');
+  return request('/public/api/menu/me');
 }
 
 export async function queryMyCustomers(params) {
@@ -61,4 +61,8 @@ export async function changeRolePermissions(params) {
     method: 'PUT',
     body: params.permissions
   });
+}
+
+export async function getPermissionsByMenu(params){
+  return request('/public/api/permission/'+ params.menuName);
 }

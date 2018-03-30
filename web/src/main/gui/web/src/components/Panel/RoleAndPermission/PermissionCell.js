@@ -7,10 +7,15 @@ import TipCheckableTag from '../../Common/TipCheckableTag';
 export default class PermissionCell extends React.Component{
   render(){
     const {permission} = this.props;
-    return(<div style={{border:'1px solid', borderRadius:'2px'}}>
+    return(<div>
       {permission.name}:
       {
-        permission.permissions? permission.permissions.map(item =>(<TipCheckableTag tagChecked={item.checked} handleTagChange={item.handleTagChange}>{item.displayName}</TipCheckableTag>)):[]
+        permission.permissions? permission.permissions.map(item =>(
+          <TipCheckableTag
+            tagChecked={item.checked}
+            handleTagChange={item.handleTagChange}>
+            {item.displayName}
+          </TipCheckableTag>)):[]
       }
     </div>);
   }
