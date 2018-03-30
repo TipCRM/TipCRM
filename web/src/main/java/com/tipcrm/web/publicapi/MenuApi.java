@@ -44,6 +44,7 @@ public class MenuApi {
     @RequestMapping(value = "menu", method = RequestMethod.DELETE)
     @RequiresPermissions(Constants.Permission.SYSTEM_CONFIGURE)
     public JsonEntity<String> dactiveMenu(@RequestBody List<Integer> ids) {
+        menuService.deactiveMenu(ids);
         return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
     }
 }

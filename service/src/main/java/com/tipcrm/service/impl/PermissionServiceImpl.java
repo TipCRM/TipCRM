@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Sets;
 import com.tipcrm.bo.PermissionBo;
 import com.tipcrm.bo.PermissionGroupBo;
+import com.tipcrm.cache.MenuCache;
 import com.tipcrm.cache.PermissionCache;
+import com.tipcrm.dao.entity.Menu;
 import com.tipcrm.dao.entity.Permission;
 import com.tipcrm.dao.entity.PermissionGroup;
 import com.tipcrm.dao.entity.Role;
@@ -47,6 +49,17 @@ public class PermissionServiceImpl implements PermissionService {
         if (!CollectionUtils.isEmpty(groups)) {
             for (PermissionGroupBo group : groups) {
                 permissions.addAll(group.getPermissions().stream().filter(p -> p.getChecked()).map(p -> p.getValue()).collect(Collectors.toList()));
+            }
+        }
+        List<Menu> deactive = MenuCache.getDeactiveMenus();
+        if (!CollectionUtils.isEmpty(deactive)) {
+            for (Menu menu : deactive) {
+                if (menu.getPermission() != null) {
+                    List<Permission> deactivePermission = flatPermission(menu.getPermission());
+                    if (!CollectionUtils.isEmpty(deactivePermission)) {
+                        permissions.removeAll(deactivePermission.stream().map(Permission::getValue).collect(Collectors.toList()));
+                    }
+                }
             }
         }
         return permissions;
@@ -171,6 +184,14 @@ public class PermissionServiceImpl implements PermissionService {
             flat.add(permission);
             flat.addAll(getChildren(allPermission, permission));
         }
+        return flat;
+    }
+
+    public List<Permission> flatPermission(Permission permission) {
+        List<Permission> allPermission = getAllPermissions();
+        List<Permission> flat = new ArrayList<>();
+        flat.add(permission);
+        flat.addAll(getChildren(allPermission, permission));
         return flat;
     }
 
