@@ -20,6 +20,27 @@ public class RoleCache {
      */
     private static Map<Integer, Set<Role>> userRoles = Maps.newHashMap();
 
+    public static void addRole(Role role) {
+        if (role != null) {
+            allRole.add(role);
+        }
+    }
+
+    public static void updateRole(Role role) {
+        if (role != null) {
+            Integer index = -1;
+            for (int i = 0; i < allRole.size(); i ++) {
+                if (allRole.get(i).getId().equals(role.getId())) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index >= 0) {
+                allRole.set(index, role);
+            }
+        }
+    }
+
     public static void addOrUpdateRoles(Integer userId, Set<Role> roles) {
         if (CollectionUtils.isEmpty(userRoles)) {
             userRoles = Maps.newHashMap();
@@ -79,5 +100,25 @@ public class RoleCache {
 
     public static void setUserRoles(Map<Integer, Set<Role>> userRoles) {
         RoleCache.userRoles = userRoles;
+    }
+
+    public static Role getRoleByName(String name) {
+        List<Role> roles = RoleCache.getAllRole();
+        for (Role role : roles) {
+            if (role.getName().equals(name)) {
+                return role;
+            }
+        }
+        return null;
+    }
+
+    public static Role getRoleById(Integer id) {
+        List<Role> roles = RoleCache.getAllRole();
+        for (Role role : roles) {
+            if (role.getId().equals(id)) {
+                return role;
+            }
+        }
+        return null;
     }
 }

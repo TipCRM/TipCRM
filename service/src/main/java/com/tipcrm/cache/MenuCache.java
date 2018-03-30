@@ -41,4 +41,14 @@ public class MenuCache {
     public static void setMenuPermissions(List<MenuPermission> menuPermissions) {
         MenuCache.menuPermissions = menuPermissions;
     }
+
+    public static List<MenuPermission> getMenuPermissions(Integer menuId) {
+        List<MenuPermission> res = new ArrayList<>();
+        for (MenuPermission menuPermission : menuPermissions) {
+            if (menuPermission.getMenu().getId().equals(menuId)) {
+                res.add(menuPermission);
+            }
+        }
+        return res;
+    }
 }

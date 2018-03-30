@@ -104,7 +104,7 @@ public class MenuServiceImpl implements MenuService {
         List<Menu> res = new ArrayList<>();
         parentMenu.setActive(active);
         res.add(parentMenu);
-        for (Menu menu :menus) {
+        for (Menu menu : menus) {
             if (menu.getParent() != null && menu.getParent().getId().equals(parentMenu.getId())) {
                 res.addAll(deactiveOrActiveMenu(menus, menu, active));
             }

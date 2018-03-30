@@ -242,4 +242,22 @@ public class PermissionServiceImpl implements PermissionService {
         }
         return permissions;
     }
+
+    @Override
+    public List<String> getMyPermission(Integer menuId) {
+        List<String> menuPermissions = MenuCache.getMenuPermissions(menuId).stream().map(menuPermission -> menuPermission.getPermission().getValue())
+                                                .collect(Collectors.toList());
+        Set<String> myPermission = getPermissionValuesByUserId(webContext.getCurrentUserId());
+
+        menuPermissions.retainAll(myPermission);
+        return menuPermissions;
+    }
+
+    @Override
+    public List<Permission> getPermissionById(List<Integer> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return new ArrayList<>();
+        }
+        return getAllPermissions().stream().filter(permission -> ids.contains(permission.getId())).collect(Collectors.toList());
+    }
 }

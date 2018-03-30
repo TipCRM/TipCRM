@@ -49,4 +49,9 @@ public class PermissionApi {
         return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
     }
 
+    @RequestMapping(value = "permission/menu/{menuId}", method = RequestMethod.GET)
+    public JsonEntity<List<String>> getMyPermissionByMenuId(@PathVariable Integer menuId) {
+        return ResponseHelper.createInstance(permissionService.getMyPermission(menuId));
+    }
+
 }

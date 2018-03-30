@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.tipcrm.bo.RoleBo;
+import com.tipcrm.bo.SaveRoleBo;
 import com.tipcrm.dao.entity.Permission;
 import com.tipcrm.dao.entity.Role;
 
@@ -16,4 +17,8 @@ public interface RoleService {
     Map<Integer, Set<Permission>> getAllRolePermissionMap();
 
     List<RoleBo> getAllRoles();
+
+    Integer saveRole(SaveRoleBo saveRoleBo);
+
+    void updateRole(SaveRoleBo saveRoleBo);
 }
