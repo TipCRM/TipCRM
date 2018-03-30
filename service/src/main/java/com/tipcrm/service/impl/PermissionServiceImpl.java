@@ -201,8 +201,10 @@ public class PermissionServiceImpl implements PermissionService {
     private List<Permission> flatAllPermission(List<Permission> permissions) {
         List<Permission> flat = new ArrayList<>();
         for (Permission permission : permissions) {
-            flat.add(permission);
-            flat.addAll(getChildren(permissions, permission));
+            if (permission.getDependence() == null) {
+                flat.add(permission);
+                flat.addAll(getChildren(permissions, permission));
+            }
         }
         return flat;
     }
@@ -211,7 +213,7 @@ public class PermissionServiceImpl implements PermissionService {
         List<Permission> permissionList = new ArrayList<>();
         for (Permission per : permissions) {
             if (per.getDependence() != null && per.getDependence().getId().equals(permission.getId())) {
-                permissionList.add(permission);
+                permissionList.add(per);
                 permissionList.addAll(getChildren(permissions, per));
             }
         }
