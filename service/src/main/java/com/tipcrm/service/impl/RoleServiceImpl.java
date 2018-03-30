@@ -100,26 +100,9 @@ public class RoleServiceImpl implements RoleService {
         role.setEntryTime(date);
         role.setEntryUser(user);
         role.setEditable(true);
-        List<Permission> permissions = null;
-        if (!CollectionUtils.isEmpty(saveRoleBo.getPermissions())) {
-            List<RolePermission> rolePermissions = new ArrayList<>();
-            permissions = permissionService.getPermissionById(saveRoleBo.getPermissions());
-            for (Permission permission : permissions) {
-                RolePermission rolePermission = new RolePermission();
-                rolePermission.setRole(role);
-                rolePermission.setPermission(permission);
-                rolePermission.setDeletable(true);
-                rolePermission.setEntryUser(user);
-                rolePermission.setEntryTime(date);
-                rolePermissions.add(rolePermission);
-            }
-            role.setRolePermissions(rolePermissions);
-        }
         roleRepository.save(role);
         RoleCache.addRole(role);
-        if (!CollectionUtils.isEmpty(permissions)) {
-            PermissionCache.pushPermissions(role.getId(), Sets.newHashSet(permissions));
-        }
+        PermissionCache.addOrUpdatePermissions(role.getId(),  new HashSet<>());
         return role.getId();
     }
 
@@ -154,25 +137,7 @@ public class RoleServiceImpl implements RoleService {
         role.setDisplayName(saveRoleBo.getName());
         role.setUpdateTime(date);
         role.setUpdateUser(user);
-        role.getRolePermissions().clear();
-        List<Permission> permissions = null;
-        if (!CollectionUtils.isEmpty(saveRoleBo.getPermissions())) {
-            List<RolePermission> rolePermissions = new ArrayList<>();
-            permissions = permissionService.getPermissionById(saveRoleBo.getPermissions());
-            for (Permission permission : permissions) {
-                RolePermission rolePermission = new RolePermission();
-                rolePermission.setRole(role);
-                rolePermission.setPermission(permission);
-                rolePermission.setDeletable(true);
-                rolePermission.setEntryUser(user);
-                rolePermission.setEntryTime(date);
-                role.getRolePermissions().add(rolePermission);
-            }
-        }
         roleRepository.save(role);
         RoleCache.updateRole(role);
-        if (!CollectionUtils.isEmpty(permissions)) {
-            PermissionCache.addOrUpdatePermissions(role.getId(), Sets.newHashSet(permissions));
-        }
     }
 }
