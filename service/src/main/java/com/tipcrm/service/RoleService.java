@@ -19,4 +19,6 @@ public interface RoleService {
     List<RoleBo> getAllRoles();
 
     Integer saveRole(SaveRoleBo saveRoleBo);
+
+    void updateRole(SaveRoleBo saveRoleBo);
 }

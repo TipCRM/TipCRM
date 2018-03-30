@@ -3,6 +3,7 @@ import java.util.List;
 
 import com.tipcrm.bo.RoleBo;
 import com.tipcrm.bo.SaveRoleBo;
+import com.tipcrm.constant.Constants;
 import com.tipcrm.service.RoleService;
 import com.tipcrm.web.util.JsonEntity;
 import com.tipcrm.web.util.ResponseHelper;
@@ -31,5 +32,11 @@ public class RoleApi {
     @RequestMapping(value = "role", method = RequestMethod.POST)
     public JsonEntity<Integer> createNewRole(@RequestBody SaveRoleBo saveRoleBo) {
         return ResponseHelper.createInstance(roleService.saveRole(saveRoleBo));
+    }
+
+    @RequestMapping(value = "role", method = RequestMethod.PUT)
+    public JsonEntity<String> updateRole(@RequestBody SaveRoleBo saveRoleBo) {
+        roleService.updateRole(saveRoleBo);
+        return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
     }
 }

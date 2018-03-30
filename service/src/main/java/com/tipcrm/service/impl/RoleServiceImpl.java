@@ -127,12 +127,52 @@ public class RoleServiceImpl implements RoleService {
         if (!isSaveMethod && saveRoleBo.getId() == null) {
             throw new BizException("没有指定需要修改角色ID");
         }
+        if (!isSaveMethod) {
+            Role role = RoleCache.getRoleById(saveRoleBo.getId());
+            if (role == null) {
+                throw new BizException("角色不存在");
+            } else if (!role.getEditable()) {
+                throw new BizException("角色不可编辑");
+            }
+        }
         if (StringUtils.isBlank(saveRoleBo.getName())) {
             throw new BizException("角色名不能为空");
         }
         Role role = RoleCache.getRoleByName(saveRoleBo.getName());
         if (role != null && (isSaveMethod || !isSaveMethod && !role.getId().equals(saveRoleBo.getId()))) {
             throw new BizException("角色名已存在");
+        }
+    }
+
+    @Override
+    public void updateRole(SaveRoleBo saveRoleBo) {
+        validateSaveRoleBo(saveRoleBo, false);
+        Role role = RoleCache.getRoleById(saveRoleBo.getId());
+        User user = webContext.getCurrentUser();
+        Date date = new Date();
+        role.setName(saveRoleBo.getName());
+        role.setDisplayName(saveRoleBo.getName());
+        role.setUpdateTime(date);
+        role.setUpdateUser(user);
+        role.getRolePermissions().clear();
+        List<Permission> permissions = null;
+        if (!CollectionUtils.isEmpty(saveRoleBo.getPermissions())) {
+            List<RolePermission> rolePermissions = new ArrayList<>();
+            permissions = permissionService.getPermissionById(saveRoleBo.getPermissions());
+            for (Permission permission : permissions) {
+                RolePermission rolePermission = new RolePermission();
+                rolePermission.setRole(role);
+                rolePermission.setPermission(permission);
+                rolePermission.setDeletable(true);
+                rolePermission.setEntryUser(user);
+                rolePermission.setEntryTime(date);
+                role.getRolePermissions().add(rolePermission);
+            }
+        }
+        roleRepository.save(role);
+        RoleCache.updateRole(role);
+        if (!CollectionUtils.isEmpty(permissions)) {
+            PermissionCache.addOrUpdatePermissions(role.getId(), Sets.newHashSet(permissions));
         }
     }
 }
