@@ -3,17 +3,20 @@
  */
 import React from 'react';
 import {connect} from 'dva';
-import {Button} from 'antd';
+import {Button, Row, Divider} from 'antd';
 import styles from './Index.css';
 import PermissionCell from './PermissionCell';
 import CommonSpin from '../../Common/CommonSpin';
+import TipEditableCell from '../../Common/TipEditableCell';
 
 @connect(({loading, permission}) =>({
   loading: loading.models.permission,
   permissions: permission.permissions,
 }))
 export default class PermissionPanel extends React.Component{
-
+  state={
+    editingRole: false,
+  };
   componentDidMount(){
     const {dispatch, role} = this.props;
     if (role){
@@ -60,7 +63,6 @@ export default class PermissionPanel extends React.Component{
         })
       })
     }
-    console.log(permissionsArray);
     dispatch({
       type:'permission/changeRolePermissions',
       payload: {id: role.id, permissions: permissionsArray},
@@ -68,18 +70,20 @@ export default class PermissionPanel extends React.Component{
   }
 
   render(){
-    const {role, canEdit, canConfigPermission, loading, permissions } = this.props;
+    const {role, enableEdit, loading, permissions} = this.props;
     return(<CommonSpin spinning={loading}>
       <div className={styles.permissionPanel}>
-        <div>{role.displayName}</div>
-        <div><Button onClick={this.handleSaveChange.bind(this, role, permissions)}>保存更改</Button></div>
-        <div>
+        <Row><TipEditableCell addonBefore="角色名称" value={role.displayName} enableEdit={enableEdit} editing={this.state.editingRole} style={{with:'25px'}}/></Row>
+        <Row style={{marginBottom: '8px'}}>
+          {enableEdit ? <Button shape="circle" style={{float: 'right'}} size="small" icon="setting" onClick={this.handleSaveChange.bind(this, role, permissions)}/> : <div></div>}
+        </Row>
+        <div style={{border:'1px solid', borderRadius:'2px', lineHeight:'15px'}}>
           {
             permissions ? permissions.map(item =>
             {
               const newPermissions = item.permissions ? item.permissions.map(permission =>
                 {
-                  return {...permission, handleTagChange: canConfigPermission ? this.handlePermissionChecked.bind(this, item, permission, permissions) : null};
+                  return {...permission, handleTagChange: enableEdit ? this.handlePermissionChecked.bind(this, item, permission, permissions) : null};
                 }): [];
               const newItem = {...item, permissions: newPermissions};
               return  <PermissionCell permission={newItem}/>;

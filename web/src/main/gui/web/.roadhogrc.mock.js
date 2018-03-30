@@ -8,6 +8,10 @@ const apis = {
   'GET /public/api/roles' : 'http://www.potafish.com',
   'GET /public/api/permission/role/*': 'http://www.potafish.com',
   'PUT /public/api/permission/role/*': 'http://www.potafish.com',
+  'GET /public/api/permission/*': {
+    status: 200,
+    data: ['ROLE_ADD', 'ROLE_UPDATE', 'ROLE_DELETE'],
+  },
   'GET /public/api/menus' : {status: 200, data:[
     {title:'客户管理',name:'CUSTOMER', active: true, children:[
       {title:'我的所有客户', id: 1, name: 'MY_CUSTOMER', active: true,
@@ -34,7 +38,7 @@ const apis = {
     {title:'报表管理', content:"维护中..."},
     {title:'安全退出', content:"维护中..."},
     {title:'安全退出Test'},]},
-  'GET /public/api/menu' :'http://www.potafish.com',
+  'GET /public/api/menu/me' :'http://www.potafish.com',
 };
 
 export default delay(apis, 1000);

@@ -1,13 +1,17 @@
 /**
  * Created by mosesc on 03/29/18.
  */
-import {listRolePermissions, changeRolePermissions} from '../services/api';
+import {listRolePermissions, changeRolePermissions, getPermissionsByMenu} from '../services/api';
 import {message} from 'antd';
 
 export default {
   namespace: 'permission',
   state: {
     permissions:[],
+    menuPermissions: {
+      menu:{},
+      permissions:[],
+    }
   },
   effects:{
     *listRolePermission({payload}, {call, put}){
@@ -22,6 +26,14 @@ export default {
       if (response.status === 200){
         message.info("保存更改成功");
       }
+    },
+    *getPermissionsByMenu({payload}, {call, put}){
+      const response = yield call(getPermissionsByMenu, payload);
+      const menuPermissions = {menuName: payload.menuName, permissions: response.data};
+      yield put({
+        type: 'saveMenuPermissions',
+        payload: menuPermissions,
+      });
     }
   },
   reducers:{
@@ -29,6 +41,12 @@ export default {
       return{
         ...state,
         permissions: payload,
+      };
+    },
+    saveMenuPermissions(state, {payload}){
+      return{
+        ...state,
+        menuPermissions: payload,
       };
     }
   }
