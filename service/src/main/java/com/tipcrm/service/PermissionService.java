@@ -22,4 +22,8 @@ public interface PermissionService {
     List<Permission> flatPermission(List<Permission> permissions);
 
     List<Permission> getAllPermissions();
+
+    List<String> getMyPermission(Integer menuId);
+
+    List<Permission> getPermissionById(List<Integer> ids);
 }
