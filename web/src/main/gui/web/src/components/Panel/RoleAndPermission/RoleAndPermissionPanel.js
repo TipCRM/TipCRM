@@ -20,7 +20,7 @@ import styles from './Index.css'
 export default class RoleAndPermissionPanel extends React.Component{
   state = {
     showPermissionPanel: false,
-    selectRole: {},
+    createNew: false,
   }
   componentDidMount(){
     const {dispatch} = this.props;
@@ -34,14 +34,17 @@ export default class RoleAndPermissionPanel extends React.Component{
   }
 
   handlePermissionEdit(record){
-    console.log(record);
+    this.props.dispatch({
+      type:'role/saveSelectRole',
+      payload: {selectRole: record, createNew: record.id ? false: true,}
+    });
     this.setState({
       showPermissionPanel: true,
-      selectRole: record,
     });
   }
 
-  handlePermissionDelete(record){}
+  handlePermissionDelete(record){
+  }
 
   handleClosePermissionPanel(){
     this.setState({
@@ -54,17 +57,20 @@ export default class RoleAndPermissionPanel extends React.Component{
     console.log(record);
     return{
       onDoubleClick:() =>{
+        this.props.dispatch({
+          type:'role/saveSelectRole',
+          payload: {selectRole: record, createNew: record.id ? false: true,}
+        });
         this.setState({
           showPermissionPanel: true,
-          selectRole: record,
         });
       }
     };
   }
 
   render(){
-    const {loading, roles, menuPermissions, loadingPermission} = this.props;
-    const {selectRole, showPermissionPanel} = this.state;
+    const {loading, roles, menuPermissions, loadingPermission, createNew} = this.props;
+    const {showPermissionPanel} = this.state;
     //init permissions
     const {permissions} = menuPermissions;
     const enableEdit = permissions.filter(item => item === getPermission('ROLE_EDIT')).length > 0;
@@ -91,7 +97,10 @@ export default class RoleAndPermissionPanel extends React.Component{
     return(<div>
       <CommonSpin spinning={loadingPermission}>
         {
-          enableAdd ? <Button style={{marginLeft: '20%', marginBottom: '8px'}} size="small" type="primary">添加角色</Button> : <div></div>
+          enableAdd ? <Button
+            style={{marginLeft: '20%', marginBottom: '8px'}}
+            size="small" type="primary"
+            onClick={this.handlePermissionEdit.bind(this, {})}>添加角色</Button> : <div></div>
         }
       </CommonSpin>
       <CommonSpin spinning={loading}>
@@ -107,8 +116,9 @@ export default class RoleAndPermissionPanel extends React.Component{
       <Modal visible={showPermissionPanel} title="权限" footer="" width="60%"
              destroyOnClose={true} onCancel={this.handleClosePermissionPanel.bind(this)}
       >
-        <PermissionPanel role={selectRole}
+        <PermissionPanel
                          enableEdit={enableEdit}
+                         createNew = {createNew}
                          canConfigPermission={true}/>
       </Modal>
     </div>);

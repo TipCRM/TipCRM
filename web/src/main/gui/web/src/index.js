@@ -20,6 +20,7 @@ app.model(require('./models/customer').default);
 app.model(require('./models/notification').default);
 app.model(require('./models/role').default);
 app.model(require('./models/permission').default);
+app.model(require('./models/config').default);
 
 // 4. Router
 app.router(require('./router').default);

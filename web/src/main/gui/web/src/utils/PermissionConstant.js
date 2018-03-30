@@ -4,9 +4,9 @@
 
 export function getPermission(permissionName){
   const permissions = {
-    ROLE_ADD: 'ROLE_ADD',
-    ROLE_EDIT: 'ROLE_UPDATE',
-    ROLE_DELETE: 'ROLE_DELETE'
+    ROLE_ADD: 'role:add',
+    ROLE_EDIT: 'role:update',
+    ROLE_DELETE: 'role:delete'
   };
 
   return permissions[permissionName];
