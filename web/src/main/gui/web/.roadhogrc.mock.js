@@ -8,6 +8,8 @@ const apis = {
   'GET /public/api/roles' : 'http://www.potafish.com',
   'GET /public/api/permission/role/*': 'http://www.potafish.com',
   'PUT /public/api/permission/role/*': 'http://www.potafish.com',
+  'POST /public/api/role': 'http://www.potafish.com',
+  'POST /public/api/cache/refresh/roleAndPermission': 'http://www.potafish.com',
   'GET /public/api/permission/*': {
     status: 200,
     data: ['ROLE_ADD', 'ROLE_UPDATE', 'ROLE_DELETE'],

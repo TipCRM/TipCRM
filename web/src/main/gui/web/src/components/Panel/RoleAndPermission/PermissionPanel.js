@@ -9,20 +9,22 @@ import PermissionCell from './PermissionCell';
 import CommonSpin from '../../Common/CommonSpin';
 import TipEditableCell from '../../Common/TipEditableCell';
 
-@connect(({loading, permission}) =>({
+@connect(({loading, permission, role}) =>({
   loading: loading.models.permission,
+  roleLoading: loading.models.role,
   permissions: permission.permissions,
+  selectRole: role.selectRole
 }))
 export default class PermissionPanel extends React.Component{
   state={
-    editingRole: false,
+    editingRole: this.props.createNew,
   };
   componentDidMount(){
-    const {dispatch, role} = this.props;
-    if (role){
+    const {dispatch, selectRole} = this.props;
+    if (selectRole.id){
       dispatch({
         type: 'permission/listRolePermission',
-        payload: {id: role.id}
+        payload: {id: selectRole.id}
       });
     }
   }
@@ -69,27 +71,61 @@ export default class PermissionPanel extends React.Component{
     });
   }
 
+  handleSaveRoleChange(createNew, selectRole, e){
+    console.log(e.target.value)
+    const {dispatch} = this.props;
+    if (createNew){
+      dispatch({
+        type: 'role/createNewRole',
+        payload: {name: e.target.value}
+      });
+    } else {
+      dispatch({
+        type: 'role/changeRole',
+        payload: {id: selectRole.id, name: e.target.value, permissions:[]}
+      });
+    }
+  }
+
   render(){
-    const {role, enableEdit, loading, permissions} = this.props;
+    const {selectRole, enableEdit, loading, permissions, createNew, roleLoading} = this.props;
+    var {editingRole} = this.state;
+
     return(<CommonSpin spinning={loading}>
       <div className={styles.permissionPanel}>
-        <Row><TipEditableCell addonBefore="角色名称" value={role.displayName} enableEdit={enableEdit} editing={this.state.editingRole} style={{with:'25px'}}/></Row>
-        <Row style={{marginBottom: '8px'}}>
-          {enableEdit ? <Button shape="circle" style={{float: 'right'}} size="small" icon="setting" onClick={this.handleSaveChange.bind(this, role, permissions)}/> : <div></div>}
-        </Row>
-        <div style={{border:'1px solid', borderRadius:'2px', lineHeight:'15px'}}>
-          {
-            permissions ? permissions.map(item =>
-            {
-              const newPermissions = item.permissions ? item.permissions.map(permission =>
+        <CommonSpin spinning={roleLoading}>
+          <Row><TipEditableCell
+            addonBefore="角色名称"
+            value={selectRole.displayName}
+            enableEdit={enableEdit}
+            editing={editingRole}
+            handleChangeValueSave={this.handleSaveRoleChange.bind(this, createNew, selectRole)}
+            style={{with:'25px'}}/></Row>
+        </CommonSpin>
+        {
+          createNew ? <div></div> : <div>
+            <Row style={{marginBottom: '8px'}}>
+              {enableEdit ? <Button
+                shape="circle"
+                style={{float: 'right'}}
+                size="small" icon="setting"
+                onClick={this.handleSaveChange.bind(this, selectRole, permissions, createNew)}/> : <div></div>}
+            </Row>
+            <div style={{border:'1px solid', borderRadius:'2px', lineHeight:'15px'}}>
+              {
+                permissions ? permissions.map(item =>
                 {
-                  return {...permission, handleTagChange: enableEdit ? this.handlePermissionChecked.bind(this, item, permission, permissions) : null};
-                }): [];
-              const newItem = {...item, permissions: newPermissions};
-              return  <PermissionCell permission={newItem}/>;
-            }) : []
-          }
-        </div>
+                  const newPermissions = item.permissions ? item.permissions.map(permission =>
+                  {
+                    return {...permission, handleTagChange: enableEdit ? this.handlePermissionChecked.bind(this, item, permission, permissions) : null};
+                  }): [];
+                  const newItem = {...item, permissions: newPermissions};
+                  return  <PermissionCell permission={newItem}/>;
+                }) : []
+              }
+            </div>
+          </div>
+        }
       </div>
     </CommonSpin>);
   }

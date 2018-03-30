@@ -64,5 +64,19 @@ export async function changeRolePermissions(params) {
 }
 
 export async function getPermissionsByMenu(params){
-  return request('/public/api/permission/'+ params.menuName);
+  return request('/public/api/permission/menu/'+ params.menuName);
+}
+
+export async function createNewRole(params){
+  return request('/public/api/role',{
+    method: 'POST',
+    body: params,
+  });
+}
+
+// cache
+export async function flushRoleCache(){
+  return request('/public/api/cache/refresh/roleAndPermission', {
+    method: 'POST'
+  });
 }

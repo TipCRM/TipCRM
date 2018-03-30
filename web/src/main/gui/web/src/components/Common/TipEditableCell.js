@@ -7,7 +7,7 @@ import {Input, Icon} from 'antd';
 export default class TipEditableCell extends React.Component{
   render(){
     const {enableEdit, editing, handleChangeValueSave, addonBefore, value, style} = this.props;
-    const addonAfter = enableEdit ? <Icon type={editing ? "setting" : "edit" } /> : '';
+    const addonAfter = enableEdit ? <Icon type={editing ? "save" : "edit" } /> : '';
     var disabled = true;
     if (enableEdit && editing){
       disabled = false;
@@ -16,7 +16,7 @@ export default class TipEditableCell extends React.Component{
       <Input addonBefore={addonBefore}
              addonAfter={addonAfter}
              defaultValue={value}
-             disabled={disabled} style={{width:'25%'}}/>
+             disabled={disabled} style={{width:'25%'}} onPressEnter={handleChangeValueSave}/>
     </div>);
   }
 }
