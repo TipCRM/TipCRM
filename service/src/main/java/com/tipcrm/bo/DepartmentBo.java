@@ -76,10 +76,10 @@ public class DepartmentBo {
     }
 
     public Date getEntryTime() {
-        return entryTime;
+        return entryTime == null ? null : (Date) entryTime.clone();
     }
 
     public void setEntryTime(Date entryTime) {
-        this.entryTime = entryTime;
+        this.entryTime = entryTime == null ? null : (Date) entryTime.clone();
     }
 }

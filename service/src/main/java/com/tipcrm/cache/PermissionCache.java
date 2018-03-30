@@ -49,7 +49,7 @@ public class PermissionCache {
         if (CollectionUtils.isEmpty(rolePermissions.get(roleId))) {
             addOrUpdatePermissions(roleId, permissions);
         } else {
-            rolePermissions.get(roleId).addAll((permissions));
+            rolePermissions.get(roleId).addAll(permissions);
         }
     }
 

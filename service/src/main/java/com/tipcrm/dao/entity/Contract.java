@@ -105,11 +105,11 @@ public class Contract {
     }
 
     public Date getSignTime() {
-        return signTime;
+        return (Date) signTime.clone();
     }
 
     public void setSignTime(Date signTime) {
-        this.signTime = signTime;
+        this.signTime = (Date) signTime.clone();
     }
 
     public User getReviewer() {
@@ -121,11 +121,11 @@ public class Contract {
     }
 
     public Date getReviewTime() {
-        return reviewTime;
+        return (Date) reviewTime.clone();
     }
 
     public void setReviewTime(Date reviewTime) {
-        this.reviewTime = reviewTime;
+        this.reviewTime = (Date) reviewTime.clone();
     }
 
     public ListBox getReviewStatus() {

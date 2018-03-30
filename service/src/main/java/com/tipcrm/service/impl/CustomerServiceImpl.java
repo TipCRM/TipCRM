@@ -154,8 +154,8 @@ public class CustomerServiceImpl implements CustomerService {
         if (StringUtils.isBlank(createCustomerBo.getName())) {
             throw new BizException("客户名不能为空");
         }
-        if ((!StringUtils.isBlank(createCustomerBo.getContactName()) && StringUtils.isBlank(createCustomerBo.getContactPhone()))
-            || (StringUtils.isBlank(createCustomerBo.getContactName()) && !StringUtils.isBlank(createCustomerBo.getContactPhone()))) {
+        if (!StringUtils.isBlank(createCustomerBo.getContactName()) && StringUtils.isBlank(createCustomerBo.getContactPhone())
+            || StringUtils.isBlank(createCustomerBo.getContactName()) && !StringUtils.isBlank(createCustomerBo.getContactPhone())) {
             throw new BizException("联系人和电话应该都填或都不填");
         }
         List<Customer> customers = customerRepository.findByNameAndDeleteTimeIsNull(createCustomerBo.getName());
@@ -560,7 +560,7 @@ public class CustomerServiceImpl implements CustomerService {
         return null;
     }
 
-    class CustomerSpecification implements Specification<Customer> {
+    static class CustomerSpecification implements Specification<Customer> {
         private QueryRequestBo queryRequestBo;
         private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -635,6 +635,8 @@ public class CustomerServiceImpl implements CustomerService {
                             if (followDepartmentId != null) {
                                 predicates.add(criteriaBuilder.equal(path, followDepartmentId));
                             }
+                            break;
+                        default:
                             break;
                     }
                 }

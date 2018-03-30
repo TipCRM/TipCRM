@@ -56,11 +56,11 @@ public class UserBo {
     }
 
     public Date getBirthday() {
-        return birthday;
+        return birthday == null ? null : (Date) birthday.clone();
     }
 
     public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+        this.birthday = birthday == null ? null : (Date) birthday.clone();
     }
 
     public String getPhoneNo() {
@@ -96,11 +96,11 @@ public class UserBo {
     }
 
     public Date getHireTime() {
-        return hireTime;
+        return hireTime == null ? null : (Date) hireTime.clone();
     }
 
     public void setHireTime(Date hireTime) {
-        this.hireTime = hireTime;
+        this.hireTime = hireTime == null ? null : (Date) hireTime.clone();
     }
 
     public String getManager() {
