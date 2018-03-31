@@ -2,10 +2,8 @@ package com.tipcrm.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
-import com.google.common.collect.Lists;
 import com.tipcrm.bo.CreateUserBo;
 import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.RegistUserBo;
