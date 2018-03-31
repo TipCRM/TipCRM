@@ -1,16 +1,11 @@
 package com.tipcrm.cache;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.swing.text.html.HTMLDocument;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.tipcrm.dao.entity.Role;
 import org.springframework.util.CollectionUtils;
 

@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.Sets;
 import com.tipcrm.bo.RoleBo;
 import com.tipcrm.bo.SaveRoleBo;
 import com.tipcrm.cache.PermissionCache;
@@ -17,13 +16,11 @@ import com.tipcrm.dao.entity.Permission;
 import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.entity.RolePermission;
 import com.tipcrm.dao.entity.User;
-import com.tipcrm.dao.entity.UserRole;
 import com.tipcrm.dao.repository.RolePermissionRepository;
 import com.tipcrm.dao.repository.RoleRepository;
 import com.tipcrm.dao.repository.UserRepository;
 import com.tipcrm.dao.repository.UserRoleRepository;
 import com.tipcrm.exception.BizException;
-import com.tipcrm.service.PermissionService;
 import com.tipcrm.service.RoleService;
 import com.tipcrm.service.WebContext;
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +47,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private UserRoleRepository userRoleRepository;
+
     @Override
     public List<Role> getRolesByUserId(Integer userId) {
         List<Role> roles = RoleCache.getRoles(userId);
@@ -149,6 +147,9 @@ public class RoleServiceImpl implements RoleService {
         Role role = RoleCache.getRoleById(roleId);
         if (role == null) {
             throw new BizException("角色不存在");
+        }
+        if (!role.getEditable()) {
+            throw new BizException("该角色不可删除");
         }
         rolePermissionRepository.deleteByRoleId(roleId);
         roleRepository.delete(roleId);
