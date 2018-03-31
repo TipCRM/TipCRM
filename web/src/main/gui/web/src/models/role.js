@@ -1,7 +1,7 @@
 /**
  * Created by mosesc on 03/29/18.
  */
-import {listRoles, createNewRole, updateRow} from '../services/api';
+import {listRoles, createNewRole, updateRole, deleteRole} from '../services/api';
 import {message} from 'antd';
 
 export default {
@@ -39,7 +39,7 @@ export default {
     *changeRole({payload}, {call, put}){
       var {selectRole} = payload;
       const request = {id: selectRole.id, name: payload.newName}
-      const response = yield call(updateRow, request);
+      const response = yield call(updateRole, request);
       if (response.status === 200){
         message.success("修改角色信息成功");
         selectRole.name = payload.newName;
@@ -48,11 +48,18 @@ export default {
           payload: {selectRole: selectRole, createNew: false},
         });
         yield put({
-          type: 'permission/listRolePermission',
-          payload: {id: selectRole.id}
-        });
-        yield put({
           type: 'fetchRoles',
+        });
+      }
+    },
+    *deleteRole({payload}, {call, put}){
+      const response = yield call(deleteRole, payload);
+      if (response.status === 200){
+        message.success("删除角色成功");
+        var roles = payload.roles.filter(item => item.id != payload.deleteId);
+        yield put({
+          type: 'saveRoles',
+          payload: roles,
         });
       }
     }

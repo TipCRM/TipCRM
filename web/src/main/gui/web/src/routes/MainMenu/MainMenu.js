@@ -34,7 +34,7 @@ export default class MainMenu extends React.Component{
     console.log(currentUser);
     const menus = main.menus;
     const finalMenus = menus ? menus.map(item => {
-        return {...item, content: item.active ? menuComponentConstant(item.children)[item.name] : item.content};
+        return {...item, content: item.active ? menuComponentConstant(item) : item.content};
       }
     ) : menus;
     return(

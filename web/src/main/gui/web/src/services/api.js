@@ -64,9 +64,10 @@ export async function changeRolePermissions(params) {
 }
 
 export async function getPermissionsByMenu(params){
-  return request('/public/api/permission/menu/'+ params.menuName);
+  return request('/public/api/permission/menu/'+ params.menuId);
 }
 
+// the operation for role
 export async function createNewRole(params){
   return request('/public/api/role',{
     method: 'POST',
@@ -74,11 +75,17 @@ export async function createNewRole(params){
   });
 }
 
-export async function updateRow(params) {
+export async function updateRole(params) {
   return request('/public/api/role',{
     method: 'PUT',
     body: params,
   });
+}
+
+export async function deleteRole(params) {
+  return request('/public/api/role/'+ params.deleteId,{
+    method: 'DELETE'
+  })
 }
 
 // cache

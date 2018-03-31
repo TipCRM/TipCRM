@@ -1,19 +1,9 @@
 import { delay } from 'roadhog-api-doc';
-
-const apis = {
-  'POST /public/api/login':'http://www.potafish.com',
-  'GET /public/api/user/me':'http://www.potafish.com',
-  'POST /public/api/my/customers' :'http://www.potafish.com',
-  'POST /public/api/notification/my' : 'http://www.potafish.com',
-  'GET /public/api/roles' : 'http://www.potafish.com',
-  'GET /public/api/permission/role/*': 'http://www.potafish.com',
-  'PUT /public/api/permission/role/*': 'http://www.potafish.com',
-  'POST /public/api/role': 'http://www.potafish.com',
-  'PUT /public/api/role': 'http://www.potafish.com',
-  'POST /public/api/cache/refresh/roleAndPermission': 'http://www.potafish.com',
-  'GET /public/api/permission/*': {
+const noProxy = true;
+const apisNoProxy ={
+  'GET /public/api/user/me':{
     status: 200,
-    data: ['role:add', 'role:update', 'role:delete']
+    data: {userName: '李白'}
   },
   'GET /public/api/menu/me' : {status: 200, data:[
     {title:'客户管理',name:'CUSTOMER_MANAGEMENT', active: true, children:[
@@ -41,7 +31,59 @@ const apis = {
     {title:'报表管理', content:"维护中..."},
     {title:'安全退出', content:"维护中..."},
     {title:'安全退出Test'},]},
-  'GET /public/api/menu/mes' :'http://www.potafish.com',
+    'GET /public/api/permission/menu/*': {
+      status: 200,
+      data: ['role:add', 'role:update', 'role:delete']
+    },
+    'GET /public/api/roles' : {status: 200, data:[
+      {id: 1, displayName: '经理', entryUser: '系统', entryDatetime:'2017-8-17 18:42:00'},
+      {id: 2, displayName: '总裁', entryUser: '系统', entryDatetime:'2017-8-17 18:42:00'},
+      {id: 3, displayName: '员工', entryUser: '系统', entryDatetime:'2017-8-17 18:42:00'},
+    ]},
+    'GET /public/api/permission/role/*': {
+      status: 200,
+      data:[
+        {name: '客户管理', permissions:[
+          {displayName:'添加客户', checked: true},
+          {displayName:'修改客户', checked: false},
+          {displayName:'删除客户', checked: true},
+        ]},
+        {name: '客户角色', permissions:[
+          {displayName:'添加角色', checked: true},
+          {displayName:'修改角色', checked: false},
+          {displayName:'删除角色', checked: true},
+        ]}
+      ]
+    },
+    'POST /public/api/role': {
+      status: 200,
+      data:{id:1}
+    },
+    'PUT /public/api/permission/role/*': {
+      status: 200,
+    },
+    'PUT /public/api/role': {
+      status: 200,
+    },
+    'DELETE /public/api/role/*': {
+      status: 200
+    }
+}
+
+const apis = {
+  'POST /public/api/login':'http://www.potafish.com',
+  'GET /public/api/user/me':'http://www.potafish.com',
+  'POST /public/api/my/customers' :'http://www.potafish.com',
+  'POST /public/api/notification/my' : 'http://www.potafish.com',
+  'GET /public/api/roles' : 'http://www.potafish.com',
+  'GET /public/api/permission/role/*': 'http://www.potafish.com',
+  'PUT /public/api/permission/role/*': 'http://www.potafish.com',
+  'POST /public/api/role': 'http://www.potafish.com',
+  'PUT /public/api/role': 'http://www.potafish.com',
+  'DELETE /public/api/role/*': 'http://www.potafish.com',
+  'POST /public/api/cache/refresh/roleAndPermission': 'http://www.potafish.com',
+  'GET /public/api/menu/me' :'http://www.potafish.com',
+  'GET /public/api/permission/menu/*': 'http://www.potafish.com',
 };
 
-export default delay(apis, 1000);
+export default delay( noProxy ? apis : apisNoProxy, 1000);

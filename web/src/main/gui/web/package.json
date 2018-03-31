@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "start": "roadhog server",
+    "start-proxy": "roadhog server NO_PROXY=false",
     "build": "roadhog build",
     "lint": "eslint --ext .js src test",
     "precommit": "npm run lint"
