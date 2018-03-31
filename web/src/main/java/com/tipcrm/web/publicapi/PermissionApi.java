@@ -33,7 +33,7 @@ public class PermissionApi {
     @RequestMapping(value = "permission/me", method = RequestMethod.GET)
     public JsonEntity<List<MenuPermissionBo>> myPermissions() {
         Integer userId = webContext.getCurrentUserId();
-        return ResponseHelper.createInstance(permissionService.getPermissionsByUserId(userId));
+        return ResponseHelper.createInstance(permissionService.getMenuPermissionsByUserId(userId));
     }
 
     @RequestMapping(value = "permission/role/{roleId}", method = RequestMethod.GET)

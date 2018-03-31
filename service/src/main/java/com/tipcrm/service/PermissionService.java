@@ -9,9 +9,11 @@ public interface PermissionService {
 
     Set<String> getPermissionValuesByUserId(Integer userId);
 
+    Set<String> getPermissionNamesByUserId(Integer userId);
+
     Set<Integer> getPermissionIdsByUserId(Integer userId);
 
-    List<MenuPermissionBo> getPermissionsByUserId(Integer userId);
+    List<MenuPermissionBo> getMenuPermissionsByUserId(Integer userId);
 
     List<MenuPermissionBo> getPermissionsByRoleId(Integer roleId);
 
