@@ -82,7 +82,7 @@ public class PermissionServiceImpl implements PermissionService {
         List<MenuPermission> groups = PermissionCache.getMenuPermissions();
         List<MenuPermissionBo> groupBos = MenuPermissionBo.toMenuPermissionBos(groups);
         List<PermissionBo> allPermission = flatMenuPermission(groupBos);
-        Set<Role> myRoles = roleService.getRolesByUserId(userId);
+        List<Role> myRoles = roleService.getRolesByUserId(userId);
         if (!CollectionUtils.isEmpty(myRoles)) {
             Set<Permission> myPermissions = PermissionCache.getPermissions(myRoles.stream().map(role -> role.getId()).collect(Collectors.toList()));
             for (Permission myPermission : myPermissions) {

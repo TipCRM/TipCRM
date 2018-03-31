@@ -79,6 +79,13 @@ public class PermissionCache {
         }
     }
 
+    public static void popPermissions(Integer roleId) {
+        if (CollectionUtils.isEmpty(rolePermissions)) {
+            return;
+        }
+        rolePermissions.remove(roleId);
+    }
+
     public static Set<Permission> getPermissions(Integer roleId) {
         if (CollectionUtils.isEmpty(rolePermissions)) {
             return new HashSet<>();

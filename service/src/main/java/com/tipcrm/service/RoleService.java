@@ -10,7 +10,7 @@ import com.tipcrm.dao.entity.Role;
 
 public interface RoleService {
 
-    Set<Role> getRolesByUserId(Integer userId);
+    List<Role> getRolesByUserId(Integer userId);
 
     Role findById(Integer roleId);
 
@@ -21,4 +21,6 @@ public interface RoleService {
     Integer saveRole(SaveRoleBo saveRoleBo);
 
     void updateRole(SaveRoleBo saveRoleBo);
+
+    void deleteRole(Integer roleId);
 }

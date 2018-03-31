@@ -80,10 +80,6 @@ public class User {
     @Column(name = "update_time")
     private Date updateTime;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    private List<Role> roles = new ArrayList<Role>();
-
     @Column(name = "payment_percent")
     private BigDecimal paymentPercent;
 
@@ -229,14 +225,6 @@ public class User {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime == null ? null : (Date) updateTime.clone();
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
     }
 
     public BigDecimal getPaymentPercent() {

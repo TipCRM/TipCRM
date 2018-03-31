@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.text.html.HTMLDocument;
+
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.tipcrm.dao.entity.Role;
@@ -18,7 +21,7 @@ public class RoleCache {
     /**
      * Map <userId, roles>
      */
-    private static Map<Integer, Set<Role>> userRoles = Maps.newHashMap();
+    private static Map<Integer, List<Role>> userRoles = Maps.newHashMap();
 
     public static void addRole(Role role) {
         if (role != null) {
@@ -41,18 +44,39 @@ public class RoleCache {
         }
     }
 
-    public static void addOrUpdateRoles(Integer userId, Set<Role> roles) {
+    public static void addOrUpdateRoles(Integer userId, List<Role> roles) {
         if (CollectionUtils.isEmpty(userRoles)) {
             userRoles = Maps.newHashMap();
         }
         userRoles.put(userId, roles);
     }
 
-    public static void addOrUpdateRoles(Integer userId, Role role) {
-        addOrUpdateRoles(userId, Sets.newHashSet(role));
+    public static void deleteRole(Integer roleId) {
+        removeRole(roleId, allRole);
+        for (Map.Entry<Integer, List<Role>> entry : userRoles.entrySet()) {
+            List<Role> roles = entry.getValue();
+            removeRole(roleId, roles);
+        }
     }
 
-    public static void pushRoles(Integer userId, Set<Role> roles) {
+    private static boolean removeRole(Integer roleId, List<Role> roles) {
+        if (!CollectionUtils.isEmpty(roles)) {
+            Iterator<Role> it = roles.iterator();
+            while (it.hasNext()) {
+                if (it.next().getId().equals(roleId)) {
+                    it.remove();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void addOrUpdateRoles(Integer userId, Role role) {
+        addOrUpdateRoles(userId, Lists.newArrayList(role));
+    }
+
+    public static void pushRoles(Integer userId, List<Role> roles) {
         if (CollectionUtils.isEmpty(userRoles)) {
             userRoles = Maps.newHashMap();
         }
@@ -67,7 +91,7 @@ public class RoleCache {
         if (CollectionUtils.isEmpty(userRoles)) {
             return;
         }
-        Set<Role> currentRoles = userRoles.get(userId);
+        List<Role> currentRoles = userRoles.get(userId);
         if (CollectionUtils.isEmpty(currentRoles)) {
             return;
         }
@@ -79,9 +103,9 @@ public class RoleCache {
         }
     }
 
-    public static Set<Role> getRoles(Integer userId) {
+    public static List<Role> getRoles(Integer userId) {
         if (CollectionUtils.isEmpty(userRoles)) {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
         return userRoles.get(userId);
     }
@@ -94,11 +118,11 @@ public class RoleCache {
         RoleCache.allRole = allRole;
     }
 
-    public static Map<Integer, Set<Role>> getUserRoles() {
+    public static Map<Integer, List<Role>> getUserRoles() {
         return userRoles;
     }
 
-    public static void setUserRoles(Map<Integer, Set<Role>> userRoles) {
+    public static void setUserRoles(Map<Integer, List<Role>> userRoles) {
         RoleCache.userRoles = userRoles;
     }
 

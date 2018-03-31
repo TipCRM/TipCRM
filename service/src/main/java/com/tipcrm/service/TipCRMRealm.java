@@ -1,4 +1,5 @@
 package com.tipcrm.service;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,7 +42,7 @@ public class TipCRMRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         Integer userId = (Integer) SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        Set<Role> roles = roleService.getRolesByUserId(userId);
+        List<Role> roles = roleService.getRolesByUserId(userId);
         if (!CollectionUtils.isEmpty(roles)) {
             info.setRoles(roles.stream().map(role -> role.getName()).collect(Collectors.toSet()));
         }
