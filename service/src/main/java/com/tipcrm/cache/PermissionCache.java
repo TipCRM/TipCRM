@@ -8,8 +8,8 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.tipcrm.dao.entity.MenuPermission;
 import com.tipcrm.dao.entity.Permission;
-import com.tipcrm.dao.entity.PermissionGroup;
 import org.springframework.util.CollectionUtils;
 
 public class PermissionCache {
@@ -19,9 +19,19 @@ public class PermissionCache {
      */
     private static Map<Integer, Set<Permission>> rolePermissions = Maps.newHashMap();
 
-    private static List<PermissionGroup> allPermissionGroups = new ArrayList<>();
+    private static List<Permission> allPermissions = new ArrayList<>();
 
     private static List<Permission> deactivePermissions = new ArrayList<>();
+
+    private static List<MenuPermission> menuPermissions = new ArrayList<>();
+
+    public static List<MenuPermission> getMenuPermissions() {
+        return menuPermissions;
+    }
+
+    public static void setMenuPermissions(List<MenuPermission> menuPermissions) {
+        PermissionCache.menuPermissions = menuPermissions;
+    }
 
     public static List<Permission> getDeactivePermissions() {
         return deactivePermissions;
@@ -95,11 +105,11 @@ public class PermissionCache {
         PermissionCache.rolePermissions = rolePermissions;
     }
 
-    public static List<PermissionGroup> getAllPermissionGroups() {
-        return allPermissionGroups;
+    public static List<Permission> getAllPermissions() {
+        return allPermissions;
     }
 
-    public static void setAllPermissionGroups(List<PermissionGroup> allPermissionGroups) {
-        PermissionCache.allPermissionGroups = allPermissionGroups;
+    public static void setAllPermissions(List<Permission> allPermissions) {
+        PermissionCache.allPermissions = allPermissions;
     }
 }

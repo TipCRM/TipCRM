@@ -16,10 +16,6 @@ public class Permission extends BaseAllEntity {
     @Column(name = "id")
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "group_id", referencedColumnName = "id")
-    private PermissionGroup group;
-
     @Column(name = "name")
     private String name;
 
@@ -39,14 +35,6 @@ public class Permission extends BaseAllEntity {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public PermissionGroup getGroup() {
-        return group;
-    }
-
-    public void setGroup(PermissionGroup group) {
-        this.group = group;
     }
 
     public String getName() {

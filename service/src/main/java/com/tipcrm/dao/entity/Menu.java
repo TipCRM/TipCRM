@@ -23,6 +23,9 @@ public class Menu {
     @Column(name = "display_name")
     private String displayName;
 
+    @Column(name = "sequence")
+    private Integer sequence;
+
     @Column(name = "icon")
     private String icon;
 
@@ -62,6 +65,14 @@ public class Menu {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public Integer getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(Integer sequence) {
+        this.sequence = sequence;
     }
 
     public String getIcon() {

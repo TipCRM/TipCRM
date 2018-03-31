@@ -2,7 +2,7 @@ package com.tipcrm.service;
 import java.util.List;
 import java.util.Set;
 
-import com.tipcrm.bo.PermissionGroupBo;
+import com.tipcrm.bo.MenuPermissionBo;
 import com.tipcrm.dao.entity.Permission;
 
 public interface PermissionService {
@@ -11,17 +11,15 @@ public interface PermissionService {
 
     Set<Integer> getPermissionIdsByUserId(Integer userId);
 
-    List<PermissionGroupBo> getPermissionsByUserId(Integer userId);
+    List<MenuPermissionBo> getPermissionsByUserId(Integer userId);
 
-    List<PermissionGroupBo> getPermissionsByRoleId(Integer roleId);
+    List<MenuPermissionBo> getPermissionsByRoleId(Integer roleId);
 
     void updateRolePermissions(Integer roleId, Set<Integer> permissionIds);
 
     List<Permission> findByIdIn(Set<Integer> ids);
 
     List<Permission> flatPermission(List<Permission> permissions);
-
-    List<Permission> getAllPermissions();
 
     List<String> getMyPermission(Integer menuId);
 

@@ -2,7 +2,7 @@ package com.tipcrm.web.publicapi;
 import java.util.List;
 import java.util.Set;
 
-import com.tipcrm.bo.PermissionGroupBo;
+import com.tipcrm.bo.MenuPermissionBo;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.service.PermissionService;
 import com.tipcrm.service.WebContext;
@@ -31,13 +31,13 @@ public class PermissionApi {
     private PermissionService permissionService;
 
     @RequestMapping(value = "permission/me", method = RequestMethod.GET)
-    public JsonEntity<List<PermissionGroupBo>> myPermissions() {
+    public JsonEntity<List<MenuPermissionBo>> myPermissions() {
         Integer userId = webContext.getCurrentUserId();
         return ResponseHelper.createInstance(permissionService.getPermissionsByUserId(userId));
     }
 
     @RequestMapping(value = "permission/role/{roleId}", method = RequestMethod.GET)
-    public JsonEntity<List<PermissionGroupBo>> getRolePermissions(@PathVariable(value = "roleId") Integer roleId) {
+    public JsonEntity<List<MenuPermissionBo>> getRolePermissions(@PathVariable(value = "roleId") Integer roleId) {
         return ResponseHelper.createInstance(permissionService.getPermissionsByRoleId(roleId));
     }
 
