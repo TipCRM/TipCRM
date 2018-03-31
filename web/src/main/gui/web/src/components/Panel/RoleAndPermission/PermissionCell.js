@@ -8,7 +8,7 @@ export default class PermissionCell extends React.Component{
   render(){
     const {permission} = this.props;
     return(<div>
-      {permission.name}:
+      {permission.menuName}:
       {
         permission.permissions? permission.permissions.map(item =>(
           <TipCheckableTag

@@ -23,13 +23,13 @@ export default class RoleAndPermissionPanel extends React.Component{
     createNew: false,
   }
   componentDidMount(){
-    const {dispatch} = this.props;
+    const {dispatch, menuId} = this.props;
     dispatch({
       type: 'role/fetchRoles'
     });
     dispatch({
       type: 'permission/getPermissionsByMenu',
-      payload: {menuName:''}
+      payload: {menuId: menuId}
     })
   }
 
@@ -44,6 +44,11 @@ export default class RoleAndPermissionPanel extends React.Component{
   }
 
   handlePermissionDelete(record){
+    const {dispatch, roles} = this.props;
+    dispatch({
+      type: 'role/deleteRole',
+      payload: {deleteId: record.id, roles: roles}
+    });
   }
 
   handleClosePermissionPanel(){

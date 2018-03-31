@@ -12,21 +12,41 @@ import DynamicPanel from '../components/Common/DynamicPanel';
  * the menu's component
  * @returns {*[]}
  */
-export function menuComponentConstant(children){
-  const menu2Component = {
-    CUSTOMER_MANAGEMENT: (<DynamicPanel children={children} childrenPanels= {customerComponentConstant(children.children)}/>),
-    NOTIFICATION_CENTER: (<DynamicPanel children={children} childrenPanels= {notificationComponentConstant(children.children)}/>),
-    ROLE_AND_PERMISSION: (<DynamicPanel children={children} childrenPanels= {roleAndPermissionComponentConstant(children.children)}/>)};
-  return menu2Component;
+export function menuComponentConstant(item){
+  var component;
+  const children = item.children;
+  switch (item.name){
+    case 'CUSTOMER_MANAGEMENT':
+      component = (<DynamicPanel children={children} initChildrenPanel= {initCustomerComponent}/>);
+      break;
+    case 'NOTIFICATION_CENTER':
+      component = (<DynamicPanel children={children} initChildrenPanel= {initNotificationComponent}/>);
+      break;
+    case 'ROLE_AND_PERMISSION':
+      component = (<DynamicPanel children={children} initChildrenPanel= {initRoleAndPermissionComponent}/>);
+      break;
+    default:
+      component = (<div>The page you request is not exist.</div>);
+  }
+  return component;
 }
 
-export function customerComponentConstant(children){
-  const customer2Component = {
-    MY_CUSTOMER: (<MyCustomerPanel children={children}/>),
-    DEPARTMENT_OPEN_SEA: (<div>全力开发中，敬请期待...</div>),
-    COMPANY_OPEN_SEA: (<div>全力开发中，敬请期待...</div>),
-  };
-  return customer2Component;
+export function initCustomerComponent(item){
+  var component;
+  switch (item.name){
+    case 'MY_CUSTOMER':
+      component = (<MyCustomerPanel children={item.children} menuId={item.id}/>);
+      break;
+    case 'DEPARTMENT_OPEN_SEA':
+      component = (<div>全力开发中，敬请期待...</div>);
+      break;
+    case 'COMPANY_OPEN_SEA':
+      component = (<div>全力开发中，敬请期待...</div>);
+      break;
+    default:
+      component = (<div>The page you request is not exist.</div>);
+  }
+  return component;
 }
 /**
  *  the mycustomer's children component
@@ -42,18 +62,32 @@ export function myCustomerComponentConstant(customerId){
   return myCustomer2Component;
 }
 
-export function notificationComponentConstant(children){
-  const notification2Component = {
-    SYSTEM_NOTIFICATION : (<CustomerNotificationPanel children={children} />),
-    USER_NOTIFICATION: (<div>全力开发中，敬请期待...</div>),
-  };
-  return notification2Component;
+export function initNotificationComponent(item){
+  var component;
+  switch (item.name){
+    case 'SYSTEM_NOTIFICATION':
+      component = (<CustomerNotificationPanel children={item.children} menuId={item.id}/>);
+      break;
+    case 'USER_NOTIFICATION':
+      component = (<div>全力开发中，敬请期待...</div>);
+      break;
+    default:
+      component = (<div>The page you request is not exist.</div>);
+  }
+  return component;
 }
 
-export function roleAndPermissionComponentConstant(children){
-  const roleAndPermissionComponent = {
-    ROLES : (<RoleAndPermissionPanel children={children}/>),
-    MY_ROLE_AND_PERMISSION: (<div>全力开发中，敬请期待...</div>),
-  };
-  return roleAndPermissionComponent;
+export function initRoleAndPermissionComponent(item){
+  var component;
+  switch (item.name){
+    case 'ROLES':
+      component = (<RoleAndPermissionPanel children={item.children} menuId={item.id}/>);
+      break;
+    case 'MY_ROLE_AND_PERMISSION':
+      component = (<div>全力开发中，敬请期待...</div>);
+      break
+    default:
+      component = (<div>The page you request is not exist.</div>);
+  }
+  return component;
 }

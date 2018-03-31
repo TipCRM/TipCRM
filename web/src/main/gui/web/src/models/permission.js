@@ -9,7 +9,7 @@ export default {
   state: {
     permissions:[],
     menuPermissions: {
-      menu:{},
+      menuId:{},
       permissions:[],
     }
   },
@@ -24,12 +24,12 @@ export default {
     *changeRolePermissions({payload}, {call}){
       const response = yield call(changeRolePermissions, payload);
       if (response.status === 200){
-        message.info("保存更改成功");
+        message.success("成功修改权限");
       }
     },
     *getPermissionsByMenu({payload}, {call, put}){
       const response = yield call(getPermissionsByMenu, payload);
-      const menuPermissions = {menuName: payload.menuName, permissions: response.data};
+      const menuPermissions = {...payload, permissions: response.data};
       yield put({
         type: 'saveMenuPermissions',
         payload: menuPermissions,
