@@ -17,8 +17,11 @@ import com.tipcrm.dao.entity.Permission;
 import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.entity.RolePermission;
 import com.tipcrm.dao.entity.User;
+import com.tipcrm.dao.entity.UserRole;
+import com.tipcrm.dao.repository.RolePermissionRepository;
 import com.tipcrm.dao.repository.RoleRepository;
 import com.tipcrm.dao.repository.UserRepository;
+import com.tipcrm.dao.repository.UserRoleRepository;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.service.PermissionService;
 import com.tipcrm.service.RoleService;
@@ -42,12 +45,16 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private WebContext webContext;
 
+    @Autowired
+    private RolePermissionRepository rolePermissionRepository;
+
+    @Autowired
+    private UserRoleRepository userRoleRepository;
     @Override
-    public Set<Role> getRolesByUserId(Integer userId) {
-        Set<Role> roles = RoleCache.getRoles(userId);
+    public List<Role> getRolesByUserId(Integer userId) {
+        List<Role> roles = RoleCache.getRoles(userId);
         if (CollectionUtils.isEmpty(roles)) {
-            User user = userRepository.findOne(userId);
-            roles = Sets.newHashSet(user.getRoles());
+            roles = userRoleRepository.findRoleByUserId(userId);
             RoleCache.addOrUpdateRoles(userId, roles);
         }
         return roles;
@@ -135,5 +142,18 @@ public class RoleServiceImpl implements RoleService {
         role.setUpdateUser(user);
         roleRepository.save(role);
         RoleCache.updateRole(role);
+    }
+
+    @Override
+    public void deleteRole(Integer roleId) {
+        Role role = RoleCache.getRoleById(roleId);
+        if (role == null) {
+            throw new BizException("角色不存在");
+        }
+        rolePermissionRepository.deleteByRoleId(roleId);
+        roleRepository.delete(roleId);
+        userRoleRepository.deleteByRoleId(roleId);
+        PermissionCache.popPermissions(roleId);
+        RoleCache.deleteRole(roleId);
     }
 }

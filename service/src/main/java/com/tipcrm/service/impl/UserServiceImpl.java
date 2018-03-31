@@ -22,11 +22,13 @@ import com.tipcrm.dao.entity.ListBox;
 import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.entity.Security;
 import com.tipcrm.dao.entity.User;
+import com.tipcrm.dao.entity.UserRole;
 import com.tipcrm.dao.repository.DepartmentRepository;
 import com.tipcrm.dao.repository.LevelRepository;
 import com.tipcrm.dao.repository.RoleRepository;
 import com.tipcrm.dao.repository.SecurityRepository;
 import com.tipcrm.dao.repository.UserRepository;
+import com.tipcrm.dao.repository.UserRoleRepository;
 import com.tipcrm.exception.AccountException;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.service.ConfigurationService;
@@ -82,6 +84,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private UserRoleRepository userRoleRepository;
+
     @Override
     public String regist(RegistUserBo registUserBo) {
         String registable = configurationService.get(ConfigurationItems.REGISTABLE.name());
@@ -115,9 +120,12 @@ public class UserServiceImpl implements UserService {
         user.setHireTime(new Date());
         user.setDepartment(department);
         user.setLevel(level);
-        user.setRoles(Lists.newArrayList(role));
         user.setPaymentPercent(level.getDefaultPaymentPercent());
         userRepository.save(user);
+        UserRole userRole = new UserRole();
+        userRole.setRole(role);
+        userRole.setUser(user);
+        userRoleRepository.save(userRole);
         saveSecurity(user.getId(), registUserBo.getPassword());
         return registUserBo.getEmail();
     }
@@ -141,9 +149,12 @@ public class UserServiceImpl implements UserService {
         user.setHireTime(new Date());
         user.setDepartment(department);
         user.setLevel(level);
-        user.setRoles(Lists.newArrayList(role));
         user.setPaymentPercent(level.getDefaultPaymentPercent());
         userRepository.save(user);
+        UserRole userRole = new UserRole();
+        userRole.setRole(role);
+        userRole.setUser(user);
+        userRoleRepository.save(userRole);
         String randomPwd = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8);
         saveSecurity(user.getId(), randomPwd);
         mailService.sendSimpleEmail(createUserBo.getEmail(), "注册通知", "管理员已为您分配帐号，初始密码是" + randomPwd + "，请尽快登陆系统修改密码。");
@@ -194,7 +205,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean isGeneralManager(Integer userId) {
-        Set<Role> roles = roleService.getRolesByUserId(userId);
+        List<Role> roles = roleService.getRolesByUserId(userId);
         for (Role roleBo : roles) {
             if (roleBo.getName().equals(Roles.GENERAL_MANAGER.name())) {
                 return true;
@@ -238,7 +249,7 @@ public class UserServiceImpl implements UserService {
             userBo.setLevel(level.getDisplayName());
         }
         userBo.setPhoneNo(user.getPhoneNo());
-        List<Role> roles = user.getRoles();
+        List<Role> roles = roleService.getRolesByUserId(user.getId());
         List<String> roleStr = new ArrayList<String>();
         if (!CollectionUtils.isEmpty(roles)) {
             for (Role role : roles) {
