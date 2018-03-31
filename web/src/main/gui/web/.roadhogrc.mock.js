@@ -13,8 +13,7 @@ const apis = {
   'POST /public/api/cache/refresh/roleAndPermission': 'http://www.potafish.com',
   'GET /public/api/permission/*': {
     status: 200,
-    data: ['role:add', 'role:update', 'role:delete'],
-    message:{}
+    data: ['role:add', 'role:update', 'role:delete']
   },
   'GET /public/api/menu/me' : {status: 200, data:[
     {title:'客户管理',name:'CUSTOMER_MANAGEMENT', active: true, children:[
