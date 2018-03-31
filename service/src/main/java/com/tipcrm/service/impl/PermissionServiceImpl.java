@@ -44,11 +44,28 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public Set<String> getPermissionValuesByUserId(Integer userId) {
-        List<MenuPermissionBo> groups = getPermissionsByUserId(userId);
+        Set<PermissionBo> permissionBos = getPermissionsByUserId(userId);
         Set<String> permissions = new HashSet<>();
+        if (!CollectionUtils.isEmpty(permissionBos)) {
+            permissions = permissionBos.stream().map(PermissionBo::getValue).collect(Collectors.toSet());
+        }
+        return permissions;
+    }
+    @Override
+    public Set<String> getPermissionNamesByUserId(Integer userId) {
+        Set<PermissionBo> permissionBos = getPermissionsByUserId(userId);
+        Set<String> permissions = new HashSet<>();
+        if (!CollectionUtils.isEmpty(permissionBos)) {
+            permissions = permissionBos.stream().map(PermissionBo::getName).collect(Collectors.toSet());
+        }
+        return permissions;
+    }
+    public Set<PermissionBo> getPermissionsByUserId(Integer userId) {
+        List<MenuPermissionBo> groups = getMenuPermissionsByUserId(userId);
+        Set<PermissionBo> permissions = new HashSet<>();
         if (!CollectionUtils.isEmpty(groups)) {
             for (MenuPermissionBo group : groups) {
-                permissions.addAll(group.getPermissions().stream().filter(p -> p.getChecked()).map(p -> p.getValue()).collect(Collectors.toList()));
+                permissions.addAll(group.getPermissions().stream().filter(p -> p.getChecked()).collect(Collectors.toList()));
             }
         }
         List<Menu> deactive = MenuCache.getDeactiveMenus();
@@ -57,17 +74,16 @@ public class PermissionServiceImpl implements PermissionService {
                 if (menu.getPermission() != null) {
                     List<Permission> deactivePermission = flatPermission(menu.getPermission());
                     if (!CollectionUtils.isEmpty(deactivePermission)) {
-                        permissions.removeAll(deactivePermission.stream().map(Permission::getValue).collect(Collectors.toList()));
+                        permissions.removeAll(deactivePermission.stream().collect(Collectors.toList()));
                     }
                 }
             }
         }
         return permissions;
     }
-
     @Override
     public Set<Integer> getPermissionIdsByUserId(Integer userId) {
-        List<MenuPermissionBo> groups = getPermissionsByUserId(userId);
+        List<MenuPermissionBo> groups = getMenuPermissionsByUserId(userId);
         Set<Integer> permissions = new HashSet<>();
         if (!CollectionUtils.isEmpty(groups)) {
             for (MenuPermissionBo group : groups) {
@@ -78,7 +94,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<MenuPermissionBo> getPermissionsByUserId(Integer userId) {
+    public List<MenuPermissionBo> getMenuPermissionsByUserId(Integer userId) {
         List<MenuPermission> groups = PermissionCache.getMenuPermissions();
         List<MenuPermissionBo> groupBos = MenuPermissionBo.toMenuPermissionBos(groups);
         List<PermissionBo> allPermission = flatMenuPermission(groupBos);
@@ -246,9 +262,9 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public List<String> getMyPermission(Integer menuId) {
-        List<String> menuPermissions = MenuCache.getMenuPermissions(menuId).stream().map(menuPermission -> menuPermission.getPermission().getValue())
+        List<String> menuPermissions = MenuCache.getMenuPermissions(menuId).stream().map(menuPermission -> menuPermission.getPermission().getName())
                                                 .collect(Collectors.toList());
-        Set<String> myPermission = getPermissionValuesByUserId(webContext.getCurrentUserId());
+        Set<String> myPermission = getPermissionNamesByUserId(webContext.getCurrentUserId());
 
         menuPermissions.retainAll(myPermission);
         return menuPermissions;
