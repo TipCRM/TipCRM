@@ -12,6 +12,8 @@ public class RoleBasicBo {
 
     private String displayName;
 
+    private Boolean editable;
+
     public static List<RoleBasicBo> toRoleBasicBos(List<Role> roles) {
         List<RoleBasicBo> roleBos = new ArrayList<>();
         if (!CollectionUtils.isEmpty(roles)) {
@@ -33,6 +35,7 @@ public class RoleBasicBo {
         roleBo.setId(role.getId());
         roleBo.setName(role.getName());
         roleBo.setDisplayName(role.getDisplayName());
+        roleBo.setEditable(role.getEditable());
         return roleBo;
     }
 
@@ -58,6 +61,14 @@ public class RoleBasicBo {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public Boolean getEditable() {
+        return editable;
+    }
+
+    public void setEditable(Boolean editable) {
+        this.editable = editable;
     }
 
     @Override

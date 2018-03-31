@@ -14,13 +14,12 @@ import com.tipcrm.dao.entity.ListBox;
 import com.tipcrm.dao.entity.Menu;
 import com.tipcrm.dao.entity.MenuPermission;
 import com.tipcrm.dao.entity.Permission;
-import com.tipcrm.dao.entity.PermissionGroup;
 import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.repository.ConfigurationRepository;
 import com.tipcrm.dao.repository.ListBoxRepository;
 import com.tipcrm.dao.repository.MenuPermissionRepository;
 import com.tipcrm.dao.repository.MenuRepository;
-import com.tipcrm.dao.repository.PermissionGroupRepository;
+import com.tipcrm.dao.repository.PermissionRepository;
 import com.tipcrm.dao.repository.RoleRepository;
 import com.tipcrm.service.MenuService;
 import com.tipcrm.service.PermissionService;
@@ -47,9 +46,6 @@ public class CacheInitializer implements CommandLineRunner {
     private PermissionService permissionService;
 
     @Autowired
-    private PermissionGroupRepository permissionGroupRepository;
-
-    @Autowired
     private RoleRepository roleRepository;
 
     @Autowired
@@ -63,6 +59,9 @@ public class CacheInitializer implements CommandLineRunner {
 
     @Autowired
     private MenuPermissionRepository menuPermissionRepository;
+
+    @Autowired
+    private PermissionRepository permissionRepository;
 
     private Logger logger = LoggerFactory.getLogger(CacheInitializer.class);
 
@@ -95,7 +94,7 @@ public class CacheInitializer implements CommandLineRunner {
 
     public void initMenuCache() {
         logger.info("Initializing menu cache data...");
-        List<Menu> menus = menuRepository.findAll();
+        List<Menu> menus = menuRepository.findAllOrderBySequence();
         List<Menu> deactiveMenus = new ArrayList<>();
         for (Menu menu : menus) {
             if (!menu.getActive()) {
@@ -113,10 +112,11 @@ public class CacheInitializer implements CommandLineRunner {
         logger.info("Initializing role and permission cache data...");
         List<Role> roles = roleRepository.findAll();
         RoleCache.setAllRole(roles);
+        PermissionCache.setAllPermissions(permissionRepository.findAll());
 
         PermissionCache.setRolePermissions(roleService.getAllRolePermissionMap());
-        List<PermissionGroup> groups = permissionGroupRepository.findAll();
-        PermissionCache.setAllPermissionGroups(groups);
+        List<MenuPermission> menuPermissions = menuPermissionRepository.findAll();
+        PermissionCache.setMenuPermissions(menuPermissions);
 
         List<Menu> menus = MenuCache.getDeactiveMenus();
         if (CollectionUtils.isEmpty(menus)) {

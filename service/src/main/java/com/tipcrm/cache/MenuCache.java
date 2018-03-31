@@ -12,6 +12,7 @@ public class MenuCache {
     private static List<Menu> menus = new ArrayList<>();
     private static List<Menu> deactiveMenus = new ArrayList<>();
     private static List<MenuPermission> menuPermissions = new ArrayList<>();
+
     /**
      * Get Flat menus
      */

@@ -1,6 +1,5 @@
 package com.tipcrm.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,9 +41,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private WebContext webContext;
-
-    @Autowired
-    private PermissionService permissionService;
 
     @Override
     public Set<Role> getRolesByUserId(Integer userId) {
@@ -102,7 +98,7 @@ public class RoleServiceImpl implements RoleService {
         role.setEditable(true);
         roleRepository.save(role);
         RoleCache.addRole(role);
-        PermissionCache.addOrUpdatePermissions(role.getId(),  new HashSet<>());
+        PermissionCache.addOrUpdatePermissions(role.getId(), new HashSet<>());
         return role.getId();
     }
 

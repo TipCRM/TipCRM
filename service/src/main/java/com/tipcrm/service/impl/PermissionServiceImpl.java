@@ -8,13 +8,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Sets;
+import com.tipcrm.bo.MenuPermissionBo;
 import com.tipcrm.bo.PermissionBo;
-import com.tipcrm.bo.PermissionGroupBo;
 import com.tipcrm.cache.MenuCache;
 import com.tipcrm.cache.PermissionCache;
 import com.tipcrm.dao.entity.Menu;
+import com.tipcrm.dao.entity.MenuPermission;
 import com.tipcrm.dao.entity.Permission;
-import com.tipcrm.dao.entity.PermissionGroup;
 import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.entity.RolePermission;
 import com.tipcrm.dao.entity.User;
@@ -44,10 +44,10 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public Set<String> getPermissionValuesByUserId(Integer userId) {
-        List<PermissionGroupBo> groups = getPermissionsByUserId(userId);
+        List<MenuPermissionBo> groups = getPermissionsByUserId(userId);
         Set<String> permissions = new HashSet<>();
         if (!CollectionUtils.isEmpty(groups)) {
-            for (PermissionGroupBo group : groups) {
+            for (MenuPermissionBo group : groups) {
                 permissions.addAll(group.getPermissions().stream().filter(p -> p.getChecked()).map(p -> p.getValue()).collect(Collectors.toList()));
             }
         }
@@ -67,10 +67,10 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public Set<Integer> getPermissionIdsByUserId(Integer userId) {
-        List<PermissionGroupBo> groups = getPermissionsByUserId(userId);
+        List<MenuPermissionBo> groups = getPermissionsByUserId(userId);
         Set<Integer> permissions = new HashSet<>();
         if (!CollectionUtils.isEmpty(groups)) {
-            for (PermissionGroupBo group : groups) {
+            for (MenuPermissionBo group : groups) {
                 permissions.addAll(group.getPermissions().stream().filter(p -> p.getChecked()).map(p -> p.getId()).collect(Collectors.toList()));
             }
         }
@@ -78,10 +78,10 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<PermissionGroupBo> getPermissionsByUserId(Integer userId) {
-        List<PermissionGroup> groups = PermissionCache.getAllPermissionGroups();
-        List<PermissionGroupBo> groupBos = PermissionGroupBo.toPermissionGroupBos(groups);
-        List<PermissionBo> allPermission = flatPermissionGroupBo(groupBos);
+    public List<MenuPermissionBo> getPermissionsByUserId(Integer userId) {
+        List<MenuPermission> groups = PermissionCache.getMenuPermissions();
+        List<MenuPermissionBo> groupBos = MenuPermissionBo.toMenuPermissionBos(groups);
+        List<PermissionBo> allPermission = flatMenuPermission(groupBos);
         Set<Role> myRoles = roleService.getRolesByUserId(userId);
         if (!CollectionUtils.isEmpty(myRoles)) {
             Set<Permission> myPermissions = PermissionCache.getPermissions(myRoles.stream().map(role -> role.getId()).collect(Collectors.toList()));
@@ -89,19 +89,18 @@ public class PermissionServiceImpl implements PermissionService {
                 for (PermissionBo permission : allPermission) {
                     if (myPermission.getId().equals(permission.getId())) {
                         permission.setChecked(true);
-                        break;
                     }
                 }
             }
         }
-        return groupBos;
+        return groupMenuPermissionBo(groupBos);
     }
 
     @Override
-    public List<PermissionGroupBo> getPermissionsByRoleId(Integer roleId) {
-        List<PermissionGroup> groups = PermissionCache.getAllPermissionGroups();
-        List<PermissionGroupBo> groupBos = PermissionGroupBo.toPermissionGroupBos(groups);
-        List<PermissionBo> allPermission = flatPermissionGroupBo(groupBos);
+    public List<MenuPermissionBo> getPermissionsByRoleId(Integer roleId) {
+        List<MenuPermission> groups = PermissionCache.getMenuPermissions();
+        List<MenuPermissionBo> groupBos = MenuPermissionBo.toMenuPermissionBos(groups);
+        List<PermissionBo> allPermission = flatMenuPermission(groupBos);
         Set<Permission> myPermissions = PermissionCache.getPermissions(roleId);
         if (myPermissions == null) {
             throw new BizException("角色不存在");
@@ -116,13 +115,33 @@ public class PermissionServiceImpl implements PermissionService {
                 }
             }
         }
-        return groupBos;
+        return groupMenuPermissionBo(groupBos);
+    }
+
+    public List<MenuPermissionBo> groupMenuPermissionBo(List<MenuPermissionBo> menuPermissions) {
+        List<MenuPermissionBo> res = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(menuPermissions)) {
+            for (MenuPermissionBo menuPermission : menuPermissions) {
+                Boolean isFound = false;
+                for (MenuPermissionBo mp : res) {
+                    if (mp.getMenuId().equals(menuPermission.getMenuId())) {
+                        mp.getPermissions().addAll(menuPermission.getPermissions());
+                        isFound = true;
+                        break;
+                    }
+                }
+                if (!isFound) {
+                    res.add(menuPermission);
+                }
+            }
+        }
+        return res;
     }
 
     @Override
     public void updateRolePermissions(Integer roleId, Set<Integer> permissionIds) {
-        List<PermissionGroupBo> permissionGroupBos = getPermissionsByRoleId(roleId);
-        List<PermissionBo> permissionBos = flatPermissionGroupBo(permissionGroupBos);
+        List<MenuPermissionBo> menuPermissionBos = getPermissionsByRoleId(roleId);
+        List<PermissionBo> permissionBos = flatMenuPermission(menuPermissionBos);
         Set<Integer> existIds = new HashSet<>();
         if (!CollectionUtils.isEmpty(permissionBos)) {
             existIds = permissionBos.stream().filter(permissionBo -> permissionBo.getChecked()).map(permissionBo -> permissionBo.getId()).collect(
@@ -168,7 +187,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public List<Permission> findByIdIn(Set<Integer> ids) {
         List<Permission> res = new ArrayList<>();
-        for (Permission p : getAllPermissions()) {
+        for (Permission p : PermissionCache.getAllPermissions()) {
             if (ids.contains(p.getId())) {
                 res.add(p);
             }
@@ -178,7 +197,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public List<Permission> flatPermission(List<Permission> permissions) {
-        List<Permission> allPermission = getAllPermissions();
+        List<Permission> allPermission = PermissionCache.getAllPermissions();
         List<Permission> flat = new ArrayList<>();
         for (Permission permission : permissions) {
             flat.add(permission);
@@ -188,27 +207,19 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     public List<Permission> flatPermission(Permission permission) {
-        List<Permission> allPermission = getAllPermissions();
+        List<Permission> allPermission = PermissionCache.getAllPermissions();
         List<Permission> flat = new ArrayList<>();
         flat.add(permission);
         flat.addAll(getChildren(allPermission, permission));
         return flat;
     }
 
-    private List<PermissionBo> flatPermissionGroupBo(List<PermissionGroupBo> groups) {
+    private List<PermissionBo> flatMenuPermission(List<MenuPermissionBo> menuPermissionBos) {
         List<PermissionBo> permissionBos = new ArrayList<>();
-        for (PermissionGroupBo group : groups) {
-            permissionBos.addAll(group.getPermissions());
+        for (MenuPermissionBo menuPermissionBo : menuPermissionBos) {
+            permissionBos.addAll(menuPermissionBo.getPermissions());
         }
         return permissionBos;
-    }
-
-    private List<Permission> flatPermissionGroup(List<PermissionGroup> groups) {
-        List<Permission> permissions = new ArrayList<>();
-        for (PermissionGroup group : groups) {
-            permissions.addAll(group.getPermissions());
-        }
-        return permissions;
     }
 
     private List<Permission> flatAllPermission(List<Permission> permissions) {
@@ -234,16 +245,6 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<Permission> getAllPermissions() {
-        List<PermissionGroup> groups = PermissionCache.getAllPermissionGroups();
-        List<Permission> permissions = new ArrayList<>();
-        for (PermissionGroup group : groups) {
-            permissions.addAll(flatAllPermission(group.getPermissions()));
-        }
-        return permissions;
-    }
-
-    @Override
     public List<String> getMyPermission(Integer menuId) {
         List<String> menuPermissions = MenuCache.getMenuPermissions(menuId).stream().map(menuPermission -> menuPermission.getPermission().getValue())
                                                 .collect(Collectors.toList());
@@ -258,6 +259,6 @@ public class PermissionServiceImpl implements PermissionService {
         if (CollectionUtils.isEmpty(ids)) {
             return new ArrayList<>();
         }
-        return getAllPermissions().stream().filter(permission -> ids.contains(permission.getId())).collect(Collectors.toList());
+        return PermissionCache.getAllPermissions().stream().filter(permission -> ids.contains(permission.getId())).collect(Collectors.toList());
     }
 }
