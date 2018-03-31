@@ -1,7 +1,4 @@
 package com.tipcrm.bo;
-import java.util.ArrayList;
-import java.util.List;
-
 public class SaveRoleBo {
     private Integer id;
     private String name;

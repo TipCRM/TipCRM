@@ -29,7 +29,7 @@ public class RoleCache {
     public static void updateRole(Role role) {
         if (role != null) {
             Integer index = -1;
-            for (int i = 0; i < allRole.size(); i ++) {
+            for (int i = 0; i < allRole.size(); i++) {
                 if (allRole.get(i).getId().equals(role.getId())) {
                     index = i;
                     break;

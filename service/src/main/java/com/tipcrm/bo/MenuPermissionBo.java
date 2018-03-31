@@ -12,30 +12,6 @@ public class MenuPermissionBo implements Serializable {
     private String menuName;
     private List<PermissionBo> permissions = new ArrayList<>();
 
-    public Integer getMenuId() {
-        return menuId;
-    }
-
-    public void setMenuId(Integer menuId) {
-        this.menuId = menuId;
-    }
-
-    public String getMenuName() {
-        return menuName;
-    }
-
-    public void setMenuName(String menuName) {
-        this.menuName = menuName;
-    }
-
-    public List<PermissionBo> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(List<PermissionBo> permissions) {
-        this.permissions = permissions;
-    }
-
     public static List<MenuPermissionBo> toMenuPermissionBos(List<MenuPermission> menuPermissions) {
         List<MenuPermissionBo> groupBos = new ArrayList<>();
         if (!CollectionUtils.isEmpty(menuPermissions)) {
@@ -58,5 +34,29 @@ public class MenuPermissionBo implements Serializable {
         groupBo.setMenuName(menuPermission.getMenu().getDisplayName());
         groupBo.getPermissions().add(PermissionBo.toPermissionBo(menuPermission.getPermission()));
         return groupBo;
+    }
+
+    public Integer getMenuId() {
+        return menuId;
+    }
+
+    public void setMenuId(Integer menuId) {
+        this.menuId = menuId;
+    }
+
+    public String getMenuName() {
+        return menuName;
+    }
+
+    public void setMenuName(String menuName) {
+        this.menuName = menuName;
+    }
+
+    public List<PermissionBo> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<PermissionBo> permissions) {
+        this.permissions = permissions;
     }
 }
