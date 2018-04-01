@@ -23,4 +23,6 @@ public interface RoleService {
     void updateRole(SaveRoleBo saveRoleBo);
 
     void deleteRole(Integer roleId);
+
+    void assignRoleToUser(Integer userId, Set<Integer> roleIds);
 }

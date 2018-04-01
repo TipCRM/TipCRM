@@ -157,4 +157,9 @@ public class RoleServiceImpl implements RoleService {
         PermissionCache.popPermissions(roleId);
         RoleCache.deleteRole(roleId);
     }
+
+    @Override
+    public void assignRoleToUser(Integer userId, Set<Integer> roleIds) {
+        //todo
+    }
 }
