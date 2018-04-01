@@ -126,7 +126,6 @@ public class PermissionServiceImpl implements PermissionService {
                 for (PermissionBo permission : allPermission) {
                     if (myPermission.getId().equals(permission.getId())) {
                         permission.setChecked(true);
-                        break;
                     }
                 }
             }
