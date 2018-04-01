@@ -50,7 +50,7 @@ public class RoleApi {
         return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
     }
 
-    @RequestMapping(value = "/role/user/{userId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/role/user/{userId}", method = RequestMethod.PUT)
     public JsonEntity<String> assignRoleToUser(@PathVariable(value = "userId") Integer userId,
                                                @RequestBody Set<Integer> roleIds) {
         roleService.assignRoleToUser(userId, roleIds);
