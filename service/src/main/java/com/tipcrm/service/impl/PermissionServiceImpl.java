@@ -51,6 +51,7 @@ public class PermissionServiceImpl implements PermissionService {
         }
         return permissions;
     }
+
     @Override
     public Set<String> getPermissionNamesByUserId(Integer userId) {
         Set<PermissionBo> permissionBos = getPermissionsByUserId(userId);
@@ -60,6 +61,7 @@ public class PermissionServiceImpl implements PermissionService {
         }
         return permissions;
     }
+
     public Set<PermissionBo> getPermissionsByUserId(Integer userId) {
         List<MenuPermissionBo> groups = getMenuPermissionsByUserId(userId);
         Set<PermissionBo> permissions = new HashSet<>();
@@ -81,6 +83,7 @@ public class PermissionServiceImpl implements PermissionService {
         }
         return permissions;
     }
+
     @Override
     public Set<Integer> getPermissionIdsByUserId(Integer userId) {
         List<MenuPermissionBo> groups = getMenuPermissionsByUserId(userId);
@@ -126,7 +129,6 @@ public class PermissionServiceImpl implements PermissionService {
                 for (PermissionBo permission : allPermission) {
                     if (myPermission.getId().equals(permission.getId())) {
                         permission.setChecked(true);
-                        break;
                     }
                 }
             }

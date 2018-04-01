@@ -1,5 +1,6 @@
 package com.tipcrm.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +17,7 @@ import com.tipcrm.dao.entity.Permission;
 import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.entity.RolePermission;
 import com.tipcrm.dao.entity.User;
+import com.tipcrm.dao.entity.UserRole;
 import com.tipcrm.dao.repository.RolePermissionRepository;
 import com.tipcrm.dao.repository.RoleRepository;
 import com.tipcrm.dao.repository.UserRepository;
@@ -160,6 +162,39 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void assignRoleToUser(Integer userId, Set<Integer> roleIds) {
-        //todo
+        User user = userRepository.findOne(userId);
+        if (user == null) {
+            throw new BizException("用户不存在");
+        }
+        List<Role> roles = RoleCache.getRoles(userId);
+        List<Integer> existIds = roles.stream().map(Role::getId).collect(Collectors.toList());
+        List<Integer> needRemove = new ArrayList<>();
+        List<Integer> needAdd = new ArrayList<>();
+        for (Integer id : existIds) {
+            if (!roleIds.contains(id)) {
+                needRemove.add(id);
+            }
+        }
+        for (Integer roleId : roleIds) {
+            if (!existIds.contains(roleId)) {
+                needAdd.add(roleId);
+            }
+        }
+        if (!CollectionUtils.isEmpty(needRemove)) {
+            userRoleRepository.deleteByUserIdAndRoleId(userId, needRemove);
+            RoleCache.popRoles(userId, needRemove);
+        }
+        if (!CollectionUtils.isEmpty(needAdd)) {
+            List<Role> addRoles = RoleCache.getRoleById(needAdd);
+            List<UserRole> userRoles = new ArrayList<>();
+            for (Role role : addRoles) {
+                UserRole userRole = new UserRole();
+                userRole.setUser(user);
+                userRole.setRole(role);
+                userRoles.add(userRole);
+            }
+            userRoleRepository.save(userRoles);
+            RoleCache.pushRoles(userId, addRoles);
+        }
     }
 }

@@ -132,12 +132,23 @@ public class RoleCache {
     }
 
     public static Role getRoleById(Integer id) {
-        List<Role> roles = RoleCache.getAllRole();
-        for (Role role : roles) {
+        for (Role role : allRole) {
             if (role.getId().equals(id)) {
                 return role;
             }
         }
         return null;
+    }
+
+    public static List<Role> getRoleById(List<Integer> ids) {
+        List<Role> res = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(ids)) {
+            for (Role role : allRole) {
+                if (ids.contains(role.getId())) {
+                    res.add(role);
+                }
+            }
+        }
+        return res;
     }
 }
