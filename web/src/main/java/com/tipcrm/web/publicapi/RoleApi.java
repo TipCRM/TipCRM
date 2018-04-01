@@ -1,5 +1,6 @@
 package com.tipcrm.web.publicapi;
 import java.util.List;
+import java.util.Set;
 
 import com.tipcrm.bo.RoleBo;
 import com.tipcrm.bo.SaveRoleBo;
@@ -46,6 +47,13 @@ public class RoleApi {
     @RequiresPermissions(value = Constants.Permission.ROLE_DELETE)
     public JsonEntity<String> deleteRole(@PathVariable(value = "roleId") Integer roleId) {
         roleService.deleteRole(roleId);
+        return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
+    }
+
+    @RequestMapping(value = "/role/user/{userId}", method = RequestMethod.POST)
+    public JsonEntity<String> assignRoleToUser(@PathVariable(value = "userId") Integer userId,
+                                               @RequestBody Set<Integer> roleIds) {
+        roleService.assignRoleToUser(userId, roleIds);
         return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
     }
 }

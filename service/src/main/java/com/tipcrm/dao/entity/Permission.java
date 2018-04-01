@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "permission")
-public class Permission extends BaseAllEntity {
+public class Permission {
     @GeneratedValue
     @Id
     @Column(name = "id")
