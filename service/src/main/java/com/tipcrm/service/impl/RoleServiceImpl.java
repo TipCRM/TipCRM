@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.tipcrm.bo.RoleBasicBo;
 import com.tipcrm.bo.RoleBo;
 import com.tipcrm.bo.SaveRoleBo;
 import com.tipcrm.cache.PermissionCache;
@@ -58,6 +59,11 @@ public class RoleServiceImpl implements RoleService {
             RoleCache.addOrUpdateRoles(userId, roles);
         }
         return roles;
+    }
+
+    @Override
+    public List<RoleBasicBo> getMyRoles() {
+        return RoleBasicBo.toRoleBasicBos(getRolesByUserId(webContext.getCurrentUserId()));
     }
 
     @Override
