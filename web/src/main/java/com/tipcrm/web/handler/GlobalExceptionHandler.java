@@ -34,6 +34,7 @@ public class GlobalExceptionHandler {
             Sentry.init(sentryConfig.getDsn());
         }
     }
+
     public void report(Throwable e) {
         if (sentryConfig.getEnable() && !(e instanceof BizException)) {
             Sentry.capture(e);
