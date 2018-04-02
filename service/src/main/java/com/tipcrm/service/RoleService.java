@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.tipcrm.bo.RoleBasicBo;
 import com.tipcrm.bo.RoleBo;
 import com.tipcrm.bo.SaveRoleBo;
 import com.tipcrm.dao.entity.Permission;
@@ -11,6 +12,8 @@ import com.tipcrm.dao.entity.Role;
 public interface RoleService {
 
     List<Role> getRolesByUserId(Integer userId);
+
+    List<RoleBasicBo> getMyRoles();
 
     Role findById(Integer roleId);
 

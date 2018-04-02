@@ -2,6 +2,7 @@ package com.tipcrm.web.publicapi;
 import java.util.List;
 import java.util.Set;
 
+import com.tipcrm.bo.RoleBasicBo;
 import com.tipcrm.bo.RoleBo;
 import com.tipcrm.bo.SaveRoleBo;
 import com.tipcrm.constant.Constants;
@@ -55,5 +56,10 @@ public class RoleApi {
                                                @RequestBody Set<Integer> roleIds) {
         roleService.assignRoleToUser(userId, roleIds);
         return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
+    }
+
+    @RequestMapping(value = "/role/me", method = RequestMethod.GET)
+    public JsonEntity<List<RoleBasicBo>> myRoles() {
+        return ResponseHelper.createInstance(roleService.getMyRoles());
     }
 }
