@@ -9,7 +9,7 @@ public class DepartmentBo {
 
     private Integer total;
 
-    private SimpleUserBo manager;
+    private UserBasicBo manager;
 
     private String entryUser;
 
@@ -39,11 +39,11 @@ public class DepartmentBo {
         this.total = total;
     }
 
-    public SimpleUserBo getManager() {
+    public UserBasicBo getManager() {
         return manager;
     }
 
-    public void setManager(SimpleUserBo manager) {
+    public void setManager(UserBasicBo manager) {
         this.manager = manager;
     }
 

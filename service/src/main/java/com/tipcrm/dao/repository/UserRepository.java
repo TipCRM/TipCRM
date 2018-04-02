@@ -19,4 +19,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("select count(u.id) from User u where u.department.id = :departmentId")
     Integer countByDepartmentId(@Param("departmentId") Integer departmentId);
+
+    @Query("select u from User u where u.userName like %:userName% and u.id > 0")
+    List<User> findByNameIncludeDismiss(@Param("userName") String userName);
+
+    @Query("select u from User u where u.userName like %:userName% and u.dismissTime is null and u.id > 0")
+    List<User> findByNameWithoutDismiss(@Param("userName") String userName);
 }

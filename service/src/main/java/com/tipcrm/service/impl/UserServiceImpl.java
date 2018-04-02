@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.tipcrm.bo.CreateUserBo;
 import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.RegistUserBo;
+import com.tipcrm.bo.UserBasicBo;
 import com.tipcrm.bo.UserBo;
 import com.tipcrm.constant.ConfigurationItems;
 import com.tipcrm.constant.Constants;
@@ -318,5 +319,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public void logout() {
         SecurityUtils.getSubject().logout();
+    }
+
+    @Override
+    public List<UserBasicBo> findByName(String userName, Boolean includeDismiss) {
+        if (StringUtils.isBlank(userName)) {
+            throw new BizException("用户名不能为空");
+        }
+        userName = "%" + userName + "%";
+        List<User> users;
+        if (includeDismiss) {
+            users = userRepository.findByNameIncludeDismiss(userName);
+        } else {
+            users = userRepository.findByNameWithoutDismiss(userName);
+        }
+        return UserBasicBo.convertToUserBasicBos(users);
     }
 }

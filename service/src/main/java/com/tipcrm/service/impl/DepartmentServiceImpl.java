@@ -3,9 +3,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.tipcrm.bo.SaveDepartmentBo;
 import com.tipcrm.bo.DepartmentBo;
-import com.tipcrm.bo.SimpleUserBo;
+import com.tipcrm.bo.SaveDepartmentBo;
+import com.tipcrm.bo.UserBasicBo;
 import com.tipcrm.dao.entity.Department;
 import com.tipcrm.dao.entity.User;
 import com.tipcrm.dao.repository.DepartmentRepository;
@@ -157,7 +157,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentBo.setId(department.getId());
         User manager = department.getManager();
         if (manager != null) {
-            SimpleUserBo simpleUserBo = new SimpleUserBo(manager.getId(), manager.getUserName());
+            UserBasicBo simpleUserBo = new UserBasicBo(manager.getId(), manager.getUserName());
             departmentBo.setManager(simpleUserBo);
         }
         departmentBo.setName(department.getName());
