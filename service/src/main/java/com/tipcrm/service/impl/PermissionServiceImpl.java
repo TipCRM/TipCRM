@@ -240,17 +240,6 @@ public class PermissionServiceImpl implements PermissionService {
         return permissionBos;
     }
 
-    private List<Permission> flatAllPermission(List<Permission> permissions) {
-        List<Permission> flat = new ArrayList<>();
-        for (Permission permission : permissions) {
-            if (permission.getDependence() == null) {
-                flat.add(permission);
-                flat.addAll(getChildren(permissions, permission));
-            }
-        }
-        return flat;
-    }
-
     public List<Permission> getChildren(List<Permission> permissions, Permission permission) {
         List<Permission> permissionList = new ArrayList<>();
         for (Permission per : permissions) {

@@ -4,12 +4,16 @@ package com.tipcrm.web.handler;
 import javax.servlet.http.HttpServletRequest;
 
 import com.tipcrm.exception.AccountException;
+import com.tipcrm.exception.BizException;
+import com.tipcrm.web.config.ErrorReportConfig;
 import com.tipcrm.web.util.JsonEntity;
+import io.airbrake.javabrake.Notifier;
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,8 +21,19 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
     private Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @Autowired
+    private Notifier notifier;
+
+    @Autowired
+    private ErrorReportConfig errorReportConfig;
+
+    public void report(Throwable e) {
+        if (errorReportConfig.getEnable() && !(e instanceof BizException)) {
+            notifier.report(e);
+        }
+    }
 
     // 捕捉shiro的异常
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -65,6 +80,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public JsonEntity globalException(HttpServletRequest request, Throwable e) {
         logger.error("ERROR: " + e.getMessage(), e);
+        report(e);
         JsonEntity jsonEntity = new JsonEntity();
         jsonEntity.setStatus(getStatus(request).value());
         jsonEntity.setMessage(e.getMessage());

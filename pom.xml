@@ -51,6 +51,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.airbrake</groupId>
+            <artifactId>javabrake</artifactId>
+            <version>0.1.4</version>
+        </dependency>
     </dependencies>
 
 </project>
