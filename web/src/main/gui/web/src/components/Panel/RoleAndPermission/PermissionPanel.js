@@ -20,6 +20,7 @@ export default class PermissionPanel extends React.Component{
   state={
     editingRole: this.props.createNew,
     editingPermission: false,
+    roleNewName: this.props.selectRole.displayName,
   };
   componentDidMount(){
     const {dispatch, selectRole} = this.props;
@@ -90,21 +91,27 @@ export default class PermissionPanel extends React.Component{
       });
     } else {
       const {dispatch} = this.props;
+      const {roleNewName} = this.state;
       if (createNew){
         dispatch({
           type: 'role/createNewRole',
-          payload: {name: e.target.value}
+          payload: {name: roleNewName}
         });
       } else {
         dispatch({
           type: 'role/changeRole',
-          payload: {selectRole: selectRole, newName: e.target.value}
+          payload: {selectRole: selectRole, newName: roleNewName}
         });
       }
       this.setState({
         editingRole: false,
       });
     }
+  }
+  handleChangeRoleValue(e){
+    this.setState({
+      roleNewName: e.target.value,
+    });
   }
 
   render(){
@@ -120,6 +127,7 @@ export default class PermissionPanel extends React.Component{
             value={selectRole.displayName}
             enableEdit={enableEdit}
             createNew = {createNew}
+            handleChangeValue = {this.handleChangeRoleValue.bind(this)}
             editing={editingRole}
             handleChangeValueSave={this.handleSaveRoleChange.bind(this, createNew, selectRole)}
             style={{with:'25px'}}/></Row>
