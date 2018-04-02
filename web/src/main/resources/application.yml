@@ -9,6 +9,11 @@ tipcrm:
     version: 1.0
     author: neil(1051750377@qq.com), moses(1285823170@qq.com)
 
+javabrake:
+  enable: false
+  projectId: 178259
+  projectKey: ba54600b75b8a3645a0a84020ab66f8c
+  environment: localhost
 spring:
       application:
          name: plm2
