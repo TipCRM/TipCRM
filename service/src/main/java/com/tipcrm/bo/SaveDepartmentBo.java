@@ -1,9 +1,19 @@
 package com.tipcrm.bo;
-public class CreateDepartmentBo {
+public class SaveDepartmentBo {
+
+    private Integer id;
 
     private String name;
 
     private Integer managerId;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
