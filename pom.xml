@@ -52,9 +52,9 @@
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.airbrake</groupId>
-            <artifactId>javabrake</artifactId>
-            <version>0.1.4</version>
+            <groupId>io.sentry</groupId>
+            <artifactId>sentry</artifactId>
+            <version>1.7.2</version>
         </dependency>
     </dependencies>
 
