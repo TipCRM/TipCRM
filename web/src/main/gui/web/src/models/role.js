@@ -72,7 +72,6 @@ export default {
       }
     },
     saveSelectRole(state, {payload}){
-      console.log(payload);
       return{
         ...state,
         selectRole: payload.selectRole,

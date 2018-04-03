@@ -119,5 +119,5 @@ export function initUserManagementComponent(item){
 }
 
 export function initDepartmentManagementComponent(item){
-  return (<DepartmentManagePanel menuId />);
+  return (<DepartmentManagePanel menuId={item.id} />);
 }

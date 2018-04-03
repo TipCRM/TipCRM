@@ -67,6 +67,33 @@ const apisNoProxy ={
     },
     'DELETE /public/api/role/*': {
       status: 200
+    },
+    'GET /public/api/departments':{
+      status: 200,
+      data:[
+        {
+          "entryTime": "2018-04-03T03:06:21.182Z",
+          "entryUser": "string",
+          "id": 0,
+          "manager": {
+            "id": 0,
+            "name": "string"
+          },
+          "name": "string",
+          "total": 0
+        },
+        {
+          "entryTime": "2018-04-03T03:06:21.182Z",
+          "entryUser": "string",
+          "id": 0,
+          "manager": {
+            "id": 0,
+            "name": "string"
+          },
+          "name": "string",
+          "total": 0
+        }
+      ]
     }
 }
 
@@ -84,6 +111,7 @@ const apis = {
   'POST /public/api/cache/refresh/roleAndPermission': 'http://www.potafish.com',
   'GET /public/api/menu/me' :'http://www.potafish.com',
   'GET /public/api/permission/menu/*': 'http://www.potafish.com',
+  'GET /public/api/departments': 'http://www.potafish.com',
 };
 
 export default delay( noProxy ? apis : apisNoProxy, 1000);

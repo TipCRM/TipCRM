@@ -94,3 +94,20 @@ export async function flushRoleCache(){
     method: 'POST'
   });
 }
+
+// department
+export async function fetchAllDepartments(){
+  return request('/public/api/departments');
+}
+export async function createNewDepartment(params){
+  return request('/public/api/department',{
+    method: 'POST',
+    body: params,
+  });
+}
+export async function updateDepartment(params){
+  return request('/public/api/department',{
+    method: 'PUT',
+    body: params,
+  });
+}

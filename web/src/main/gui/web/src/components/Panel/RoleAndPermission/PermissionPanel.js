@@ -7,7 +7,7 @@ import {Button, Row, Divider} from 'antd';
 import styles from './Index.css';
 import PermissionCell from './PermissionCell';
 import CommonSpin from '../../Common/CommonSpin';
-import TipEditableCell from '../../Common/TipEditableCell';
+import TipEditableInput from '../../Common/TipEditableInput';
 
 @connect(({loading, permission, role}) =>({
   loading: loading.models.permission,
@@ -121,7 +121,7 @@ export default class PermissionPanel extends React.Component{
     return(<CommonSpin spinning={loading}>
       <div className={styles.permissionPanel}>
         <CommonSpin spinning={roleLoading}>
-          <Row><TipEditableCell
+          <Row><TipEditableInput
             handleEditSaveClick = {this.handleSaveRoleChange.bind(this, createNew, selectRole)}
             addonBefore="角色名称"
             value={selectRole.displayName}
