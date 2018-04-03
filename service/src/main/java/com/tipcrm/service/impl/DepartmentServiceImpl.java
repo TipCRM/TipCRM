@@ -106,6 +106,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = departmentRepository.findOne(departmentId);
         department.setDeleteTime(new Date());
         department.setDeleteUser(webContext.getCurrentUser());
+        List<User> users = userRepository.findByDepartmentId(departmentId);
+        if (!CollectionUtils.isEmpty(users)) {
+            users.forEach(user -> user.setDepartment(null));
+            userRepository.save(users);
+        }
         departmentRepository.save(department);
     }
 
