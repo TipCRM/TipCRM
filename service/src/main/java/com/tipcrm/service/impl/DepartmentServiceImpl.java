@@ -47,6 +47,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         validateSaveDepartmentBo(saveDepartmentBo);
         Department department = convertToDepartment(saveDepartmentBo);
         department = departmentRepository.save(department);
+        if (saveDepartmentBo.getManagerId() != null) {
+            User manager = userRepository.findOne(saveDepartmentBo.getManagerId());
+            manager.setDepartment(department);
+            userRepository.save(manager);
+        }
         return department.getId();
     }
 
@@ -66,6 +71,8 @@ public class DepartmentServiceImpl implements DepartmentService {
                 throw new BizException("用户不存在");
             }
             manager = userRepository.findOne(saveDepartmentBo.getManagerId());
+            manager.setDepartment(department);
+            userRepository.save(manager);
         }
         department.setManager(manager);
         departmentRepository.save(department);
