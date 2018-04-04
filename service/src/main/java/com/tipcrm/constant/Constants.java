@@ -54,6 +54,11 @@ public class Constants {
         public static final String DEPARTMENT_GOAL_ASSIGN = "department_goal:assign";
         public static final String USER_GOAL_VIEW = "user_goal:view";
         public static final String USER_GOAL_ASSIGN = "user_goal:assign";
+        public static final String ROLE_ASSIGN = "role:assign";
+        public static final String LEVEL_VIEW = "level:view";
+        public static final String LEVEL_ADD = "level:add";
+        public static final String LEVEL_UPDATE = "level:update";
+        public static final String LEVEL_DELETE = "level:delete";
     }
 
     public static class RequestResult {

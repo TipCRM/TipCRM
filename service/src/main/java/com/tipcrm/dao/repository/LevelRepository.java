@@ -1,4 +1,6 @@
 package com.tipcrm.dao.repository;
+import java.util.List;
+
 import com.tipcrm.dao.entity.Level;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -7,5 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface LevelRepository extends JpaRepository<Level, Integer> {
 
     Level findByName(String name);
+
+    List<Level> findAllByDeleteTimeIsNull();
 
 }
