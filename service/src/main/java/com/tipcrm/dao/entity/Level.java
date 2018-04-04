@@ -26,9 +26,6 @@ public class Level extends BaseAllEntity {
     @Column(name = "default_payment_percent")
     private BigDecimal defaultPaymentPercent;
 
-    @Column(name = "deletable")
-    private Boolean deletable;
-
     public Integer getId() {
         return id;
     }
@@ -61,11 +58,4 @@ public class Level extends BaseAllEntity {
         this.defaultPaymentPercent = defaultPaymentPercent;
     }
 
-    public Boolean getDeletable() {
-        return deletable;
-    }
-
-    public void setDeletable(Boolean deletable) {
-        this.deletable = deletable;
-    }
 }

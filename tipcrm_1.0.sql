@@ -418,7 +418,6 @@ CREATE TABLE `level` (
   `update_time`             DATETIME(3)                           DEFAULT NULL,
   `delete_id`               INT(11)                               DEFAULT NULL,
   `delete_time`             DATETIME(3)                           DEFAULT NULL,
-  `deletable`               TINYINT(1)                            DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `levelI1` (`name`)
 )
@@ -435,7 +434,7 @@ LOCK TABLES `level` WRITE;
 /*!40000 ALTER TABLE `level`
   DISABLE KEYS */;
 INSERT INTO `level` VALUES
-  (1, 'NEW_USER', '新员工', 0.00, -1, NOW(), NULL, NULL, NULL, NULL, 0);
+  (1, 'NEW_USER', '新员工', 0.00, -1, NOW(), NULL, NULL, NULL, NULL);
 /*!40000 ALTER TABLE `level`
   ENABLE KEYS */;
 UNLOCK TABLES;
@@ -558,13 +557,14 @@ INSERT INTO `menu` VALUES
   (23, 'ROLE_AND_PERMISSION', '角色与权限', 8, NULL, NULL, NULL, NULL, 1),
   (24, 'MY_ROLE_AND_PERMISSION', '我的', 1, NULL, 23, NULL, NULL, 1),
   (25, 'ROLES', '角色', 2, NULL, 23, NULL, NULL, 1),
-  (26, 'PERSONAL_CENTER', '个人中心', 9, NULL, NULL, NULL, NULL, 1),
-  (27, 'NOTIFICATION_CENTER', '通知中心', 10, NULL, NULL, NULL, NULL, 1),
+  (26, 'PERSONAL_CENTER', '个人中心', 10, NULL, NULL, NULL, NULL, 1),
+  (27, 'NOTIFICATION_CENTER', '通知中心', 11, NULL, NULL, NULL, NULL, 1),
   (28, 'SYSTEM_NOTIFICATION', '系统通知', 1, NULL, 27, NULL, NULL, 1),
   (29, 'USER_NOTIFICATION', '站内信', 2, NULL, 27, NULL, NULL, 0),
-  (30, 'SETTING', '设置', 11, NULL, NULL, NULL, NULL, 1),
+  (30, 'SETTING', '设置', 12, NULL, NULL, NULL, NULL, 1),
   (31, 'MY_SETTING', '个人设置', 1, NULL, 30, NULL, NULL, 1),
-  (32, 'SYSTEM_SETTING', '系统配置', 2, NULL, 30, 34, NULL, 1);
+  (32, 'SYSTEM_SETTING', '系统配置', 2, NULL, 30, 34, NULL, 1),
+  (33, 'LEVEL_MANAGEMENT', '等级管理', 9, null, null, 41, null, 1);
 /*!40000 ALTER TABLE `menu`
   ENABLE KEYS */;
 UNLOCK TABLES;
@@ -671,7 +671,11 @@ INSERT INTO `permission` VALUES
   (36, 'DEPARTMENT_GOAL_ASSIGN', 'department_goal:assign', '分配部门目标', NULL, NULL),
   (37, 'USER_GOAL_VIEW', 'user_goal:view', '查看员工目标', NULL, NULL),
   (38, 'USER_GOAL_ASSIGN', 'user_goal:assign', '分配员工目标', NULL, 37),
-  (39, 'ROLE_ASSIGN', 'role:assign', '分配角色', NULL, NULL);
+  (39, 'ROLE_ASSIGN', 'role:assign', '分配角色', NULL, NULL),
+  (40, 'LEVEL_VIEW', 'level:view', '查看等级', NULL, NULL),
+  (41, 'LEVEL_ADD', 'level:add', '添加等级', NULL, 40),
+  (42, 'LEVEL_UPDATE', 'level:update', '修改等级', NULL, 40),
+  (43, 'LEVEL_DELETE', 'level:delete', '删除等级', NULL, 40);
 
 /*!40000 ALTER TABLE `permission`
   ENABLE KEYS */;
@@ -730,7 +734,10 @@ INSERT INTO `TIP_CRM`.`menu_permission` (`menu_id`, `permission_id`) VALUES
   (25, 22),
   (25, 23),
   (25, 24),
-  (32, 34);
+  (32, 34),
+  (33, 41),
+  (33, 42),
+  (33, 43);
 
 --
 -- Table structure for table `production`
