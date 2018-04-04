@@ -1,43 +1,15 @@
 package com.tipcrm.bo;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-public class UserBo {
-
-    private String userName;
+public class UserBo extends UserBasicBo {
 
     private String email;
 
-    private String idCard;
-
-    private Date birthday;
-
-    private String phoneNo;
-
-    private String avatar;
-
     private String status;
-
-    private String hirer;
-
-    private Date hireTime;
-
-    private String manager;
 
     private String department;
 
+    private String manager;
+
     private String level;
-
-    private List<String> roles = new ArrayList<String>();
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
     public String getEmail() {
         return email;
@@ -45,38 +17,6 @@ public class UserBo {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getIdCard() {
-        return idCard;
-    }
-
-    public void setIdCard(String idCard) {
-        this.idCard = idCard;
-    }
-
-    public Date getBirthday() {
-        return birthday == null ? null : (Date) birthday.clone();
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday == null ? null : (Date) birthday.clone();
-    }
-
-    public String getPhoneNo() {
-        return phoneNo;
-    }
-
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
     }
 
     public String getStatus() {
@@ -87,20 +27,12 @@ public class UserBo {
         this.status = status;
     }
 
-    public String getHirer() {
-        return hirer;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setHirer(String hirer) {
-        this.hirer = hirer;
-    }
-
-    public Date getHireTime() {
-        return hireTime == null ? null : (Date) hireTime.clone();
-    }
-
-    public void setHireTime(Date hireTime) {
-        this.hireTime = hireTime == null ? null : (Date) hireTime.clone();
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     public String getManager() {
@@ -111,27 +43,11 @@ public class UserBo {
         this.manager = manager;
     }
 
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
     public String getLevel() {
         return level;
     }
 
     public void setLevel(String level) {
         this.level = level;
-    }
-
-    public List<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
     }
 }
