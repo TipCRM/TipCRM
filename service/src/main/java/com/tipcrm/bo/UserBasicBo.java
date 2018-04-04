@@ -9,13 +9,11 @@ public class UserBasicBo {
     private Integer id;
     private String name;
 
-    public UserBasicBo(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
     public static UserBasicBo convertToUserBasicBo(User user) {
-        return new UserBasicBo(user.getId(), user.getUserName());
+        UserBasicBo userBasicBo = new UserBasicBo();
+        userBasicBo.setId(user.getId());
+        userBasicBo.setName(user.getUserName());
+        return userBasicBo;
     }
 
     public static List<UserBasicBo> convertToUserBasicBos(List<User> users) {

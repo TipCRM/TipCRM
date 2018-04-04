@@ -8,7 +8,7 @@ import com.tipcrm.bo.CreateUserBo;
 import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.RegistUserBo;
 import com.tipcrm.bo.UserBasicBo;
-import com.tipcrm.bo.UserBo;
+import com.tipcrm.bo.UserExtBo;
 import com.tipcrm.constant.ConfigurationItems;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.constant.Levels;
@@ -184,13 +184,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserBo getUserByUserId(Integer userId) {
+    public UserExtBo getUserByUserId(Integer userId) {
         User user = userRepository.findOne(userId);
         if (user == null) {
             throw new BizException("用户不存在");
         }
-        UserBo userBo = convertToUserBo(user);
-        return userBo;
+        UserExtBo userExtBo = convertToUserBo(user);
+        return userExtBo;
     }
 
     @Override
@@ -224,30 +224,30 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private UserBo convertToUserBo(User user) {
-        UserBo userBo = new UserBo();
-        userBo.setAvatar(user.getAvatar());
-        userBo.setBirthday(user.getBirthday());
+    private UserExtBo convertToUserBo(User user) {
+        UserExtBo userExtBo = new UserExtBo();
+        userExtBo.setAvatar(user.getAvatar());
+        userExtBo.setBirthday(user.getBirthday());
         Department department = user.getDepartment();
         if (department != null) {
-            userBo.setDepartment(user.getDepartment().getName());
+            userExtBo.setDepartment(user.getDepartment().getName());
             User manager = department.getManager();
             if (manager != null) {
-                userBo.setManager(manager.getUserName());
+                userExtBo.setManager(manager.getUserName());
             }
         }
-        userBo.setEmail(user.getEmail());
+        userExtBo.setEmail(user.getEmail());
         User hirer = user.getHire();
         if (hirer != null && !Constants.User.SYSTEM.equals(hirer.getUserName())) {
-            userBo.setHirer(hirer.getUserName());
+            userExtBo.setHirer(hirer.getUserName());
         }
-        userBo.setHireTime(user.getHireTime());
-        userBo.setIdCard(user.getIdCard());
+        userExtBo.setHireTime(user.getHireTime());
+        userExtBo.setIdCard(user.getIdCard());
         Level level = user.getLevel();
         if (level != null) {
-            userBo.setLevel(level.getDisplayName());
+            userExtBo.setLevel(level.getDisplayName());
         }
-        userBo.setPhoneNo(user.getPhoneNo());
+        userExtBo.setPhoneNo(user.getPhoneNo());
         List<Role> roles = roleService.getRolesByUserId(user.getId());
         List<String> roleStr = new ArrayList<String>();
         if (!CollectionUtils.isEmpty(roles)) {
@@ -255,10 +255,10 @@ public class UserServiceImpl implements UserService {
                 roleStr.add(role.getDisplayName());
             }
         }
-        userBo.setRoles(roleStr);
-        userBo.setStatus(user.getStatus().getDisplayName());
-        userBo.setUserName(user.getUserName());
-        return userBo;
+        userExtBo.setRoles(roleStr);
+        userExtBo.setStatus(user.getStatus().getDisplayName());
+        userExtBo.setName(user.getUserName());
+        return userExtBo;
     }
 
     private void validateRegistUser(RegistUserBo registUserBo) {

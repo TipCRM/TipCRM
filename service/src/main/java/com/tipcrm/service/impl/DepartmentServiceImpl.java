@@ -162,8 +162,10 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentBo.setId(department.getId());
         User manager = department.getManager();
         if (manager != null) {
-            UserBasicBo simpleUserBo = new UserBasicBo(manager.getId(), manager.getUserName());
-            departmentBo.setManager(simpleUserBo);
+            UserBasicBo userBasicBo = new UserBasicBo();
+            userBasicBo.setId(manager.getId());
+            userBasicBo.setName(manager.getUserName());
+            departmentBo.setManager(userBasicBo);
         }
         departmentBo.setName(department.getName());
         departmentBo.setEntryTime(department.getEntryTime());

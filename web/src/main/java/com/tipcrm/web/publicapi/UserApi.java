@@ -3,7 +3,7 @@ package com.tipcrm.web.publicapi;
 import java.util.List;
 
 import com.tipcrm.bo.UserBasicBo;
-import com.tipcrm.bo.UserBo;
+import com.tipcrm.bo.UserExtBo;
 import com.tipcrm.service.UserService;
 import com.tipcrm.service.WebContext;
 import com.tipcrm.web.util.JsonEntity;
@@ -29,7 +29,7 @@ public class UserApi {
     private UserService userService;
 
     @RequestMapping(value = "user/me", method = RequestMethod.GET)
-    public JsonEntity<UserBo> getUser() {
+    public JsonEntity<UserExtBo> getUser() {
         Integer userId = webContext.getCurrentUserId();
         return ResponseHelper.createInstance(userService.getUserByUserId(userId));
     }

@@ -5,7 +5,7 @@ import com.tipcrm.bo.CreateUserBo;
 import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.RegistUserBo;
 import com.tipcrm.bo.UserBasicBo;
-import com.tipcrm.bo.UserBo;
+import com.tipcrm.bo.UserExtBo;
 import com.tipcrm.dao.entity.User;
 
 public interface UserService {
@@ -16,7 +16,7 @@ public interface UserService {
 
     void login(LoginBo loginBo);
 
-    UserBo getUserByUserId(Integer userId);
+    UserExtBo getUserByUserId(Integer userId);
 
     Boolean isUserExist(Integer userId);
 
