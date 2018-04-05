@@ -63,7 +63,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Integer updateDepartment(SaveDepartmentBo saveDepartmentBo) {
         validateUpdateDepartment(saveDepartmentBo);
-        Department department = departmentRepository.findOne(saveDepartmentBo.getId());
+        Department department = departmentRepository.findByIdAndDeleteTimeIsNull(saveDepartmentBo.getId());
         department.setName(saveDepartmentBo.getName());
         User manager = null;
         if (saveDepartmentBo.getManagerId() != null) {
