@@ -10,4 +10,6 @@ public interface LevelService {
     void updateLevel(SaveLevelBo saveLevelBo);
 
     List<LevelBo> getAllLevel();
+
+    void deleteLevel(Integer levelId);
 }

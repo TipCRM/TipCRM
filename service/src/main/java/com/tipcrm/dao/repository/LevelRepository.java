@@ -10,6 +10,8 @@ public interface LevelRepository extends JpaRepository<Level, Integer> {
 
     Level findByName(String name);
 
+    Level findByIdAndDeleteTimeIsNull(Integer id);
+
     List<Level> findAllByDeleteTimeIsNull();
 
 }

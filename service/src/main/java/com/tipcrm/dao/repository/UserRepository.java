@@ -27,4 +27,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findByNameWithoutDismiss(@Param("userName") String userName);
 
     List<User> findByDepartmentId(Integer departmentId);
+
+    List<User> findAllByLevelId(Integer levelId);
 }
