@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,7 +47,8 @@ public class LevelApi {
 
     @RequestMapping(value = "level/{levelId}", method = RequestMethod.DELETE)
     @RequiresPermissions(Constants.Permission.LEVEL_DELETE)
-    public JsonEntity<String> deleteLevel() {
-        return ResponseHelper.ofNothing();
+    public JsonEntity<String> deleteLevel(@PathVariable(value = "levelId") Integer levelId) {
+        levelService.deleteLevel(levelId);
+        return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
     }
 }
