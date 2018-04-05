@@ -111,3 +111,8 @@ export async function updateDepartment(params){
     body: params,
   });
 }
+export async function deletDepartment(params) {
+  return request('/public/api/department/'+params.deleteId, {
+    method: 'DELETE'
+  });
+}

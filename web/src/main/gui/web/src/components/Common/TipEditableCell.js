@@ -8,9 +8,9 @@ export default class TipEditableCell extends React.Component{
   render(){
     const {enableEdit, editing, value, createNew, handleSaveValue, handleValueChange} = this.props;
     if (createNew){
-      return (<Input defaultValue={value}/>);
+      return (<Input defaultValue={value} onPressEnter={handleSaveValue} onChange={handleValueChange}/>);
     }
-    const editPanel = editing ? (<Input defaultValue={value} onPressEnter={handleSaveValue} onChange={handleValueChange}/>) : value;
+    const editPanel = editing ? <Input defaultValue={value} onPressEnter={handleSaveValue} onChange={handleValueChange}/> : value;
     return(<div>
       {enableEdit ? editPanel: value}
     </div>);

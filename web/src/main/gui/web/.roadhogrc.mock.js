@@ -112,6 +112,10 @@ const apis = {
   'GET /public/api/menu/me' :'http://www.potafish.com',
   'GET /public/api/permission/menu/*': 'http://www.potafish.com',
   'GET /public/api/departments': 'http://www.potafish.com',
+  'GET /public/api/departments': 'http://www.potafish.com',
+  'POST /public/api/department': 'http://www.potafish.com',
+  'PUT /public/api/department': 'http://www.potafish.com',
+  'DELETE /public/api/department/*': 'http://www.potafish.com',
 };
 
 export default delay( noProxy ? apis : apisNoProxy, 1000);
