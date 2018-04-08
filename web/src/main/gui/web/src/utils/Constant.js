@@ -7,6 +7,11 @@ import CustomerContactCell from '../components/Panel/Customer/CustomerContactCel
 import CustomerNotificationPanel from '../components/Panel/Notification/CustomerNotificationPanel';
 import RoleAndPermissionPanel from '../components/Panel/RoleAndPermission/RoleAndPermissionPanel';
 
+import DepartmentUserPanel from '../components/Panel/User/DepartmentUserPanel';
+import CompanyUserPanel from '../components/Panel/User/CompanyUserPanel';
+
+import DepartmentManagePanel from '../components/Panel/Department/DepartmentManagePanel';
+
 import DynamicPanel from '../components/Common/DynamicPanel';
 /**
  * the menu's component
@@ -24,6 +29,12 @@ export function menuComponentConstant(item){
       break;
     case 'ROLE_AND_PERMISSION':
       component = (<DynamicPanel children={children} initChildrenPanel= {initRoleAndPermissionComponent}/>);
+      break;
+    case 'USER_MANAGEMENT':
+      component = (<DynamicPanel children={children} initChildrenPanel={initUserManagementComponent}/>);
+      break;
+    case 'DEPARTMENT_MANAGEMENT':
+      component = (<DynamicPanel item={item} notTabs={true} initChildrenPanel={initDepartmentManagementComponent}/>);
       break;
     default:
       component = (<div>The page you request is not exist.</div>);
@@ -90,4 +101,23 @@ export function initRoleAndPermissionComponent(item){
       component = (<div>The page you request is not exist.</div>);
   }
   return component;
+}
+
+export function initUserManagementComponent(item){
+  var component;
+  switch (item.name){
+    case 'DEPARTMENT_USER':
+      component = (<DepartmentUserPanel children={item.children} menuId={item.id}/>)
+      break;
+    case 'COMPANY_USER':
+      component = (<CompanyUserPanel children={item.children} menuId={item.id}/>);
+      break;
+    default:
+      component = (<div>The page you request is not exist.</div>);
+  }
+  return component;
+}
+
+export function initDepartmentManagementComponent(item){
+  return (<DepartmentManagePanel menuId={item.id} />);
 }
