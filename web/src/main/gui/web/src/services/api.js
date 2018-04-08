@@ -11,11 +11,15 @@ export function userLogin(params) {
     body: params,
   });
 }
-
+// user api
 export async function fetchCurrentUser(){
   return request('/public/api/user/me');
 }
+export async function fetchUserByName(params) {
+  return request('/public/api/user?userName='+params.userName+"&includeDismiss="+params.includeDismiss);
+}
 
+// menu api
 export async function fakeGetMenu(){
   return request('/public/api/menu/me');
 }

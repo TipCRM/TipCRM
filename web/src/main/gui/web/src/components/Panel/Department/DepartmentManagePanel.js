@@ -12,11 +12,12 @@ import RoleOperationCell from '../RoleAndPermission/RoleOperationCell';
 import TipEditableSelectCell from '../../Common/TipEditableSelectCell';
 import styles from './Index.css';
 
-@connect(({loading, permission, department}) =>({
+@connect(({loading, permission, department, user}) =>({
   loadingPermission:loading.models.permission,
   menuPermissions: permission.menuPermissions,
   loading: loading.models.department,
   departments: department.departments,
+  users: user.users,
 }))
 export default class DepartmentManagePanel extends React.Component{
   state={
@@ -93,8 +94,20 @@ export default class DepartmentManagePanel extends React.Component{
     });
   }
 
+  handleSelectCellOnChange(value){
+
+  }
+  handleSelectCellOnSearch(value){
+    console.log(">>>>>>>>>>>>>>>"+value);
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'user/getUserByName',
+      payload: {userName: value, includeDismiss: false},
+    })
+  }
+
   render(){
-    const {menuPermissions, departments, loading, loadingPermission} = this.props;
+    const {menuPermissions, departments, loading, loadingPermission, users} = this.props;
     // init permissions
     const {permissions} = menuPermissions;
     const enableAdd = permissions.filter(item => item === getPermission('DEPARTMENT_ADD')).length > 0;
@@ -111,9 +124,10 @@ export default class DepartmentManagePanel extends React.Component{
                           handleValueChange = {this.handleDepartmentNameChange.bind(this)}
                           handleSaveValue = {this.handleSaveDepartment.bind(this, item, 'name')}/>)},
       {title: '部门经理', dataIndex:'manager.name', width: '15%', render:((text, item, index) =>
-        <TipEditableSelectCell editing={item.editing} enableEdit={enableEdit} data={data}
+        <TipEditableSelectCell editing={item.editing} enableEdit={enableEdit} data={users}
                           selectData={item.manager ? item.manager:''} createNew = {item.createNew} fetching={true}
-                          handleOnSearch = {this.handleSaveDepartment.bind(this, item, 'manager.name')}/>)},
+                          handleOnSearch = {this.handleSelectCellOnSearch.bind(this, item, 'manager.name')}
+                               handleValueChange = {this.handleSelectCellOnChange.bind(this)}/>)},
       {title: '部门人数', width: '10%', dataIndex: 'total'},
       {title: '创建人', width: '20%', dataIndex:'entryUser'},
       {title: '创建时间', width: '20%', dataIndex:'entryTime'},

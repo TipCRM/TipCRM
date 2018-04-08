@@ -100,6 +100,8 @@ const apisNoProxy ={
 const apis = {
   'POST /public/api/login':'http://www.potafish.com',
   'GET /public/api/user/me':'http://www.potafish.com',
+  'GET /public/api/user': 'http://www.potafish.com',
+
   'POST /public/api/my/customers' :'http://www.potafish.com',
   'POST /public/api/notification/my' : 'http://www.potafish.com',
   'GET /public/api/roles' : 'http://www.potafish.com',
