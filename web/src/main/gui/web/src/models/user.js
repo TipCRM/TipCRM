@@ -32,7 +32,7 @@ export default {
       const response = yield call(fetchUserByName, payload);
       yield put({
         type: 'saveUsers',
-        params: response,
+        payload: response.data,
       });
     }
   },

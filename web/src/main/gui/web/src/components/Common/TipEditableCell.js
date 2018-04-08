@@ -6,7 +6,7 @@ import {Input} from 'antd';
 
 export default class TipEditableCell extends React.Component{
   render(){
-    const {enableEdit, editing, value, createNew, handleSaveValue, handleValueChange} = this.props;
+    const {enableEdit, editing, value, createNew, handleSaveValue, handleValueChange, style} = this.props;
     if (createNew){
       return (<Input defaultValue={value} onPressEnter={handleSaveValue} onChange={handleValueChange}/>);
     }

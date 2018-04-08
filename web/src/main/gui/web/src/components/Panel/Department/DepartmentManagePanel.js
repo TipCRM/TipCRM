@@ -17,6 +17,7 @@ import styles from './Index.css';
   menuPermissions: permission.menuPermissions,
   loading: loading.models.department,
   departments: department.departments,
+  loadingUsers: loading.models.user,
   users: user.users,
 }))
 export default class DepartmentManagePanel extends React.Component{
@@ -98,7 +99,7 @@ export default class DepartmentManagePanel extends React.Component{
 
   }
   handleSelectCellOnSearch(value){
-    console.log(">>>>>>>>>>>>>>>"+value);
+    console.log(value);
     const {dispatch} = this.props;
     dispatch({
       type: 'user/getUserByName',
@@ -107,26 +108,25 @@ export default class DepartmentManagePanel extends React.Component{
   }
 
   render(){
-    const {menuPermissions, departments, loading, loadingPermission, users} = this.props;
+    const {menuPermissions, departments, loading, loadingPermission, users, loadingUsers} = this.props;
     // init permissions
     const {permissions} = menuPermissions;
     const enableAdd = permissions.filter(item => item === getPermission('DEPARTMENT_ADD')).length > 0;
     const enableEdit = permissions.filter(item => item === getPermission('DEPARTMENT_EDIT')).length > 0;
     const enableDelete = permissions.filter(item => item === getPermission('DEPARTMENT_DELETE')).length > 0;
-    const data = [{id: '1', name:'李白'}]
 
     let columns = [
       {title: '部门编号', dataIndex:'id', width: '10%'},
       {title: '部门名称', dataIndex:'name', width: '15%', render:((text, item, index) =>
-        <TipEditableCell editing={item.editing}
+        <TipEditableCell editing={item.editing} style={{width: '100%'}}
                           enableEdit={enableEdit} value={item.name}
                           createNew = {item.createNew}
                           handleValueChange = {this.handleDepartmentNameChange.bind(this)}
                           handleSaveValue = {this.handleSaveDepartment.bind(this, item, 'name')}/>)},
       {title: '部门经理', dataIndex:'manager.name', width: '15%', render:((text, item, index) =>
         <TipEditableSelectCell editing={item.editing} enableEdit={enableEdit} data={users}
-                          selectData={item.manager ? item.manager:''} createNew = {item.createNew} fetching={true}
-                          handleOnSearch = {this.handleSelectCellOnSearch.bind(this, item, 'manager.name')}
+                          selectData={item.manager ? item.manager:''} createNew = {item.createNew} fetching={loadingUsers}
+                          handleOnSearch = {this.handleSelectCellOnSearch.bind(this, item)}
                                handleValueChange = {this.handleSelectCellOnChange.bind(this)}/>)},
       {title: '部门人数', width: '10%', dataIndex: 'total'},
       {title: '创建人', width: '20%', dataIndex:'entryUser'},
