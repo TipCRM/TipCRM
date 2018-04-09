@@ -25,6 +25,7 @@ export default class DepartmentManagePanel extends React.Component{
     createNew: false,
     selectDepartment: {},
     newDepartmentName: null,
+    newManagerId: null,
   }
   componentDidMount(){
     const {dispatch, menuId} = this.props;
@@ -79,6 +80,7 @@ export default class DepartmentManagePanel extends React.Component{
       });
       this.setState({
         newDepartmentName:record.name,
+        newManagerId: record.manager? record.manager.id: null,
       });
     }
   }
