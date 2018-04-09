@@ -7,9 +7,9 @@ import styles from './Index.css';
 
 export default class RoleOperationCell extends React.Component{
   render(){
-    const {showEdit, showDelete, handleEditClick, handleDeleteClick} = this.props;
+    const {showEdit, showDelete, handleEditClick, handleDeleteClick, editing} = this.props;
     return(<div>
-      {showEdit ? <Button size="small" icon="edit" shape="circle" onClick={handleEditClick}/> : ''}
+      {showEdit ? <Button size="small" icon={editing ? "save":"edit"} shape="circle" onClick={handleEditClick}/> : ''}
       {showDelete ? <Button size="small" icon="delete" type="danger" shape="circle" onClick={handleDeleteClick} className={styles.operationButton}/> : ''}
     </div>);
   }

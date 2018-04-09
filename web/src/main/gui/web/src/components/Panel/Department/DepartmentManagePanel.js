@@ -51,8 +51,6 @@ export default class DepartmentManagePanel extends React.Component{
   }
 
   handleSaveDepartment(item){
-
-    console.log(item);
     const {dispatch} = this.props;
     const {newDepartmentName} = this.state;
     if (item.id){
@@ -69,9 +67,8 @@ export default class DepartmentManagePanel extends React.Component{
   }
   handleDepartmentEdit(record){
     const {dispatch, departments} = this.props;
-    console.log(departments);
     if (record.editing){
-
+      this.handleSaveDepartment(record);
     } else {
       let newDepartments = departments.filter(item => item.id != record.id);
       record.editing = true;
@@ -97,7 +94,7 @@ export default class DepartmentManagePanel extends React.Component{
   }
 
   handleSelectCellOnChange(value){
-
+    console.log(value)
   }
   handleSelectCellOnSearch(value){
     console.log(value);
@@ -124,7 +121,7 @@ export default class DepartmentManagePanel extends React.Component{
                           createNew = {item.createNew}
                           handleValueChange = {this.handleDepartmentNameChange.bind(this)}
                           handleSaveValue = {this.handleSaveDepartment.bind(this, item)}/>)},
-      {title: '部门经理', dataIndex:'manager.name', width: '15%', render:((text, item, index) =>
+      {title: '部门经理', dataIndex:'manager', width: '15%', render:((text, item, index) =>
         <TipEditableSelectCell editing={item.editing} enableEdit={enableEdit} data={users}
                           selectData={item.manager ? item.manager:''} createNew = {item.createNew} fetching={loadingUsers}
                           handleOnSearch = {this.handleSelectCellOnSearch.bind(this, item)}
@@ -136,6 +133,7 @@ export default class DepartmentManagePanel extends React.Component{
     if (enableEdit || enableDelete){
       const column = {title: '操作', render:(record =>
         <RoleOperationCell
+          editing={record.editing}
           showEdit={enableEdit}
           showDelete={enableDelete}
           handleEditClick = {this.handleDepartmentEdit.bind(this, record)}
