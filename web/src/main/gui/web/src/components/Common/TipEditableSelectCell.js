@@ -10,6 +10,7 @@ export default class TipEditableSelectCell extends React.Component{
   render(){
     const {enableEdit, editing, selectData, createNew, handleOnSearch, handleValueChange, data, fetching, style} = this.props;
     const selectCell = (<Select
+      style={{width: '100%'}}
       mode="combobox"
       value={selectData.id}
       labelInValue
@@ -26,7 +27,7 @@ export default class TipEditableSelectCell extends React.Component{
       return selectCell;
     }
     const editPanel = editing ? selectCell: data.name;
-    return(<div style={{width: '80px'}}>
+    return(<div>
       {enableEdit ? editPanel: data.name}
     </div>);
   }

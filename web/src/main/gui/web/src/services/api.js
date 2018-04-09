@@ -18,6 +18,27 @@ export async function fetchCurrentUser(){
 export async function fetchUserByName(params) {
   return request('/public/api/user?userName='+params.userName+"&includeDismiss="+params.includeDismiss);
 }
+export async function createNewUser(params){
+  return request('/public/api/user', {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function fetchUserDetailInfo(params){
+  return request('/public/api/user/'+params.userId);
+}
+export async function disMissUser(params){
+  return request('/pubic/api/user/dismiss', {
+    method: 'DELETE',
+    body: params,
+  });
+}
+export async function updateUserInfo(params){
+  return request('public/api/user', {
+    method: 'PUT',
+    body: params,
+  });
+}
 
 // menu api
 export async function fakeGetMenu(){

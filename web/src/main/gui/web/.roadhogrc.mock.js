@@ -94,7 +94,60 @@ const apisNoProxy ={
           "total": 0
         }
       ]
+    },
+  'POST /public/api/department': {
+    status: 200,
+    data:[]
+  },
+  'PUT /public/api/department': {
+    status: 200,
+    data:[]
+  },
+  'DELETE /public/api/department/*': {
+    status: 200,
+    data:[]
+  },
+  'GET /public/api/user': {
+    status: 200,
+    data: [
+      {id: 1, name: '李白'},
+      {id: 2, name: '鲁班七号'}],
+  },
+  'POST /public/api/user': {
+    status: 200,
+    data: {id: 11}
+  },
+  'GET /public/api/user/*': {
+    status: 200,
+    data: {
+      userName:'李白',
+      email:'gdsy@dasd.com',
+      idCard:'--',
+      birthday:'2017-08-12',
+      phoneNo:'18012045894',
+      avatar:'',
+      levelId:1,
+      levelName:'新员工',
+      payment: 20,
+      motto:'开心开心',
+      status: '在职',
+      hirer:' 李白',
+      hirerTime:'2017-12-07',
+      departmentId: 1,
+      departmentName: '销售一部',
+      dismissUser:'',
+      dismissDate:'',
+      dismissReason:'',
     }
+  },
+  'DELETE /pubic/api/user/dismiss': {
+    status: 200,
+    data: []
+  },
+  'PUT public/api/user': {
+    status: 200,
+    data: []
+  }
 }
 
 const apis = {
