@@ -76,7 +76,10 @@ export default class DepartmentManagePanel extends React.Component{
       dispatch({
         type: 'department/saveDepartments',
         payload: newDepartments,
-      })
+      });
+      this.setState({
+        newDepartmentName:record.name,
+      });
     }
   }
   handleDepartmentDelete(record){
