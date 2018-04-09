@@ -39,6 +39,7 @@ export default {
     *deleteDepartment({payload}, {call, put}){
       const response = yield call(deletDepartment, payload);
       if (response.status === 200){
+        message.success('成功删除部门');
         let departments = payload.departments.filter(item => item.id != payload.deleteId);
         yield put({
           type: 'saveDepartments',

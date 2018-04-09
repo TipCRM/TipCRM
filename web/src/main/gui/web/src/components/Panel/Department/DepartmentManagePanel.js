@@ -39,7 +39,7 @@ export default class DepartmentManagePanel extends React.Component{
 
   handleDepartmentAdd(){
     let {dispatch, departments} = this.props;
-    let newDepartment = {id: '--', editing: true, createNew: true};
+    let newDepartment = {editing: true, createNew: true};
     departments.push(newDepartment);
     dispatch({
       type: 'department/saveDepartments',
@@ -50,19 +50,20 @@ export default class DepartmentManagePanel extends React.Component{
     });
   }
 
-  handleSaveDepartment(e, item, field){
+  handleSaveDepartment(item){
 
-    // console.log(value    // const value = e.target.value;);
+    console.log(item);
     const {dispatch} = this.props;
+    const {newDepartmentName} = this.state;
     if (item.id){
       dispatch({
         type: 'department/updateDepartment',
-
+        payload:{id: item.id, name: newDepartmentName}
       });
     } else {
       dispatch({
         type: 'department/createNewDepartment',
-        payload: {name: this.state.newDepartmentName}
+        payload: {name: newDepartmentName}
       });
     }
   }
@@ -84,7 +85,7 @@ export default class DepartmentManagePanel extends React.Component{
   handleDepartmentDelete(record){
     const {dispatch, departments} = this.props;
     dispatch({
-      type: 'role/deleteRole',
+      type: 'department/deleteDepartment',
       payload: {deleteId: record.id, departments: departments}
     });
   }
@@ -118,11 +119,11 @@ export default class DepartmentManagePanel extends React.Component{
     let columns = [
       {title: '部门编号', dataIndex:'id', width: '10%'},
       {title: '部门名称', dataIndex:'name', width: '15%', render:((text, item, index) =>
-        <TipEditableCell editing={item.editing} style={{width: '100%'}}
+        <TipEditableCell editing={item.editing}
                           enableEdit={enableEdit} value={item.name}
                           createNew = {item.createNew}
                           handleValueChange = {this.handleDepartmentNameChange.bind(this)}
-                          handleSaveValue = {this.handleSaveDepartment.bind(this, item, 'name')}/>)},
+                          handleSaveValue = {this.handleSaveDepartment.bind(this, item)}/>)},
       {title: '部门经理', dataIndex:'manager.name', width: '15%', render:((text, item, index) =>
         <TipEditableSelectCell editing={item.editing} enableEdit={enableEdit} data={users}
                           selectData={item.manager ? item.manager:''} createNew = {item.createNew} fetching={loadingUsers}
