@@ -59,7 +59,6 @@ export default class RoleAndPermissionPanel extends React.Component{
   }
 
   onTableRow(record){
-    console.log(record);
     return{
       onDoubleClick:() =>{
         this.props.dispatch({

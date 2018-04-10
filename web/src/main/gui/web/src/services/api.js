@@ -11,11 +11,36 @@ export function userLogin(params) {
     body: params,
   });
 }
-
+// user api
 export async function fetchCurrentUser(){
   return request('/public/api/user/me');
 }
+export async function fetchUserByName(params) {
+  return request('/public/api/user?userName='+params.userName+"&includeDismiss="+params.includeDismiss);
+}
+export async function createNewUser(params){
+  return request('/public/api/user', {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function fetchUserDetailInfo(params){
+  return request('/public/api/user/'+params.userId);
+}
+export async function disMissUser(params){
+  return request('/pubic/api/user/dismiss', {
+    method: 'DELETE',
+    body: params,
+  });
+}
+export async function updateUserInfo(params){
+  return request('public/api/user', {
+    method: 'PUT',
+    body: params,
+  });
+}
 
+// menu api
 export async function fakeGetMenu(){
   return request('/public/api/menu/me');
 }
@@ -92,5 +117,27 @@ export async function deleteRole(params) {
 export async function flushRoleCache(){
   return request('/public/api/cache/refresh/roleAndPermission', {
     method: 'POST'
+  });
+}
+
+// department
+export async function fetchAllDepartments(){
+  return request('/public/api/departments');
+}
+export async function createNewDepartment(params){
+  return request('/public/api/department',{
+    method: 'POST',
+    body: params,
+  });
+}
+export async function updateDepartment(params){
+  return request('/public/api/department',{
+    method: 'PUT',
+    body: params,
+  });
+}
+export async function deletDepartment(params) {
+  return request('/public/api/department/'+params.deleteId, {
+    method: 'DELETE'
   });
 }

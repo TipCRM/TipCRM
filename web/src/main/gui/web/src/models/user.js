@@ -1,4 +1,7 @@
-import { userLogin, fetchCurrentUser } from '../services/api';
+import { userLogin, fetchCurrentUser,
+  fetchUserByName, createNewUser,
+  fetchUserDetailInfo, disMissUser,
+  updateUserInfo} from '../services/api';
 import {message} from 'antd';
 import {routerRedux} from 'dva/router';
 
@@ -6,6 +9,8 @@ export default {
   namespace: 'user',
   state: {
     currentUser: {},
+    selectUser: {},
+    users:[],
   },
   effects: {
     *login({ payload }, { call, put }) {
@@ -21,12 +26,46 @@ export default {
     *logout(_, { put, select }) {
     },
     *getCurrentUser(_,{call, put}){
-      const respone = yield call(fetchCurrentUser);
+      const response = yield call(fetchCurrentUser);
       yield put({
         type: 'saveCurrentUser',
-        payload: respone,
+        payload: response,
       });
+    },
+    *getUserByName({payload}, {call, put}){
+      const response = yield call(fetchUserByName, payload);
+      yield put({
+        type: 'saveUsers',
+        payload: response.data,
+      });
+    },
+    *createNewUser({payload}, {call, put}){
+      const response = yield call(createNewUser, payload);
+      if (response.status === 200){
+        message.success('创建员工成功');
+        yield put()
+      }
+    },
+    *getUserDetailInfo({payload}, {call, put}){
+      const response = yield call(fetchUserDetailInfo, payload);
+      yield put({
+        type: 'saveSelectUser',
+        payload: response.data,
+      });
+    },
+    *disMissUser({payload}, {call, put}){
+      const response = yield call(disMissUser, payload);
+      if (response.status === 200){
+        message.success('离职员工成功');
+      }
+    },
+    *updateUser({payload}, {call, put}){
+      const response = yield call(updateUserInfo, payload);
+      if (response.status === 200){
+        message.success('修改员工信息成功');
+      }
     }
+
   },
 
   reducers: {
@@ -42,6 +81,18 @@ export default {
       return{
         ...state,
         currentUser: payload.data,
+      }
+    },
+    saveUsers(state, {payload}){
+      return{
+        ...state,
+        users: payload,
+      }
+    },
+    saveSelectUser(state, {payload}){
+      return{
+        ...state,
+        selectUser: payload,
       }
     }
   },

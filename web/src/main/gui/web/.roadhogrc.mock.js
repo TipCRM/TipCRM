@@ -67,12 +67,94 @@ const apisNoProxy ={
     },
     'DELETE /public/api/role/*': {
       status: 200
+    },
+    'GET /public/api/departments':{
+      status: 200,
+      data:[
+        {
+          "entryTime": "2018-04-03T03:06:21.182Z",
+          "entryUser": "string",
+          "id": 0,
+          "manager": {
+            "id": 0,
+            "name": "string"
+          },
+          "name": "string",
+          "total": 0
+        },
+        {
+          "entryTime": "2018-04-03T03:06:21.182Z",
+          "entryUser": "string",
+          "id": 0,
+          "manager": {
+            "id": 0,
+            "name": "string"
+          },
+          "name": "string",
+          "total": 0
+        }
+      ]
+    },
+  'POST /public/api/department': {
+    status: 200,
+    data:[]
+  },
+  'PUT /public/api/department': {
+    status: 200,
+    data:[]
+  },
+  'DELETE /public/api/department/*': {
+    status: 200,
+    data:[]
+  },
+  'GET /public/api/user': {
+    status: 200,
+    data: [
+      {id: 1, name: '李白'},
+      {id: 2, name: '鲁班七号'}],
+  },
+  'POST /public/api/user': {
+    status: 200,
+    data: {id: 11}
+  },
+  'GET /public/api/user/*': {
+    status: 200,
+    data: {
+      userName:'李白',
+      email:'gdsy@dasd.com',
+      idCard:'--',
+      birthday:'2017-08-12',
+      phoneNo:'18012045894',
+      avatar:'',
+      levelId:1,
+      levelName:'新员工',
+      payment: 20,
+      motto:'开心开心',
+      status: '在职',
+      hirer:' 李白',
+      hirerTime:'2017-12-07',
+      departmentId: 1,
+      departmentName: '销售一部',
+      dismissUser:'',
+      dismissDate:'',
+      dismissReason:'',
     }
+  },
+  'DELETE /pubic/api/user/dismiss': {
+    status: 200,
+    data: []
+  },
+  'PUT public/api/user': {
+    status: 200,
+    data: []
+  }
 }
 
 const apis = {
   'POST /public/api/login':'http://www.potafish.com',
   'GET /public/api/user/me':'http://www.potafish.com',
+  'GET /public/api/user': 'http://www.potafish.com',
+
   'POST /public/api/my/customers' :'http://www.potafish.com',
   'POST /public/api/notification/my' : 'http://www.potafish.com',
   'GET /public/api/roles' : 'http://www.potafish.com',
@@ -84,6 +166,11 @@ const apis = {
   'POST /public/api/cache/refresh/roleAndPermission': 'http://www.potafish.com',
   'GET /public/api/menu/me' :'http://www.potafish.com',
   'GET /public/api/permission/menu/*': 'http://www.potafish.com',
+  'GET /public/api/departments': 'http://www.potafish.com',
+  'GET /public/api/departments': 'http://www.potafish.com',
+  'POST /public/api/department': 'http://www.potafish.com',
+  'PUT /public/api/department': 'http://www.potafish.com',
+  'DELETE /public/api/department/*': 'http://www.potafish.com',
 };
 
 export default delay( noProxy ? apis : apisNoProxy, 1000);
