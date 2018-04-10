@@ -96,6 +96,13 @@ public class Constants {
             public static final String READ_STATUS = "read_status";
             public static final String RECEIVER = "receiver";
         }
+
+        public static class User {
+            public static final String USER_NAME = "user_name";
+            public static final String STATUS = "status";
+            public static final String DEPARTMENT_ID = "department";
+            public static final String LEVEL_ID = "level";
+        }
     }
 
     public static class SortFieldName {
@@ -123,6 +130,17 @@ public class Constants {
                 fieldMap.put(QueryFieldName.Notification.CONTENT, "content");
                 fieldMap.put(QueryFieldName.Notification.READ_STATUS, "readStatus.name");
                 fieldMap.put(QueryFieldName.Notification.RECEIVER, "toUser.userName");
+            }
+        }
+
+        public static class User {
+            public static final Map<String, String> fieldMap = Maps.newHashMap();
+
+            static {
+                fieldMap.put(QueryFieldName.User.USER_NAME, "userName");
+                fieldMap.put(QueryFieldName.User.STATUS, "status.name");
+                fieldMap.put(QueryFieldName.User.DEPARTMENT_ID, "department.name");
+                fieldMap.put(QueryFieldName.User.LEVEL_ID, "level.name");
             }
         }
     }

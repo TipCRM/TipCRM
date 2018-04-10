@@ -2,12 +2,25 @@ package com.tipcrm.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import com.google.common.collect.Sets;
 import com.tipcrm.bo.CreateUserBo;
 import com.tipcrm.bo.LoginBo;
+import com.tipcrm.bo.QueryCriteriaBo;
+import com.tipcrm.bo.QueryRequestBo;
+import com.tipcrm.bo.QueryResultBo;
+import com.tipcrm.bo.QuerySortBo;
 import com.tipcrm.bo.RegistUserBo;
 import com.tipcrm.bo.UserBasicBo;
+import com.tipcrm.bo.UserBo;
 import com.tipcrm.bo.UserExtBo;
 import com.tipcrm.constant.ConfigurationItems;
 import com.tipcrm.constant.Constants;
@@ -30,6 +43,7 @@ import com.tipcrm.dao.repository.UserRepository;
 import com.tipcrm.dao.repository.UserRoleRepository;
 import com.tipcrm.exception.AccountException;
 import com.tipcrm.exception.BizException;
+import com.tipcrm.exception.QueryException;
 import com.tipcrm.service.ConfigurationService;
 import com.tipcrm.service.ListBoxService;
 import com.tipcrm.service.MailService;
@@ -43,7 +57,13 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +72,8 @@ import org.springframework.util.CollectionUtils;
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
 public class UserServiceImpl implements UserService {
+
+    private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -142,7 +164,7 @@ public class UserServiceImpl implements UserService {
         validateSaveUserBo(createUserBo);
         User user = new User();
         user.setEmail(createUserBo.getEmail());
-        user.setUserName(createUserBo.getUsername());
+        user.setUserName(createUserBo.getName());
         user.setStatus(userStatusActive);
         user.setHire(hirer);
         user.setHireTime(new Date());
@@ -294,10 +316,10 @@ public class UserServiceImpl implements UserService {
         if (!EmailValidator.getInstance().isValid(createUserBo.getEmail())) {
             throw new BizException("邮箱格式不正确");
         }
-        if (StringUtils.isBlank(createUserBo.getUsername())) {
+        if (StringUtils.isBlank(createUserBo.getName())) {
             throw new BizException("姓名不能为空");
         }
-        if (Constants.User.SYSTEM.equals(createUserBo.getUsername())) {
+        if (Constants.User.SYSTEM.equals(createUserBo.getName())) {
             throw new BizException("非法用户名");
         }
         // 1. validate user exist
@@ -334,5 +356,93 @@ public class UserServiceImpl implements UserService {
             users = userRepository.findByNameWithoutDismiss(userName);
         }
         return UserBasicBo.convertToUserBasicBos(users);
+    }
+
+    @Override
+    public QueryResultBo<UserBo> queryUser(QueryRequestBo queryRequestBo) {
+        List<QueryCriteriaBo> queryCriteriaBos = queryRequestBo.getCriteria();
+        if (!CollectionUtils.isEmpty(queryCriteriaBos)) {
+            Set<String> fieldSet = Sets.newHashSet();
+            for (QueryCriteriaBo queryCriteriaBo : queryCriteriaBos) {
+                fieldSet.add(queryCriteriaBo.getFieldName());
+            }
+            if (fieldSet.size() != queryCriteriaBos.size()) {
+                throw new BizException("查询字段有重复");
+            }
+        }
+        try {
+            QuerySortBo querySortBo = queryRequestBo.getSort();
+            PageRequest page;
+            if (querySortBo == null) {
+                page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize());
+            } else {
+                page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize(),
+                                       new Sort(querySortBo.getDirection(),
+                                                Constants.SortFieldName.User.fieldMap.get(querySortBo.getFieldName())));
+            }
+            Specification<User> specification = new UserSpecification(queryRequestBo);
+            Page<User> users = userRepository.findAll(specification, page);
+            List<UserBo> customerBos = UserBo.convertToUserBos(users.getContent());
+            QueryResultBo<UserBo> queryResultBo = new QueryResultBo<UserBo>(customerBos, queryRequestBo.getPage(), queryRequestBo.getSize(),
+                                                                            users.getTotalElements(), users.getTotalPages());
+            return queryResultBo;
+        } catch (Exception e) {
+            throw new QueryException("查询条件错误", e);
+        }
+    }
+
+    static class UserSpecification implements Specification<User> {
+        private QueryRequestBo queryRequestBo;
+
+        public UserSpecification(QueryRequestBo queryRequestBo) {
+            this.queryRequestBo = queryRequestBo;
+        }
+
+        @Override
+        public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+            List<Predicate> predicates = new ArrayList<Predicate>();
+            if (!CollectionUtils.isEmpty(queryRequestBo.getCriteria())) {
+                for (QueryCriteriaBo criteria : queryRequestBo.getCriteria()) {
+                    Path path = null;
+                    switch (criteria.getFieldName()) {
+                        case Constants.QueryFieldName.User.USER_NAME:
+                            path = root.get("userName");
+                            String userName = (String) criteria.getValue();
+                            if (StringUtils.isNotBlank(userName)) {
+                                predicates.add(criteriaBuilder.like(path, "%" + userName + "%"));
+                            }
+                            break;
+                        case Constants.QueryFieldName.User.STATUS:
+                            path = root.get("status").get("id");
+                            List statuses = (List) criteria.getValue();
+                            if (!CollectionUtils.isEmpty(statuses)) {
+                                predicates.add(path.in(statuses.toArray()));
+                            }
+                            break;
+                        case Constants.QueryFieldName.User.DEPARTMENT_ID:
+                            path = root.get("department").get("id");
+                            List departmentId = (List) criteria.getValue();
+                            if (!CollectionUtils.isEmpty(departmentId)) {
+                                predicates.add(path.in(departmentId.toArray()));
+                            }
+                            break;
+                        case Constants.QueryFieldName.User.LEVEL_ID:
+                            path = root.get("level").get("id");
+                            List levelIds = (List) criteria.getValue();
+                            if (!CollectionUtils.isEmpty(levelIds)) {
+                                predicates.add(path.in(levelIds.toArray()));
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                Path path = root.get("id");
+                predicates.add(criteriaBuilder.gt(path, 0));
+                Predicate[] pre = new Predicate[predicates.size()];
+                criteriaQuery.where(predicates.toArray(pre));
+            }
+            return criteriaQuery.getRestriction();
+        }
     }
 }

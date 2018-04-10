@@ -492,7 +492,7 @@ public class CustomerServiceImpl implements CustomerService {
                                                                                               customers.getTotalElements(), customers.getTotalPages());
             return queryResultBo;
         } catch (Exception e) {
-            throw new QueryException("查询条件错误");
+            throw new QueryException("查询条件错误", e);
         }
     }
 

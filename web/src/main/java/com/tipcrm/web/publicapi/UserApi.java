@@ -2,7 +2,10 @@ package com.tipcrm.web.publicapi;
 
 import java.util.List;
 
+import com.tipcrm.bo.QueryRequestBo;
+import com.tipcrm.bo.QueryResultBo;
 import com.tipcrm.bo.UserBasicBo;
+import com.tipcrm.bo.UserBo;
 import com.tipcrm.bo.UserExtBo;
 import com.tipcrm.service.UserService;
 import com.tipcrm.service.WebContext;
@@ -11,6 +14,7 @@ import com.tipcrm.web.util.ResponseHelper;
 import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,5 +41,10 @@ public class UserApi {
     @RequestMapping(value = "user", method = RequestMethod.GET)
     public JsonEntity<List<UserBasicBo>> queryUserByName(@RequestParam("userName") String userName, @RequestParam("includeDismiss") Boolean includeDismiss) {
         return ResponseHelper.createInstance(userService.findByName(userName, includeDismiss));
+    }
+
+    @RequestMapping(value = "user/query", method = RequestMethod.POST)
+    public JsonEntity<QueryResultBo<UserBo>> queryUser(@RequestBody QueryRequestBo queryRequestBo) {
+        return ResponseHelper.createInstance(userService.queryUser(queryRequestBo));
     }
 }
