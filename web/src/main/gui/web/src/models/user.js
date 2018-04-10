@@ -1,7 +1,7 @@
 import { userLogin, fetchCurrentUser,
   fetchUserByName, createNewUser,
   fetchUserDetailInfo, disMissUser,
-  updateUserInfo} from '../services/api';
+  updateUserInfo, fetchDepartmentUsers} from '../services/api';
 import {message} from 'antd';
 import {routerRedux} from 'dva/router';
 
@@ -11,6 +11,7 @@ export default {
     currentUser: {},
     selectUser: {},
     users:[],
+    departmentUsers: [],
   },
   effects: {
     *login({ payload }, { call, put }) {
@@ -64,8 +65,14 @@ export default {
       if (response.status === 200){
         message.success('修改员工信息成功');
       }
+    },
+    *listDepartmentUsers(_, {call, put}){
+      const response = yield call(fetchDepartmentUsers);
+      yield put({
+        type: 'saveDepartmentUsers',
+        payload: response.data
+      });
     }
-
   },
 
   reducers: {
@@ -93,6 +100,12 @@ export default {
       return{
         ...state,
         selectUser: payload,
+      }
+    },
+    saveDepartmentUsers(state, {payload}){
+      return{
+        ...state,
+        departmentUsers: payload,
       }
     }
   },
