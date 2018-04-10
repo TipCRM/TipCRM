@@ -11,7 +11,6 @@ import com.tipcrm.dao.repository.LevelRepository;
 import com.tipcrm.dao.repository.UserRepository;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.service.LevelService;
-import com.tipcrm.service.UserService;
 import com.tipcrm.service.WebContext;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,8 +3,11 @@ import java.util.List;
 
 import com.tipcrm.bo.CreateUserBo;
 import com.tipcrm.bo.LoginBo;
+import com.tipcrm.bo.QueryRequestBo;
+import com.tipcrm.bo.QueryResultBo;
 import com.tipcrm.bo.RegistUserBo;
 import com.tipcrm.bo.UserBasicBo;
+import com.tipcrm.bo.UserBo;
 import com.tipcrm.bo.UserExtBo;
 import com.tipcrm.dao.entity.User;
 
@@ -29,4 +32,6 @@ public interface UserService {
     void logout();
 
     List<UserBasicBo> findByName(String userName, Boolean includeDismiss);
+
+    QueryResultBo<UserBo> queryUser(QueryRequestBo queryRequestBo);
 }
