@@ -17,7 +17,7 @@ const {Meta} = Card;
   main,
   currentUser: user.currentUser,
   loading:loading.models.main,
-  userInfoLoading: loading.models.user,
+  userInfoLoading: loading.effects['user/getCurrentUser'],
 }))
 export default class MainMenu extends React.Component{
   componentWillMount(){

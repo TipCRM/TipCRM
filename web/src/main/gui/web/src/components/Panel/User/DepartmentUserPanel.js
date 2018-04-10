@@ -8,20 +8,26 @@ import CommonSpin from '../../Common/CommonSpin';
 import styles from './Index.css';
 import {} from 'antd';
 
-@connect(({user, loading})=>
+@connect(({user, loading, permission})=>
   ({
     departmentUsers: user.departmentUsers,
     userLoading: loading.models.user,
+    menuPermissions: permission.menuPermissions,
+    permissionsLoading: loading.models.permission,
   }))
 export default class DepartmentUserPanel extends React.Component{
   componentDidMount(){
-    const {dispatch} = this.props;
+    const {dispatch, menuId} = this.props;
+    dispatch({
+      type: 'permission/getPermissionsByMenu',
+      payload: {menuId: menuId}
+    });
     dispatch({
       type: 'user/listDepartmentUsers'
     });
   }
   render(){
-    const {departmentUsers, userLoading} = this.props;
+    const {departmentUsers, userLoading, menuPermissions} = this.props;
     const columns = [
       {title: '员工编号', dataIndex: 'id'},
       {title: '员工名', dataIndex: 'name'},
