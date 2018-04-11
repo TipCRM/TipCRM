@@ -9,7 +9,7 @@ export default {
   namespace: 'user',
   state: {
     currentUser: {},
-    selectUser: {},
+    selectUserInfo: {},
     users:[],
     departmentUsers: [],
   },
@@ -99,7 +99,7 @@ export default {
     saveSelectUser(state, {payload}){
       return{
         ...state,
-        selectUser: payload,
+        selectUserInfo: payload,
       }
     },
     saveDepartmentUsers(state, {payload}){

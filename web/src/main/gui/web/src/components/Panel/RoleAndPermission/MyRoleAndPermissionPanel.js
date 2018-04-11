@@ -8,7 +8,7 @@ import styles from './Index.css';
 const {TreeNode} = Tree;
 
 @connect(({loading, permission}) => ({
-  loading: loading.models.permission,
+  loading: loading.effects['permission/listMyPermissions'],
   myPermissions: permission.myPermissions
 }))
 export default class MyRoleAndPermissionPanel extends React.Component{
