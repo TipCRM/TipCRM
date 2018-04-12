@@ -45,6 +45,13 @@ const apis = {
       status: '在职'
     }
   },
+  'PUT /public/api/user': {
+    status: 200,
+  },
+  'POST /public/api/user': {
+    status: 200,
+    data: {id: 8}
+  },
 
   'POST /public/api/my/customers' :'http://www.potafish.com',
   'POST /public/api/notification/my' : 'http://www.potafish.com',

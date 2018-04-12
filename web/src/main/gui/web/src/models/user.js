@@ -44,7 +44,6 @@ export default {
       const response = yield call(createNewUser, payload);
       if (response.status === 200){
         message.success('创建员工成功');
-        yield put()
       }
     },
     *getUserDetailInfo({payload}, {call, put}){
