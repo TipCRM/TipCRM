@@ -25,6 +25,9 @@ export default class DepartmentManagePanel extends React.Component{
     createNew: false,
     selectDepartment: {},
     newDepartmentName: null,
+    newManagerId: null,
+    newManagerName: null,
+    selectManager: null,
   }
   componentDidMount(){
     const {dispatch, menuId} = this.props;
@@ -76,7 +79,13 @@ export default class DepartmentManagePanel extends React.Component{
       dispatch({
         type: 'department/saveDepartments',
         payload: newDepartments,
-      })
+      });
+      this.setState({
+        newDepartmentName:record.name,
+        newManagerId: record.manager? record.manager.id: null,
+        newManagerName: record.manager? record.manager.name : null,
+        selectManager: record.manager,
+      });
     }
   }
   handleDepartmentDelete(record){
@@ -94,25 +103,34 @@ export default class DepartmentManagePanel extends React.Component{
   }
 
   handleSelectCellOnChange(value){
-    console.log(value)
+    this.setState({
+      newManagerName: value,
+    });
   }
   handleSelectCellOnSearch(value){
-    console.log(value);
     const {dispatch} = this.props;
     dispatch({
       type: 'user/getUserByName',
-      payload: {userName: value, includeDismiss: false},
+      payload: {userName: value ? value: ' ', includeDismiss: false},
     })
+  }
+  handleOptionSelect(value){
+    const {users} = this.props;
+    const user = users.filter(user => user.id == value);
+    console.log("select manager", user);
+    this.setState({
+      selectManager: user,
+    });
   }
 
   render(){
     const {menuPermissions, departments, loading, loadingPermission, users, loadingUsers} = this.props;
+    const {selectManager} = this.state;
     // init permissions
     const {permissions} = menuPermissions;
     const enableAdd = permissions.filter(item => item === getPermission('DEPARTMENT_ADD')).length > 0;
     const enableEdit = permissions.filter(item => item === getPermission('DEPARTMENT_EDIT')).length > 0;
     const enableDelete = permissions.filter(item => item === getPermission('DEPARTMENT_DELETE')).length > 0;
-
     let columns = [
       {title: '部门编号', dataIndex:'id', width: '10%'},
       {title: '部门名称', dataIndex:'name', width: '15%', render:((text, item, index) =>
@@ -123,8 +141,9 @@ export default class DepartmentManagePanel extends React.Component{
                           handleSaveValue = {this.handleSaveDepartment.bind(this, item)}/>)},
       {title: '部门经理', dataIndex:'manager', width: '15%', render:((text, item, index) =>
         <TipEditableSelectCell editing={item.editing} enableEdit={enableEdit} data={users}
-                          selectData={item.manager ? item.manager:''} createNew = {item.createNew} fetching={loadingUsers}
-                          handleOnSearch = {this.handleSelectCellOnSearch.bind(this, item)}
+                               selectData={item.editing? selectManager: item.manager} createNew = {item.createNew} fetching={loadingUsers}
+                               handleOnSearch = {this.handleSelectCellOnSearch.bind(this)}
+                               handleOptionSelect ={this.handleOptionSelect.bind(this)}
                                handleValueChange = {this.handleSelectCellOnChange.bind(this)}/>)},
       {title: '部门人数', width: '10%', dataIndex: 'total'},
       {title: '创建人', width: '20%', dataIndex:'entryUser'},

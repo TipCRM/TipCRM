@@ -1,7 +1,7 @@
 /**
  * Created by mosesc on 03/29/18.
  */
-import {listRolePermissions, changeRolePermissions, getPermissionsByMenu} from '../services/api';
+import {listRolePermissions, changeRolePermissions, getPermissionsByMenu, listMyPermissions} from '../services/api';
 import {message} from 'antd';
 
 export default {
@@ -11,7 +11,8 @@ export default {
     menuPermissions: {
       menuId:{},
       permissions:[],
-    }
+    },
+    myPermissions:[],
   },
   effects:{
     *listRolePermission({payload}, {call, put}){
@@ -34,6 +35,13 @@ export default {
         type: 'saveMenuPermissions',
         payload: menuPermissions,
       });
+    },
+    *listMyPermissions(_, {call, put}){
+      const response = yield call(listMyPermissions);
+      yield put({
+        type: 'saveMyPermissions',
+        payload: response.data,
+      });
     }
   },
   reducers:{
@@ -48,6 +56,12 @@ export default {
         ...state,
         menuPermissions: payload,
       };
+    },
+    saveMyPermissions(state, {payload}){
+      return{
+        ...state,
+        myPermissions: payload,
+      }
     }
   }
 }

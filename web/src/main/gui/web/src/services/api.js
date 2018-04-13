@@ -11,6 +11,10 @@ export function userLogin(params) {
     body: params,
   });
 }
+export function userLogout(){
+  return request('/public/api/logout');
+}
+
 // user api
 export async function fetchCurrentUser(){
   return request('/public/api/user/me');
@@ -34,10 +38,13 @@ export async function disMissUser(params){
   });
 }
 export async function updateUserInfo(params){
-  return request('public/api/user', {
+  return request('/public/api/user', {
     method: 'PUT',
     body: params,
   });
+}
+export async function fetchDepartmentUsers(){
+  return request('/public/api/users');
 }
 
 // menu api
@@ -77,19 +84,21 @@ export async function listRoles(){
   return request('/public/api/roles');
 }
 
+// permission api
 export async function listRolePermissions(params){
   return request('/public/api/permission/role/'+params.id);
 }
-
 export async function changeRolePermissions(params) {
   return request('/public/api/permission/role/'+params.id,{
     method: 'PUT',
     body: params.permissions
   });
 }
-
 export async function getPermissionsByMenu(params){
   return request('/public/api/permission/menu/'+ params.menuId);
+}
+export async function listMyPermissions(){
+  return request('/public/api/permission/me');
 }
 
 // the operation for role

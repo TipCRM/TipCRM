@@ -30,7 +30,7 @@ export default class CardCell extends React.Component{
     const icon = (<img src={iconUrl} className={styles.iconStyle}/>) ;
     const titles = (<div className={styles.titleStyle}>{title}</div>);
     return(
-      <div className={active ? '' : styles.disabelCell}>
+      <div className={active ? styles['hvr-grow-shadow'] : styles.disabelCell}>
         <Card  onClick={active ? this.handlerCardClick.bind(this) : {}} className={styles.cardStyle} cover={icon}>
           {titles}
         </Card>

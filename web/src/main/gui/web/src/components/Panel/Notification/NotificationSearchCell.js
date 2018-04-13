@@ -8,7 +8,7 @@ import CommonTagGroup from '../../Common/CommonTagGroup';
 export default class NotificationSearchCell extends React.Component{
   render(){
     const {tags} = this.props;
-    return(<div style={{marginBottom:'10px'}}>
+    return(<div style={{marginBottom:'8px'}}>
       <CommonTagGroup tags={tags}/>
     </div>);
   }

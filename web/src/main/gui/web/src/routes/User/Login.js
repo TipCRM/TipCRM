@@ -8,7 +8,7 @@ import logo from '../../assets/logo.svg';
 const FormItem = Form.Item;
 
 @connect(({loading}) =>
-  ({loading: loading.effects['user/login'],})
+  ({loading: loading.effects['login/login'],})
 )
 @Form.create()
 export default class Login extends React.PureComponent{
@@ -24,7 +24,7 @@ export default class Login extends React.PureComponent{
         return;
       }
       this.props.dispatch(
-        { type: 'user/login',
+        { type: 'login/login',
           payload: values
         });
     })

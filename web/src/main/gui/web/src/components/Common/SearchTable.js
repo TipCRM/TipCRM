@@ -22,9 +22,7 @@ export default class SearchTable extends React.Component{
                  pagination={tablePagination}
                  onChange={onTableChange}
                  footer={tableFooter}
-                 rowKey = {tableRowKey}
-
-          />
+                 rowKey = {tableRowKey}/>
         </div>
       </div>
     );

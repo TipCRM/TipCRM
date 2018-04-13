@@ -6,9 +6,10 @@ import CustomerInfoCell from '../components/Panel/Customer/CustomerInfoCell';
 import CustomerContactCell from '../components/Panel/Customer/CustomerContactCell';
 import CustomerNotificationPanel from '../components/Panel/Notification/CustomerNotificationPanel';
 import RoleAndPermissionPanel from '../components/Panel/RoleAndPermission/RoleAndPermissionPanel';
+import MyRoleAndPermissionPanel from '../components/Panel/RoleAndPermission/MyRoleAndPermissionPanel';
 
-import DepartmentUserPanel from '../components/Panel/User/DepartmentUserPanel';
 import CompanyUserPanel from '../components/Panel/User/CompanyUserPanel';
+import DepartmentUserPanel from '../components/Panel/User/DepartmentUserPanel';
 
 import DepartmentManagePanel from '../components/Panel/Department/DepartmentManagePanel';
 
@@ -95,7 +96,7 @@ export function initRoleAndPermissionComponent(item){
       component = (<RoleAndPermissionPanel children={item.children} menuId={item.id}/>);
       break;
     case 'MY_ROLE_AND_PERMISSION':
-      component = (<div>全力开发中，敬请期待...</div>);
+      component = (<MyRoleAndPermissionPanel children={item.children} menuId={item.id}/>);
       break
     default:
       component = (<div>The page you request is not exist.</div>);
