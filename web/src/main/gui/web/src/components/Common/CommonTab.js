@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import {Tabs} from 'antd';
+import styles from './Index.less';
 const {TabPane} = Tabs;
 
 export default class CommonTab extends React.Component{
@@ -11,7 +12,7 @@ export default class CommonTab extends React.Component{
     return(
       <Tabs type="card">
         {panels.map(item =>(
-          <TabPane tab={item.title} key={item.id}>
+          <TabPane tab={<div className={styles['tab-title']}> {item.title}</div>} key={item.id}>
             {item.content}
           </TabPane>))}
       </Tabs>
