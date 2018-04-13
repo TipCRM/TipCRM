@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, Switch } from 'dva/router';
+import { Router, Route, Switch, Redirect } from 'dva/router';
 import Login from './routes/User/Login';
 import MainMenu from './routes/MainMenu/MainMenu';
 import { LocaleProvider } from 'antd';
@@ -13,6 +13,7 @@ function RouterConfig({ history }) {
       <Switch>
         <Route path="/login" exact component={Login} />
         <Route path="/index" exact component={MainMenu} />
+        <Redirect exact from="/" to="/login"/>
       </Switch>
     </Router>
   </LocaleProvider>

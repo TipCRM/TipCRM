@@ -1,9 +1,8 @@
-import { userLogin, fetchCurrentUser,
+import { fetchCurrentUser,
   fetchUserByName, createNewUser,
   fetchUserDetailInfo, disMissUser,
   updateUserInfo, fetchDepartmentUsers} from '../services/api';
 import {message} from 'antd';
-import {routerRedux} from 'dva/router';
 
 export default {
   namespace: 'user',
@@ -14,18 +13,6 @@ export default {
     departmentUsers: [],
   },
   effects: {
-    *login({ payload }, { call, put }) {
-      const response = yield call(userLogin, payload);
-      console.log(response);
-      // Login successfully
-      if (response.status === 200) {
-        yield put(routerRedux.push('/index'));
-      } else {
-        message.error(response.message);
-      }
-    },
-    *logout(_, { put, select }) {
-    },
     *getCurrentUser(_,{call, put}){
       const response = yield call(fetchCurrentUser);
       yield put({

@@ -1,6 +1,7 @@
 import { delay } from 'roadhog-api-doc';
 const apis = {
   'POST /public/api/login':'http://www.potafish.com',
+  'GET /public/api/logout':'http://www.potafish.com',
   'GET /public/api/user/me':'http://www.potafish.com',
   'GET /public/api/user': 'http://www.potafish.com',
   'GET /public/api/users': {

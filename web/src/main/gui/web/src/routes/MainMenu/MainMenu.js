@@ -9,7 +9,7 @@ import CommonSpin from '../../components/Common/CommonSpin';
 import NotificationPanel from '../../components/Panel/Notification/NotificationPanel';
 import styles from './Index.less';
 import {menuComponentConstant} from '../../utils/Constant';
-import {Layout, List, Avatar, Card, Row, Divider} from 'antd';
+import {Layout, List, Avatar, Card, Row, Divider, Button} from 'antd';
 const {Content, Footer, Header} = Layout;
 const {Meta} = Card;
 
@@ -29,6 +29,13 @@ export default class MainMenu extends React.Component{
       type: 'main/getMenus',
     });
   }
+  handleLogout(){
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'login/logout',
+    });
+  }
+
   render(){
     const {main, loading, currentUser, userInfoLoading } = this.props;
     console.log(currentUser);
@@ -41,13 +48,11 @@ export default class MainMenu extends React.Component{
       <Layout className={styles.layout}>
         <Header style={{height: '40px'}}>
           <div style={{textAlign: 'right', marginRight: '20%'}}>
-            <div style={{color:'#eeee'}}>{currentUser ? currentUser.userName : '加载中...'}</div>
+            <div style={{color:'#0000'}}>{currentUser ? currentUser.userName : '加载中...'}</div>
           </div>
+          <Button onClick={this.handleLogout.bind(this)}>退出登录</Button>
         </Header>
         <Content className={styles.content}>
-          <CommonSpin spinning={userInfoLoading}>
-          </CommonSpin>
-
           <CommonSpin spinning={loading}>
             <List dataSource={finalMenus}
                   grid={{ gutter: 20, column: 8 }}

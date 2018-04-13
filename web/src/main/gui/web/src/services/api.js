@@ -11,6 +11,10 @@ export function userLogin(params) {
     body: params,
   });
 }
+export function userLogout(){
+  return request('/public/api/logout');
+}
+
 // user api
 export async function fetchCurrentUser(){
   return request('/public/api/user/me');
