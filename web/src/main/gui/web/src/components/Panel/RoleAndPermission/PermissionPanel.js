@@ -83,9 +83,20 @@ export default class PermissionPanel extends React.Component{
       });
     }
   }
+  handleCancelSaveRoleChange(createNew, selectRole){
+    if (!createNew){
+      this.setState({
+        roleNewName: selectRole.displayName,
+        editingRole: false,
+      });
+    }
+  }
 
   handleSaveRoleChange(createNew, selectRole, e){
     if (!this.state.editingRole){
+      console.log("refs", this.refs);
+      //const input = this.refs.input;
+      //this.focus();
       this.setState({
         editingRole: true,
       });
@@ -122,6 +133,7 @@ export default class PermissionPanel extends React.Component{
       <div className={styles.permissionPanel}>
         <CommonSpin spinning={roleLoading}>
           <Row><TipEditableInput
+            handleCancelSave = {this.handleCancelSaveRoleChange.bind(this, createNew, selectRole)}
             handleEditSaveClick = {this.handleSaveRoleChange.bind(this, createNew, selectRole)}
             addonBefore="角色名称"
             value={selectRole.displayName}

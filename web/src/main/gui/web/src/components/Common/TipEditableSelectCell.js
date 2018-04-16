@@ -13,8 +13,7 @@ export default class TipEditableSelectCell extends React.Component{
       data,fetching} = this.props;
     const selectCell = (<Select
       style={{width: '100%'}}
-      mode="combobox"
-      value={selectData ? selectData.name : ''}
+      mode="tags"
       labelInValue={false}
       placeholder="输入用户名"
       notFoundContent={fetching? <CommonSpin spinning={fetching}/>: ''}
