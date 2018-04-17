@@ -18,6 +18,8 @@ import com.tipcrm.exception.BizException;
 import com.tipcrm.service.FileService;
 import com.tipcrm.service.WebContext;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -28,6 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @Transactional
 public class FileServiceImpl implements FileService {
+
+    private Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
 
     private static final List<String> picExtension = Lists.newArrayList("JPG", "JPEG", "GIF", "PNG");
 
@@ -47,6 +51,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String uploadAvatar(MultipartFile file) {
+        logger.info("avatarPath ======> " + avatarPath);
         String fileName = file.getOriginalFilename();
         ListBox avatar = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.ATTACHMENT_TYPE.name(), AttachmentType.AVATAR.name());
         if (StringUtils.isBlank(fileName)) {
