@@ -38,7 +38,6 @@ public class LevelServiceImpl implements LevelService {
         Date date = new Date();
         Level level = new Level();
         level.setDefaultPaymentPercent(saveLevelBo.getDefaultPayment().setScale(2, BigDecimal.ROUND_HALF_DOWN));
-        level.setDisplayName(saveLevelBo.getName());
         level.setName(saveLevelBo.getName());
         level.setEntryUser(user);
         level.setEntryTime(date);
@@ -53,7 +52,6 @@ public class LevelServiceImpl implements LevelService {
         Date date = new Date();
         Level level = levelRepository.findOne(saveLevelBo.getId());
         level.setName(saveLevelBo.getName());
-        level.setDisplayName(saveLevelBo.getName());
         level.setDefaultPaymentPercent(saveLevelBo.getDefaultPayment().setScale(2, BigDecimal.ROUND_HALF_DOWN));
         level.setUpdateUser(user);
         level.setUpdateTime(date);

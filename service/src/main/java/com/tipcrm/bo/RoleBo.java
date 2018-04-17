@@ -36,7 +36,6 @@ public class RoleBo extends RoleBasicBo {
         roleBo.setId(role.getId());
         roleBo.setName(role.getName());
         roleBo.setEditable(role.getEditable());
-        roleBo.setDisplayName(role.getDisplayName());
         roleBo.setEntryUser(role.getEntryUser().getUserName());
         roleBo.setEntryDatetime(role.getEntryTime());
         if (role.getUpdateUser() != null) {

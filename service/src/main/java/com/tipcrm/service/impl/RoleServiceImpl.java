@@ -105,7 +105,6 @@ public class RoleServiceImpl implements RoleService {
         Date date = new Date();
         Role role = new Role();
         role.setName(saveRoleBo.getName());
-        role.setDisplayName(saveRoleBo.getName());
         role.setEntryTime(date);
         role.setEntryUser(user);
         role.setEditable(true);
@@ -143,7 +142,6 @@ public class RoleServiceImpl implements RoleService {
         User user = webContext.getCurrentUser();
         Date date = new Date();
         role.setName(saveRoleBo.getName());
-        role.setDisplayName(saveRoleBo.getName());
         role.setUpdateTime(date);
         role.setUpdateUser(user);
         roleRepository.save(role);
