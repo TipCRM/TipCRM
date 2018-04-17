@@ -410,7 +410,6 @@ DROP TABLE IF EXISTS `level`;
 CREATE TABLE `level` (
   `id`                      INT(11)                      NOT NULL AUTO_INCREMENT,
   `name`                    VARCHAR(50) COLLATE utf8_bin NOT NULL,
-  `display_name`            VARCHAR(50) COLLATE utf8_bin          DEFAULT NULL,
   `default_payment_percent` DECIMAL(4, 2)                NOT NULL,
   `entry_id`                INT(11)                      NOT NULL,
   `entry_time`              DATETIME(3)                  NOT NULL,
@@ -434,7 +433,7 @@ LOCK TABLES `level` WRITE;
 /*!40000 ALTER TABLE `level`
   DISABLE KEYS */;
 INSERT INTO `level` VALUES
-  (1, 'NEW_USER', '新员工', 0.00, -1, NOW(), NULL, NULL, NULL, NULL);
+  (1, '新员工', 0.00, -1, NOW(), NULL, NULL, NULL, NULL);
 /*!40000 ALTER TABLE `level`
   ENABLE KEYS */;
 UNLOCK TABLES;
@@ -782,16 +781,15 @@ DROP TABLE IF EXISTS `role`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `role` (
-  `id`           INT(11)                      NOT NULL AUTO_INCREMENT,
-  `name`         VARCHAR(50) COLLATE utf8_bin NOT NULL,
-  `display_name` VARCHAR(50) COLLATE utf8_bin          DEFAULT NULL,
-  `entry_id`     INT(11)                      NOT NULL,
-  `entry_time`   DATETIME(3)                  NOT NULL,
-  `update_id`    INT(11)                               DEFAULT NULL,
-  `update_time`  DATETIME(3)                           DEFAULT NULL,
-  `delete_id`    INT(11)                               DEFAULT NULL,
-  `delete_time`  DATETIME(3)                           DEFAULT NULL,
-  `editable`     TINYINT(1)                            DEFAULT NULL,
+  `id`          INT(11)                      NOT NULL AUTO_INCREMENT,
+  `name`        VARCHAR(50) COLLATE utf8_bin NOT NULL,
+  `entry_id`    INT(11)                      NOT NULL,
+  `entry_time`  DATETIME(3)                  NOT NULL,
+  `update_id`   INT(11)                               DEFAULT NULL,
+  `update_time` DATETIME(3)                           DEFAULT NULL,
+  `delete_id`   INT(11)                               DEFAULT NULL,
+  `delete_time` DATETIME(3)                           DEFAULT NULL,
+  `editable`    TINYINT(1)                            DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `roleI1` (`name`)
 )
@@ -808,9 +806,9 @@ LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role`
   DISABLE KEYS */;
 INSERT INTO `role` VALUES
-  (1, 'GENERAL_MANAGER', '经理', -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (2, 'NORMAL', '员工', -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (3, 'DEPARTMENT_MANAGER', '部门经理', -1, NOW(), NULL, NULL, NULL, NULL, 0);
+  (1, '经理', -1, NOW(), NULL, NULL, NULL, NULL, 0),
+  (2, '员工', -1, NOW(), NULL, NULL, NULL, NULL, 0),
+  (3, '部门经理', -1, NOW(), NULL, NULL, NULL, NULL, 0);
 /*!40000 ALTER TABLE `role`
   ENABLE KEYS */;
 UNLOCK TABLES;

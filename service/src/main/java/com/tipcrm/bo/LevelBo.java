@@ -31,7 +31,7 @@ public class LevelBo {
         if (level != null) {
             LevelBo levelBo = new LevelBo();
             levelBo.setId(level.getId());
-            levelBo.setName(level.getDisplayName());
+            levelBo.setName(level.getName());
             levelBo.setDefaultPayment(level.getDefaultPaymentPercent());
             levelBo.setEntryUser(level.getEntryUser().getUserName());
             levelBo.setEntryTime(level.getEntryTime());

@@ -34,7 +34,7 @@ public class UserBo extends UserBasicBo {
         }
         Level level = user.getLevel();
         if (level != null) {
-            userBo.setLevel(level.getDisplayName());
+            userBo.setLevel(level.getName());
         }
         return userBo;
     }

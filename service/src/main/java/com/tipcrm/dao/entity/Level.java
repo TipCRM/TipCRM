@@ -20,9 +20,6 @@ public class Level extends BaseAllEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "display_name")
-    private String displayName;
-
     @Column(name = "default_payment_percent")
     private BigDecimal defaultPaymentPercent;
 
@@ -40,14 +37,6 @@ public class Level extends BaseAllEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
     }
 
     public BigDecimal getDefaultPaymentPercent() {

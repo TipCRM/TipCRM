@@ -125,12 +125,12 @@ public class UserServiceImpl implements UserService {
         if (registUserBo.getDepartmentId() != null) {
             department = departmentRepository.findOne(registUserBo.getDepartmentId());
         }
-        Level level = levelRepository.findByName(Levels.NEW_USER.name());
+        Level level = levelRepository.findByName(Levels.NEW_USER.getValue());
         Role role = null;
         if (registUserBo.getTopManager()) {
-            role = roleRepository.findByName(Roles.GENERAL_MANAGER.name());
+            role = roleRepository.findByName(Roles.GENERAL_MANAGER.getValue());
         } else {
-            role = roleRepository.findByName(Roles.NORMAL.name());
+            role = roleRepository.findByName(Roles.NORMAL.getValue());
         }
         validateRegistUser(registUserBo);
         User user = new User();
@@ -159,8 +159,8 @@ public class UserServiceImpl implements UserService {
         if (createUserBo.getDepartmentId() != null) {
             department = departmentRepository.findOne(createUserBo.getDepartmentId());
         }
-        Level level = levelRepository.findByName(Levels.NEW_USER.name());
-        Role role = roleRepository.findByName(Roles.NORMAL.name());
+        Level level = levelRepository.findByName(Levels.NEW_USER.getValue());
+        Role role = roleRepository.findByName(Roles.NORMAL.getValue());
         validateSaveUserBo(createUserBo);
         User user = new User();
         user.setEmail(createUserBo.getEmail());
@@ -228,7 +228,7 @@ public class UserServiceImpl implements UserService {
     public Boolean isGeneralManager(Integer userId) {
         List<Role> roles = roleService.getRolesByUserId(userId);
         for (Role roleBo : roles) {
-            if (roleBo.getName().equals(Roles.GENERAL_MANAGER.name())) {
+            if (roleBo.getName().equals(Roles.GENERAL_MANAGER.getValue())) {
                 return true;
             }
         }
@@ -237,7 +237,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findGeneralManager() {
-        return userRepository.findByRole(Roles.GENERAL_MANAGER.name());
+        return userRepository.findByRole(Roles.GENERAL_MANAGER.getValue());
     }
 
     @Override
@@ -267,14 +267,14 @@ public class UserServiceImpl implements UserService {
         userExtBo.setIdCard(user.getIdCard());
         Level level = user.getLevel();
         if (level != null) {
-            userExtBo.setLevel(level.getDisplayName());
+            userExtBo.setLevel(level.getName());
         }
         userExtBo.setPhoneNo(user.getPhoneNo());
         List<Role> roles = roleService.getRolesByUserId(user.getId());
         List<String> roleStr = new ArrayList<String>();
         if (!CollectionUtils.isEmpty(roles)) {
             for (Role role : roles) {
-                roleStr.add(role.getDisplayName());
+                roleStr.add(role.getName());
             }
         }
         userExtBo.setRoles(roleStr);

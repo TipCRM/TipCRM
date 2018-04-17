@@ -10,8 +10,6 @@ public class RoleBasicBo {
 
     private String name;
 
-    private String displayName;
-
     private Boolean editable;
 
     public static List<RoleBasicBo> toRoleBasicBos(List<Role> roles) {
@@ -34,7 +32,6 @@ public class RoleBasicBo {
         RoleBasicBo roleBo = new RoleBasicBo();
         roleBo.setId(role.getId());
         roleBo.setName(role.getName());
-        roleBo.setDisplayName(role.getDisplayName());
         roleBo.setEditable(role.getEditable());
         return roleBo;
     }
@@ -53,14 +50,6 @@ public class RoleBasicBo {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
     }
 
     public Boolean getEditable() {
