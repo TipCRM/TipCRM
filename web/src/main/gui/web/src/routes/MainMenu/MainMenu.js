@@ -10,6 +10,7 @@ import NotificationPanel from '../../components/Panel/Notification/NotificationP
 import styles from './Index.less';
 import {menuComponentConstant} from '../../utils/Constant';
 import {Layout, List, Avatar, Card, Row, Divider, Button} from 'antd';
+import { Chart, Geom, Axis, Tooltip, Legend, Coord } from 'bizcharts';
 const {Content, Footer, Header} = Layout;
 const {Meta} = Card;
 
@@ -44,6 +45,19 @@ export default class MainMenu extends React.Component{
         return {...item, content: item.active ? menuComponentConstant(item) : item.content};
       }
     ) : menus;
+
+    const data = [
+      { genre: 'Sports', sold: 275, income: 2300 },
+      { genre: 'Strategy', sold: 115, income: 667 },
+      { genre: 'Action', sold: 120, income: 982 },
+      { genre: 'Shooter', sold: 350, income: 5271 },
+      { genre: 'Other', sold: 150, income: 3710 }
+    ];
+    // 定义度量
+    const cols = {
+      sold: { alias: '销售量' },
+      genre: { alias: '游戏种类' }
+    };
     return(
       <Layout className={styles.layout}>
         <Header style={{height: '40px'}}>
@@ -54,14 +68,23 @@ export default class MainMenu extends React.Component{
         </Header>
         <Content className={styles.content}>
           <CommonSpin spinning={loading}>
-            <List dataSource={finalMenus}
-                  grid={{ gutter: 20, column: 8 }}
-                  renderItem={item=>(<List.Item style={{marginTop:"20px"}}>
-                  <CardCell title={item.title} content={item.content} active={item.active}/>
-                  </List.Item>)}
-            />
+            {
+              finalMenus.map(item=>
+                <CardCell title={item.title} content={item.content} active={item.active}/>)
+            }
           </CommonSpin>
         </Content>
+        <Footer>
+          <div>
+            <Chart width={300} height={200} data={data} scale={cols}>
+              <Axis name="genre" />
+              <Axis name="sold" />
+              <Legend position="top" dy={-20} />
+              <Tooltip />
+              <Geom type="interval" position="genre*sold" color="genre" />
+            </Chart>
+          </div>
+        </Footer>
       </Layout>
     );
   }

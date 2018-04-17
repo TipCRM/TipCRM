@@ -18,6 +18,8 @@
 .cardStyle{
   min-width: 80px;
   min-height: 80px;
+  margin-left: 16px;
+  margin-top: 40px;
   width: 120px;
   height: 120px;
   border: 0px solid;
