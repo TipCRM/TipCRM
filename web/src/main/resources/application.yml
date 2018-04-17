@@ -13,6 +13,9 @@ sentry:
   enable: false
   dsn: https://c6ba06533b624692839f68f116691bb0:11c83623ecb044b0822beaa961307206@sentry.io/295676
 
+uploadfile:
+  base-dir: E://
+
 spring:
       application:
          name: plm2

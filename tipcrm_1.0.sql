@@ -492,7 +492,10 @@ INSERT INTO `list_box` VALUES
   (15, 'NOTIFICATION_READ_STATUS', 'UNREAD', '未读', 2, -1, NOW(), NULL, NULL, NULL, NULL, 0),
   (16, 'OPERATION_TYPE', 'ADD', '新增', 1, -1, NOW(), NULL, NULL, NULL, NULL, 0),
   (17, 'OPERATION_TYPE', 'UPDATE', '修改', 2, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (18, 'OPERATION_TYPE', 'REMOVE', '删除', 3, -1, NOW(), NULL, NULL, NULL, NULL, 0);
+  (18, 'OPERATION_TYPE', 'REMOVE', '删除', 3, -1, NOW(), NULL, NULL, NULL, NULL, 0),
+  (19, 'ATTACHMENT_TYPE', 'AVATAR', '头像', 1, -1, NOW(), NULL, NULL, NULL, NULL, 0),
+  (20, 'ATTACHMENT_TYPE', 'FILE', '文件', 2, -1, NOW(), NULL, NULL, NULL, NULL, 0);
+
 /*!40000 ALTER TABLE `list_box`
   ENABLE KEYS */;
 UNLOCK TABLES;
@@ -968,6 +971,21 @@ LOCK TABLES `user_role` WRITE;
 /*!40000 ALTER TABLE `user_role`
   ENABLE KEYS */;
 UNLOCK TABLES;
+
+DROP TABLE IF EXISTS `attachment`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `attachment` (
+  `id` VARCHAR(50) NOT NULL,
+  `extension` VARCHAR(10) DEFAULT NULL,
+  `path` VARCHAR(255) NOT NULL,
+  `type` INT(11) NOT NULL,
+  `entry_id` INT(11) NOT NULL,
+  `entry_time` DATETIME(3) NOT NULL,
+  PRIMARY KEY (`id`));
+
+
+
 /*!40103 SET TIME_ZONE = @OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE = @OLD_SQL_MODE */;
