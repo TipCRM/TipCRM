@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import com.google.common.collect.Lists;
 import com.tipcrm.constant.AttachmentType;
-import com.tipcrm.constant.FileConfig;
 import com.tipcrm.constant.ListBoxCategory;
 import com.tipcrm.dao.entity.Attachment;
 import com.tipcrm.dao.entity.ListBox;
@@ -17,6 +16,7 @@ import com.tipcrm.dao.repository.ListBoxRepository;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.service.FileService;
 import com.tipcrm.service.WebContext;
+import com.tipcrm.util.ValidateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +33,8 @@ public class FileServiceImpl implements FileService {
 
     private Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
 
-    private static final List<String> picExtension = Lists.newArrayList("JPG", "JPEG", "GIF", "PNG");
-
-    private static final String avatarPath = FileConfig.baseUrl + "/avatar";
+    @Autowired
+    private String baseUrl;
 
     @Autowired
     private ResourceLoader resourceLoader;
@@ -51,6 +50,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String uploadAvatar(MultipartFile file) {
+        String avatarPath = baseUrl + "/avatar";
         logger.info("avatarPath ======> " + avatarPath);
         String fileName = file.getOriginalFilename();
         ListBox avatar = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.ATTACHMENT_TYPE.name(), AttachmentType.AVATAR.name());
@@ -62,7 +62,7 @@ public class FileServiceImpl implements FileService {
             throw new BizException("文件不是图片");
         }
         String extension = fileName.substring(lastDot + 1).toLowerCase();
-        if (StringUtils.isBlank(extension) || !picExtension.contains(extension.toUpperCase())) {
+        if (StringUtils.isBlank(extension) || !ValidateUtils.isPicture(fileName)) {
             throw new BizException("文件不是图片");
         }
         String uuidFileName = UUID.randomUUID().toString();
