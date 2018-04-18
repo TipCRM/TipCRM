@@ -49,12 +49,12 @@ import com.tipcrm.dao.repository.CustomerApprovalRepository;
 import com.tipcrm.dao.repository.CustomerContactRepository;
 import com.tipcrm.dao.repository.CustomerRepository;
 import com.tipcrm.dao.repository.DepartmentRepository;
-import com.tipcrm.dao.repository.ListBoxRepository;
 import com.tipcrm.dao.repository.UserRepository;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.exception.QueryException;
 import com.tipcrm.service.ApprovalService;
 import com.tipcrm.service.CustomerService;
+import com.tipcrm.service.ListBoxService;
 import com.tipcrm.service.NotificationService;
 import com.tipcrm.service.PermissionService;
 import com.tipcrm.service.UserService;
@@ -88,7 +88,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private WebContext webContext;
     @Autowired
-    private ListBoxRepository listBoxRepository;
+    private ListBoxService listBoxService;
     @Autowired
     private NotificationService notificationService;
     @Autowired
@@ -127,13 +127,13 @@ public class CustomerServiceImpl implements CustomerService {
         customerApproval.setNote(createCustomerBo.getNote());
         customerApproval.setEntryUser(currentUser);
         customerApproval.setEntryTime(date);
-        ListBox fastApprovalType = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.REVIEW_TYPE.name(), ReviewType.FAST.name());
+        ListBox fastApprovalType = listBoxService.findByCategoryAndName(ListBoxCategory.REVIEW_TYPE.name(), ReviewType.FAST.name());
         customerApproval.setReviewType(fastApprovalType);
-        ListBox newCustomer = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.CUSTOMER_STATUS.name(), CustomerStatus.NEW_CUSTOMER.name());
+        ListBox newCustomer = listBoxService.findByCategoryAndName(ListBoxCategory.CUSTOMER_STATUS.name(), CustomerStatus.NEW_CUSTOMER.name());
         customerApproval.setStatus(newCustomer);
-        ListBox addOpt = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.OPERATION_TYPE.name(), OperationType.ADD.name());
+        ListBox addOpt = listBoxService.findByCategoryAndName(ListBoxCategory.OPERATION_TYPE.name(), OperationType.ADD.name());
         customerApproval.setOptType(addOpt);
-        ListBox reviewStatusPending = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.APPROVAL_STATUS.name(), ApprovalStatus.PENDING.name());
+        ListBox reviewStatusPending = listBoxService.findByCategoryAndName(ListBoxCategory.APPROVAL_STATUS.name(), ApprovalStatus.PENDING.name());
         customerApproval.setReviewStatus(reviewStatusPending);
         customerApproval = approvalService.saveApprovalRequest(customerApproval);
 
@@ -183,7 +183,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     private Boolean hasPermissionToApproveCustomer(Integer approvalId) {
-        ListBox approvalType = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.APPROVAL_TYPE.name(), ApprovalType.CUSTOMER.name());
+        ListBox approvalType = listBoxService.findByCategoryAndName(ListBoxCategory.APPROVAL_TYPE.name(), ApprovalType.CUSTOMER.name());
         User currentUser = webContext.getCurrentUser();
         List<ApprovalRequest> approvalRequests = approvalRequestRepository.findByApprovalTypeIdAndApprovalId(approvalType.getId(), approvalId);
         for (ApprovalRequest approvalRequest : approvalRequests) {
@@ -203,14 +203,14 @@ public class CustomerServiceImpl implements CustomerService {
         User user = webContext.getCurrentUser();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         CustomerApproval customerApproval = customerApprovalRepository.findOne(approveBo.getTargetId());
-        ListBox approveTypeCustomer = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.APPROVAL_TYPE.name(), ApprovalType.CUSTOMER.name());
+        ListBox approveTypeCustomer = listBoxService.findByCategoryAndName(ListBoxCategory.APPROVAL_TYPE.name(), ApprovalType.CUSTOMER.name());
         ApprovalRequest request = approvalRequestRepository.findByApprovalTypeIdAndApprovalIdAndReviewerId(approveTypeCustomer.getId(), approveBo.getTargetId(),
                                                                                                            webContext.getCurrentUserId());
         request.setReviewTime(date);
         request.setReviewNote(approveBo.getNote());
         Integer customerId = null;
         if (ApproveAction.REJECT.name().equals(approveBo.getAction())) {
-            ListBox rejectStatus = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.APPROVAL_STATUS.name(), ApprovalStatus.REJECTED.name());
+            ListBox rejectStatus = listBoxService.findByCategoryAndName(ListBoxCategory.APPROVAL_STATUS.name(), ApprovalStatus.REJECTED.name());
             customerApproval.setReviewStatus(rejectStatus);
             customerApproval.setFinalApprovalTime(date);
             customerApprovalRepository.save(customerApproval);
@@ -226,7 +226,7 @@ public class CustomerServiceImpl implements CustomerService {
                                                        NotificationType.SYSTEM_NOTIFICATION);
             }
         } else {
-            ListBox approve = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.APPROVAL_STATUS.name(), ApprovalStatus.APPROVED.name());
+            ListBox approve = listBoxService.findByCategoryAndName(ListBoxCategory.APPROVAL_STATUS.name(), ApprovalStatus.APPROVED.name());
             request.setReviewStatus(approve);
             approvalRequestRepository.save(request);
             Customer customer = null;
@@ -310,16 +310,16 @@ public class CustomerServiceImpl implements CustomerService {
         User user = webContext.getCurrentUser();
         Date now = new Date();
         CustomerApproval customerApproval = new CustomerApproval();
-        ListBox removeOptType = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.OPERATION_TYPE.name(), OperationType.REMOVE.name());
+        ListBox removeOptType = listBoxService.findByCategoryAndName(ListBoxCategory.OPERATION_TYPE.name(), OperationType.REMOVE.name());
         customerApproval.setOptType(removeOptType);
         customerApproval.setCustomer(customer);
         customerApproval.setEntryUser(user);
         customerApproval.setEntryTime(now);
         customerApproval.setName(customer.getName());
         customerApproval.setStatus(customer.getStatus());
-        ListBox pending = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.APPROVAL_STATUS.name(), ApprovalStatus.PENDING.name());
+        ListBox pending = listBoxService.findByCategoryAndName(ListBoxCategory.APPROVAL_STATUS.name(), ApprovalStatus.PENDING.name());
         customerApproval.setReviewStatus(pending);
-        ListBox fast = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.REVIEW_TYPE.name(), ReviewType.FAST.name());
+        ListBox fast = listBoxService.findByCategoryAndName(ListBoxCategory.REVIEW_TYPE.name(), ReviewType.FAST.name());
         customerApproval.setReviewType(fast);
         return customerApproval;
     }
@@ -335,7 +335,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (approveBo.getTargetId() == null) {
             throw new BizException("审批目标为空");
         }
-        ListBox reviewStatusPending = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.APPROVAL_STATUS.name(), ApprovalStatus.PENDING.name());
+        ListBox reviewStatusPending = listBoxService.findByCategoryAndName(ListBoxCategory.APPROVAL_STATUS.name(), ApprovalStatus.PENDING.name());
         CustomerApproval customerApproval = customerApprovalRepository.findByIdAndReviewStatusId(approveBo.getTargetId(), reviewStatusPending.getId());
         if (customerApproval == null) {
             throw new BizException("审批目标不存在或者已经审批");
