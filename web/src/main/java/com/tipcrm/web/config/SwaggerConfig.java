@@ -16,6 +16,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
+    @Value("${tipcrm.swagger.enable}")
+    private Boolean enable;
+
     @Value("${tipcrm.swagger.title}")
     private String title;
 
@@ -37,7 +40,7 @@ public class SwaggerConfig {
             .apiInfo(apiInfo())
             .select()
             .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
-            .paths(PathSelectors.any())
+            .paths(enable ? PathSelectors.any() : PathSelectors.none())
             .build();
     }
 

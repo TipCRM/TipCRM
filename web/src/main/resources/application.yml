@@ -3,6 +3,7 @@ server:
   port: 8080
 tipcrm:
   swagger:
+    enable: true
     title: Project of Tip CRM
     description: Tip CRM Swagger UI
     url:
