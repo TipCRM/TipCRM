@@ -45,6 +45,7 @@ import com.tipcrm.dao.repository.UserRoleRepository;
 import com.tipcrm.exception.AccountException;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.exception.QueryException;
+import com.tipcrm.service.AttachmentService;
 import com.tipcrm.service.ConfigurationService;
 import com.tipcrm.service.ListBoxService;
 import com.tipcrm.service.MailService;
@@ -109,6 +110,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRoleRepository userRoleRepository;
 
+    @Autowired
+    private AttachmentService attachmentService;
+
     @Override
     public String regist(RegistUserBo registUserBo) {
         String registable = configurationService.get(ConfigurationItems.REGISTABLE.name());
@@ -142,6 +146,7 @@ public class UserServiceImpl implements UserService {
         user.setHireTime(new Date());
         user.setDepartment(department);
         user.setLevel(level);
+        user.setAvatar(attachmentService.findDefaultAvatar());
         user.setPaymentPercent(level.getDefaultPaymentPercent());
         userRepository.save(user);
         UserRole userRole = new UserRole();
@@ -171,6 +176,7 @@ public class UserServiceImpl implements UserService {
         user.setHireTime(new Date());
         user.setDepartment(department);
         user.setLevel(level);
+        user.setAvatar(attachmentService.findDefaultAvatar());
         user.setPaymentPercent(level.getDefaultPaymentPercent());
         userRepository.save(user);
         UserRole userRole = new UserRole();
