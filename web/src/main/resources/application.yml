@@ -3,6 +3,7 @@ server:
   port: 8080
 tipcrm:
   swagger:
+    enable: true
     title: Project of Tip CRM
     description: Tip CRM Swagger UI
     url:
@@ -45,5 +46,15 @@ spring:
               ssl:
                 enable: true
         port: 465
+      http:
+        multipart:
+          max-file-size: 10MB
+          max-request-size: 10MB
+
+file:
+  max-file-size:
+    avatar: 1048576
+    file: 10485760
+
 mail:
       from: wan_neil@163.com
