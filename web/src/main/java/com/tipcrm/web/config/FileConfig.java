@@ -16,7 +16,6 @@ public class FileConfig {
 
     @Bean
     public String baseUrl() {
-        logger.info("Read base url from application config =======> " + baseUrl);
         return baseUrl;
     }
 }

@@ -33,6 +33,7 @@ import com.tipcrm.dao.repository.NotificationRepository;
 import com.tipcrm.dao.repository.UserRepository;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.exception.QueryException;
+import com.tipcrm.service.ListBoxService;
 import com.tipcrm.service.NotificationService;
 import com.tipcrm.service.UserService;
 import com.tipcrm.service.WebContext;
@@ -58,7 +59,7 @@ public class NotificationServiceImpl implements NotificationService {
     private UserService userService;
 
     @Autowired
-    private ListBoxRepository listBoxRepository;
+    private ListBoxService listBoxService;
 
     @Autowired
     private WebContext webContext;
@@ -74,8 +75,8 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setToUser(userRepository.findOne(toId));
         notification.setSubject(subject);
         notification.setContent(content);
-        ListBox notificationType = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.NOTIFICATION_TYPE.name(), type.name());
-        ListBox unread = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.NOTIFICATION_READ_STATUS.name(), NotificationReadStatus.UNREAD.name());
+        ListBox notificationType = listBoxService.findByCategoryAndName(ListBoxCategory.NOTIFICATION_TYPE.name(), type.name());
+        ListBox unread = listBoxService.findByCategoryAndName(ListBoxCategory.NOTIFICATION_READ_STATUS.name(), NotificationReadStatus.UNREAD.name());
         notification.setType(notificationType);
         notification.setReadStatus(unread);
         if (NotificationType.SYSTEM_NOTIFICATION.equals(type)) {

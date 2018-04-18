@@ -12,8 +12,8 @@ import com.tipcrm.dao.entity.ListBox;
 import com.tipcrm.dao.entity.User;
 import com.tipcrm.dao.repository.ApprovalRequestRepository;
 import com.tipcrm.dao.repository.CustomerApprovalRepository;
-import com.tipcrm.dao.repository.ListBoxRepository;
 import com.tipcrm.service.ApprovalService;
+import com.tipcrm.service.ListBoxService;
 import com.tipcrm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class ApprovalServiceImpl implements ApprovalService {
     private UserService userService;
 
     @Autowired
-    private ListBoxRepository listBoxRepository;
+    private ListBoxService listBoxService;
 
     @Autowired
     private ApprovalRequestRepository approvalRequestRepository;
@@ -65,8 +65,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     public ApprovalRequest convertToApprovalRequest(CustomerApproval customerApproval, User reviewer, Integer sequence) {
         ApprovalRequest approvalRequest = new ApprovalRequest();
-        ListBox approvalType = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.APPROVAL_TYPE.name(), ApprovalType.CUSTOMER.name());
-        ListBox pending = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.APPROVAL_STATUS.name(), ApprovalStatus.PENDING.name());
+        ListBox approvalType = listBoxService.findByCategoryAndName(ListBoxCategory.APPROVAL_TYPE.name(), ApprovalType.CUSTOMER.name());
+        ListBox pending = listBoxService.findByCategoryAndName(ListBoxCategory.APPROVAL_STATUS.name(), ApprovalStatus.PENDING.name());
         approvalRequest.setApprovalType(approvalType);
         approvalRequest.setReviewer(reviewer);
         approvalRequest.setReviewStatus(pending);
