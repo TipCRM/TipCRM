@@ -22,6 +22,10 @@ public class Attachment extends BaseCreateEntity{
     @JoinColumn(name = "type")
     private ListBox type;
 
+    @ManyToOne
+    @JoinColumn(name = "location_type")
+    private ListBox locationType;
+
     @Column(name = "path")
     private String path;
 
@@ -55,5 +59,13 @@ public class Attachment extends BaseCreateEntity{
 
     public void setType(ListBox type) {
         this.type = type;
+    }
+
+    public ListBox getLocationType() {
+        return locationType;
+    }
+
+    public void setLocationType(ListBox locationType) {
+        this.locationType = locationType;
     }
 }

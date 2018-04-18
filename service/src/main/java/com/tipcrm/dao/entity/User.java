@@ -34,8 +34,9 @@ public class User {
     @Column(name = "phone_no")
     private String phoneNo;
 
-    @Column(name = "avatar")
-    private String avatar;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "avatar")
+    private Attachment avatar;
 
     @Column(name = "motto")
     private String motto;
@@ -127,11 +128,11 @@ public class User {
         this.phoneNo = phoneNo;
     }
 
-    public String getAvatar() {
+    public Attachment getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(Attachment avatar) {
         this.avatar = avatar;
     }
 

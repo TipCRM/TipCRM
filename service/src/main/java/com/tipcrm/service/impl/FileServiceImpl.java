@@ -3,18 +3,16 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
-import com.google.common.collect.Lists;
 import com.tipcrm.config.FileConfiguration;
+import com.tipcrm.constant.AttachmentLocation;
 import com.tipcrm.constant.AttachmentType;
 import com.tipcrm.constant.FileSizeUnit;
 import com.tipcrm.constant.ListBoxCategory;
 import com.tipcrm.dao.entity.Attachment;
 import com.tipcrm.dao.entity.ListBox;
 import com.tipcrm.dao.repository.AttachmentRepository;
-import com.tipcrm.dao.repository.ListBoxRepository;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.service.FileService;
 import com.tipcrm.service.ListBoxService;
@@ -22,9 +20,8 @@ import com.tipcrm.service.WebContext;
 import com.tipcrm.util.FileSizeCalculator;
 import com.tipcrm.util.ValidateUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
@@ -58,6 +55,7 @@ public class FileServiceImpl implements FileService {
         String avatarPath = fileConfiguration.getBaseUrl() + "/avatar";
         String fileName = file.getOriginalFilename();
         ListBox avatar = listBoxService.findByCategoryAndName(ListBoxCategory.ATTACHMENT_TYPE.name(), AttachmentType.AVATAR.name());
+        ListBox externalFile = listBoxService.findByCategoryAndName(ListBoxCategory.ATTACHMENT_LOCATION.name(), AttachmentLocation.EXTERNAL.name());
         if (StringUtils.isBlank(fileName)) {
             throw new BizException("文件名为空");
         }
@@ -83,6 +81,7 @@ public class FileServiceImpl implements FileService {
             attachment.setExt(extension);
             attachment.setPath(realPath);
             attachment.setType(avatar);
+            attachment.setLocationType(externalFile);
             attachment.setEntryUser(webContext.getCurrentUser());
             attachment.setEntryTime(new Date());
             attachmentRepository.save(attachment);
@@ -121,7 +120,13 @@ public class FileServiceImpl implements FileService {
         if (attachment == null) {
             throw new BizException(type.getValue() + "不存在");
         }
-        Resource resource = resourceLoader.getResource("file:" + Paths.get(attachment.getPath()));
+        ListBox systemFile = listBoxService.findByCategoryAndName(ListBoxCategory.ATTACHMENT_LOCATION.name(), AttachmentLocation.SYSTEM.name());
+        Resource resource;
+        if (systemFile.getId().equals(attachment.getLocationType().getId())) {
+            resource = new ClassPathResource(attachment.getPath());
+        } else {
+            resource = resourceLoader.getResource("file:" + Paths.get(attachment.getPath()));
+        }
         if (resource == null) {
             throw new BizException(type.getValue() + "不存在");
         }

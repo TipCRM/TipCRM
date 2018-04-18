@@ -27,9 +27,6 @@ public class ListBox extends BaseAllEntity {
     @Column(name = "sequence")
     private Integer sequence;
 
-    @Column(name = "editable")
-    private Boolean editable;
-
     public Integer getId() {
         return id;
     }
@@ -68,13 +65,5 @@ public class ListBox extends BaseAllEntity {
 
     public void setSequence(Integer sequence) {
         this.sequence = sequence;
-    }
-
-    public Boolean getEditable() {
-        return editable;
-    }
-
-    public void setEditable(Boolean editable) {
-        this.editable = editable;
     }
 }
