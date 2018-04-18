@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 import com.google.common.collect.Lists;
+import com.tipcrm.config.FileConfiguration;
 import com.tipcrm.constant.AttachmentType;
+import com.tipcrm.constant.FileSizeUnit;
 import com.tipcrm.constant.ListBoxCategory;
 import com.tipcrm.dao.entity.Attachment;
 import com.tipcrm.dao.entity.ListBox;
@@ -17,6 +19,7 @@ import com.tipcrm.exception.BizException;
 import com.tipcrm.service.FileService;
 import com.tipcrm.service.ListBoxService;
 import com.tipcrm.service.WebContext;
+import com.tipcrm.util.FileSizeCalculator;
 import com.tipcrm.util.ValidateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -32,10 +35,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 public class FileServiceImpl implements FileService {
 
-    private Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
-
     @Autowired
-    private String baseUrl;
+    private FileConfiguration fileConfiguration;
 
     @Autowired
     private ResourceLoader resourceLoader;
@@ -51,7 +52,10 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String uploadAvatar(MultipartFile file) {
-        String avatarPath = baseUrl + "/avatar";
+        if (file.getSize() > fileConfiguration.getAvatarMaxSize()) {
+            throw new BizException("头像文件大小不能超过" + FileSizeCalculator.calcSize(fileConfiguration.getAvatarMaxSize(), FileSizeUnit.B, FileSizeUnit.MB));
+        }
+        String avatarPath = fileConfiguration.getBaseUrl() + "/avatar";
         String fileName = file.getOriginalFilename();
         ListBox avatar = listBoxService.findByCategoryAndName(ListBoxCategory.ATTACHMENT_TYPE.name(), AttachmentType.AVATAR.name());
         if (StringUtils.isBlank(fileName)) {
