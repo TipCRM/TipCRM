@@ -23,15 +23,24 @@ export default class DepartmentUserPanel extends React.Component{
     showUserDetail: false,
     selectUser: {},
     createNew: false,
+    currentPage: 1,
+    pageSize: 5,
+    filterCondition:{"criteria":[]},
+    sorterCondition:{},
+    showModal: false,
+    statusFilters: [],
+    unReadTagChecked: false,
   }
   componentDidMount(){
     const {dispatch, menuId} = this.props;
+    const {currentPage, pageSize} = this.state;
     dispatch({
       type: 'permission/getPermissionsByMenu',
       payload: {menuId: menuId}
     });
     dispatch({
-      type: 'user/listDepartmentUsers'
+      type: 'user/listDepartmentUsers',
+      payload: {page: currentPage, size: pageSize},
     });
   }
   handleTableRowSelect(record){

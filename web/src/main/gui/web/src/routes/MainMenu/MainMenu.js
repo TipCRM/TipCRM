@@ -58,6 +58,18 @@ export default class MainMenu extends React.Component{
       sold: { alias: '销售量' },
       genre: { alias: '游戏种类' }
     };
+
+    const footer =<Footer>
+      <div>
+        <Chart width={300} height={200} data={data} scale={cols}>
+          <Axis name="genre" />
+          <Axis name="sold" />
+          <Legend position="top" dy={-20} />
+          <Tooltip />
+          <Geom type="interval" position="genre*sold" color="genre" />
+        </Chart>
+      </div>
+    </Footer>;
     return(
       <Layout className={styles.layout}>
         <Header style={{height: '40px'}}>
@@ -74,17 +86,6 @@ export default class MainMenu extends React.Component{
             }
           </CommonSpin>
         </Content>
-        <Footer>
-          <div>
-            <Chart width={300} height={200} data={data} scale={cols}>
-              <Axis name="genre" />
-              <Axis name="sold" />
-              <Legend position="top" dy={-20} />
-              <Tooltip />
-              <Geom type="interval" position="genre*sold" color="genre" />
-            </Chart>
-          </div>
-        </Footer>
       </Layout>
     );
   }
