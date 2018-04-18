@@ -9,5 +9,6 @@ public enum ListBoxCategory {
     OPERATION_TYPE,
     APPROVAL_TYPE,
     REVIEW_TYPE,
-    ATTACHMENT_TYPE
+    ATTACHMENT_TYPE,
+    ATTACHMENT_LOCATION
 }

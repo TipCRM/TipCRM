@@ -457,7 +457,6 @@ CREATE TABLE `list_box` (
   `update_time`   DATETIME(3)                            DEFAULT NULL,
   `delete_id`     INT(11)                                DEFAULT NULL,
   `delete_time`   DATETIME(3)                            DEFAULT NULL,
-  `editable`      TINYINT(1)                             DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `list_boxI1` (`category_name`, `name`),
   UNIQUE KEY `list_boxI2` (`category_name`, `sequence`)
@@ -475,26 +474,28 @@ LOCK TABLES `list_box` WRITE;
 /*!40000 ALTER TABLE `list_box`
   DISABLE KEYS */;
 INSERT INTO `list_box` VALUES
-  (1, 'CUSTOMER_STATUS', 'NEW_CUSTOMER', '新客户', 1, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (2, 'CUSTOMER_STATUS', 'INTENTIONAL_CUSTOMER', '意向客户', 2, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (3, 'CUSTOMER_STATUS', 'SIGNING_CUSTOMER', '签约客户', 3, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (4, 'CUSTOMER_STATUS', 'EXPIRED_CUSTOMER', '过期客户', 4, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (5, 'APPROVAL_STATUS', 'PENDING', '待审批', 1, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (6, 'APPROVAL_STATUS', 'REJECTED', '已驳回', 2, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (7, 'APPROVAL_STATUS', 'APPROVED', '已通过', 3, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (8, 'GOAL_TYPE', 'USER', '员工目标', 1, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (9, 'GOAL_TYPE', 'DEPARTMENT', '部门目标', 2, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (10, 'USER_STATUS', 'ACTIVE', '正常', 1, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (11, 'USER_STATUS', 'FROZEN', '冻结', 2, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (12, 'NOTIFICATION_TYPE', 'SYSTEM_NOTIFICATION', '系统通知', 1, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (13, 'NOTIFICATION_TYPE', 'USER_NOTIFICATION', '用户通知', 2, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (14, 'NOTIFICATION_READ_STATUS', 'READ', '已读', 1, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (15, 'NOTIFICATION_READ_STATUS', 'UNREAD', '未读', 2, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (16, 'OPERATION_TYPE', 'ADD', '新增', 1, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (17, 'OPERATION_TYPE', 'UPDATE', '修改', 2, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (18, 'OPERATION_TYPE', 'REMOVE', '删除', 3, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (19, 'ATTACHMENT_TYPE', 'AVATAR', '头像', 1, -1, NOW(), NULL, NULL, NULL, NULL, 0),
-  (20, 'ATTACHMENT_TYPE', 'FILE', '文件', 2, -1, NOW(), NULL, NULL, NULL, NULL, 0);
+  (1, 'CUSTOMER_STATUS', 'NEW_CUSTOMER', '新客户', 1, -1, NOW(), NULL, NULL, NULL, NULL),
+  (2, 'CUSTOMER_STATUS', 'INTENTIONAL_CUSTOMER', '意向客户', 2, -1, NOW(), NULL, NULL, NULL, NULL),
+  (3, 'CUSTOMER_STATUS', 'SIGNING_CUSTOMER', '签约客户', 3, -1, NOW(), NULL, NULL, NULL, NULL),
+  (4, 'CUSTOMER_STATUS', 'EXPIRED_CUSTOMER', '过期客户', 4, -1, NOW(), NULL, NULL, NULL, NULL),
+  (5, 'APPROVAL_STATUS', 'PENDING', '待审批', 1, -1, NOW(), NULL, NULL, NULL, NULL),
+  (6, 'APPROVAL_STATUS', 'REJECTED', '已驳回', 2, -1, NOW(), NULL, NULL, NULL, NULL),
+  (7, 'APPROVAL_STATUS', 'APPROVED', '已通过', 3, -1, NOW(), NULL, NULL, NULL, NULL),
+  (8, 'GOAL_TYPE', 'USER', '员工目标', 1, -1, NOW(), NULL, NULL, NULL, NULL),
+  (9, 'GOAL_TYPE', 'DEPARTMENT', '部门目标', 2, -1, NOW(), NULL, NULL, NULL, NULL),
+  (10, 'USER_STATUS', 'ACTIVE', '正常', 1, -1, NOW(), NULL, NULL, NULL, NULL),
+  (11, 'USER_STATUS', 'FROZEN', '冻结', 2, -1, NOW(), NULL, NULL, NULL, NULL),
+  (12, 'NOTIFICATION_TYPE', 'SYSTEM_NOTIFICATION', '系统通知', 1, -1, NOW(), NULL, NULL, NULL, NULL),
+  (13, 'NOTIFICATION_TYPE', 'USER_NOTIFICATION', '用户通知', 2, -1, NOW(), NULL, NULL, NULL, NULL),
+  (14, 'NOTIFICATION_READ_STATUS', 'READ', '已读', 1, -1, NOW(), NULL, NULL, NULL, NULL),
+  (15, 'NOTIFICATION_READ_STATUS', 'UNREAD', '未读', 2, -1, NOW(), NULL, NULL, NULL, NULL),
+  (16, 'OPERATION_TYPE', 'ADD', '新增', 1, -1, NOW(), NULL, NULL, NULL, NULL),
+  (17, 'OPERATION_TYPE', 'UPDATE', '修改', 2, -1, NOW(), NULL, NULL, NULL, NULL),
+  (18, 'OPERATION_TYPE', 'REMOVE', '删除', 3, -1, NOW(), NULL, NULL, NULL, NULL),
+  (19, 'ATTACHMENT_TYPE', 'AVATAR', '头像', 1, -1, NOW(), NULL, NULL, NULL, NULL),
+  (20, 'ATTACHMENT_TYPE', 'FILE', '文件', 2, -1, NOW(), NULL, NULL, NULL, NULL),
+  (21, 'ATTACHMENT_LOCATION', 'EXTERNAL', '外部文件', 1, -1, NOW(), NULL, NULL, NULL, NULL),
+  (22, 'ATTACHMENT_LOCATION', 'SYSTEM', '系统文件', 2, -1, NOW(), NULL, NULL, NULL, NULL);
 
 /*!40000 ALTER TABLE `list_box`
   ENABLE KEYS */;
@@ -897,25 +898,25 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
-  `id`              INT(11)                      NOT NULL AUTO_INCREMENT,
-  `username`        VARCHAR(50) COLLATE utf8_bin NOT NULL,
-  `email`           VARCHAR(50) COLLATE utf8_bin NOT NULL,
-  `id_card`         VARCHAR(20) COLLATE utf8_bin          DEFAULT NULL,
-  `birthday`        DATETIME(3)                           DEFAULT NULL,
-  `phone_no`        VARCHAR(20) COLLATE utf8_bin          DEFAULT NULL,
-  `avatar`          VARCHAR(255) CHARACTER SET utf8       DEFAULT NULL,
-  `motto`           VARCHAR(1000) COLLATE utf8_bin        DEFAULT NULL,
-  `status`          INT(11)                      NOT NULL,
-  `hire_id`         INT(11)                      NOT NULL,
-  `hire_time`       DATETIME(3)                  NOT NULL,
-  `department_id`   INT(11)                               DEFAULT NULL,
-  `level_id`        INT(11)                               DEFAULT NULL,
-  `payment_percent` DECIMAL(4, 2)                NOT NULL,
-  `dismiss_id`      INT(11)                               DEFAULT NULL,
-  `dismiss_date`    DATETIME(3)                           DEFAULT NULL,
-  `dismiss_reason`  VARCHAR(255) COLLATE utf8_bin         DEFAULT NULL,
-  `update_id`       INT(11)                               DEFAULT NULL,
-  `update_time`     DATETIME(3)                           DEFAULT NULL,
+  `id`              INT(11)                        NOT NULL      AUTO_INCREMENT,
+  `username`        VARCHAR(50) COLLATE utf8_bin   NOT NULL,
+  `email`           VARCHAR(50) COLLATE utf8_bin   NOT NULL,
+  `id_card`         VARCHAR(20) COLLATE utf8_bin                 DEFAULT NULL,
+  `birthday`        DATETIME(3)                                  DEFAULT NULL,
+  `phone_no`        VARCHAR(20) COLLATE utf8_bin                 DEFAULT NULL,
+  `avatar`          VARCHAR(50) CHARACTER SET utf8 NOT NULL      DEFAULT 'default-avatar',
+  `motto`           VARCHAR(1000) COLLATE utf8_bin               DEFAULT NULL,
+  `status`          INT(11)                        NOT NULL,
+  `hire_id`         INT(11)                        NOT NULL,
+  `hire_time`       DATETIME(3)                    NOT NULL,
+  `department_id`   INT(11)                                      DEFAULT NULL,
+  `level_id`        INT(11)                                      DEFAULT NULL,
+  `payment_percent` DECIMAL(4, 2)                  NOT NULL,
+  `dismiss_id`      INT(11)                                      DEFAULT NULL,
+  `dismiss_date`    DATETIME(3)                                  DEFAULT NULL,
+  `dismiss_reason`  VARCHAR(255) COLLATE utf8_bin                DEFAULT NULL,
+  `update_id`       INT(11)                                      DEFAULT NULL,
+  `update_time`     DATETIME(3)                                  DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `userI2` (`email`),
   UNIQUE KEY `userI4` (`phone_no`),
@@ -976,14 +977,19 @@ DROP TABLE IF EXISTS `attachment`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `attachment` (
-  `id` VARCHAR(50) NOT NULL,
-  `extension` VARCHAR(10) DEFAULT NULL,
-  `path` VARCHAR(255) NOT NULL,
-  `type` INT(11) NOT NULL,
-  `entry_id` INT(11) NOT NULL,
-  `entry_time` DATETIME(3) NOT NULL,
-  PRIMARY KEY (`id`));
+  `id`            VARCHAR(50)  NOT NULL,
+  `extension`     VARCHAR(10) DEFAULT NULL,
+  `path`          VARCHAR(255) NOT NULL,
+  `type`          INT(11)      NOT NULL,
+  `location_type` INT(11)      NOT NULL,
+  `entry_id`      INT(11)      NOT NULL,
+  `entry_time`    DATETIME(3)  NOT NULL,
+  PRIMARY KEY (`id`)
+);
 
+
+INSERT INTO `attachment` VALUES
+  ('default-avatar', 'jpg', 'default-avatar.jpg', 19, 22, -1, now());
 
 
 /*!40103 SET TIME_ZONE = @OLD_TIME_ZONE */;

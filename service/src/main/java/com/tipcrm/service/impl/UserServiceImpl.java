@@ -28,6 +28,7 @@ import com.tipcrm.constant.Levels;
 import com.tipcrm.constant.ListBoxCategory;
 import com.tipcrm.constant.Roles;
 import com.tipcrm.constant.UserStatus;
+import com.tipcrm.dao.entity.Attachment;
 import com.tipcrm.dao.entity.Department;
 import com.tipcrm.dao.entity.Level;
 import com.tipcrm.dao.entity.ListBox;
@@ -248,7 +249,12 @@ public class UserServiceImpl implements UserService {
 
     private UserExtBo convertToUserBo(User user) {
         UserExtBo userExtBo = new UserExtBo();
-        userExtBo.setAvatar(user.getAvatar());
+        Attachment avatar = user.getAvatar();
+        String path = avatar.getId();
+        if (StringUtils.isNotBlank(avatar.getExt())) {
+            path += "." + avatar.getExt();
+        }
+        userExtBo.setAvatar(path);
         userExtBo.setBirthday(user.getBirthday());
         Department department = user.getDepartment();
         if (department != null) {
