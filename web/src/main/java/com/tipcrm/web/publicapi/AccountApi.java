@@ -30,11 +30,11 @@ public class AccountApi {
         return ResponseHelper.createInstance("success");
     }
 
-    @RequestMapping(value = "/regist", method = {RequestMethod.POST})
-    public JsonEntity<String> regist(@RequestBody RegistUserBo registUserBo) {
-        String email = userService.regist(registUserBo);
-        return ResponseHelper.createInstance(email);
-    }
+    // @RequestMapping(value = "/regist", method = {RequestMethod.POST})
+    // public JsonEntity<String> regist(@RequestBody RegistUserBo registUserBo) {
+    //     String email = userService.regist(registUserBo);
+    //     return ResponseHelper.createInstance(email);
+    // }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     @RequiresAuthentication
@@ -46,9 +46,9 @@ public class AccountApi {
     @RequestMapping(value = "/user", method = {RequestMethod.POST})
     @RequiresAuthentication
     @RequiresPermissions(value = Constants.Permission.USER_ADD)
-    public JsonEntity<String> addUser(@RequestBody CreateUserBo saveUserBo) {
-        String email = userService.saveUser(saveUserBo);
-        return ResponseHelper.createInstance(email);
+    public JsonEntity<Integer> addUser(@RequestBody CreateUserBo saveUserBo) {
+        Integer workNo = userService.saveUser(saveUserBo);
+        return ResponseHelper.createInstance(workNo);
     }
 
 }

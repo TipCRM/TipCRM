@@ -52,7 +52,7 @@ public class TipCRMRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String loginKey = (String) token.getPrincipal();
-        User user = userRepository.findByEmailOrPhoneNo(loginKey);
+        User user = userRepository.findByEmailOrWorkNo(loginKey);
         if (user == null) {
             throw new AuthenticationException("帐号或密码错误");
         }

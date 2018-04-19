@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
-    @Query("SELECT u FROM User u where u.email = :loginKey OR u.phoneNo = :loginKey")
-    User findByEmailOrPhoneNo(@Param(value = "loginKey") String loginKey);
+    @Query("SELECT u FROM User u where u.email = :loginKey OR u.workNo = :loginKey")
+    User findByEmailOrWorkNo(@Param(value = "loginKey") String loginKey);
 
     List<User> findByUserName(String userName);
 

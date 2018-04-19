@@ -52,6 +52,7 @@ import com.tipcrm.service.MailService;
 import com.tipcrm.service.RoleService;
 import com.tipcrm.service.UserService;
 import com.tipcrm.service.WebContext;
+import com.tipcrm.util.MessageUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.shiro.SecurityUtils;
@@ -113,52 +114,52 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private AttachmentService attachmentService;
 
-    @Override
-    public String regist(RegistUserBo registUserBo) {
-        String registable = configurationService.get(ConfigurationItems.REGISTABLE.name());
-        if (!Boolean.valueOf(registable)) {
-            throw new BizException("管理员没有开放注册通道");
-        }
+    // @Override
+    // public String regist(RegistUserBo registUserBo) {
+    //     String registable = configurationService.getValue(ConfigurationItems.REGISTABLE.name());
+    //     if (!Boolean.valueOf(registable)) {
+    //         throw new BizException("管理员没有开放注册通道");
+    //     }
+    //
+    //     ListBox userStatusActive = listBoxService.findByCategoryAndName(ListBoxCategory.USER_STATUS.name(), UserStatus.ACTIVE.name());
+    //     List<User> users = userRepository.findByUserName(Constants.User.SYSTEM);
+    //     if (CollectionUtils.isEmpty(users)) {
+    //         throw new BizException("系统用户丢失，请联系运维人员修复数据库");
+    //     }
+    //     User hirer = users.get(0);
+    //     Department department = null;
+    //     if (registUserBo.getDepartmentId() != null) {
+    //         department = departmentRepository.findOne(registUserBo.getDepartmentId());
+    //     }
+    //     Level level = levelRepository.findByName(Levels.NEW_USER.getValue());
+    //     Role role = null;
+    //     if (registUserBo.getTopManager()) {
+    //         role = roleRepository.findByName(Roles.GENERAL_MANAGER.getValue());
+    //     } else {
+    //         role = roleRepository.findByName(Roles.NORMAL.getValue());
+    //     }
+    //     validateRegistUser(registUserBo);
+    //     User user = new User();
+    //     user.setEmail(registUserBo.getEmail());
+    //     user.setUserName(registUserBo.getUsername());
+    //     user.setStatus(userStatusActive);
+    //     user.setHire(hirer);
+    //     user.setHireTime(new Date());
+    //     user.setDepartment(department);
+    //     user.setLevel(level);
+    //     user.setAvatar(attachmentService.findDefaultAvatar());
+    //     user.setPaymentPercent(level.getDefaultPaymentPercent());
+    //     userRepository.save(user);
+    //     UserRole userRole = new UserRole();
+    //     userRole.setRole(role);
+    //     userRole.setUser(user);
+    //     userRoleRepository.save(userRole);
+    //     saveSecurity(user.getId(), registUserBo.getPassword());
+    //     return registUserBo.getEmail();
+    // }
 
-        ListBox userStatusActive = listBoxService.findByCategoryAndName(ListBoxCategory.USER_STATUS.name(), UserStatus.ACTIVE.name());
-        List<User> users = userRepository.findByUserName(Constants.User.SYSTEM);
-        if (CollectionUtils.isEmpty(users)) {
-            throw new BizException("系统用户丢失，请联系运维人员修复数据库");
-        }
-        User hirer = users.get(0);
-        Department department = null;
-        if (registUserBo.getDepartmentId() != null) {
-            department = departmentRepository.findOne(registUserBo.getDepartmentId());
-        }
-        Level level = levelRepository.findByName(Levels.NEW_USER.getValue());
-        Role role = null;
-        if (registUserBo.getTopManager()) {
-            role = roleRepository.findByName(Roles.GENERAL_MANAGER.getValue());
-        } else {
-            role = roleRepository.findByName(Roles.NORMAL.getValue());
-        }
-        validateRegistUser(registUserBo);
-        User user = new User();
-        user.setEmail(registUserBo.getEmail());
-        user.setUserName(registUserBo.getUsername());
-        user.setStatus(userStatusActive);
-        user.setHire(hirer);
-        user.setHireTime(new Date());
-        user.setDepartment(department);
-        user.setLevel(level);
-        user.setAvatar(attachmentService.findDefaultAvatar());
-        user.setPaymentPercent(level.getDefaultPaymentPercent());
-        userRepository.save(user);
-        UserRole userRole = new UserRole();
-        userRole.setRole(role);
-        userRole.setUser(user);
-        userRoleRepository.save(userRole);
-        saveSecurity(user.getId(), registUserBo.getPassword());
-        return registUserBo.getEmail();
-    }
-
     @Override
-    public String saveUser(CreateUserBo createUserBo) {
+    public Integer saveUser(CreateUserBo createUserBo) {
         ListBox userStatusActive = listBoxService.findByCategoryAndName(ListBoxCategory.USER_STATUS.name(), UserStatus.ACTIVE.name());
         User hirer = webContext.getCurrentUser();
         Department department = null;
@@ -168,7 +169,9 @@ public class UserServiceImpl implements UserService {
         Level level = levelRepository.findByName(Levels.NEW_USER.getValue());
         Role role = roleRepository.findByName(Roles.NORMAL.getValue());
         validateSaveUserBo(createUserBo);
+        Integer workNo = configurationService.generateNewWorkNo();
         User user = new User();
+        user.setWorkNo(workNo);
         user.setEmail(createUserBo.getEmail());
         user.setUserName(createUserBo.getName());
         user.setStatus(userStatusActive);
@@ -185,8 +188,8 @@ public class UserServiceImpl implements UserService {
         userRoleRepository.save(userRole);
         String randomPwd = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8);
         saveSecurity(user.getId(), randomPwd);
-        mailService.sendSimpleEmail(createUserBo.getEmail(), "注册通知", "管理员已为您分配帐号，初始密码是" + randomPwd + "，请尽快登陆系统修改密码。");
-        return createUserBo.getEmail();
+        mailService.sendSimpleEmail(createUserBo.getEmail(), "注册通知", MessageUtil.getMessage(Constants.Email.ADD_USER_CONTENT, workNo, user.getEmail(), randomPwd));
+        return user.getWorkNo();
     }
 
     private void saveSecurity(Integer userId, String password) {
@@ -315,7 +318,7 @@ public class UserServiceImpl implements UserService {
             throw new BizException("非法用户名");
         }
         // 1. validate user exist
-        User user = userRepository.findByEmailOrPhoneNo(registUserBo.getEmail());
+        User user = userRepository.findByEmailOrWorkNo(registUserBo.getEmail());
         if (user != null) {
             throw new BizException("用户已存在");
         }
@@ -335,7 +338,7 @@ public class UserServiceImpl implements UserService {
             throw new BizException("非法用户名");
         }
         // 1. validate user exist
-        User user = userRepository.findByEmailOrPhoneNo(createUserBo.getEmail());
+        User user = userRepository.findByEmailOrWorkNo(createUserBo.getEmail());
         if (user != null) {
             throw new BizException("用户已存在");
         }
