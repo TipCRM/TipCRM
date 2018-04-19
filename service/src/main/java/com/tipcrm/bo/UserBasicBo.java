@@ -7,6 +7,7 @@ import org.springframework.util.CollectionUtils;
 
 public class UserBasicBo {
     private Integer id;
+    private Integer workNo;
     private String name;
 
     public static UserBasicBo convertToUserBasicBo(User user) {
@@ -41,5 +42,13 @@ public class UserBasicBo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getWorkNo() {
+        return workNo;
+    }
+
+    public void setWorkNo(Integer workNo) {
+        this.workNo = workNo;
     }
 }

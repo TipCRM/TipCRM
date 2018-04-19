@@ -450,11 +450,11 @@ public class UserServiceImpl implements UserService {
                             break;
                     }
                 }
-                Path path = root.get("id");
-                predicates.add(criteriaBuilder.gt(path, 0));
-                Predicate[] pre = new Predicate[predicates.size()];
-                criteriaQuery.where(predicates.toArray(pre));
             }
+            Path path = root.get("id");
+            predicates.add(criteriaBuilder.gt(path, 0));
+            Predicate[] pre = new Predicate[predicates.size()];
+            criteriaQuery.where(predicates.toArray(pre));
             return criteriaQuery.getRestriction();
         }
     }
