@@ -35,7 +35,7 @@ export default class CompanyUserPanel extends React.Component{
     advanceSearch: false,
     advanceCheckedAlive: false,
     advanceCheckedDead: false,
-    advanceFilter: {},
+    advanceFilter: "",
     advanceSelectDepartments: [],
   }
   componentDidMount(){
@@ -199,12 +199,19 @@ export default class CompanyUserPanel extends React.Component{
   handleAdvanceSearch(){
     const {currentPage, pageSize, advanceFilter} = this.state;
     let pageCondition = {page: currentPage, size: pageSize};
-    let sorterCondition = {sort:{direction:'DESC', fieldName: advanceFilter ? advanceFilter: 'id'}};
+    let sorterCondition;
+    if (advanceFilter != ""){
+      sorterCondition = {sort:{direction:'DESC', fieldName: advanceFilter!="" ? advanceFilter: 'id'}};
+    }
     let filterCondition = {};
     let request = {...filterCondition, ...pageCondition, ...sorterCondition};
     this.props.dispatch({
       type:'user/listCompanyUsers',
       payload:request,
+    });
+    this.setState({
+      filterCondition: filterCondition,
+      sorterCondition: sorterCondition,
     });
   }
 
