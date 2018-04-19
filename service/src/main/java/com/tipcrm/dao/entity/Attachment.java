@@ -2,7 +2,6 @@ package com.tipcrm.dao.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -10,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "attachment")
-public class Attachment extends BaseCreateEntity{
+public class Attachment extends BaseCreateEntity {
     @Id
     @Column(name = "id")
     private String id;

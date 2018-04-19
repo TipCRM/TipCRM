@@ -11,7 +11,7 @@ public class FileSizeCalculator {
         BigDecimal origionSize = BigDecimal.valueOf(size * origionUnit.getSizeAsByte());
         BigDecimal unitSize = BigDecimal.valueOf(toUnit.getSizeAsByte());
         DecimalFormat decimalFormat = new DecimalFormat("###.##");
-        return decimalFormat.format(origionSize.divide(unitSize,2, RoundingMode.HALF_UP)) + toUnit.name();
+        return decimalFormat.format(origionSize.divide(unitSize, 2, RoundingMode.HALF_UP)) + toUnit.name();
 
     }
 }

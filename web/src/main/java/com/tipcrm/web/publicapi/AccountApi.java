@@ -2,7 +2,6 @@ package com.tipcrm.web.publicapi;
 
 import com.tipcrm.bo.CreateUserBo;
 import com.tipcrm.bo.LoginBo;
-import com.tipcrm.bo.RegistUserBo;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.service.UserService;
 import com.tipcrm.web.util.JsonEntity;

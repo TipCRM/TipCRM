@@ -9,8 +9,6 @@ public class UserExtBo extends UserBo {
 
     private Date birthday;
 
-    private String phoneNo;
-
     private String avatar;
 
     private String hirer;
@@ -33,14 +31,6 @@ public class UserExtBo extends UserBo {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday == null ? null : (Date) birthday.clone();
-    }
-
-    public String getPhoneNo() {
-        return phoneNo;
-    }
-
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
     }
 
     public String getAvatar() {

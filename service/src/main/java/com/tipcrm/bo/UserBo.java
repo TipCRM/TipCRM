@@ -11,6 +11,8 @@ public class UserBo extends UserBasicBo {
 
     private String email;
 
+    private String phoneNo;
+
     private String status;
 
     private String department;
@@ -22,8 +24,10 @@ public class UserBo extends UserBasicBo {
     public static UserBo convertToUserBo(User user) {
         UserBo userBo = new UserBo();
         userBo.setId(user.getId());
+        userBo.setWorkNo(user.getWorkNo());
         userBo.setName(user.getUserName());
         userBo.setEmail(user.getEmail());
+        userBo.setPhoneNo(user.getPhoneNo());
         Department department = user.getDepartment();
         if (department != null) {
             userBo.setDepartment(user.getDepartment().getName());
@@ -88,5 +92,13 @@ public class UserBo extends UserBasicBo {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
     }
 }
