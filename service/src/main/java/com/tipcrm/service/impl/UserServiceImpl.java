@@ -22,7 +22,6 @@ import com.tipcrm.bo.RegistUserBo;
 import com.tipcrm.bo.UserBasicBo;
 import com.tipcrm.bo.UserBo;
 import com.tipcrm.bo.UserExtBo;
-import com.tipcrm.constant.ConfigurationItems;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.constant.Levels;
 import com.tipcrm.constant.ListBoxCategory;
@@ -75,8 +74,6 @@ import org.springframework.util.CollectionUtils;
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
 public class UserServiceImpl implements UserService {
-
-    private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -188,7 +185,8 @@ public class UserServiceImpl implements UserService {
         userRoleRepository.save(userRole);
         String randomPwd = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8);
         saveSecurity(user.getId(), randomPwd);
-        mailService.sendSimpleEmail(createUserBo.getEmail(), "注册通知", MessageUtil.getMessage(Constants.Email.ADD_USER_CONTENT, workNo, user.getEmail(), randomPwd));
+        mailService.sendSimpleEmail(createUserBo.getEmail(), "注册通知",
+                                    MessageUtil.getMessage(Constants.Email.ADD_USER_CONTENT, workNo, user.getEmail(), randomPwd));
         return user.getWorkNo();
     }
 
@@ -298,31 +296,31 @@ public class UserServiceImpl implements UserService {
         return userExtBo;
     }
 
-    private void validateRegistUser(RegistUserBo registUserBo) {
-        if (StringUtils.isBlank(registUserBo.getEmail())) {
-            throw new BizException("邮箱不能为空");
-        }
-        if (!EmailValidator.getInstance().isValid(registUserBo.getEmail())) {
-            throw new BizException("邮箱格式不正确");
-        }
-        if (StringUtils.isBlank(registUserBo.getPassword())) {
-            throw new BizException("密码不能为空");
-        }
-        if (registUserBo.getPassword().length() < 6) {
-            throw new BizException("密码不能小于6位");
-        }
-        if (StringUtils.isBlank(registUserBo.getUsername())) {
-            throw new BizException("姓名不能为空");
-        }
-        if (Constants.User.SYSTEM.equals(registUserBo.getUsername())) {
-            throw new BizException("非法用户名");
-        }
-        // 1. validate user exist
-        User user = userRepository.findByEmailOrWorkNo(registUserBo.getEmail());
-        if (user != null) {
-            throw new BizException("用户已存在");
-        }
-    }
+    // private void validateRegistUser(RegistUserBo registUserBo) {
+    //     if (StringUtils.isBlank(registUserBo.getEmail())) {
+    //         throw new BizException("邮箱不能为空");
+    //     }
+    //     if (!EmailValidator.getInstance().isValid(registUserBo.getEmail())) {
+    //         throw new BizException("邮箱格式不正确");
+    //     }
+    //     if (StringUtils.isBlank(registUserBo.getPassword())) {
+    //         throw new BizException("密码不能为空");
+    //     }
+    //     if (registUserBo.getPassword().length() < 6) {
+    //         throw new BizException("密码不能小于6位");
+    //     }
+    //     if (StringUtils.isBlank(registUserBo.getUsername())) {
+    //         throw new BizException("姓名不能为空");
+    //     }
+    //     if (Constants.User.SYSTEM.equals(registUserBo.getUsername())) {
+    //         throw new BizException("非法用户名");
+    //     }
+    //     // 1. validate user exist
+    //     User user = userRepository.findByEmailOrWorkNo(registUserBo.getEmail());
+    //     if (user != null) {
+    //         throw new BizException("用户已存在");
+    //     }
+    // }
 
     private void validateSaveUserBo(CreateUserBo createUserBo) {
         if (StringUtils.isBlank(createUserBo.getEmail())) {

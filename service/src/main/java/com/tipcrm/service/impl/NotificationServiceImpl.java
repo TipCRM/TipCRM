@@ -28,7 +28,6 @@ import com.tipcrm.constant.NotificationReadStatus;
 import com.tipcrm.constant.NotificationType;
 import com.tipcrm.dao.entity.ListBox;
 import com.tipcrm.dao.entity.Notification;
-import com.tipcrm.dao.repository.ListBoxRepository;
 import com.tipcrm.dao.repository.NotificationRepository;
 import com.tipcrm.dao.repository.UserRepository;
 import com.tipcrm.exception.BizException;
