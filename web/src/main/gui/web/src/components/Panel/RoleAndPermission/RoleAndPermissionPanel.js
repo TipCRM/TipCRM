@@ -82,7 +82,7 @@ export default class RoleAndPermissionPanel extends React.Component{
 
     var columns = [
       {title:'角色编号', dataIndex:'id'},
-      {title:'角色名称', dataIndex:'displayName'},
+      {title:'角色名称', dataIndex:'name'},
       {title:'创建人', dataIndex:'entryUser'},
       {title:'创建时间', dataIndex:'entryDatetime'},
     ];

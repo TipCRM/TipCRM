@@ -136,7 +136,7 @@ export default class PermissionPanel extends React.Component{
             handleCancelSave = {this.handleCancelSaveRoleChange.bind(this, createNew, selectRole)}
             handleEditSaveClick = {this.handleSaveRoleChange.bind(this, createNew, selectRole)}
             addonBefore="角色名称"
-            value={selectRole.displayName}
+            value={selectRole.name}
             enableEdit={enableEdit}
             createNew = {createNew}
             handleChangeValue = {this.handleChangeRoleValue.bind(this)}

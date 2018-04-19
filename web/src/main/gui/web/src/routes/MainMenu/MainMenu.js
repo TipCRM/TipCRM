@@ -80,10 +80,10 @@ export default class MainMenu extends React.Component{
         </Header>
         <Content className={styles.content}>
           <CommonSpin spinning={loading}>
-            {
-              finalMenus.map(item=>
-                <CardCell title={item.title} content={item.content} active={item.active}/>)
-            }
+              {
+                finalMenus.map(item=>
+                  <CardCell title={item.title} content={item.content} active={item.active}/>)
+              }
           </CommonSpin>
         </Content>
       </Layout>

@@ -151,7 +151,7 @@ export default class DepartmentManagePanel extends React.Component{
 
   render(){
     const {menuPermissions, departments, loading, loadingPermission, users, loadingUsers} = this.props;
-    const {selectManager} = this.state;
+    const {selectManager, selectDepartment} = this.state;
     // init permissions
     const {permissions} = menuPermissions;
     const enableAdd = permissions.filter(item => item === getPermission('DEPARTMENT_ADD')).length > 0;
