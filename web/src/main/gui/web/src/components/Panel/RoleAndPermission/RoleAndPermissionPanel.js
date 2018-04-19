@@ -42,7 +42,6 @@ export default class RoleAndPermissionPanel extends React.Component{
       showPermissionPanel: true,
     });
   }
-
   handlePermissionDelete(record){
     const {dispatch, roles} = this.props;
     dispatch({
@@ -83,7 +82,7 @@ export default class RoleAndPermissionPanel extends React.Component{
 
     var columns = [
       {title:'角色编号', dataIndex:'id'},
-      {title:'角色名称', dataIndex:'displayName'},
+      {title:'角色名称', dataIndex:'name'},
       {title:'创建人', dataIndex:'entryUser'},
       {title:'创建时间', dataIndex:'entryDatetime'},
     ];
@@ -104,8 +103,9 @@ export default class RoleAndPermissionPanel extends React.Component{
           enableAdd ? <Button
             style={{marginLeft: '20%', marginBottom: '8px'}}
             size="small" type="primary"
-            onClick={this.handlePermissionEdit.bind(this, {})}>添加角色</Button> : <div></div>
+            onClick={this.handlePermissionEdit.bind(this, {})}>添加角色</Button> : ''
         }
+       <font style={{borderLeft:'3px solid',marginLeft:'40%'}}>双击查看角色权限</font>
       </CommonSpin>
       <CommonSpin spinning={loading}>
         <SearchTable

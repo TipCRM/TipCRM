@@ -95,6 +95,31 @@ export default class DepartmentManagePanel extends React.Component{
       payload: {deleteId: record.id, departments: departments}
     });
   }
+  handleCancelEditDepartment(record){
+    let {dispatch, departments} = this.props;
+    console.log("record:", record);
+    if (record.createNew){
+      departments = departments.filter(department => department.id != null);
+      dispatch({
+        type: 'department/saveDepartments',
+        payload: departments,
+      });
+    } else{
+      departments = departments.map(department => {
+        if (department.id == record.id){
+          return {...department, editing: false};
+        }
+        return department;
+      });
+      dispatch({
+        type: 'department/saveDepartments',
+        payload: departments,
+      });
+      this.setState({
+        newDepartmentName: record.name,
+      });
+    }
+  }
 
   handleDepartmentNameChange(e){
     this.setState({
@@ -114,7 +139,8 @@ export default class DepartmentManagePanel extends React.Component{
       payload: {userName: value ? value: ' ', includeDismiss: false},
     })
   }
-  handleOptionSelect(value){
+  handleOptionSelect(value, key){
+    console.log("value:", value, " key:", key);
     const {users} = this.props;
     const user = users.filter(user => user.id == value);
     console.log("select manager", user);
@@ -125,7 +151,7 @@ export default class DepartmentManagePanel extends React.Component{
 
   render(){
     const {menuPermissions, departments, loading, loadingPermission, users, loadingUsers} = this.props;
-    const {selectManager} = this.state;
+    const {selectManager, selectDepartment} = this.state;
     // init permissions
     const {permissions} = menuPermissions;
     const enableAdd = permissions.filter(item => item === getPermission('DEPARTMENT_ADD')).length > 0;
@@ -155,6 +181,7 @@ export default class DepartmentManagePanel extends React.Component{
           editing={record.editing}
           showEdit={enableEdit}
           showDelete={enableDelete}
+          handleCancelEditClick = {this.handleCancelEditDepartment.bind(this, record)}
           handleEditClick = {this.handleDepartmentEdit.bind(this, record)}
           handleDeleteClick={this.handleDepartmentDelete.bind(this, record)} />)};
       columns.push(column);

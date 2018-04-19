@@ -9,7 +9,7 @@ import RoleAndPermissionPanel from '../components/Panel/RoleAndPermission/RoleAn
 import MyRoleAndPermissionPanel from '../components/Panel/RoleAndPermission/MyRoleAndPermissionPanel';
 
 import CompanyUserPanel from '../components/Panel/User/CompanyUserPanel';
-import DepartmentUserPanel from '../components/Panel/User/DepartmentUserPanel';
+import DepartmentUserPanel from '../components/Panel/User/CompanyUserPanel';
 
 import DepartmentManagePanel from '../components/Panel/Department/DepartmentManagePanel';
 
@@ -32,7 +32,7 @@ export function menuComponentConstant(item){
       component = (<DynamicPanel children={children} initChildrenPanel= {initRoleAndPermissionComponent}/>);
       break;
     case 'USER_MANAGEMENT':
-      component = (<DynamicPanel children={children} initChildrenPanel={initUserManagementComponent}/>);
+      component = (<DynamicPanel item={item} notTabs={true} initChildrenPanel={initUserManagementComponent}/>);
       break;
     case 'DEPARTMENT_MANAGEMENT':
       component = (<DynamicPanel item={item} notTabs={true} initChildrenPanel={initDepartmentManagementComponent}/>);
@@ -105,18 +105,7 @@ export function initRoleAndPermissionComponent(item){
 }
 
 export function initUserManagementComponent(item){
-  var component;
-  switch (item.name){
-    case 'DEPARTMENT_USER':
-      component = (<DepartmentUserPanel children={item.children} menuId={item.id}/>)
-      break;
-    case 'COMPANY_USER':
-      component = (<CompanyUserPanel children={item.children} menuId={item.id}/>);
-      break;
-    default:
-      component = (<div>The page you request is not exist.</div>);
-  }
-  return component;
+  return (<CompanyUserPanel menuId={item.id}/>);
 }
 
 export function initDepartmentManagementComponent(item){

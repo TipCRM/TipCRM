@@ -1,7 +1,7 @@
 import { fetchCurrentUser,
   fetchUserByName, createNewUser,
   fetchUserDetailInfo, disMissUser,
-  updateUserInfo, fetchDepartmentUsers} from '../services/api';
+  updateUserInfo, fetchCompanyUsers} from '../services/api';
 import {message} from 'antd';
 
 export default {
@@ -10,7 +10,7 @@ export default {
     currentUser: {},
     selectUserInfo: {},
     users:[],
-    departmentUsers: [],
+    companyUsers: [],
   },
   effects: {
     *getCurrentUser(_,{call, put}){
@@ -52,11 +52,12 @@ export default {
         message.success('修改员工信息成功');
       }
     },
-    *listDepartmentUsers(_, {call, put}){
-      const response = yield call(fetchDepartmentUsers);
+    *listCompanyUsers({payload}, {call, put}){
+      console.log("start calling users api: ", payload);
+      const response = yield call(fetchCompanyUsers, payload);
       yield put({
-        type: 'saveDepartmentUsers',
-        payload: response.data
+        type: 'saveCompanyUsers',
+        payload: response.data,
       });
     }
   },
@@ -88,10 +89,10 @@ export default {
         selectUserInfo: payload,
       }
     },
-    saveDepartmentUsers(state, {payload}){
+    saveCompanyUsers(state, {payload}){
       return{
         ...state,
-        departmentUsers: payload,
+        companyUsers: payload,
       }
     }
   },

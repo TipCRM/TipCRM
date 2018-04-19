@@ -9,7 +9,7 @@ export default class TipCheckableTag extends React.Component{
   render(){
     const {tagChecked, handleTagChange, children} = this.props;
     return(
-        <CheckableTag checked={tagChecked} onChange={handleTagChange} style={{border:'1px solid', borderRadius:'3px'}}>{children}</CheckableTag>
+        <CheckableTag checked={tagChecked} onChange={handleTagChange} style={{border:'1px solid #CCCCCC', borderRadius:'3px'}}>{children}</CheckableTag>
     );
   }
 }

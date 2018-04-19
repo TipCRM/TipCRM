@@ -6,13 +6,20 @@ import { LocaleProvider } from 'antd';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import 'moment/locale/zh-cn';
 
+function isLogin(nextState, replaceState){
+  if (!localStorage.getItem("tip_user_login")){
+    replaceState("/login");
+  } else{
+    replaceState("/index");
+  }
+}
 function RouterConfig({ history }) {
   return (
   <LocaleProvider locale={zh_CN}>
     <Router history={history}>
       <Switch>
-        <Route path="/login" exact component={Login} />
-        <Route path="/index" exact component={MainMenu} />
+        <Route path="/login" exact component={Login} onEnter={isLogin}/>
+        <Route path="/index" exact component={MainMenu} onEnter={isLogin}/>
         <Redirect exact from="/" to="/login"/>
       </Switch>
     </Router>

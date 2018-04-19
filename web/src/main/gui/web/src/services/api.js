@@ -43,8 +43,11 @@ export async function updateUserInfo(params){
     body: params,
   });
 }
-export async function fetchDepartmentUsers(){
-  return request('/public/api/users');
+export async function fetchCompanyUsers(params){
+  return request('/public/api/user/query', {
+    method: 'POST',
+    body: params
+  });
 }
 
 // menu api
@@ -127,6 +130,9 @@ export async function flushRoleCache(){
   return request('/public/api/cache/refresh/roleAndPermission', {
     method: 'POST'
   });
+}
+export async function fluashAllCache(){
+
 }
 
 // department
