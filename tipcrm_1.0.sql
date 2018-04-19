@@ -104,11 +104,11 @@ DROP TABLE IF EXISTS `configuration`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `configuration` (
-  `id`    INT(11)                       NOT NULL,
-  `key`   VARCHAR(100) COLLATE utf8_bin NOT NULL,
-  `value` VARCHAR(255) COLLATE utf8_bin NOT NULL,
+  `id`    INT(11)                       NOT NULL AUTO_INCREMENT,
+  `conf_key`   VARCHAR(100) COLLATE utf8_bin NOT NULL,
+  `conf_value` VARCHAR(255) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `configuration` (`key`)
+  UNIQUE KEY `configuration` (`conf_key`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8
@@ -123,7 +123,8 @@ LOCK TABLES `configuration` WRITE;
 /*!40000 ALTER TABLE `configuration`
   DISABLE KEYS */;
 INSERT INTO `configuration` VALUES
-  (1, 'REGISTABLE', 'TRUE');
+  (1, 'REGISTABLE', 'TRUE'),
+  (2, 'WORK_NO', 1001);
 /*!40000 ALTER TABLE `configuration`
   ENABLE KEYS */;
 UNLOCK TABLES;
@@ -886,6 +887,8 @@ CREATE TABLE `security` (
 LOCK TABLES `security` WRITE;
 /*!40000 ALTER TABLE `security`
   DISABLE KEYS */;
+INSERT INTO `security` (user_id, password, salt) VALUES
+  (1, '7468e186588902b59d45cdb0c4dd20ae', '8417184ca1');
 /*!40000 ALTER TABLE `security`
   ENABLE KEYS */;
 UNLOCK TABLES;
@@ -899,6 +902,7 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `id`              INT(11)                        NOT NULL      AUTO_INCREMENT,
+  `work_no`         INT(11)                        NOT NULL,
   `username`        VARCHAR(50) COLLATE utf8_bin   NOT NULL,
   `email`           VARCHAR(50) COLLATE utf8_bin   NOT NULL,
   `id_card`         VARCHAR(20) COLLATE utf8_bin                 DEFAULT NULL,
@@ -920,6 +924,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `userI2` (`email`),
   UNIQUE KEY `userI4` (`phone_no`),
+  UNIQUE KEY `userI6` (`work_no` ASC),
   KEY `userI1` (`username`),
   KEY `userI3` (`status`),
   KEY `userI5` (`department_id`)
@@ -937,7 +942,11 @@ LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user`
   DISABLE KEYS */;
 INSERT INTO `user` VALUES
-  (-1, 'SYSTEM', '', NULL, NULL, NULL, NULL, NULL, 10, -1, NOW(), NULL, NULL, 0.00, NULL, NULL, NULL, NULL,
+  (-1, -1, 'SYSTEM', 'tip@crm.com', NULL, NULL, NULL, 'robot-avatar', NULL, 10, -1, NOW(), NULL, NULL, 0.00, NULL, NULL,
+   NULL, NULL,
+   NULL),
+  (1, 1000, 'admin', '', NULL, NULL, NULL, 'default-avatar', NULL, 10, -1, NOW(), NULL, NULL, 0.00, NULL, NULL, NULL,
+   NULL,
    NULL);
 /*!40000 ALTER TABLE `user`
   ENABLE KEYS */;
@@ -969,6 +978,8 @@ CREATE TABLE `user_role` (
 LOCK TABLES `user_role` WRITE;
 /*!40000 ALTER TABLE `user_role`
   DISABLE KEYS */;
+INSERT INTO `user_role` VALUES
+  (1, 1, 1);
 /*!40000 ALTER TABLE `user_role`
   ENABLE KEYS */;
 UNLOCK TABLES;

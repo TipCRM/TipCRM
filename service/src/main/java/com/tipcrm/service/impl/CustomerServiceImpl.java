@@ -430,8 +430,8 @@ public class CustomerServiceImpl implements CustomerService {
             customerBo.setNextCommunicationTime(communication.getNextCommunicateTime());
         }
         // todo: query intentional amount and sign amount
-        // customerBo.setIntentionalAmount(customer.get);
-        // customerBo.setSignAmount(customer.get);
+        // customerBo.setIntentionalAmount(customer.getValue);
+        // customerBo.setSignAmount(customer.getValue);
         return customerBo;
     }
 

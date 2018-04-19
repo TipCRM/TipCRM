@@ -1,4 +1,5 @@
 package com.tipcrm.constant;
 public enum ConfigurationItems {
-    REGISTABLE
+    REGISTABLE,
+    WORK_NO
 }

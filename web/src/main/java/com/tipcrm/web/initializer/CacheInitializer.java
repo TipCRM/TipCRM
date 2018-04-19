@@ -82,14 +82,10 @@ public class CacheInitializer implements CommandLineRunner {
 
     public void initConfigurationCache() {
         logger.info("Initializing configuration cache data...");
-        Map<String, String> configurationMap = Maps.newHashMap();
         List<Configuration> configurations = configurationRepository.findAll();
         if (!CollectionUtils.isEmpty(configurations)) {
-            for (Configuration configuration : configurations) {
-                configurationMap.put(configuration.getKey(), configuration.getValue());
-            }
+            ConfigurationCache.pushConfigurations(configurations);
         }
-        ConfigurationCache.pushConfigurations(configurationMap);
     }
 
     public void initMenuCache() {

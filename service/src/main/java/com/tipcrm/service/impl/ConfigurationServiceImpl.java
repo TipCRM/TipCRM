@@ -1,5 +1,6 @@
 package com.tipcrm.service.impl;
 import com.tipcrm.cache.ConfigurationCache;
+import com.tipcrm.constant.ConfigurationItems;
 import com.tipcrm.dao.entity.Configuration;
 import com.tipcrm.dao.repository.ConfigurationRepository;
 import com.tipcrm.service.ConfigurationService;
@@ -15,16 +16,34 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     private ConfigurationRepository configurationRepository;
 
     @Override
-    public String get(String key) {
-        String value = ConfigurationCache.get(key);
-        if (value != null) {
-            return value;
+    public Configuration get(String key) {
+        Configuration configuration = ConfigurationCache.get(key);
+        if (configuration != null) {
+            return configuration;
         }
-        Configuration configuration = configurationRepository.findByKey(key);
+        configuration = configurationRepository.findByKey(key);
         if (configuration == null) {
             return null;
         }
-        ConfigurationCache.pushConfiguration(key, configuration.getValue());
-        return configuration.getValue();
+        ConfigurationCache.pushConfiguration(configuration);
+        return configuration;
+    }
+
+    @Override
+    public void set(String key, String value) {
+        Configuration configuration = get(key);
+        configuration.setValue(value);
+        configurationRepository.save(configuration);
+        ConfigurationCache.pushConfiguration(configuration);
+    }
+
+    @Override
+    public Integer generateNewWorkNo() {
+        Configuration configuration = get(ConfigurationItems.WORK_NO.name());
+        Integer workNo = Integer.valueOf(configuration.getValue());
+        configuration.setValue(String.valueOf(workNo + 1));
+        configurationRepository.save(configuration);
+        ConfigurationCache.pushConfiguration(configuration);
+        return workNo;
     }
 }

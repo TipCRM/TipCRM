@@ -19,6 +19,9 @@ public class User {
     @Column(name = "id")
     private Integer id;
 
+    @Column(name = "work_no")
+    private Integer workNo;
+
     @Column(name = "username")
     private String userName;
 
@@ -230,5 +233,13 @@ public class User {
 
     public void setPaymentPercent(BigDecimal paymentPercent) {
         this.paymentPercent = paymentPercent;
+    }
+
+    public Integer getWorkNo() {
+        return workNo;
+    }
+
+    public void setWorkNo(Integer workNo) {
+        this.workNo = workNo;
     }
 }

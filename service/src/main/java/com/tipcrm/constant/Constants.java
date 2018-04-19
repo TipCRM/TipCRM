@@ -6,6 +6,10 @@ import com.google.common.collect.Maps;
 public class Constants {
     public static final Integer HASH_ITERATIONS = 2;
 
+    public static class Email {
+        public static final String ADD_USER_CONTENT = "管理员已为您分配帐号，您的工号是{0}, 您可以用工号或者邮箱({1})登录系统，初始密码是{2}。请尽快修改密码。";
+    }
+
     public static class User {
         public static final String SYSTEM = "系统";
     }

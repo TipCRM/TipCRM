@@ -13,9 +13,9 @@ import com.tipcrm.dao.entity.User;
 
 public interface UserService {
 
-    String regist(RegistUserBo registUserBo);
+    // String regist(RegistUserBo registUserBo);
 
-    String saveUser(CreateUserBo createUserBo);
+    Integer saveUser(CreateUserBo createUserBo);
 
     void login(LoginBo loginBo);
 
