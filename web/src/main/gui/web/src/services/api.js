@@ -156,3 +156,10 @@ export async function deletDepartment(params) {
     method: 'DELETE'
   });
 }
+
+
+export async function uploadAvatar(){
+  return request('/avatar', {
+    method: 'POST'
+  });
+}
