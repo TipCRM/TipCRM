@@ -29,12 +29,6 @@ public class AccountApi {
         return ResponseHelper.createInstance("success");
     }
 
-    // @RequestMapping(value = "/regist", method = {RequestMethod.POST})
-    // public JsonEntity<String> regist(@RequestBody RegistUserBo registUserBo) {
-    //     String email = userService.regist(registUserBo);
-    //     return ResponseHelper.createInstance(email);
-    // }
-
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     @RequiresAuthentication
     public JsonEntity<String> logout() {
