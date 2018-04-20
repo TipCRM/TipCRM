@@ -1,5 +1,7 @@
 package com.tipcrm.service.impl;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -72,7 +75,10 @@ public class FileServiceImpl implements FileService {
         File dest = new File(realPath);
         // 检测是否存在目录
         if (dest.getParentFile() != null && !dest.getParentFile().exists()) {
-            dest.getParentFile().mkdirs();
+            boolean mkdirRes = dest.getParentFile().mkdirs();
+            if (!mkdirRes) {
+                throw new BizException("创建目录失败，请联系运维。");
+            }
         }
         try {
             file.transferTo(dest);
@@ -121,9 +127,17 @@ public class FileServiceImpl implements FileService {
             throw new BizException(type.getValue() + "不存在");
         }
         ListBox systemFile = listBoxService.findByCategoryAndName(ListBoxCategory.ATTACHMENT_LOCATION.name(), AttachmentLocation.SYSTEM.name());
+        ListBox networkFile= listBoxService.findByCategoryAndName(ListBoxCategory.ATTACHMENT_LOCATION.name(), AttachmentLocation.NETWORK.name());
         Resource resource;
         if (systemFile.getId().equals(attachment.getLocationType().getId())) {
             resource = new ClassPathResource(attachment.getPath());
+        } else if (networkFile.getId().equals(attachment.getLocationType().getId())) {
+            try {
+                URL url = new URL(attachment.getPath());
+                resource = new UrlResource(url);
+            } catch (MalformedURLException e) {
+                throw new BizException("网络资源文件路径有误", e);
+            }
         } else {
             resource = resourceLoader.getResource("file:" + Paths.get(attachment.getPath()));
         }

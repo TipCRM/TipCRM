@@ -496,7 +496,8 @@ INSERT INTO `list_box` VALUES
   (19, 'ATTACHMENT_TYPE', 'AVATAR', '头像', 1, -1, NOW(), NULL, NULL, NULL, NULL),
   (20, 'ATTACHMENT_TYPE', 'FILE', '文件', 2, -1, NOW(), NULL, NULL, NULL, NULL),
   (21, 'ATTACHMENT_LOCATION', 'EXTERNAL', '外部文件', 1, -1, NOW(), NULL, NULL, NULL, NULL),
-  (22, 'ATTACHMENT_LOCATION', 'SYSTEM', '系统文件', 2, -1, NOW(), NULL, NULL, NULL, NULL);
+  (22, 'ATTACHMENT_LOCATION', 'SYSTEM', '系统文件', 2, -1, NOW(), NULL, NULL, NULL, NULL),
+  (23, 'ATTACHMENT_LOCATION', 'NETWORK', '网络文件', 2, -1, NOW(), NULL, NULL, NULL, NULL);
 
 /*!40000 ALTER TABLE `list_box`
   ENABLE KEYS */;
@@ -555,8 +556,6 @@ INSERT INTO `menu` VALUES
   (17, 'USER_GOAL', '员工目标', 2, NULL, 15, 38, NULL, 1),
   (18, 'DEPARTMENT_GOAL', '部门目标', 3, NULL, 15, 36, NULL, 1),
   (19, 'USER_MANAGEMENT', '员工管理', 6, NULL, NULL, NULL, NULL, 1),
-  (20, 'DEPARTMENT_USER', '部门员工', 1, NULL, 19, 17, NULL, 1),
-  (21, 'COMPANY_USER', '公司员工', 2, NULL, 19, 18, NULL, 1),
   (22, 'DEPARTMENT_MANAGEMENT', '部门管理', 7, NULL, NULL, NULL, NULL, 1),
   (23, 'ROLE_AND_PERMISSION', '角色与权限', 8, NULL, NULL, NULL, NULL, 1),
   (24, 'MY_ROLE_AND_PERMISSION', '我的', 1, NULL, 23, NULL, NULL, 1),
@@ -724,14 +723,6 @@ INSERT INTO `TIP_CRM`.`menu_permission` (`menu_id`, `permission_id`) VALUES
   (17, 38),
   (18, 35),
   (18, 36),
-  (20, 17),
-  (20, 19),
-  (20, 20),
-  (20, 21),
-  (20, 39),
-  (21, 18),
-  (21, 19),
-  (21, 39),
   (22, 25),
   (22, 26),
   (22, 27),

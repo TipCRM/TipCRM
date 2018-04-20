@@ -12,13 +12,13 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.google.common.collect.Sets;
+import com.sun.deploy.config.SecuritySettings;
 import com.tipcrm.bo.CreateUserBo;
 import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.QueryCriteriaBo;
 import com.tipcrm.bo.QueryRequestBo;
 import com.tipcrm.bo.QueryResultBo;
 import com.tipcrm.bo.QuerySortBo;
-import com.tipcrm.bo.RegistUserBo;
 import com.tipcrm.bo.UserBasicBo;
 import com.tipcrm.bo.UserBo;
 import com.tipcrm.bo.UserExtBo;
@@ -59,8 +59,6 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.SimpleHash;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -151,7 +149,7 @@ public class UserServiceImpl implements UserService {
     //     userRole.setRole(role);
     //     userRole.setUser(user);
     //     userRoleRepository.save(userRole);
-    //     saveSecurity(user.getId(), registUserBo.getPassword());
+    //     generateSecurity(user.getId(), registUserBo.getPassword());
     //     return registUserBo.getEmail();
     // }
 
@@ -184,20 +182,21 @@ public class UserServiceImpl implements UserService {
         userRole.setUser(user);
         userRoleRepository.save(userRole);
         String randomPwd = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8);
-        saveSecurity(user.getId(), randomPwd);
+        Security security = generateSecurity(user.getId(), randomPwd);
+        securityRepository.save(security);
         mailService.sendSimpleEmail(createUserBo.getEmail(), "注册通知",
                                     MessageUtil.getMessage(Constants.Email.ADD_USER_CONTENT, workNo, user.getEmail(), randomPwd));
         return user.getWorkNo();
     }
 
-    private void saveSecurity(Integer userId, String password) {
+    private Security generateSecurity(Integer userId, String password) {
         Security security = new Security();
         security.setUserId(userId);
         String salt = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
         String securityPwd = new SimpleHash("MD5", password, salt, Constants.HASH_ITERATIONS).toHex();
         security.setSalt(salt);
         security.setPassword(securityPwd);
-        securityRepository.save(security);
+        return security;
     }
 
     @Override
@@ -261,6 +260,8 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isNotBlank(avatar.getExt())) {
             path += "." + avatar.getExt();
         }
+        userExtBo.setId(user.getId());
+        userExtBo.setWorkNo(user.getWorkNo());
         userExtBo.setAvatar(path);
         userExtBo.setBirthday(user.getBirthday());
         Department department = user.getDepartment();
