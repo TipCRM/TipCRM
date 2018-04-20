@@ -214,6 +214,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserExtBo getUserByUserId(Integer userId) {
+        if (userId < 0) {
+            throw new BizException("用户不存在");
+        }
         User user = userRepository.findOne(userId);
         if (user == null) {
             throw new BizException("用户不存在");

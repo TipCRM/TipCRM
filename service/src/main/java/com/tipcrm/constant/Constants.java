@@ -35,8 +35,7 @@ public class Constants {
         public static final String CUSTOMER_COMPANY_TRANSFER_TO_DEPARTMENT = "customer:company:transfer_to_department";
         public static final String CUSTOMER_MY_TRANSFER_TO_DEPARTMENT = "customer:my:transfer_to_department";
         public static final String CUSTOMER_APPROVAL = "customer:approval";
-        public static final String USER_DEPARTMENT_VIEW = "user:department:view";
-        public static final String USER_COMPANY_VIEW = "user:company:view";
+        public static final String USER_DETAIL_VIEW = "user:detail:view";
         public static final String USER_ADD = "user:add";
         public static final String USER_UPDATE = "user:update";
         public static final String USER_DELETE = "user:delete";
