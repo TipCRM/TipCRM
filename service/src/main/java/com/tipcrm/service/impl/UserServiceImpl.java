@@ -12,7 +12,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.google.common.collect.Sets;
-import com.sun.deploy.config.SecuritySettings;
 import com.tipcrm.bo.CreateUserBo;
 import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.QueryCriteriaBo;
@@ -108,50 +107,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AttachmentService attachmentService;
-
-    // @Override
-    // public String regist(RegistUserBo registUserBo) {
-    //     String registable = configurationService.getValue(ConfigurationItems.REGISTABLE.name());
-    //     if (!Boolean.valueOf(registable)) {
-    //         throw new BizException("管理员没有开放注册通道");
-    //     }
-    //
-    //     ListBox userStatusActive = listBoxService.findByCategoryAndName(ListBoxCategory.USER_STATUS.name(), UserStatus.ACTIVE.name());
-    //     List<User> users = userRepository.findByUserName(Constants.User.SYSTEM);
-    //     if (CollectionUtils.isEmpty(users)) {
-    //         throw new BizException("系统用户丢失，请联系运维人员修复数据库");
-    //     }
-    //     User hirer = users.get(0);
-    //     Department department = null;
-    //     if (registUserBo.getDepartmentId() != null) {
-    //         department = departmentRepository.findOne(registUserBo.getDepartmentId());
-    //     }
-    //     Level level = levelRepository.findByName(Levels.NEW_USER.getValue());
-    //     Role role = null;
-    //     if (registUserBo.getTopManager()) {
-    //         role = roleRepository.findByName(Roles.GENERAL_MANAGER.getValue());
-    //     } else {
-    //         role = roleRepository.findByName(Roles.NORMAL.getValue());
-    //     }
-    //     validateRegistUser(registUserBo);
-    //     User user = new User();
-    //     user.setEmail(registUserBo.getEmail());
-    //     user.setUserName(registUserBo.getUsername());
-    //     user.setStatus(userStatusActive);
-    //     user.setHire(hirer);
-    //     user.setHireTime(new Date());
-    //     user.setDepartment(department);
-    //     user.setLevel(level);
-    //     user.setAvatar(attachmentService.findDefaultAvatar());
-    //     user.setPaymentPercent(level.getDefaultPaymentPercent());
-    //     userRepository.save(user);
-    //     UserRole userRole = new UserRole();
-    //     userRole.setRole(role);
-    //     userRole.setUser(user);
-    //     userRoleRepository.save(userRole);
-    //     generateSecurity(user.getId(), registUserBo.getPassword());
-    //     return registUserBo.getEmail();
-    // }
 
     @Override
     public Integer saveUser(CreateUserBo createUserBo) {
