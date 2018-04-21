@@ -23,8 +23,8 @@ spring:
       datasource:
          driverClassName: com.mysql.jdbc.Driver
          url: jdbc:mysql://www.potafish.com:3306/TIP_CRM?zeroDateTimeBehavior=convertToNull&verifyServerCertificate=false&useSSL=true&useUnicode=true&characterEncoding=utf-8
-         username: neilw
-         password: tipcrm
+         username:
+         password:
       jackson:
          date-format: yyyy-MM-dd HH:mm:ss
          time-zone: GMT+8
@@ -34,7 +34,7 @@ spring:
       mail:
         host: smtp.163.com
         username: wan_neil@163.com
-        password: wjz19940908
+        password:
         default-encoding: UTF-8
         properties:
           mail:
