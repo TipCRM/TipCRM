@@ -1,6 +1,12 @@
 package com.tipcrm.web.publicapi;
 
-import com.tipcrm.bo.*;
+import com.tipcrm.bo.CreateUserBo;
+import com.tipcrm.bo.QueryRequestBo;
+import com.tipcrm.bo.QueryResultBo;
+import com.tipcrm.bo.UpdateUserBo;
+import com.tipcrm.bo.UserBasicBo;
+import com.tipcrm.bo.UserBo;
+import com.tipcrm.bo.UserExtBo;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.service.UserService;
 import com.tipcrm.service.WebContext;
@@ -10,7 +16,12 @@ import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

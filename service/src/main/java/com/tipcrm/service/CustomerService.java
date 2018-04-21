@@ -1,6 +1,12 @@
 package com.tipcrm.service;
 
-import com.tipcrm.bo.*;
+import com.tipcrm.bo.ApproveBo;
+import com.tipcrm.bo.CreateCustomerBo;
+import com.tipcrm.bo.CustomerTransferRequestBo;
+import com.tipcrm.bo.OptCustomerResultBo;
+import com.tipcrm.bo.QueryCustomerBo;
+import com.tipcrm.bo.QueryRequestBo;
+import com.tipcrm.bo.QueryResultBo;
 
 public interface CustomerService {
 

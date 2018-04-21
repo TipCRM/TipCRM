@@ -1,6 +1,11 @@
 package com.tipcrm.web.publicapi;
 
-import com.tipcrm.bo.*;
+import com.tipcrm.bo.CreateCustomerBo;
+import com.tipcrm.bo.CustomerTransferRequestBo;
+import com.tipcrm.bo.OptCustomerResultBo;
+import com.tipcrm.bo.QueryCustomerBo;
+import com.tipcrm.bo.QueryRequestBo;
+import com.tipcrm.bo.QueryResultBo;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.service.CustomerService;
 import com.tipcrm.web.util.JsonEntity;
@@ -9,7 +14,11 @@ import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/public/api")

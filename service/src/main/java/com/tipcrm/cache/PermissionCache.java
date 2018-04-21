@@ -6,7 +6,12 @@ import com.tipcrm.dao.entity.MenuPermission;
 import com.tipcrm.dao.entity.Permission;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class PermissionCache {
 

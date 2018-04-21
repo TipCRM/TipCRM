@@ -2,7 +2,12 @@ package com.tipcrm.service.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.tipcrm.bo.*;
+import com.tipcrm.bo.NotificationBo;
+import com.tipcrm.bo.QueryCriteriaBo;
+import com.tipcrm.bo.QueryRequestBo;
+import com.tipcrm.bo.QueryResultBo;
+import com.tipcrm.bo.QuerySortBo;
+import com.tipcrm.bo.SimpleNotificationBo;
 import com.tipcrm.cache.NotificationCache;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.constant.ListBoxCategory;
@@ -30,10 +35,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
