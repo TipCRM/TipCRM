@@ -7,8 +7,15 @@ import java.util.Map;
 public class Constants {
     public static final Integer HASH_ITERATIONS = 2;
 
+    public static class SessionAttribute {
+        public static final String CHANG_PASSWORD_VALIDATION_CODE = "CHANG_PASSWORD_VALIDATION_CODE";
+        public static final String CHANG_PASSWORD_VALIDATION_CODE_TIME = "CHANG_PASSWORD_VALIDATION_CODE_TIME";
+        public static final String CHANG_PASSWORD_VALIDATION_CODE_TRY_TIMES = "CHANG_PASSWORD_VALIDATION_CODE_TRY_TIMES";
+    }
+
     public static class Email {
         public static final String ADD_USER_CONTENT = "管理员已为您分配帐号，您的工号是{0}, 您可以用工号或者邮箱({1})登录系统，初始密码是{2}。请尽快修改密码。";
+        public static final String CHANGE_PASSWORD_VALIDATION_CODE = "您正请求修改密码，请确认是本人操作。请求验证码是{0}，30分钟内有效。";
     }
 
     public static class User {

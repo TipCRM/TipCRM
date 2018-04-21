@@ -35,4 +35,8 @@ public interface UserService {
     QueryResultBo<UserBo> queryUser(QueryRequestBo queryRequestBo);
 
     void updateMe(UpdateUserBo updateUserBo);
+
+    String generateChangePasswordValidationCode(String email);
+
+    void changePassword(String newPassword);
 }
