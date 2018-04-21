@@ -412,7 +412,7 @@ public class UserServiceImpl implements UserService {
                 if (dotPos < 0) {
                     attachment.setId(updateUserBo.getAvatar());
                 } else {
-                    attachment.setId(updateUserBo.getAvatar().substring(0, dotPos));
+                    attachment.setId(UUID.randomUUID().toString().toLowerCase());
                     attachment.setExt(updateUserBo.getAvatar().substring(dotPos + 1));
                 }
                 attachment.setEntryTime(entryTime);
@@ -427,7 +427,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void validateUpdateUser(UpdateUserBo updateUserBo) {
-        if (StringUtils.isBlank(updateUserBo.getEmail())) {
+        if (StringUtils.isNotBlank(updateUserBo.getEmail())) {
             if (!ValidateUtils.isEmail(updateUserBo.getEmail())) {
                 throw new BizException("邮箱格式不正确");
             }
