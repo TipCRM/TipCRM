@@ -1,6 +1,4 @@
 package com.tipcrm.web.publicapi;
-import java.util.List;
-import java.util.Set;
 
 import com.tipcrm.bo.MenuPermissionBo;
 import com.tipcrm.constant.Constants;
@@ -12,11 +10,10 @@ import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/public/api")

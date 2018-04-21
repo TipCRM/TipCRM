@@ -1,9 +1,6 @@
 package com.tipcrm.web.handler;
 
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-
 import com.tipcrm.exception.AccountException;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.web.config.SentryConfig;
@@ -20,6 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

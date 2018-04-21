@@ -1,15 +1,9 @@
 package com.tipcrm.service.impl;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.tipcrm.constant.ApprovalStatus;
 import com.tipcrm.constant.ApprovalType;
 import com.tipcrm.constant.ListBoxCategory;
-import com.tipcrm.dao.entity.ApprovalRequest;
-import com.tipcrm.dao.entity.CustomerApproval;
-import com.tipcrm.dao.entity.Department;
-import com.tipcrm.dao.entity.ListBox;
-import com.tipcrm.dao.entity.User;
+import com.tipcrm.dao.entity.*;
 import com.tipcrm.dao.repository.ApprovalRequestRepository;
 import com.tipcrm.dao.repository.CustomerApprovalRepository;
 import com.tipcrm.service.ApprovalService;
@@ -18,6 +12,9 @@ import com.tipcrm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional

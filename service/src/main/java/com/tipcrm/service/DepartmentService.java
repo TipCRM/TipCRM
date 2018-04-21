@@ -1,8 +1,9 @@
 package com.tipcrm.service;
-import java.util.List;
 
 import com.tipcrm.bo.DepartmentBo;
 import com.tipcrm.bo.SaveDepartmentBo;
+
+import java.util.List;
 
 public interface DepartmentService {
     List<DepartmentBo> findAllDepartment();

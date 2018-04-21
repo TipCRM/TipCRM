@@ -1,56 +1,17 @@
 package com.tipcrm.service.impl;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import com.google.common.collect.Sets;
-import com.tipcrm.bo.CreateUserBo;
-import com.tipcrm.bo.LoginBo;
-import com.tipcrm.bo.QueryCriteriaBo;
-import com.tipcrm.bo.QueryRequestBo;
-import com.tipcrm.bo.QueryResultBo;
-import com.tipcrm.bo.QuerySortBo;
-import com.tipcrm.bo.UserBasicBo;
-import com.tipcrm.bo.UserBo;
-import com.tipcrm.bo.UserExtBo;
-import com.tipcrm.constant.Constants;
-import com.tipcrm.constant.Levels;
-import com.tipcrm.constant.ListBoxCategory;
-import com.tipcrm.constant.Roles;
-import com.tipcrm.constant.UserStatus;
-import com.tipcrm.dao.entity.Attachment;
-import com.tipcrm.dao.entity.Department;
-import com.tipcrm.dao.entity.Level;
-import com.tipcrm.dao.entity.ListBox;
-import com.tipcrm.dao.entity.Role;
-import com.tipcrm.dao.entity.Security;
-import com.tipcrm.dao.entity.User;
-import com.tipcrm.dao.entity.UserRole;
-import com.tipcrm.dao.repository.DepartmentRepository;
-import com.tipcrm.dao.repository.LevelRepository;
-import com.tipcrm.dao.repository.RoleRepository;
-import com.tipcrm.dao.repository.SecurityRepository;
-import com.tipcrm.dao.repository.UserRepository;
-import com.tipcrm.dao.repository.UserRoleRepository;
+import com.tipcrm.bo.*;
+import com.tipcrm.constant.*;
+import com.tipcrm.dao.entity.*;
+import com.tipcrm.dao.repository.*;
 import com.tipcrm.exception.AccountException;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.exception.QueryException;
-import com.tipcrm.service.AttachmentService;
-import com.tipcrm.service.ConfigurationService;
-import com.tipcrm.service.ListBoxService;
-import com.tipcrm.service.MailService;
-import com.tipcrm.service.RoleService;
-import com.tipcrm.service.UserService;
-import com.tipcrm.service.WebContext;
+import com.tipcrm.service.*;
+import com.tipcrm.util.IDCardValidator;
 import com.tipcrm.util.MessageUtil;
+import com.tipcrm.util.ValidateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.shiro.SecurityUtils;
@@ -67,6 +28,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import javax.persistence.criteria.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
@@ -108,6 +74,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private AttachmentService attachmentService;
 
+    @Autowired
+    private AttachmentRepository attachmentRepository;
+
     @Override
     public Integer saveUser(CreateUserBo createUserBo) {
         ListBox userStatusActive = listBoxService.findByCategoryAndName(ListBoxCategory.USER_STATUS.name(), UserStatus.ACTIVE.name());
@@ -140,7 +109,7 @@ public class UserServiceImpl implements UserService {
         Security security = generateSecurity(user.getId(), randomPwd);
         securityRepository.save(security);
         mailService.sendSimpleEmail(createUserBo.getEmail(), "注册通知",
-                                    MessageUtil.getMessage(Constants.Email.ADD_USER_CONTENT, workNo, user.getEmail(), randomPwd));
+                MessageUtil.getMessage(Constants.Email.ADD_USER_CONTENT, workNo, user.getEmail(), randomPwd));
         return user.getWorkNo();
     }
 
@@ -221,6 +190,7 @@ public class UserServiceImpl implements UserService {
         userExtBo.setId(user.getId());
         userExtBo.setWorkNo(user.getWorkNo());
         userExtBo.setAvatar(path);
+        userExtBo.setMotto(user.getMotto());
         userExtBo.setBirthday(user.getBirthday());
         Department department = user.getDepartment();
         if (department != null) {
@@ -349,17 +319,101 @@ public class UserServiceImpl implements UserService {
                 page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize());
             } else {
                 page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize(),
-                                       new Sort(querySortBo.getDirection(),
-                                                Constants.SortFieldName.User.fieldMap.get(querySortBo.getFieldName())));
+                        new Sort(querySortBo.getDirection(),
+                                Constants.SortFieldName.User.fieldMap.get(querySortBo.getFieldName())));
             }
             Specification<User> specification = new UserSpecification(queryRequestBo);
             Page<User> users = userRepository.findAll(specification, page);
             List<UserBo> customerBos = UserBo.convertToUserBos(users.getContent());
             QueryResultBo<UserBo> queryResultBo = new QueryResultBo<UserBo>(customerBos, queryRequestBo.getPage(), queryRequestBo.getSize(),
-                                                                            users.getTotalElements(), users.getTotalPages());
+                    users.getTotalElements(), users.getTotalPages());
             return queryResultBo;
         } catch (Exception e) {
             throw new QueryException("查询条件错误", e);
+        }
+    }
+
+    @Override
+    public void updateMe(UpdateUserBo updateUserBo) {
+        validateUpdateUser(updateUserBo);
+        User user = webContext.getCurrentUser();
+        user.setUserName(updateUserBo.getUserName());
+        user.setEmail(updateUserBo.getEmail());
+        Date date = null;
+        if (StringUtils.isNoneBlank(updateUserBo.getBirthday())) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                sdf.setLenient(true);
+                date = sdf.parse(updateUserBo.getBirthday());
+            } catch (ParseException e) {
+                throw new BizException("生日不正确");
+            }
+        }
+        user.setBirthday(date);
+        user.setIdCard(updateUserBo.getIdCard());
+        user.setPhoneNo(updateUserBo.getPhoneNo());
+        user.setMotto(updateUserBo.getMotto());
+        User entryUser = webContext.getCurrentUser();
+        Date entryTime = new Date();
+        ListBox external = listBoxService.findByCategoryAndName(ListBoxCategory.ATTACHMENT_LOCATION.name(), AttachmentLocation.EXTERNAL.name());
+        if (StringUtils.isNotBlank(updateUserBo.getAvatar())) {
+            Attachment attachment;
+            if (updateUserBo.getAvatarType().equals(external.getId())) {
+                attachment = attachmentService.findByFileNameAndType(updateUserBo.getAvatar(), AttachmentType.AVATAR);
+                user.setAvatar(attachment);
+            } else {
+                ListBox network = listBoxService.findByCategoryAndName(ListBoxCategory.ATTACHMENT_LOCATION.name(), AttachmentLocation.NETWORK.name());
+                attachment = new Attachment();
+                attachment.setLocationType(network);
+                attachment.setPath(updateUserBo.getAvatar());
+                Integer dotPos = updateUserBo.getAvatar().lastIndexOf(".");
+                if (dotPos < 0) {
+                    attachment.setId(updateUserBo.getAvatar());
+                } else {
+                    attachment.setId(updateUserBo.getAvatar().substring(0, dotPos));
+                    attachment.setExt(updateUserBo.getAvatar().substring(dotPos + 1));
+                }
+                attachment.setEntryTime(entryTime);
+                attachment.setEntryUser(entryUser);
+                attachment.setType(listBoxService.findByCategoryAndName(ListBoxCategory.ATTACHMENT_TYPE.name(), AttachmentType.AVATAR.name()));
+            }
+            user.setAvatar(attachment);
+        }
+        user.setUpdateTime(entryTime);
+        user.setUpdateUser(entryUser);
+        userRepository.save(user);
+    }
+
+    private void validateUpdateUser(UpdateUserBo updateUserBo) {
+        if (StringUtils.isBlank(updateUserBo.getEmail())) {
+            if (!ValidateUtils.isEmail(updateUserBo.getEmail())) {
+                throw new BizException("邮箱格式不正确");
+            }
+            User user = userRepository.findByEmail(updateUserBo.getEmail());
+            User currentUser = webContext.getCurrentUser();
+            if (!user.getId().equals(currentUser.getId())) {
+                throw new BizException("该邮箱已被绑定");
+            }
+        }
+
+        ListBox external = listBoxService.findByCategoryAndName(ListBoxCategory.ATTACHMENT_LOCATION.name(), AttachmentLocation.EXTERNAL.name());
+        if (updateUserBo.getAvatarType().equals(external.getId())) {
+            Attachment attachment = attachmentService.findByFileNameAndType(updateUserBo.getAvatar(), AttachmentType.AVATAR);
+            if (attachment == null) {
+                throw new BizException("头像不存在，请上传");
+            }
+        } else {
+            if (!ValidateUtils.isUrl(updateUserBo.getAvatar())) {
+                throw new BizException("网络地址不正确");
+            }
+        }
+        if (StringUtils.isBlank(updateUserBo.getUserName())) {
+            throw new BizException("姓名不能为空");
+        }
+        if (StringUtils.isBlank(updateUserBo.getIdCard())) {
+            throw new BizException("身份证号不能为空");
+        } else if (!IDCardValidator.validate(updateUserBo.getIdCard())) {
+            throw new BizException("身份证号不正确");
         }
     }
 

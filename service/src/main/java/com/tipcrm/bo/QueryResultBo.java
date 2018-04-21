@@ -1,4 +1,5 @@
 package com.tipcrm.bo;
+
 import java.util.List;
 
 public class QueryResultBo<T> {

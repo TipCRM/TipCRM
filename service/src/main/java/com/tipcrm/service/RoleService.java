@@ -1,13 +1,14 @@
 package com.tipcrm.service;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import com.tipcrm.bo.RoleBasicBo;
 import com.tipcrm.bo.RoleBo;
 import com.tipcrm.bo.SaveRoleBo;
 import com.tipcrm.dao.entity.Permission;
 import com.tipcrm.dao.entity.Role;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface RoleService {
 

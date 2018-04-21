@@ -1,9 +1,10 @@
 package com.tipcrm.util;
+
+import com.tipcrm.constant.FileSizeUnit;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-
-import com.tipcrm.constant.FileSizeUnit;
 
 public class FileSizeCalculator {
 

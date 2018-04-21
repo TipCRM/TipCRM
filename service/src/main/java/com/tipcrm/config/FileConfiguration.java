@@ -1,4 +1,5 @@
 package com.tipcrm.config;
+
 public class FileConfiguration {
 
     private String baseUrl;

@@ -1,26 +1,8 @@
 package com.tipcrm.service.impl;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.tipcrm.bo.NotificationBo;
-import com.tipcrm.bo.QueryCriteriaBo;
-import com.tipcrm.bo.QueryRequestBo;
-import com.tipcrm.bo.QueryResultBo;
-import com.tipcrm.bo.QuerySortBo;
-import com.tipcrm.bo.SimpleNotificationBo;
+import com.tipcrm.bo.*;
 import com.tipcrm.cache.NotificationCache;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.constant.ListBoxCategory;
@@ -47,6 +29,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import javax.persistence.criteria.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @Transactional
@@ -209,14 +196,14 @@ public class NotificationServiceImpl implements NotificationService {
                 page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize());
             } else {
                 page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize(),
-                                       new Sort(querySortBo.getDirection(),
-                                                Constants.SortFieldName.Notification.fieldMap.get(querySortBo.getFieldName())));
+                        new Sort(querySortBo.getDirection(),
+                                Constants.SortFieldName.Notification.fieldMap.get(querySortBo.getFieldName())));
             }
             Specification<Notification> specification = new NotificationSpecification(queryRequestBo);
             Page<Notification> notificationPage = notificationRepository.findAll(specification, page);
             List<NotificationBo> notificationBos = convertToNotificationBos(notificationPage.getContent());
             QueryResultBo<NotificationBo> queryResultBo = new QueryResultBo<>(notificationBos, queryRequestBo.getPage(), queryRequestBo.getSize(),
-                                                                              notificationPage.getTotalElements(), notificationPage.getTotalPages());
+                    notificationPage.getTotalElements(), notificationPage.getTotalPages());
             return queryResultBo;
         } catch (Exception e) {
             throw new QueryException("查询条件错误", e);
@@ -231,7 +218,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
         Integer currentUserId = webContext.getCurrentUserId();
         if (!notification.getToUser().getId().equals(currentUserId) &&
-            !notification.getEntryUser().getId().equals(currentUserId)) {
+                !notification.getEntryUser().getId().equals(currentUserId)) {
             throw new BizException("您没有权限查看该通知");
         }
         return convertToNotificationBo(notification);

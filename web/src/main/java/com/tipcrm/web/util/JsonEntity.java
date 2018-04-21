@@ -1,10 +1,10 @@
 package com.tipcrm.web.util;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.io.Serializable;
 
 @ApiModel
 public class JsonEntity<T> implements Serializable {
@@ -12,23 +12,23 @@ public class JsonEntity<T> implements Serializable {
     @ApiModelProperty("Actual response data as JSON")
     T data;
     @ApiModelProperty(
-        value = "API http response status. 200 is ok, 500 is failed.",
-        example = "200",
-        required = true
+            value = "API http response status. 200 is ok, 500 is failed.",
+            example = "200",
+            required = true
     )
     private int status = 200;
     @ApiModelProperty("Human readable response message")
     private String message;
     @ApiModelProperty(
-        value = "Unique request  id",
-        example = "5a124806f9f9e98924014e75",
-        required = true
+            value = "Unique request  id",
+            example = "5a124806f9f9e98924014e75",
+            required = true
     )
     private String requestId;
     @ApiModelProperty(
-        value = "Country code, depends on config synnex.system.companyName, defaults to US",
-        example = "US",
-        required = true
+            value = "Country code, depends on config synnex.system.companyName, defaults to US",
+            example = "US",
+            required = true
     )
     private String languageLocale;
 
@@ -98,11 +98,11 @@ public class JsonEntity<T> implements Serializable {
     @Override
     public String toString() {
         return "JsonEntity{" +
-               "data=" + data +
-               ", status=" + status +
-               ", message='" + message + '\'' +
-               ", requestId='" + requestId + '\'' +
-               ", languageLocale='" + languageLocale + '\'' +
-               '}';
+                "data=" + data +
+                ", status=" + status +
+                ", message='" + message + '\'' +
+                ", requestId='" + requestId + '\'' +
+                ", languageLocale='" + languageLocale + '\'' +
+                '}';
     }
 }

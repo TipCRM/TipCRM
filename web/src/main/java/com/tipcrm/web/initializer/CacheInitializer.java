@@ -1,24 +1,8 @@
 package com.tipcrm.web.initializer;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.tipcrm.cache.ConfigurationCache;
-import com.tipcrm.cache.ListBoxCache;
-import com.tipcrm.cache.MenuCache;
-import com.tipcrm.cache.PermissionCache;
-import com.tipcrm.cache.RoleCache;
-import com.tipcrm.dao.entity.Configuration;
-import com.tipcrm.dao.entity.ListBox;
-import com.tipcrm.dao.entity.Menu;
-import com.tipcrm.dao.entity.MenuPermission;
-import com.tipcrm.dao.entity.Permission;
-import com.tipcrm.dao.entity.Role;
-import com.tipcrm.dao.repository.ConfigurationRepository;
-import com.tipcrm.dao.repository.ListBoxRepository;
-import com.tipcrm.dao.repository.MenuPermissionRepository;
-import com.tipcrm.dao.repository.MenuRepository;
-import com.tipcrm.dao.repository.PermissionRepository;
-import com.tipcrm.dao.repository.RoleRepository;
+import com.tipcrm.cache.*;
+import com.tipcrm.dao.entity.*;
+import com.tipcrm.dao.repository.*;
 import com.tipcrm.service.MenuService;
 import com.tipcrm.service.PermissionService;
 import com.tipcrm.service.RoleService;
@@ -29,6 +13,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Order(value = 1)

@@ -1,4 +1,5 @@
 package com.tipcrm.constant;
+
 public enum CriteriaMethod {
     LIKE,
     NOT_LIKE,

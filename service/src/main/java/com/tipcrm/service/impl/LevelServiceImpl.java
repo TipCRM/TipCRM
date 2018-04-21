@@ -1,7 +1,4 @@
 package com.tipcrm.service.impl;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 
 import com.tipcrm.bo.LevelBo;
 import com.tipcrm.bo.SaveLevelBo;
@@ -17,6 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 @Transactional
 @Service

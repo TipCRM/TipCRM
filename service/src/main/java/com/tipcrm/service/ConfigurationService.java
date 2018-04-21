@@ -1,4 +1,5 @@
 package com.tipcrm.service;
+
 import com.tipcrm.dao.entity.Configuration;
 
 public interface ConfigurationService {

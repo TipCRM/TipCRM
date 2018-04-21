@@ -1,12 +1,6 @@
 package com.tipcrm.web.publicapi;
 
-import java.util.List;
-
-import com.tipcrm.bo.QueryRequestBo;
-import com.tipcrm.bo.QueryResultBo;
-import com.tipcrm.bo.UserBasicBo;
-import com.tipcrm.bo.UserBo;
-import com.tipcrm.bo.UserExtBo;
+import com.tipcrm.bo.*;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.service.UserService;
 import com.tipcrm.service.WebContext;
@@ -16,12 +10,9 @@ import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/public/api/")
@@ -55,5 +46,19 @@ public class UserApi {
     @RequiresPermissions(value = {Constants.Permission.USER_DETAIL_VIEW})
     public JsonEntity<UserExtBo> getUser(@PathVariable(name = "userId") Integer userId) {
         return ResponseHelper.createInstance(userService.getUserByUserId(userId));
+    }
+
+    @RequestMapping(value = "/user", method = {RequestMethod.POST})
+    @RequiresAuthentication
+    @RequiresPermissions(value = Constants.Permission.USER_ADD)
+    public JsonEntity<Integer> addUser(@RequestBody CreateUserBo saveUserBo) {
+        Integer workNo = userService.saveUser(saveUserBo);
+        return ResponseHelper.createInstance(workNo);
+    }
+
+    @RequestMapping(value = "user/me", method = RequestMethod.PUT)
+    public JsonEntity<String> updateMe(@RequestBody UpdateUserBo updateUserBo) {
+        userService.updateMe(updateUserBo);
+        return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
     }
 }

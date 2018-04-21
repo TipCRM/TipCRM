@@ -1,4 +1,5 @@
 package com.tipcrm.constant;
+
 public enum AttachmentType {
     AVATAR("头像"),
     FILE("文件");

@@ -1,9 +1,10 @@
 package com.tipcrm.bo;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.tipcrm.dao.entity.User;
 import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserBasicBo {
     private Integer id;

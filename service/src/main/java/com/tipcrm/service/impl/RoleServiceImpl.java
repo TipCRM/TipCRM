@@ -1,24 +1,11 @@
 package com.tipcrm.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.tipcrm.bo.RoleBasicBo;
 import com.tipcrm.bo.RoleBo;
 import com.tipcrm.bo.SaveRoleBo;
 import com.tipcrm.cache.PermissionCache;
 import com.tipcrm.cache.RoleCache;
-import com.tipcrm.dao.entity.Permission;
-import com.tipcrm.dao.entity.Role;
-import com.tipcrm.dao.entity.RolePermission;
-import com.tipcrm.dao.entity.User;
-import com.tipcrm.dao.entity.UserRole;
+import com.tipcrm.dao.entity.*;
 import com.tipcrm.dao.repository.RolePermissionRepository;
 import com.tipcrm.dao.repository.RoleRepository;
 import com.tipcrm.dao.repository.UserRepository;
@@ -31,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional

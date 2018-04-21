@@ -1,4 +1,5 @@
 package com.tipcrm.bo;
+
 import java.math.BigDecimal;
 
 public class SaveLevelBo {

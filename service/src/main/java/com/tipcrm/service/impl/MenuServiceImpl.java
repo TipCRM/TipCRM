@@ -1,7 +1,4 @@
 package com.tipcrm.service.impl;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 import com.tipcrm.bo.MenuBo;
 import com.tipcrm.cache.MenuCache;
@@ -13,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -63,10 +64,10 @@ public class MenuServiceImpl implements MenuService {
                 currentParentId = menu.getParent().getId();
             }
             if (currentParentId == null && parentId == null
-                || parentId != null && parentId.equals(currentParentId)) {
+                    || parentId != null && parentId.equals(currentParentId)) {
                 menuBos.add(
-                    new MenuBo(menu.getId(), menu.getName(), menu.getDisplayName(), null, menu.getIcon(), menu.getUrl(), convertToMenuBo(menus, menu.getId()),
-                               menu.getActive()));
+                        new MenuBo(menu.getId(), menu.getName(), menu.getDisplayName(), null, menu.getIcon(), menu.getUrl(), convertToMenuBo(menus, menu.getId()),
+                                menu.getActive()));
             }
         }
         return menuBos;

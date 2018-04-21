@@ -1,4 +1,5 @@
 package com.tipcrm.web.config;
+
 import com.tipcrm.config.FileConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

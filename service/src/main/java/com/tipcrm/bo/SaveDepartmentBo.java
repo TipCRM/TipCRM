@@ -1,4 +1,5 @@
 package com.tipcrm.bo;
+
 public class SaveDepartmentBo {
 
     private Integer id;
