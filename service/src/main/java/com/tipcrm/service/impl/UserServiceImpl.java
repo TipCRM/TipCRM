@@ -267,32 +267,6 @@ public class UserServiceImpl implements UserService {
         return userExtBo;
     }
 
-    // private void validateRegistUser(RegistUserBo registUserBo) {
-    //     if (StringUtils.isBlank(registUserBo.getEmail())) {
-    //         throw new BizException("邮箱不能为空");
-    //     }
-    //     if (!EmailValidator.getInstance().isValid(registUserBo.getEmail())) {
-    //         throw new BizException("邮箱格式不正确");
-    //     }
-    //     if (StringUtils.isBlank(registUserBo.getPassword())) {
-    //         throw new BizException("密码不能为空");
-    //     }
-    //     if (registUserBo.getPassword().length() < 6) {
-    //         throw new BizException("密码不能小于6位");
-    //     }
-    //     if (StringUtils.isBlank(registUserBo.getUsername())) {
-    //         throw new BizException("姓名不能为空");
-    //     }
-    //     if (Constants.User.SYSTEM.equals(registUserBo.getUsername())) {
-    //         throw new BizException("非法用户名");
-    //     }
-    //     // 1. validate user exist
-    //     User user = userRepository.findByEmailOrWorkNo(registUserBo.getEmail());
-    //     if (user != null) {
-    //         throw new BizException("用户已存在");
-    //     }
-    // }
-
     private void validateSaveUserBo(CreateUserBo createUserBo) {
         if (StringUtils.isBlank(createUserBo.getEmail())) {
             throw new BizException("邮箱不能为空");
@@ -512,5 +486,31 @@ public class UserServiceImpl implements UserService {
             criteriaQuery.where(predicates.toArray(pre));
             return criteriaQuery.getRestriction();
         }
+    }
+
+    @Override
+    public String generateChangePasswordValidationCode(String email) {
+        String validationCode = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8);
+        User user = webContext.getCurrentUser();
+        if (StringUtils.isBlank(user.getEmail())) {
+            throw new BizException("请先配置用户邮箱");
+        }
+        if (!user.getEmail().equals(email)) {
+            throw new BizException("邮箱地址与帐户设置不匹配");
+        }
+        mailService.sendSimpleEmail(email, "修改密码", MessageUtil.getMessage(Constants.Email.CHANGE_PASSWORD_VALIDATION_CODE, validationCode));
+        return validationCode;
+    }
+
+    @Override
+    public void changePassword(String newPassword) {
+        if (StringUtils.isBlank(newPassword)) {
+            throw new BizException("新密码不能为空");
+        }
+        if (newPassword.length() < 6) {
+            throw new BizException("新密码至少6位");
+        }
+        Security security = generateSecurity(webContext.getCurrentUserId(), newPassword);
+        securityRepository.save(security);
     }
 }
