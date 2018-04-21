@@ -1,4 +1,5 @@
 package com.tipcrm.bo;
+
 public class LoginBo {
     private String loginKey;
     private String password;

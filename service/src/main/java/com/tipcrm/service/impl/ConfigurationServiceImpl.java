@@ -1,4 +1,5 @@
 package com.tipcrm.service.impl;
+
 import com.tipcrm.cache.ConfigurationCache;
 import com.tipcrm.constant.ConfigurationItems;
 import com.tipcrm.dao.entity.Configuration;

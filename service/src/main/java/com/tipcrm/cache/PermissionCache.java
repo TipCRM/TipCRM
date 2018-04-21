@@ -1,16 +1,17 @@
 package com.tipcrm.cache;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.tipcrm.dao.entity.MenuPermission;
 import com.tipcrm.dao.entity.Permission;
 import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class PermissionCache {
 

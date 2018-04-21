@@ -1,4 +1,5 @@
 package com.tipcrm.util;
+
 public class MessageUtil {
 
     public static String getMessage(String message, Object... args) {

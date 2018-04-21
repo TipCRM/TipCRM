@@ -1,10 +1,11 @@
 package com.tipcrm.bo;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.tipcrm.dao.entity.Permission;
 import org.springframework.util.CollectionUtils;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PermissionBo implements Serializable {
     private Integer id;

@@ -1,4 +1,5 @@
 package com.tipcrm.constant;
+
 public enum Attachments {
     DEFAULT_AVATAR("default-avatar");
 

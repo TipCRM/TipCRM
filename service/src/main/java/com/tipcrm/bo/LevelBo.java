@@ -1,12 +1,13 @@
 package com.tipcrm.bo;
+
+import com.tipcrm.dao.entity.Level;
+import org.springframework.util.CollectionUtils;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.tipcrm.dao.entity.Level;
-import org.springframework.util.CollectionUtils;
 
 public class LevelBo {
     private Integer id;

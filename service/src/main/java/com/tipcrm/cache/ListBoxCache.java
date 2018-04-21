@@ -1,12 +1,13 @@
 package com.tipcrm.cache;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.tipcrm.dao.entity.ListBox;
 import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ListBoxCache {
     private static Map<Integer, ListBox> listBoxCache = Maps.newHashMap();

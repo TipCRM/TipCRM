@@ -1,9 +1,10 @@
 package com.tipcrm.service;
-import java.util.List;
-import java.util.Set;
 
 import com.tipcrm.bo.MenuPermissionBo;
 import com.tipcrm.dao.entity.Permission;
+
+import java.util.List;
+import java.util.Set;
 
 public interface PermissionService {
 

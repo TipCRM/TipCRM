@@ -1,11 +1,12 @@
 package com.tipcrm.cache;
-import java.util.List;
-import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.tipcrm.dao.entity.Notification;
 import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.Map;
 
 public class NotificationCache {
     /**

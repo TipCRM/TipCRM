@@ -1,4 +1,5 @@
 package com.tipcrm.bo;
+
 public class SaveRoleBo {
     private Integer id;
     private String name;

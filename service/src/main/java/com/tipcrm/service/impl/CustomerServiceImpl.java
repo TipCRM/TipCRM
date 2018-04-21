@@ -1,17 +1,4 @@
 package com.tipcrm.service.impl;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -71,6 +58,19 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -155,7 +155,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BizException("客户名不能为空");
         }
         if (!StringUtils.isBlank(createCustomerBo.getContactName()) && StringUtils.isBlank(createCustomerBo.getContactPhone())
-            || StringUtils.isBlank(createCustomerBo.getContactName()) && !StringUtils.isBlank(createCustomerBo.getContactPhone())) {
+                || StringUtils.isBlank(createCustomerBo.getContactName()) && !StringUtils.isBlank(createCustomerBo.getContactPhone())) {
             throw new BizException("联系人和电话应该都填或都不填");
         }
         List<Customer> customers = customerRepository.findByNameAndDeleteTimeIsNull(createCustomerBo.getName());
@@ -205,7 +205,7 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerApproval customerApproval = customerApprovalRepository.findOne(approveBo.getTargetId());
         ListBox approveTypeCustomer = listBoxService.findByCategoryAndName(ListBoxCategory.APPROVAL_TYPE.name(), ApprovalType.CUSTOMER.name());
         ApprovalRequest request = approvalRequestRepository.findByApprovalTypeIdAndApprovalIdAndReviewerId(approveTypeCustomer.getId(), approveBo.getTargetId(),
-                                                                                                           webContext.getCurrentUserId());
+                webContext.getCurrentUserId());
         request.setReviewTime(date);
         request.setReviewNote(approveBo.getNote());
         Integer customerId = null;
@@ -219,11 +219,11 @@ public class CustomerServiceImpl implements CustomerService {
             approvalRequestRepository.save(request);
             if (needNotify) {
                 notificationService.createNotification(customerApproval.getEntryUser().getId(),
-                                                       MessageUtil.getMessage(Constants.Notification.Subject.NEW_CUSTOMER_APPROVAL, "已驳回"),
-                                                       MessageUtil.getMessage(Constants.Notification.Content.NEW_CUSTOMER_APPROVAL, "被驳回",
-                                                                              customerApproval.getId().toString(), user.getUserName(),
-                                                                              dateFormat.format(date), request.getReviewNote()),
-                                                       NotificationType.SYSTEM_NOTIFICATION);
+                        MessageUtil.getMessage(Constants.Notification.Subject.NEW_CUSTOMER_APPROVAL, "已驳回"),
+                        MessageUtil.getMessage(Constants.Notification.Content.NEW_CUSTOMER_APPROVAL, "被驳回",
+                                customerApproval.getId().toString(), user.getUserName(),
+                                dateFormat.format(date), request.getReviewNote()),
+                        NotificationType.SYSTEM_NOTIFICATION);
             }
         } else {
             ListBox approve = listBoxService.findByCategoryAndName(ListBoxCategory.APPROVAL_STATUS.name(), ApprovalStatus.APPROVED.name());
@@ -267,11 +267,11 @@ public class CustomerServiceImpl implements CustomerService {
                 customerContactRepository.save(customerContacts);
                 if (needNotify) {
                     notificationService.createNotification(customerApproval.getEntryUser().getId(),
-                                                           MessageUtil.getMessage(Constants.Notification.Subject.NEW_CUSTOMER_APPROVAL, "已通过"),
-                                                           MessageUtil.getMessage(Constants.Notification.Content.NEW_CUSTOMER_APPROVAL, "通过",
-                                                                                  customerApproval.getId().toString(), user.getUserName(),
-                                                                                  dateFormat.format(date), request.getReviewNote()),
-                                                           NotificationType.SYSTEM_NOTIFICATION);
+                            MessageUtil.getMessage(Constants.Notification.Subject.NEW_CUSTOMER_APPROVAL, "已通过"),
+                            MessageUtil.getMessage(Constants.Notification.Content.NEW_CUSTOMER_APPROVAL, "通过",
+                                    customerApproval.getId().toString(), user.getUserName(),
+                                    dateFormat.format(date), request.getReviewNote()),
+                            NotificationType.SYSTEM_NOTIFICATION);
                 }
             }
             customerApproval.setReviewStatus(approve);
@@ -341,7 +341,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BizException("审批目标不存在或者已经审批");
         }
         if (!ApproveAction.REJECT.name().equals(approveBo.getAction())
-            && !ApproveAction.APPROVE.name().equals(approveBo.getAction())) {
+                && !ApproveAction.APPROVE.name().equals(approveBo.getAction())) {
             throw new BizException("不支持的操作");
         }
     }
@@ -361,7 +361,7 @@ public class CustomerServiceImpl implements CustomerService {
             while (iterator.hasNext()) {
                 QueryCriteriaBo queryCriteriaBo = iterator.next();
                 if (Constants.QueryFieldName.Customer.FOLLOW_USER.equals(queryCriteriaBo.getFieldName())
-                    || Constants.QueryFieldName.Customer.FOLLOW_DEPARTMENT.equals(queryCriteriaBo.getFieldName())) {
+                        || Constants.QueryFieldName.Customer.FOLLOW_DEPARTMENT.equals(queryCriteriaBo.getFieldName())) {
                     iterator.remove();
                 }
             }
@@ -383,14 +383,14 @@ public class CustomerServiceImpl implements CustomerService {
                 page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize());
             } else {
                 page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize(),
-                                       new Sort(querySortBo.getDirection(),
-                                                Constants.SortFieldName.Customer.fieldMap.get(querySortBo.getFieldName())));
+                        new Sort(querySortBo.getDirection(),
+                                Constants.SortFieldName.Customer.fieldMap.get(querySortBo.getFieldName())));
             }
             Specification<Customer> specification = new CustomerSpecification(queryRequestBo);
             Page<Customer> customers = customerRepository.findAll(specification, page);
             List<QueryCustomerBo> customerBos = convertToQueryCustomerResultBos(customers.getContent());
             QueryResultBo<QueryCustomerBo> queryResultBo = new QueryResultBo<>(customerBos, queryRequestBo.getPage(), queryRequestBo.getSize(),
-                                                                               customers.getTotalElements(), customers.getTotalPages());
+                    customers.getTotalElements(), customers.getTotalPages());
             return queryResultBo;
         } catch (Exception e) {
             throw new QueryException("查询条件错误", e);
@@ -461,7 +461,7 @@ public class CustomerServiceImpl implements CustomerService {
             while (iterator.hasNext()) {
                 QueryCriteriaBo queryCriteriaBo = iterator.next();
                 if (Constants.QueryFieldName.Customer.FOLLOW_USER.equals(queryCriteriaBo.getFieldName())
-                    || Constants.QueryFieldName.Customer.FOLLOW_DEPARTMENT.equals(queryCriteriaBo.getFieldName())) {
+                        || Constants.QueryFieldName.Customer.FOLLOW_DEPARTMENT.equals(queryCriteriaBo.getFieldName())) {
                     iterator.remove();
                 }
             }
@@ -482,14 +482,14 @@ public class CustomerServiceImpl implements CustomerService {
                 page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize());
             } else {
                 page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize(),
-                                       new Sort(querySortBo.getDirection(),
-                                                Constants.SortFieldName.Customer.fieldMap.get(querySortBo.getFieldName())));
+                        new Sort(querySortBo.getDirection(),
+                                Constants.SortFieldName.Customer.fieldMap.get(querySortBo.getFieldName())));
             }
             Specification<Customer> specification = new CustomerSpecification(queryRequestBo);
             Page<Customer> customers = customerRepository.findAll(specification, page);
             List<QueryCustomerBo> customerBos = convertToQueryCustomerResultBos(customers.getContent());
             QueryResultBo<QueryCustomerBo> queryResultBo = new QueryResultBo<QueryCustomerBo>(customerBos, queryRequestBo.getPage(), queryRequestBo.getSize(),
-                                                                                              customers.getTotalElements(), customers.getTotalPages());
+                    customers.getTotalElements(), customers.getTotalPages());
             return queryResultBo;
         } catch (Exception e) {
             throw new QueryException("查询条件错误", e);
@@ -521,7 +521,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BizException("没有提供转移对象");
         }
         if (!CustomerTransferTarget.COMMON_OPEN_SEA.equals(transferBo.getTarget())
-            && transferBo.getTargetId() == null) {
+                && transferBo.getTargetId() == null) {
             throw new BizException("没有提供转移目标");
         }
         Customer customer = customerRepository.findOne(transferBo.getCustomerId());

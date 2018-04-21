@@ -1,10 +1,11 @@
 package com.tipcrm.bo;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import com.tipcrm.dao.entity.Role;
 import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class RoleBo extends RoleBasicBo {
     private String entryUser;

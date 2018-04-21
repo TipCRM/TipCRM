@@ -37,21 +37,21 @@ public class SwaggerConfig {
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-            .apiInfo(apiInfo())
-            .select()
-            .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
-            .paths(enable ? PathSelectors.any() : PathSelectors.none())
-            .build();
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+                .paths(enable ? PathSelectors.any() : PathSelectors.none())
+                .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title(title)
-            .description(description)
-            .termsOfServiceUrl(url)
-            .contact(author)
-            .version(version)
-            .build();
+                .title(title)
+                .description(description)
+                .termsOfServiceUrl(url)
+                .contact(author)
+                .version(version)
+                .build();
     }
 
 }

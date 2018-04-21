@@ -1,11 +1,12 @@
 package com.tipcrm.bo;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.tipcrm.dao.entity.Department;
 import com.tipcrm.dao.entity.Level;
 import com.tipcrm.dao.entity.User;
 import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserBo extends UserBasicBo {
 
@@ -21,6 +22,8 @@ public class UserBo extends UserBasicBo {
 
     private String level;
 
+    private String motto;
+
     public static UserBo convertToUserBo(User user) {
         UserBo userBo = new UserBo();
         userBo.setId(user.getId());
@@ -28,6 +31,7 @@ public class UserBo extends UserBasicBo {
         userBo.setName(user.getUserName());
         userBo.setEmail(user.getEmail());
         userBo.setPhoneNo(user.getPhoneNo());
+        userBo.setMotto(user.getMotto());
         Department department = user.getDepartment();
         if (department != null) {
             userBo.setDepartment(user.getDepartment().getName());
@@ -100,5 +104,13 @@ public class UserBo extends UserBasicBo {
 
     public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
+    }
+
+    public String getMotto() {
+        return motto;
+    }
+
+    public void setMotto(String motto) {
+        this.motto = motto;
     }
 }

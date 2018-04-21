@@ -1,4 +1,5 @@
 package com.tipcrm.bo;
+
 import com.tipcrm.constant.CustomerTransferTarget;
 
 public class CustomerTransferRequestBo {

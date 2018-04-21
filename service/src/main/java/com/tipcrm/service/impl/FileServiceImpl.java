@@ -1,11 +1,4 @@
 package com.tipcrm.service.impl;
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
 
 import com.tipcrm.config.FileConfiguration;
 import com.tipcrm.constant.AttachmentLocation;
@@ -30,6 +23,14 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -102,10 +103,10 @@ public class FileServiceImpl implements FileService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
         Date date = new Date();
         directory.append(sdf.format(date))
-                 .append("/");
+                .append("/");
         sdf = new SimpleDateFormat("MM");
         directory.append(sdf.format(date))
-                 .append("/");
+                .append("/");
         return directory.toString();
     }
 
@@ -127,7 +128,7 @@ public class FileServiceImpl implements FileService {
             throw new BizException(type.getValue() + "不存在");
         }
         ListBox systemFile = listBoxService.findByCategoryAndName(ListBoxCategory.ATTACHMENT_LOCATION.name(), AttachmentLocation.SYSTEM.name());
-        ListBox networkFile= listBoxService.findByCategoryAndName(ListBoxCategory.ATTACHMENT_LOCATION.name(), AttachmentLocation.NETWORK.name());
+        ListBox networkFile = listBoxService.findByCategoryAndName(ListBoxCategory.ATTACHMENT_LOCATION.name(), AttachmentLocation.NETWORK.name());
         Resource resource;
         if (systemFile.getId().equals(attachment.getLocationType().getId())) {
             resource = new ClassPathResource(attachment.getPath());
