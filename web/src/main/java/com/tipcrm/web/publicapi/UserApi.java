@@ -98,9 +98,7 @@ public class UserApi {
         }
         Integer tryTimes = (Integer) request.getSession().getAttribute(Constants.SessionAttribute.CHANG_PASSWORD_VALIDATION_CODE_TRY_TIMES);
         if (tryTimes != null && tryTimes >= 3) {
-            request.getSession().removeAttribute(Constants.SessionAttribute.CHANG_PASSWORD_VALIDATION_CODE);
-            request.getSession().removeAttribute(Constants.SessionAttribute.CHANG_PASSWORD_VALIDATION_CODE_TIME);
-            request.getSession().removeAttribute(Constants.SessionAttribute.CHANG_PASSWORD_VALIDATION_CODE_TRY_TIMES);
+            removeChangePasswordSessionAttribute(request);
             throw new BizException("尝试次数过多，请重新获取验证码");
         }
         if (!changePasswordBo.getValidationCode().equals(correctValidationCode)) {
@@ -108,6 +106,13 @@ public class UserApi {
             throw new BizException("验证码不正确");
         }
         userService.changePassword(changePasswordBo.getNewPassword());
+        removeChangePasswordSessionAttribute(request);
         return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
+    }
+
+    private void removeChangePasswordSessionAttribute(HttpServletRequest request) {
+        request.getSession().removeAttribute(Constants.SessionAttribute.CHANG_PASSWORD_VALIDATION_CODE);
+        request.getSession().removeAttribute(Constants.SessionAttribute.CHANG_PASSWORD_VALIDATION_CODE_TIME);
+        request.getSession().removeAttribute(Constants.SessionAttribute.CHANG_PASSWORD_VALIDATION_CODE_TRY_TIMES);
     }
 }
