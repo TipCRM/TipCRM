@@ -31,7 +31,7 @@ export default class DepartmentUserSearchCell extends React.Component{
       <div  className={styles.searchByStatus}>
         <CommonTagGroup tags={tags}/>
         {
-          enableAdd ? <Button type="primary" icon="plus" style={{marginLeft: '16px'}} onClick={createNewUser}>添加员工</Button> :''
+          enableAdd ? <Button size="small" type="primary" icon="plus" style={{marginLeft: '16px'}} onClick={createNewUser}>添加员工</Button> :''
         }
       </div>
     </div>);
