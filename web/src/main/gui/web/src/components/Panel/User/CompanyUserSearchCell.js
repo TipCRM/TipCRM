@@ -82,7 +82,7 @@ export default class DepartmentUserSearchCell extends React.Component{
           </RadioGroup>
         </FormItem >
         <FormItem {...tailFormItemLayout} style={{marginTop:'-18px'}}>
-          <Button type="primary" htmlType="submit" icon="search" size="small" onClick={onAdvanceSearch}>开始搜索</Button>
+          <Button type="primary" htmlType="submit" icon="search" size="small">开始搜索</Button>
           <Button size="small" style={{marginLeft:'8px'}} onClick={onClearAdvanceCondition}>清除条件</Button>
         </FormItem>
       </Form>

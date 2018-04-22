@@ -12,6 +12,7 @@ import CompanyUserPanel from '../components/Panel/User/CompanyUserPanel';
 import DepartmentUserPanel from '../components/Panel/User/CompanyUserPanel';
 
 import DepartmentManagePanel from '../components/Panel/Department/DepartmentManagePanel';
+import UserCenterPanel from '../components/Panel/UserCenter/UserCenterPanel';
 
 import DynamicPanel from '../components/Common/DynamicPanel';
 /**
@@ -36,6 +37,9 @@ export function menuComponentConstant(item){
       break;
     case 'DEPARTMENT_MANAGEMENT':
       component = (<DynamicPanel item={item} notTabs={true} initChildrenPanel={initDepartmentManagementComponent}/>);
+      break;
+    case 'PERSONAL_CENTER':
+      component = (<DynamicPanel item={item} notTabs={true} initChildrenPanel={initUserCenterComponent}/>);
       break;
     default:
       component = (<div>The page you request is not exist.</div>);
@@ -110,4 +114,8 @@ export function initUserManagementComponent(item){
 
 export function initDepartmentManagementComponent(item){
   return (<DepartmentManagePanel menuId={item.id} />);
+}
+
+export function initUserCenterComponent(item){
+  return (<UserCenterPanel menuId={item.id}/>);
 }

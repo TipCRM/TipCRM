@@ -4,8 +4,11 @@
 import React from 'react';
 import CommonSpin from '../../Common/CommonSpin';
 import {connect} from 'dva';
-import {Input, Button} from 'antd';
+import {Input, Button, Icon, Col, Upload, Form, Modal} from 'antd';
+import ChangePassWordPanel from './ChangePassWordPanel';
 import styles from './Index.less';
+const FormItem = Form.Item;
+const {TextArea} = Input;
 
 @connect(({loading, user})=>({
   userLoading: loading.models.user,
@@ -15,6 +18,7 @@ export default class UserDetailInfoPanel extends React.Component{
   state={
     editing: this.props.createNew,
     createNew: this.props.createNew,
+    showChangePassword: false,
   }
   componentDidMount(){
     const {dispatch, selectUser} = this.props;
@@ -55,33 +59,78 @@ export default class UserDetailInfoPanel extends React.Component{
     });
   }
 
+  handleOpenChangePassword(){
+    this.setState({
+      showChangePassword: true
+    });
+  }
+  handleCloseChangePassword(){
+    this.setState({
+      showChangePassword: false
+    });
+  }
+  handleSubmitChangePassword(){
+    console.log("submit change password");
+  }
+
   render(){
     const {selectUserInfo, userLoading, enableEdit} = this.props;
-    const {editing, createNew} =  this.state;
-    const dataSource = [
-      {title: '用户名', value: selectUserInfo.name},
-      {title: '联系电话', value: selectUserInfo.phone},
-      {title: '邮箱', value: selectUserInfo.email},
-      {title: '员工状态', value: selectUserInfo.status},
-      {title: '提成比例', value: selectUserInfo.status},
-      {title: '所在部门', value: selectUserInfo.status},
-      {title: '职位', value: selectUserInfo.status},
-      {title: '客户数量限制', value: selectUserInfo.status},];
+    const {editing, createNew, showChangePassword} =  this.state;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 8 },
+        sm: { span: 8 },
+      },
+      wrapperCol: {
+        xs: { span: 12 },
+        sm: { span: 12 },
+      },
+    };
     return(<CommonSpin spinning={userLoading}>
       <div>
-        {
-          dataSource.map(item =>
-            <Input addonBefore={item.title}
-                   value={item.value} disabled={!editing}
-                   style={{marginBottom: '8px', marginLeft:'8px', marginRight: '8px', width:'31%'}}/>)
-        }
+            <div style={{float: 'left', width: '30%', marginTop: '15%'}}>
+              <div>
+                <Upload
+                  name="avatar"
+                  listType="picture-card"
+                  disabled={!editing}
+                >
+                  {selectUserInfo.avatar ? <image src={selectUserInfo.avatar}></image> : ""}
+                </Upload>
+              </div>
+              <div  style={{marginBottom: '8px'}}>
+                <a onClick={this.handleOpenChangePassword.bind(this)}><Icon type="lock"/>修改密码</a>
+                <Modal footer="" visible={showChangePassword} title="修改密码" width="30%"
+                       onCancel={this.handleCloseChangePassword.bind(this)} destroyOnClose>
+                  <ChangePassWordPanel onSubmitChange={this.handleSubmitChangePassword.bind(this)} onCancelChange={this.handleCloseChangePassword.bind(this)}/>
+                </Modal>
+              </div>
+              <div>
+                <b>座右铭：</b>
+                <TextArea row="4" value={selectUserInfo.motto} style={{marginTop: '4px'}} disabled={!editing}/>
+              </div>
+            </div>
+            <div style={{float: 'left', width:'70%'}}>
+              <Form>
+                <FormItem label="员工编号" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.workNo}</FormItem>
+                <FormItem label="用户名" {...formItemLayout} style={{marginTop:'-24px'}}><Input value={selectUserInfo.name} size="small" disabled={!editing}/></FormItem>
+                <FormItem label="所在部门" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.department}</FormItem>
+                <FormItem label="员工等级" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.level}</FormItem>
+                <FormItem label="邮箱" {...formItemLayout} style={{marginTop:'-24px'}}><Input value={selectUserInfo.email} disabled={!editing} size="small"/></FormItem>
+                <FormItem label="联系电话" {...formItemLayout} style={{marginTop:'-24px'}}><Input value={selectUserInfo.phoneNo} size="small" disabled={!editing}/></FormItem>
+                <FormItem label="身份证" {...formItemLayout} style={{marginTop:'-24px'}}><Input value={selectUserInfo.idCard} size="small" disabled={!editing}/></FormItem>
+                <FormItem label="入职时间" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.hireTime}</FormItem>
+                <FormItem label="经办人" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.hirer}</FormItem>
+                <FormItem label="状态" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.status}</FormItem>
+              </Form>
+            </div>
       </div>
-      <div style={{textAlign: 'center'}}>
+      <div style={{textAlign: 'center',clear: 'both'}}>
         {
           editing ? <div>{
-            (enableEdit && !createNew) ? <Button onClick={this.handleCancelSave.bind(this)}>取消</Button>: ''
-          }<Button type="primary" style={{marginLeft: '8px', marginRight:'8px'}} icon="save" onClick={this.handleSaveUser.bind(this, selectUserInfo)}>保存</Button></div> :
-            (enableEdit ? <Button icon="edit" type="primary" onClick={this.handleEditUser.bind(this)}>修改</Button> : '')
+            (enableEdit && !createNew) ? <Button onClick={this.handleCancelSave.bind(this)} size="small">取消</Button>: ''
+          }<Button type="primary" style={{marginLeft: '8px', marginRight:'8px'}} icon="save" size="small" onClick={this.handleSaveUser.bind(this, selectUserInfo)}>保存</Button></div> :
+            (enableEdit ? <Button icon="edit" type="primary" size="small" onClick={this.handleEditUser.bind(this)}>修改</Button> : '')
         }
       </div>
     </CommonSpin>);
