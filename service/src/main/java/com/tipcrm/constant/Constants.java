@@ -110,6 +110,7 @@ public class Constants {
 
         public static class User {
             public static final String USER_NAME = "user_name";
+            public static final String WORK_NO = "work_no";
             public static final String STATUS = "status";
             public static final String DEPARTMENT_ID = "department";
             public static final String LEVEL_ID = "level";
@@ -152,6 +153,7 @@ public class Constants {
                 fieldMap.put(QueryFieldName.User.STATUS, "status.name");
                 fieldMap.put(QueryFieldName.User.DEPARTMENT_ID, "department.name");
                 fieldMap.put(QueryFieldName.User.LEVEL_ID, "level.name");
+                fieldMap.put(QueryFieldName.User.WORK_NO, "workNo");
             }
         }
     }
