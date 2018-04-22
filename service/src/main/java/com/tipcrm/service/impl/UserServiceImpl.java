@@ -475,6 +475,12 @@ public class UserServiceImpl implements UserService {
                                 predicates.add(path.in(levelIds.toArray()));
                             }
                             break;
+                        case Constants.QueryFieldName.User.WORK_NO:
+                            path = root.get("workNo");
+                            Integer workNo = (Integer) criteria.getValue();
+                            if (workNo != null) {
+                                predicates.add(criteriaBuilder.like(path, "%" + workNo + "%"));
+                            }
                         default:
                             break;
                     }

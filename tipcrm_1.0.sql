@@ -932,7 +932,7 @@ LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user`
   DISABLE KEYS */;
 INSERT INTO `user` VALUES
-  (-1, -1, 'SYSTEM', 'tip@crm.com', NULL, NULL, NULL, 'robot-avatar', NULL, 10, -1, NOW(), NULL, NULL, 0.00, NULL, NULL,
+  (-1, -1, '系统', 'tip@crm.com', NULL, NULL, NULL, 'robot-avatar', NULL, 10, -1, NOW(), NULL, NULL, 0.00, NULL, NULL,
    NULL, NULL,
    NULL),
   (1, 1000, 'admin', '', NULL, NULL, NULL, 'default-avatar', NULL, 10, -1, NOW(), NULL, NULL, 0.00, NULL, NULL, NULL,
