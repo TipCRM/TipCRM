@@ -59,6 +59,7 @@ export default class CompanyUserPanel extends React.Component{
     });
   }
   handleTableRowSelect(record){
+    console.log("record:", record);
     return {
       onDoubleClick: () => {
         this.setState({
@@ -221,7 +222,7 @@ export default class CompanyUserPanel extends React.Component{
       advanceSearch, advanceCheckedDead, advanceCheckedAlive, advanceFilter, advanceSelectDepartments} = this.state;
     //init permissions
     const {permissions} = menuPermissions;
-    const enableView = permissions.filter(item => item === getPermission('USER_DEPARTMENT_VIEW')).length > 0;
+    const enableView = permissions.filter(item => item === getPermission('USER_VIEW')).length > 0;
     const enableEdit = permissions.filter(item => item === getPermission('USER_UPDATE')).length > 0;
     const enableAdd = permissions.filter(item => item === getPermission('USER_ADD')).length > 0;
     const enableDelete = permissions.filter(item => item === getPermission('USER_DELETE')).length > 0;
@@ -241,10 +242,10 @@ export default class CompanyUserPanel extends React.Component{
       onAdvanceSearch={this.handleAdvanceSearch.bind(this)}/>);
 
     const columns = [
-      {title: '员工编号', dataIndex: 'id'},
+      {title: '员工编号', dataIndex: 'workNo'},
       {title: '员工名', dataIndex: 'name'},
       {title: '部门', dataIndex: 'department'},
-      {title: '联系电话', dataIndex: 'phone'},
+      {title: '联系电话', dataIndex: 'phoneNo'},
       {title: '邮箱', dataIndex: 'email'},
       {title: '员工状态', dataIndex: 'status'}];
     const tablePagination ={defaultCurrent:1, pageSize: companyUsers.size,
@@ -258,7 +259,7 @@ export default class CompanyUserPanel extends React.Component{
                      tablePagination={tablePagination} onTableChange={this.handleTableChange.bind(this)}/>
       </CommonSpin>
       {
-        enableView ? <Modal footer="" visible={showUserDetail} title={createNew ? '创建新用户' : selectUser.name} width="60%"
+        enableView ? <Modal footer="" visible={showUserDetail} title={createNew ? '创建新用户' : selectUser.name} width="40%"
                             onCancel={this.handleCloseUserInfo.bind(this)} destroyOnClose>
           <UserDetailInfoPanel selectUser={selectUser} createNew={createNew} enableEdit={enableEdit}/>
         </Modal> : ""
