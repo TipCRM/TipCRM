@@ -173,6 +173,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             UserBasicBo userBasicBo = new UserBasicBo();
             userBasicBo.setId(manager.getId());
             userBasicBo.setName(manager.getUserName());
+            userBasicBo.setWorkNo(manager.getWorkNo());
             departmentBo.setManager(userBasicBo);
         }
         departmentBo.setName(department.getName());
