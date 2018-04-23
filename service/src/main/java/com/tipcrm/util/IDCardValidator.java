@@ -42,7 +42,7 @@ public class IDCardValidator {
             }
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             sdf.setLenient(false);
-            sdf.parse(idCard.substring(6, 13));
+            sdf.parse(idCard.substring(6, 14));
             int mod = sum % 11;
             String last = idCard.substring(17, 18);
             int lastNum;
