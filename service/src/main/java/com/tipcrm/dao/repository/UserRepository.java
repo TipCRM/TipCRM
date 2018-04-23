@@ -28,6 +28,9 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     @Query("select u from User u where u.userName like %:userName% and u.dismissTime is null and u.id > 0")
     List<User> findByNameWithoutDismiss(@Param("userName") String userName);
 
+    @Query("select u from User u where u.id = :userId and u.dismissTime is null and u.id > 0")
+    User findByIdWithoutDismiss(@Param("userId") Integer Id);
+
     List<User> findByDepartmentId(Integer departmentId);
 
     List<User> findAllByLevelId(Integer levelId);

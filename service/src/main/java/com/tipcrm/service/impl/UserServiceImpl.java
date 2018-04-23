@@ -10,6 +10,7 @@ import com.tipcrm.bo.QuerySortBo;
 import com.tipcrm.bo.UpdateUserBo;
 import com.tipcrm.bo.UserBasicBo;
 import com.tipcrm.bo.UserBo;
+import com.tipcrm.bo.UserDepartmentAssignBo;
 import com.tipcrm.bo.UserExtBo;
 import com.tipcrm.constant.AttachmentLocation;
 import com.tipcrm.constant.AttachmentType;
@@ -524,5 +525,30 @@ public class UserServiceImpl implements UserService {
         }
         Security security = generateSecurity(webContext.getCurrentUserId(), newPassword);
         securityRepository.save(security);
+    }
+
+    @Override
+    public void userDepartmentAssign(UserDepartmentAssignBo assignBo) {
+        if (assignBo.getUserId() == null) {
+            throw new BizException("用户不能为空");
+        }
+        if (assignBo.getDepartmentId() == null) {
+            throw new BizException("部门不能为空");
+        }
+        User user = userRepository.findByIdWithoutDismiss(assignBo.getUserId());
+        if (user == null) {
+            throw new BizException("用户不存在");
+        }
+        Department department = departmentRepository.findByIdAndDeleteTimeIsNull(assignBo.getDepartmentId());
+        if (department == null) {
+            throw new BizException("部门不存在");
+        }
+        user.setDepartment(department);
+        Department managed = departmentRepository.findByManagerIdAndDeleteTimeIsNull(assignBo.getUserId());
+        if (managed != null) {
+            managed.setManager(null);
+            departmentRepository.save(managed);
+        }
+        userRepository.save(user);
     }
 }

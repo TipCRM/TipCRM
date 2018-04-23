@@ -7,6 +7,7 @@ import com.tipcrm.bo.QueryResultBo;
 import com.tipcrm.bo.UpdateUserBo;
 import com.tipcrm.bo.UserBasicBo;
 import com.tipcrm.bo.UserBo;
+import com.tipcrm.bo.UserDepartmentAssignBo;
 import com.tipcrm.bo.UserExtBo;
 import com.tipcrm.dao.entity.User;
 
@@ -39,4 +40,6 @@ public interface UserService {
     String generateChangePasswordValidationCode(String email);
 
     void changePassword(String newPassword);
+
+    void userDepartmentAssign(UserDepartmentAssignBo assignBo);
 }

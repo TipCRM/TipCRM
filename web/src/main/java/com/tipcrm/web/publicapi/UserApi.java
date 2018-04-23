@@ -7,6 +7,7 @@ import com.tipcrm.bo.QueryResultBo;
 import com.tipcrm.bo.UpdateUserBo;
 import com.tipcrm.bo.UserBasicBo;
 import com.tipcrm.bo.UserBo;
+import com.tipcrm.bo.UserDepartmentAssignBo;
 import com.tipcrm.bo.UserExtBo;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.exception.BizException;
@@ -114,5 +115,12 @@ public class UserApi {
         request.getSession().removeAttribute(Constants.SessionAttribute.CHANG_PASSWORD_VALIDATION_CODE);
         request.getSession().removeAttribute(Constants.SessionAttribute.CHANG_PASSWORD_VALIDATION_CODE_TIME);
         request.getSession().removeAttribute(Constants.SessionAttribute.CHANG_PASSWORD_VALIDATION_CODE_TRY_TIMES);
+    }
+
+    @RequestMapping(value = "user/department", method = RequestMethod.PUT)
+    @RequiresPermissions(Constants.Permission.USER_UPDATE)
+    public JsonEntity<String> assignDepartment(@RequestBody UserDepartmentAssignBo assignBo) {
+        userService.userDepartmentAssign(assignBo);
+        return  ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
     }
 }
