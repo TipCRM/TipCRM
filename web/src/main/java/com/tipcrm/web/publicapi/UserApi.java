@@ -2,6 +2,7 @@ package com.tipcrm.web.publicapi;
 
 import com.tipcrm.bo.ChangePasswordBo;
 import com.tipcrm.bo.CreateUserBo;
+import com.tipcrm.bo.DismissBo;
 import com.tipcrm.bo.QueryRequestBo;
 import com.tipcrm.bo.QueryResultBo;
 import com.tipcrm.bo.UpdateUserBo;
@@ -129,6 +130,13 @@ public class UserApi {
     @RequiresPermissions(Constants.Permission.USER_UPDATE)
     public JsonEntity<String> assignLevel(@RequestBody UserLevelAssignBo assignBo) {
         userService.userLevelAssign(assignBo);
+        return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
+    }
+
+    @RequestMapping(value = "user", method = RequestMethod.DELETE)
+    @RequiresPermissions(Constants.Permission.USER_DELETE)
+    public JsonEntity<String> dismiss(@RequestBody DismissBo dismissBo) {
+        userService.dismiss(dismissBo);
         return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
     }
 }

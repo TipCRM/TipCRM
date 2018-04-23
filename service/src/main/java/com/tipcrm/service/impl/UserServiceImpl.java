@@ -2,6 +2,7 @@ package com.tipcrm.service.impl;
 
 import com.google.common.collect.Sets;
 import com.tipcrm.bo.CreateUserBo;
+import com.tipcrm.bo.DismissBo;
 import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.QueryCriteriaBo;
 import com.tipcrm.bo.QueryRequestBo;
@@ -539,7 +540,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = userRepository.findByIdWithoutDismiss(assignBo.getUserId());
         if (user == null) {
-            throw new BizException("用户不存在");
+            throw new BizException("用户不存在或已离职");
         }
         Department department = departmentRepository.findByIdAndDeleteTimeIsNull(assignBo.getDepartmentId());
         if (department == null) {
@@ -565,7 +566,7 @@ public class UserServiceImpl implements UserService {
         BigDecimal payment = assignBo.getPaymentPercentage();
         User user = userRepository.findByIdWithoutDismiss(assignBo.getUserId());
         if (user == null) {
-            throw new BizException("用户不存在");
+            throw new BizException("用户不存在或已离职");
         }
         Level level = levelRepository.findByIdAndDeleteTimeIsNull(assignBo.getLevelId());
         if (level == null) {
@@ -576,6 +577,30 @@ public class UserServiceImpl implements UserService {
             payment = level.getDefaultPaymentPercent();
         }
         user.setPaymentPercent(payment.setScale(2, BigDecimal.ROUND_HALF_DOWN));
+        userRepository.save(user);
+    }
+
+
+    @Override
+    public void dismiss(DismissBo dismissBo) {
+        if (dismissBo.getUserId() == null) {
+            throw new BizException("用户能不能空");
+        }
+        if (StringUtils.isBlank(dismissBo.getReason())) {
+            throw new BizException("原因不能为空");
+        }
+        if (dismissBo.getReason().length() > 255) {
+         throw new BizException("原因过长");
+        }
+        User user = userRepository.findByIdWithoutDismiss(dismissBo.getUserId());
+        if (user == null) {
+            throw new BizException("用户不存在或已离职");
+        }
+
+        User entryUser = webContext.getCurrentUser();
+        user.setDismissUser(entryUser);
+        user.setDismissReason(dismissBo.getReason());
+        user.setDismissTime(new Date());
         userRepository.save(user);
     }
 }

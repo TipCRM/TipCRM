@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
-    @Query("SELECT u FROM User u where u.email = :loginKey OR u.workNo = :loginKey")
+    @Query("SELECT u FROM User u where u.email = :loginKey OR u.workNo = :loginKey and u.dismissTime is null")
     User findByEmailOrWorkNo(@Param(value = "loginKey") String loginKey);
 
     List<User> findByUserName(String userName);

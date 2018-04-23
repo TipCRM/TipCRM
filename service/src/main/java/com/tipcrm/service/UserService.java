@@ -1,6 +1,7 @@
 package com.tipcrm.service;
 
 import com.tipcrm.bo.CreateUserBo;
+import com.tipcrm.bo.DismissBo;
 import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.QueryRequestBo;
 import com.tipcrm.bo.QueryResultBo;
@@ -45,4 +46,6 @@ public interface UserService {
     void userDepartmentAssign(UserDepartmentAssignBo assignBo);
 
     void userLevelAssign(UserLevelAssignBo assignBo);
+
+    void dismiss(DismissBo dismissBo);
 }
