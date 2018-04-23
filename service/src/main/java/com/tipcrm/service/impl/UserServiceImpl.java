@@ -601,6 +601,11 @@ public class UserServiceImpl implements UserService {
         user.setDismissUser(entryUser);
         user.setDismissReason(dismissBo.getReason());
         user.setDismissTime(new Date());
+        Department managed = departmentRepository.findByManagerIdAndDeleteTimeIsNull(dismissBo.getUserId());
+        if (managed != null) {
+            managed.setManager(null);
+            departmentRepository.save(managed);
+        }
         userRepository.save(user);
     }
 }
