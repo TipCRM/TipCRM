@@ -9,6 +9,7 @@ import com.tipcrm.bo.UserBasicBo;
 import com.tipcrm.bo.UserBo;
 import com.tipcrm.bo.UserDepartmentAssignBo;
 import com.tipcrm.bo.UserExtBo;
+import com.tipcrm.bo.UserLevelAssignBo;
 import com.tipcrm.dao.entity.User;
 
 import java.util.List;
@@ -42,4 +43,6 @@ public interface UserService {
     void changePassword(String newPassword);
 
     void userDepartmentAssign(UserDepartmentAssignBo assignBo);
+
+    void userLevelAssign(UserLevelAssignBo assignBo);
 }

@@ -12,6 +12,7 @@ import com.tipcrm.bo.UserBasicBo;
 import com.tipcrm.bo.UserBo;
 import com.tipcrm.bo.UserDepartmentAssignBo;
 import com.tipcrm.bo.UserExtBo;
+import com.tipcrm.bo.UserLevelAssignBo;
 import com.tipcrm.constant.AttachmentLocation;
 import com.tipcrm.constant.AttachmentType;
 import com.tipcrm.constant.Constants;
@@ -68,6 +69,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -549,6 +551,31 @@ public class UserServiceImpl implements UserService {
             managed.setManager(null);
             departmentRepository.save(managed);
         }
+        userRepository.save(user);
+    }
+
+    @Override
+    public void userLevelAssign(UserLevelAssignBo assignBo) {
+        if (assignBo.getUserId() == null) {
+            throw new BizException("用户不能为空");
+        }
+        if (assignBo.getLevelId() == null) {
+            throw new BizException("等级不能为空");
+        }
+        BigDecimal payment = assignBo.getPaymentPercentage();
+        User user = userRepository.findByIdWithoutDismiss(assignBo.getUserId());
+        if (user == null) {
+            throw new BizException("用户不存在");
+        }
+        Level level = levelRepository.findByIdAndDeleteTimeIsNull(assignBo.getLevelId());
+        if (level == null) {
+            throw new BizException("等级不存在");
+        }
+        user.setLevel(level);
+        if (payment == null) {
+            payment = level.getDefaultPaymentPercent();
+        }
+        user.setPaymentPercent(payment.setScale(2, BigDecimal.ROUND_HALF_DOWN));
         userRepository.save(user);
     }
 }

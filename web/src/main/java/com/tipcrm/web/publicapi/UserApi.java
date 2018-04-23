@@ -9,6 +9,7 @@ import com.tipcrm.bo.UserBasicBo;
 import com.tipcrm.bo.UserBo;
 import com.tipcrm.bo.UserDepartmentAssignBo;
 import com.tipcrm.bo.UserExtBo;
+import com.tipcrm.bo.UserLevelAssignBo;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.service.UserService;
@@ -93,7 +94,7 @@ public class UserApi {
         }
         Date date = (Date) request.getSession().getAttribute(Constants.SessionAttribute.CHANG_PASSWORD_VALIDATION_CODE_TIME);
         Date now = new Date();
-        int minutes = (int) ((now.getTime() - date.getTime())/(1000 * 60));
+        int minutes = (int) ((now.getTime() - date.getTime()) / (1000 * 60));
         if (minutes > 30) {
             throw new BizException("验证码已过期，请重新获取");
         }
@@ -121,6 +122,13 @@ public class UserApi {
     @RequiresPermissions(Constants.Permission.USER_UPDATE)
     public JsonEntity<String> assignDepartment(@RequestBody UserDepartmentAssignBo assignBo) {
         userService.userDepartmentAssign(assignBo);
-        return  ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
+        return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
+    }
+
+    @RequestMapping(value = "user/level", method = RequestMethod.PUT)
+    @RequiresPermissions(Constants.Permission.USER_UPDATE)
+    public JsonEntity<String> assignLevel(@RequestBody UserLevelAssignBo assignBo) {
+        userService.userLevelAssign(assignBo);
+        return ResponseHelper.createInstance(Constants.RequestResult.SUCCESS);
     }
 }
