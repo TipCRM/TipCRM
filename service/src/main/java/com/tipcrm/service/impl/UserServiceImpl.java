@@ -26,7 +26,6 @@ import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.entity.Security;
 import com.tipcrm.dao.entity.User;
 import com.tipcrm.dao.entity.UserRole;
-import com.tipcrm.dao.repository.AttachmentRepository;
 import com.tipcrm.dao.repository.DepartmentRepository;
 import com.tipcrm.dao.repository.LevelRepository;
 import com.tipcrm.dao.repository.RoleRepository;
@@ -115,9 +114,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AttachmentService attachmentService;
-
-    @Autowired
-    private AttachmentRepository attachmentRepository;
 
     @Override
     public Integer saveUser(CreateUserBo createUserBo) {
@@ -236,21 +232,24 @@ public class UserServiceImpl implements UserService {
         userExtBo.setBirthday(user.getBirthday());
         Department department = user.getDepartment();
         if (department != null) {
-            userExtBo.setDepartment(user.getDepartment().getName());
+            userExtBo.setDepartmentId(department.getId());
+            userExtBo.setDepartment(department.getName());
             User manager = department.getManager();
             if (manager != null) {
                 userExtBo.setManager(manager.getUserName());
+                userExtBo.setIsDepartmentManager(manager.getId().equals(user.getId()));
             }
         }
         userExtBo.setEmail(user.getEmail());
         User hirer = user.getHire();
-        if (hirer != null && !Constants.User.SYSTEM.equals(hirer.getUserName())) {
+        if (hirer != null) {
             userExtBo.setHirer(hirer.getUserName());
         }
         userExtBo.setHireTime(user.getHireTime());
         userExtBo.setIdCard(user.getIdCard());
         Level level = user.getLevel();
         if (level != null) {
+            userExtBo.setLevelId(level.getId());
             userExtBo.setLevel(level.getName());
         }
         userExtBo.setPhoneNo(user.getPhoneNo());
@@ -264,6 +263,12 @@ public class UserServiceImpl implements UserService {
         userExtBo.setRoles(roleStr);
         userExtBo.setStatus(user.getStatus().getDisplayName());
         userExtBo.setName(user.getUserName());
+        userExtBo.setPaymentPercentage(user.getPaymentPercent());
+        if (user.getDismissUser() != null) {
+            userExtBo.setDismissUser(user.getDismissUser().getUserName());
+            userExtBo.setDismissDate(user.getDismissTime());
+            userExtBo.setDismissReason(user.getDismissReason());
+        }
         return userExtBo;
     }
 
@@ -481,6 +486,7 @@ public class UserServiceImpl implements UserService {
                             if (workNo != null) {
                                 predicates.add(criteriaBuilder.like(path, "%" + workNo + "%"));
                             }
+                            break;
                         default:
                             break;
                     }
