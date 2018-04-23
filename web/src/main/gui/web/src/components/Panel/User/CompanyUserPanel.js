@@ -192,7 +192,6 @@ export default class CompanyUserPanel extends React.Component{
     });
   }
   handleCheckedAlive(checked){
-    console.log("checkAlive", checked);
     this.setState({
       advanceCheckedAlive: checked,
     });
@@ -238,7 +237,7 @@ export default class CompanyUserPanel extends React.Component{
 
   render(){
     const {companyUsers, userLoading, menuPermissions, departments} = this.props;
-    const {showUserDetail, selectUser, createNew,
+    const {showUserDetail, createNew, selectUser,
       advanceSearch, advanceCheckedDead, advanceCheckedAlive, advanceFilter, advanceSelectDepartments} = this.state;
     //init permissions
     const {permissions} = menuPermissions;
@@ -281,7 +280,9 @@ export default class CompanyUserPanel extends React.Component{
       {
         enableView ? <Modal footer="" visible={showUserDetail} title={createNew ? '创建新用户' : selectUser.name} width="40%"
                             onCancel={this.handleCloseUserInfo.bind(this)} destroyOnClose>
-          <UserDetailInfoPanel selectUser={selectUser} createNew={createNew} enableEdit={enableEdit}/>
+          <UserDetailInfoPanel selectUser={selectUser}
+                               createNew={createNew}
+                               handleCancelSave = {this.handleCloseUserInfo.bind(this)}/>
         </Modal> : ""
       }
     </div>);
