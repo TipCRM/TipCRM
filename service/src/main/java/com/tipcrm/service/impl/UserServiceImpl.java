@@ -2,6 +2,7 @@ package com.tipcrm.service.impl;
 
 import com.google.common.collect.Sets;
 import com.tipcrm.bo.CreateUserBo;
+import com.tipcrm.bo.DismissBo;
 import com.tipcrm.bo.LoginBo;
 import com.tipcrm.bo.QueryCriteriaBo;
 import com.tipcrm.bo.QueryRequestBo;
@@ -10,7 +11,9 @@ import com.tipcrm.bo.QuerySortBo;
 import com.tipcrm.bo.UpdateUserBo;
 import com.tipcrm.bo.UserBasicBo;
 import com.tipcrm.bo.UserBo;
+import com.tipcrm.bo.UserDepartmentAssignBo;
 import com.tipcrm.bo.UserExtBo;
+import com.tipcrm.bo.UserLevelAssignBo;
 import com.tipcrm.constant.AttachmentLocation;
 import com.tipcrm.constant.AttachmentType;
 import com.tipcrm.constant.Constants;
@@ -26,7 +29,6 @@ import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.entity.Security;
 import com.tipcrm.dao.entity.User;
 import com.tipcrm.dao.entity.UserRole;
-import com.tipcrm.dao.repository.AttachmentRepository;
 import com.tipcrm.dao.repository.DepartmentRepository;
 import com.tipcrm.dao.repository.LevelRepository;
 import com.tipcrm.dao.repository.RoleRepository;
@@ -68,6 +70,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -115,9 +118,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AttachmentService attachmentService;
-
-    @Autowired
-    private AttachmentRepository attachmentRepository;
 
     @Override
     public Integer saveUser(CreateUserBo createUserBo) {
@@ -236,21 +236,24 @@ public class UserServiceImpl implements UserService {
         userExtBo.setBirthday(user.getBirthday());
         Department department = user.getDepartment();
         if (department != null) {
-            userExtBo.setDepartment(user.getDepartment().getName());
+            userExtBo.setDepartmentId(department.getId());
+            userExtBo.setDepartment(department.getName());
             User manager = department.getManager();
             if (manager != null) {
                 userExtBo.setManager(manager.getUserName());
+                userExtBo.setIsDepartmentManager(manager.getId().equals(user.getId()));
             }
         }
         userExtBo.setEmail(user.getEmail());
         User hirer = user.getHire();
-        if (hirer != null && !Constants.User.SYSTEM.equals(hirer.getUserName())) {
+        if (hirer != null) {
             userExtBo.setHirer(hirer.getUserName());
         }
         userExtBo.setHireTime(user.getHireTime());
         userExtBo.setIdCard(user.getIdCard());
         Level level = user.getLevel();
         if (level != null) {
+            userExtBo.setLevelId(level.getId());
             userExtBo.setLevel(level.getName());
         }
         userExtBo.setPhoneNo(user.getPhoneNo());
@@ -264,6 +267,12 @@ public class UserServiceImpl implements UserService {
         userExtBo.setRoles(roleStr);
         userExtBo.setStatus(user.getStatus().getDisplayName());
         userExtBo.setName(user.getUserName());
+        userExtBo.setPaymentPercentage(user.getPaymentPercent());
+        if (user.getDismissUser() != null) {
+            userExtBo.setDismissUser(user.getDismissUser().getUserName());
+            userExtBo.setDismissDate(user.getDismissTime());
+            userExtBo.setDismissReason(user.getDismissReason());
+        }
         return userExtBo;
     }
 
@@ -481,6 +490,7 @@ public class UserServiceImpl implements UserService {
                             if (workNo != null) {
                                 predicates.add(criteriaBuilder.like(path, "%" + workNo + "%"));
                             }
+                            break;
                         default:
                             break;
                     }
@@ -518,5 +528,79 @@ public class UserServiceImpl implements UserService {
         }
         Security security = generateSecurity(webContext.getCurrentUserId(), newPassword);
         securityRepository.save(security);
+    }
+
+    @Override
+    public void userDepartmentAssign(UserDepartmentAssignBo assignBo) {
+        if (assignBo.getUserId() == null) {
+            throw new BizException("用户不能为空");
+        }
+        if (assignBo.getDepartmentId() == null) {
+            throw new BizException("部门不能为空");
+        }
+        User user = userRepository.findByIdWithoutDismiss(assignBo.getUserId());
+        if (user == null) {
+            throw new BizException("用户不存在或已离职");
+        }
+        Department department = departmentRepository.findByIdAndDeleteTimeIsNull(assignBo.getDepartmentId());
+        if (department == null) {
+            throw new BizException("部门不存在");
+        }
+        user.setDepartment(department);
+        Department managed = departmentRepository.findByManagerIdAndDeleteTimeIsNull(assignBo.getUserId());
+        if (managed != null) {
+            managed.setManager(null);
+            departmentRepository.save(managed);
+        }
+        userRepository.save(user);
+    }
+
+    @Override
+    public void userLevelAssign(UserLevelAssignBo assignBo) {
+        if (assignBo.getUserId() == null) {
+            throw new BizException("用户不能为空");
+        }
+        if (assignBo.getLevelId() == null) {
+            throw new BizException("等级不能为空");
+        }
+        BigDecimal payment = assignBo.getPaymentPercentage();
+        User user = userRepository.findByIdWithoutDismiss(assignBo.getUserId());
+        if (user == null) {
+            throw new BizException("用户不存在或已离职");
+        }
+        Level level = levelRepository.findByIdAndDeleteTimeIsNull(assignBo.getLevelId());
+        if (level == null) {
+            throw new BizException("等级不存在");
+        }
+        user.setLevel(level);
+        if (payment == null) {
+            payment = level.getDefaultPaymentPercent();
+        }
+        user.setPaymentPercent(payment.setScale(2, BigDecimal.ROUND_HALF_DOWN));
+        userRepository.save(user);
+    }
+
+
+    @Override
+    public void dismiss(DismissBo dismissBo) {
+        if (dismissBo.getUserId() == null) {
+            throw new BizException("用户能不能空");
+        }
+        if (StringUtils.isBlank(dismissBo.getReason())) {
+            throw new BizException("原因不能为空");
+        }
+        if (dismissBo.getReason().length() > 255) {
+         throw new BizException("原因过长");
+        }
+        User user = userRepository.findByIdWithoutDismiss(dismissBo.getUserId());
+        if (user == null) {
+            throw new BizException("用户不存在或已离职");
+        }
+
+        User entryUser = webContext.getCurrentUser();
+        user.setDismissUser(entryUser);
+        user.setDismissReason(dismissBo.getReason());
+        user.setDismissTime(new Date());
+        userRepository.save(user);
     }
 }

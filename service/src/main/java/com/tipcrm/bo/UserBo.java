@@ -16,13 +16,19 @@ public class UserBo extends UserBasicBo {
 
     private String status;
 
+    private Integer departmentId;
+
     private String department;
 
     private String manager;
 
+    private Integer levelId;
+
     private String level;
 
     private String motto;
+
+    private Boolean isDepartmentManager;
 
     public static UserBo convertToUserBo(User user) {
         UserBo userBo = new UserBo();
@@ -112,5 +118,29 @@ public class UserBo extends UserBasicBo {
 
     public void setMotto(String motto) {
         this.motto = motto;
+    }
+
+    public Integer getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public Integer getLevelId() {
+        return levelId;
+    }
+
+    public void setLevelId(Integer levelId) {
+        this.levelId = levelId;
+    }
+
+    public Boolean getIsDepartmentManager() {
+        return isDepartmentManager;
+    }
+
+    public void setIsDepartmentManager(Boolean isDepartmentManager) {
+        this.isDepartmentManager = isDepartmentManager;
     }
 }

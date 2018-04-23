@@ -3,6 +3,7 @@ package com.tipcrm.util;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class IDCardValidator {
             }
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             sdf.setLenient(false);
-            sdf.parse(idCard.substring(6, 13));
+            sdf.parse(idCard.substring(6, 14));
             int mod = sum % 11;
             String last = idCard.substring(17, 18);
             int lastNum;
@@ -51,7 +52,7 @@ public class IDCardValidator {
                 lastNum = Integer.parseInt(last);
             }
             return LAST_NUM.get(mod).equals(lastNum);
-        } catch (Exception e) {
+        } catch (ParseException e) {
             return false;
         }
     }

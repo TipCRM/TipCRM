@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
-    @Query("SELECT u FROM User u where u.email = :loginKey OR u.workNo = :loginKey")
+    @Query("SELECT u FROM User u where u.email = :loginKey OR u.workNo = :loginKey and u.dismissTime is null")
     User findByEmailOrWorkNo(@Param(value = "loginKey") String loginKey);
 
     List<User> findByUserName(String userName);
@@ -27,6 +27,9 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
     @Query("select u from User u where u.userName like %:userName% and u.dismissTime is null and u.id > 0")
     List<User> findByNameWithoutDismiss(@Param("userName") String userName);
+
+    @Query("select u from User u where u.id = :userId and u.dismissTime is null and u.id > 0")
+    User findByIdWithoutDismiss(@Param("userId") Integer Id);
 
     List<User> findByDepartmentId(Integer departmentId);
 

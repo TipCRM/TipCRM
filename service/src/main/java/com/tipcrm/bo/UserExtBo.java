@@ -1,5 +1,6 @@
 package com.tipcrm.bo;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,9 +13,17 @@ public class UserExtBo extends UserBo {
 
     private String avatar;
 
+    private BigDecimal paymentPercentage;
+
     private String hirer;
 
     private Date hireTime;
+
+    private String dismissUser;
+
+    private Date dismissDate;
+
+    private String dismissReason;
 
     private List<String> roles = new ArrayList<String>();
 
@@ -64,5 +73,37 @@ public class UserExtBo extends UserBo {
 
     public void setRoles(List<String> roles) {
         this.roles = roles;
+    }
+
+    public String getDismissUser() {
+        return dismissUser;
+    }
+
+    public void setDismissUser(String dismissUser) {
+        this.dismissUser = dismissUser;
+    }
+
+    public Date getDismissDate() {
+        return dismissDate == null ? null : (Date) dismissDate.clone();
+    }
+
+    public void setDismissDate(Date dismissDate) {
+        this.dismissDate = dismissDate == null ? null : (Date) dismissDate.clone();
+    }
+
+    public String getDismissReason() {
+        return dismissReason;
+    }
+
+    public void setDismissReason(String dismissReason) {
+        this.dismissReason = dismissReason;
+    }
+
+    public BigDecimal getPaymentPercentage() {
+        return paymentPercentage;
+    }
+
+    public void setPaymentPercentage(BigDecimal paymentPercentage) {
+        this.paymentPercentage = paymentPercentage;
     }
 }

@@ -654,7 +654,7 @@ INSERT INTO `permission` VALUES
   (16, 'CUSTOMER_APPROVAL', 'customer:approval', '审批客户', NULL, NULL),
   (17, 'USER_DETAIL_VIEW', 'user:detail:view', '查看员工详情', NULL, NULL),
   (19, 'USER_ADD', 'user:add', '添加员工', NULL, NULL),
-  (20, 'USER_UPDATE', 'user:update', '修改员工', NULL, NULL),
+  (20, 'USER_UPDATE', 'user:update', '修改员工', '包括为其分配部门，等级，提成比', NULL),
   (21, 'USER_DELETE', 'user:delete', '员工离职', NULL, NULL),
   (22, 'ROLE_ADD', 'role:add', '添加角色', NULL, NULL),
   (23, 'ROLE_UPDATE', 'role:update', '修改角色', NULL, NULL),

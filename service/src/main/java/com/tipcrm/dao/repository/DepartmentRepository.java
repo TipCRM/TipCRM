@@ -15,5 +15,5 @@ public interface DepartmentRepository extends JpaRepository<Department, Integer>
 
     List<Department> findByDeleteTimeIsNull();
 
-    List<Department> findByManagerId(Integer managerId);
+    Department findByManagerIdAndDeleteTimeIsNull(Integer managerId);
 }
