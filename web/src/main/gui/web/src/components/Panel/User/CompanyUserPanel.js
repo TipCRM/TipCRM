@@ -198,13 +198,33 @@ export default class CompanyUserPanel extends React.Component{
     });
   }
   handleAdvanceSearch(){
-    const {currentPage, pageSize, advanceFilter} = this.state;
+    let {currentPage, pageSize, advanceFilter, filterCondition, advanceSelectDepartments, advanceCheckedDead, advanceCheckedAlive} = this.state;
     let pageCondition = {page: currentPage, size: pageSize};
     let sorterCondition;
     if (advanceFilter != ""){
-      sorterCondition = {sort:{direction:'DESC', fieldName: advanceFilter!="" ? advanceFilter: 'id'}};
+      sorterCondition = {sort:{direction:'DESC', fieldName: advanceFilter}};
     }
-    let filterCondition = {};
+    let filterConditions = filterCondition['criteria'];
+    if (advanceSelectDepartments != null){
+      filterConditions.push({
+        fieldName: 'department',
+        value: advanceSelectDepartments,
+      });
+    }
+    const status = [];
+    if (advanceCheckedAlive){
+      status.push(10);
+    }
+    if (advanceCheckedDead){
+      status.push(11);
+    }
+    if (advanceCheckedAlive || advanceCheckedDead){
+      filterConditions.push({
+        fieldName: 'status',
+        value: status,
+      });
+    }
+
     let request = {...filterCondition, ...pageCondition, ...sorterCondition};
     this.props.dispatch({
       type:'user/listCompanyUsers',
