@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 @RestController
 @RequiresAuthentication
 @Api
@@ -25,8 +23,8 @@ public class FileApi {
     private FileService fileService;
 
     @RequestMapping(value = "avatar", method = RequestMethod.POST)
-    public JsonEntity<String> uploadAvatar(MultipartFile file) throws IOException {
-        return ResponseHelper.createInstance(fileService.uploadAvatar(file));
+    public JsonEntity<String> uploadAvatar(MultipartFile avatar) {
+        return ResponseHelper.createInstance(fileService.uploadAvatar(avatar));
     }
 
     @RequestMapping(value = "avatar/{fileName}", method = RequestMethod.GET)
