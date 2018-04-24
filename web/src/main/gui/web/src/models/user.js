@@ -1,7 +1,8 @@
 import { fetchCurrentUser,
   fetchUserByName, createNewUser,
-  fetchUserDetailInfo, disMissUser,
-  updateUserInfo, fetchCompanyUsers, changePassword} from '../services/api';
+  fetchUserDetailInfo, disMissUser, changeUserDepartment,
+  updateUserInfo, fetchCompanyUsers, changePassword,
+  changeUserLevel} from '../services/api';
 import {message} from 'antd';
 
 export default {
@@ -67,6 +68,18 @@ export default {
         yield put({
           type: 'login/logout'
         })
+      }
+    },
+    *changeUserDepartment({payload}, {call, put}){
+      const response = yield call(changeUserDepartment, payload);
+      if (response.status === 200){
+        message.success("修改员工部门成功！");
+      }
+    },
+    *changeUserLevel({payload}, {call, put}){
+      const response = yield call(changeUserLevel, payload);
+      if (response.status === 200){
+        message.success("修改员工等级成功！");
       }
     }
   },

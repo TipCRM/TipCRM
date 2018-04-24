@@ -55,6 +55,18 @@ export async function changePassword(params){
     body: params,
   });
 }
+export async function changeUserDepartment(params){
+  return request('/public/api/user/department',{
+    method: 'PUT',
+    body: params,
+  })
+}
+export async function changeUserLevel(params){
+  return request('/public/api/user/level', {
+    method: 'PUT',
+    body: params,
+  })
+}
 
 // menu api
 export async function fakeGetMenu(){

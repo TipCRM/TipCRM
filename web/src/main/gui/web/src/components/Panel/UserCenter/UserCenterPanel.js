@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import {connect} from 'dva';
-import {Upload, Icon, Modal, Form, Input, Button} from 'antd';
+import {Upload, Icon, Modal, Form, Input, Button, message} from 'antd';
 import ChangePassWordPanel from './ChangePassWordPanel';
 import CommonSpin from '../../Common/CommonSpin';
 const FormItem = Form.Item;
@@ -55,6 +55,11 @@ export default class UserCenterPanel extends React.Component{
     });
   }
   handleGetValidationCode(inputEmail){
+    const reg = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+    if (inputEmail == null || !reg.test(inputEmail)){
+      message.error("邮箱地址不合法！");
+      return;
+    }
     let count = 59;
     this.setState({ count });
     this.interval = setInterval(() => {

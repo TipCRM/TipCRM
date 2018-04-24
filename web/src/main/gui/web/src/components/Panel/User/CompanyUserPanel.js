@@ -59,7 +59,6 @@ export default class CompanyUserPanel extends React.Component{
     });
   }
   handleTableRowSelect(record){
-    console.log("record:", record);
     return {
       onDoubleClick: () => {
         this.setState({
@@ -83,7 +82,6 @@ export default class CompanyUserPanel extends React.Component{
     });
   }
   handleTableChange(pagination, filters, sorter){
-    console.log("pagination: ", pagination)
     const {dispatch} = this.props;
     const {sorterCondition, filterCondition} = this.state;
     /** init page condition **/
@@ -197,33 +195,38 @@ export default class CompanyUserPanel extends React.Component{
     });
   }
   handleAdvanceSearch(){
-    let {currentPage, pageSize, advanceFilter, filterCondition, advanceSelectDepartments, advanceCheckedDead, advanceCheckedAlive} = this.state;
+    let {currentPage, pageSize, advanceFilter, filterCondition,
+      advanceSelectDepartments, advanceCheckedDead, advanceCheckedAlive} = this.state;
     let pageCondition = {page: currentPage, size: pageSize};
     let sorterCondition;
     if (advanceFilter != ""){
       sorterCondition = {sort:{direction:'DESC', fieldName: advanceFilter}};
     }
     let filterConditions = filterCondition['criteria'];
-    if (advanceSelectDepartments != null){
+    if (filterConditions.length > 0){
+      filterConditions = filterConditions.filter(item => item.fieldName != 'department' && item.fieldName != 'status');
+    }
+    if (advanceSelectDepartments.length > 0){
       filterConditions.push({
         fieldName: 'department',
         value: advanceSelectDepartments,
       });
     }
-    const status = [];
+    let status = [];
     if (advanceCheckedAlive){
       status.push(10);
     }
     if (advanceCheckedDead){
       status.push(11);
     }
-    if (advanceCheckedAlive || advanceCheckedDead){
+    console.log("dead", advanceCheckedDead);
+    if (status.length > 0){
       filterConditions.push({
         fieldName: 'status',
         value: status,
       });
     }
-
+    filterCondition['criteria'] = filterConditions;
     let request = {...filterCondition, ...pageCondition, ...sorterCondition};
     this.props.dispatch({
       type:'user/listCompanyUsers',
@@ -282,6 +285,7 @@ export default class CompanyUserPanel extends React.Component{
                             onCancel={this.handleCloseUserInfo.bind(this)} destroyOnClose>
           <UserDetailInfoPanel selectUser={selectUser}
                                createNew={createNew}
+                               enableEdit = {enableEdit}
                                handleCancelSave = {this.handleCloseUserInfo.bind(this)}/>
         </Modal> : ""
       }

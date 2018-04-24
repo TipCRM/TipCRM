@@ -51,7 +51,7 @@ export default class UserDetailInfoPanel extends React.Component{
   }
 
   render(){
-    const {selectUserInfo, userLoading, handleCancelSave} = this.props;
+    const {selectUserInfo, userLoading, handleCancelSave, enableEdit} = this.props;
     const {createNew, showChangePassword} =  this.state;
     const formItemLayout = {
       labelCol: {
