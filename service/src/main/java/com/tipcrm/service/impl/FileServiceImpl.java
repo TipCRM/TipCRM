@@ -53,6 +53,12 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String uploadAvatar(MultipartFile file) {
+        if (file == null) {
+            throw new BizException("文件不能为空");
+        }
+        if (fileConfiguration == null) {
+            throw new BizException("与文件相关的配置不存在");
+        }
         if (file.getSize() > fileConfiguration.getAvatarMaxSize()) {
             throw new BizException("头像文件大小不能超过" + FileSizeCalculator.calcSize(fileConfiguration.getAvatarMaxSize(), FileSizeUnit.B, FileSizeUnit.MB));
         }
