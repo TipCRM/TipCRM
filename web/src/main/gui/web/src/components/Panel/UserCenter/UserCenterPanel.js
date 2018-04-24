@@ -91,7 +91,7 @@ export default class UserCenterPanel extends React.Component{
           className="avatar-uploader"
           headers = "Content-Type: multipart/form-data;"
           showUploadList={false}
-          action="http://192.168.87.32:8080/tipcrm/avatar"
+          action="/avatar"
         >
           {avatar ? <img src={avatar} alt="" /> : uploadButton}
         </Upload>

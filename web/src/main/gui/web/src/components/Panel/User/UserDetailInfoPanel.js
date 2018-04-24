@@ -94,7 +94,7 @@ export default class UserDetailInfoPanel extends React.Component{
                   name="avatar"
                   listType="picture-card"
                   disabled={!editing}
-                  action="http://www.potafish.com/avatar"
+                  action="/avatar"
                 >
                   {selectUserInfo.avatar ? <img src={"http://www.potafish.com/avatar/"+selectUserInfo.avatar} style={{height:'100%', width:'100%'}}/> : ""}
                 </Upload>
