@@ -13,6 +13,8 @@ const apis = {
   'PUT /public/api/permission/role/*': 'http://www.potafish.com',
   'GET /public/api/permission/me': 'http://www.potafish.com',
 
+  'POST /public/avatar' : 'http://www.potafish.com',
+
   'POST /public/api/role': 'http://www.potafish.com',
   'PUT /public/api/role': 'http://www.potafish.com',
   'DELETE /public/api/role/*': 'http://www.potafish.com',

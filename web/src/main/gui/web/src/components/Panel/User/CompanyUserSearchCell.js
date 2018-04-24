@@ -31,7 +31,7 @@ export default class DepartmentUserSearchCell extends React.Component{
       <div  className={styles.searchByStatus}>
         <CommonTagGroup tags={tags}/>
         {
-          enableAdd ? <Button type="primary" icon="plus" style={{marginLeft: '16px'}} onClick={createNewUser}>添加员工</Button> :''
+          enableAdd ? <Button size="small" type="primary" icon="plus" style={{marginLeft: '16px'}} onClick={createNewUser}>添加员工</Button> :''
         }
       </div>
     </div>);
@@ -75,14 +75,13 @@ export default class DepartmentUserSearchCell extends React.Component{
         </FormItem>
         <FormItem label="排序方式" {...formItemLayout} style={{marginTop:'-20px'}}>
           <RadioGroup size="small" onChange={onFilterChange} value={filterValue}>
-            <RadioButton value="id">员工编号</RadioButton>
             <RadioButton value="user_name">员工姓名</RadioButton>
             <RadioButton value="status">员工状态</RadioButton>
             <RadioButton value="level">员工等级</RadioButton>
           </RadioGroup>
         </FormItem >
         <FormItem {...tailFormItemLayout} style={{marginTop:'-18px'}}>
-          <Button type="primary" htmlType="submit" icon="search" size="small" onClick={onAdvanceSearch}>开始搜索</Button>
+          <Button type="primary" htmlType="submit" icon="search" size="small">开始搜索</Button>
           <Button size="small" style={{marginLeft:'8px'}} onClick={onClearAdvanceCondition}>清除条件</Button>
         </FormItem>
       </Form>
