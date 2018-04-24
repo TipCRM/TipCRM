@@ -49,6 +49,12 @@ export async function fetchCompanyUsers(params){
     body: params
   });
 }
+export async function changePassword(params){
+  return request('/public/api/user/password', {
+    method: 'PUT',
+    body: params,
+  });
+}
 
 // menu api
 export async function fakeGetMenu(){

@@ -1,7 +1,7 @@
 import { fetchCurrentUser,
   fetchUserByName, createNewUser,
   fetchUserDetailInfo, disMissUser,
-  updateUserInfo, fetchCompanyUsers} from '../services/api';
+  updateUserInfo, fetchCompanyUsers, changePassword} from '../services/api';
 import {message} from 'antd';
 
 export default {
@@ -59,6 +59,15 @@ export default {
         type: 'saveCompanyUsers',
         payload: response.data,
       });
+    },
+    *changePassword({payload}, {call, put}){
+      const response = yield call(changePassword, payload);
+      if (response.status === 200){
+        message.success("修改密码成功");
+        yield put({
+          type: 'login/logout'
+        })
+      }
     }
   },
 

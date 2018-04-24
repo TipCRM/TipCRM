@@ -19,16 +19,14 @@ export default class UserCenterPanel extends React.Component{
     loading: false,
     editing: false,
     showChangePassword: false,
+    inputEmail: null,
+    newPassword: null,
+    repeatPassword: null,
+    validationCode: null,
+    count: 0,
   }
 
   componentDidMount(){
-    //const {dispatch} = this.props;
-    //dispatch({
-    //  type: 'user/getCurrentUser'
-    //});
-    //this.setState({
-    //  avatar: ,
-    //});
   }
   handleCancelSave(){
     this.setState({
@@ -56,13 +54,29 @@ export default class UserCenterPanel extends React.Component{
       showChangePassword: false
     });
   }
+  handleGetValidationCode(inputEmail){
+    let count = 59;
+    this.setState({ count });
+    this.interval = setInterval(() => {
+      count -= 1;
+      this.setState({ count });
+      if (count === 0) {
+        clearInterval(this.interval);
+      }
+    }, 1000);
+  }
   handleSubmitChangePassword(){
-    console.log("submit change password");
+    const {dispatch} = this.props;
+    let request = {};
+    dispatch({
+      type: 'user/changePassword',
+      payload: request,
+    });
   }
 
   render(){
     const {currentUser} = this.props;
-    const { showChangePassword, editing} =  this.state;
+    const { showChangePassword, editing, validationCode, inputEmail, newPassword, repeatPassword, count} =  this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 8 },
@@ -97,7 +111,12 @@ export default class UserCenterPanel extends React.Component{
               <a onClick={this.handleOpenChangePassword.bind(this)}><Icon type="lock"/>修改密码</a>
               <Modal footer="" visible={showChangePassword} title="修改密码" width="30%"
                      onCancel={this.handleCloseChangePassword.bind(this)} destroyOnClose>
-                <ChangePassWordPanel onSubmitChange={this.handleSubmitChangePassword.bind(this)} onCancelChange={this.handleCloseChangePassword.bind(this)}/>
+                <ChangePassWordPanel inputEmail ={inputEmail} validationCode={validationCode}
+                                     count = {count}
+                                     newPassword = {newPassword} repeatPassword={repeatPassword}
+                                     onGetValidationCode = {this.handleGetValidationCode.bind(this, inputEmail)}
+                                     onSubmitChange={this.handleSubmitChangePassword.bind(this)}
+                                     onCancelChange={this.handleCloseChangePassword.bind(this)}/>
               </Modal>
             </div>
 
