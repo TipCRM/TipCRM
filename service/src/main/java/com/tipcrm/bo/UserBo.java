@@ -28,41 +28,7 @@ public class UserBo extends UserBasicBo {
 
     private String motto;
 
-    private Boolean isDepartmentManager;
-
-    public static UserBo convertToUserBo(User user) {
-        UserBo userBo = new UserBo();
-        userBo.setId(user.getId());
-        userBo.setWorkNo(user.getWorkNo());
-        userBo.setName(user.getUserName());
-        userBo.setEmail(user.getEmail());
-        userBo.setPhoneNo(user.getPhoneNo());
-        userBo.setMotto(user.getMotto());
-        Department department = user.getDepartment();
-        if (department != null) {
-            userBo.setDepartment(user.getDepartment().getName());
-            User manager = department.getManager();
-            if (manager != null) {
-                userBo.setManager(manager.getUserName());
-            }
-        }
-        Level level = user.getLevel();
-        if (level != null) {
-            userBo.setLevel(level.getName());
-        }
-        return userBo;
-    }
-
-    public static List<UserBo> convertToUserBos(List<User> users) {
-        List<UserBo> userBos = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(users)) {
-            for (User user : users) {
-                userBos.add(convertToUserBo(user));
-            }
-        }
-        return userBos;
-
-    }
+    private Boolean isDepartmentManager = false;
 
     public String getEmail() {
         return email;

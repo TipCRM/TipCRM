@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new BizException("用户不存在");
         }
-        UserExtBo userExtBo = convertToUserBo(user);
+        UserExtBo userExtBo = convertToUserExtBo(user);
         return userExtBo;
     }
 
@@ -222,7 +222,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private UserExtBo convertToUserBo(User user) {
+    private UserExtBo convertToUserExtBo(User user) {
         UserExtBo userExtBo = new UserExtBo();
         Attachment avatar = user.getAvatar();
         String path = avatar.getId();
@@ -349,13 +349,54 @@ public class UserServiceImpl implements UserService {
             }
             Specification<User> specification = new UserSpecification(queryRequestBo);
             Page<User> users = userRepository.findAll(specification, page);
-            List<UserBo> customerBos = UserBo.convertToUserBos(users.getContent());
-            QueryResultBo<UserBo> queryResultBo = new QueryResultBo<UserBo>(customerBos, queryRequestBo.getPage(), queryRequestBo.getSize(),
+            List<UserBo> customerBos = convertToUserBos(users.getContent());
+            QueryResultBo<UserBo> queryResultBo = new QueryResultBo<>(customerBos, queryRequestBo.getPage(), queryRequestBo.getSize(),
                     users.getTotalElements(), users.getTotalPages());
             return queryResultBo;
         } catch (Exception e) {
             throw new QueryException("查询条件错误", e);
         }
+    }
+
+    public UserBo convertToUserBo(User user) {
+        UserBo userBo = new UserBo();
+        userBo.setId(user.getId());
+        userBo.setWorkNo(user.getWorkNo());
+        userBo.setName(user.getUserName());
+        userBo.setEmail(user.getEmail());
+        userBo.setPhoneNo(user.getPhoneNo());
+        userBo.setMotto(user.getMotto());
+        userBo.setStatus(user.getStatus().getName());
+        Department department = user.getDepartment();
+        if (department != null) {
+            userBo.setDepartmentId(department.getId());
+            userBo.setDepartment(department.getName());
+            User manager = department.getManager();
+            if (manager != null) {
+                userBo.setManager(manager.getUserName());
+                if (manager != null) {
+                    userBo.setManager(manager.getUserName());
+                    userBo.setIsDepartmentManager(manager.getId().equals(user.getId()));
+                }
+            }
+        }
+        Level level = user.getLevel();
+        if (level != null) {
+            userBo.setLevelId(level.getId());
+            userBo.setLevel(level.getName());
+        }
+        return userBo;
+    }
+
+    public List<UserBo> convertToUserBos(List<User> users) {
+        List<UserBo> userBos = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(users)) {
+            for (User user : users) {
+                userBos.add(convertToUserBo(user));
+            }
+        }
+        return userBos;
+
     }
 
     @Override
@@ -598,6 +639,8 @@ public class UserServiceImpl implements UserService {
         }
 
         User entryUser = webContext.getCurrentUser();
+        ListBox dismiss = listBoxService.findByCategoryAndName(ListBoxCategory.USER_STATUS.name(), UserStatus.DISMISS.name());
+        user.setStatus(dismiss);
         user.setDismissUser(entryUser);
         user.setDismissReason(dismissBo.getReason());
         user.setDismissTime(new Date());
