@@ -75,7 +75,6 @@ export default class DepartmentUserSearchCell extends React.Component{
         </FormItem>
         <FormItem label="排序方式" {...formItemLayout} style={{marginTop:'-20px'}}>
           <RadioGroup size="small" onChange={onFilterChange} value={filterValue}>
-            <RadioButton value="id">员工编号</RadioButton>
             <RadioButton value="user_name">员工姓名</RadioButton>
             <RadioButton value="status">员工状态</RadioButton>
             <RadioButton value="level">员工等级</RadioButton>

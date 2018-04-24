@@ -192,19 +192,38 @@ export default class CompanyUserPanel extends React.Component{
     });
   }
   handleCheckedAlive(checked){
-    console.log("checkAlive", checked);
     this.setState({
       advanceCheckedAlive: checked,
     });
   }
   handleAdvanceSearch(){
-    const {currentPage, pageSize, advanceFilter} = this.state;
+    let {currentPage, pageSize, advanceFilter, filterCondition, advanceSelectDepartments, advanceCheckedDead, advanceCheckedAlive} = this.state;
     let pageCondition = {page: currentPage, size: pageSize};
     let sorterCondition;
     if (advanceFilter != ""){
-      sorterCondition = {sort:{direction:'DESC', fieldName: advanceFilter!="" ? advanceFilter: 'id'}};
+      sorterCondition = {sort:{direction:'DESC', fieldName: advanceFilter}};
     }
-    let filterCondition = {};
+    let filterConditions = filterCondition['criteria'];
+    if (advanceSelectDepartments != null){
+      filterConditions.push({
+        fieldName: 'department',
+        value: advanceSelectDepartments,
+      });
+    }
+    const status = [];
+    if (advanceCheckedAlive){
+      status.push(10);
+    }
+    if (advanceCheckedDead){
+      status.push(11);
+    }
+    if (advanceCheckedAlive || advanceCheckedDead){
+      filterConditions.push({
+        fieldName: 'status',
+        value: status,
+      });
+    }
+
     let request = {...filterCondition, ...pageCondition, ...sorterCondition};
     this.props.dispatch({
       type:'user/listCompanyUsers',
@@ -218,7 +237,7 @@ export default class CompanyUserPanel extends React.Component{
 
   render(){
     const {companyUsers, userLoading, menuPermissions, departments} = this.props;
-    const {showUserDetail, selectUser, createNew,
+    const {showUserDetail, createNew, selectUser,
       advanceSearch, advanceCheckedDead, advanceCheckedAlive, advanceFilter, advanceSelectDepartments} = this.state;
     //init permissions
     const {permissions} = menuPermissions;
@@ -261,7 +280,9 @@ export default class CompanyUserPanel extends React.Component{
       {
         enableView ? <Modal footer="" visible={showUserDetail} title={createNew ? '创建新用户' : selectUser.name} width="40%"
                             onCancel={this.handleCloseUserInfo.bind(this)} destroyOnClose>
-          <UserDetailInfoPanel selectUser={selectUser} createNew={createNew} enableEdit={enableEdit}/>
+          <UserDetailInfoPanel selectUser={selectUser}
+                               createNew={createNew}
+                               handleCancelSave = {this.handleCloseUserInfo.bind(this)}/>
         </Modal> : ""
       }
     </div>);
