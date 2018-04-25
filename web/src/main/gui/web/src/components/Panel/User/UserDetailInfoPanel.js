@@ -4,10 +4,11 @@
 import React from 'react';
 import CommonSpin from '../../Common/CommonSpin';
 import {connect} from 'dva';
-import {Input, Button, Icon, Col, Upload, Form, Modal} from 'antd';
+import {Input, Button, Icon, Col, Upload, Form, Modal, Select} from 'antd';
 import styles from './Index.less';
 const FormItem = Form.Item;
 const {TextArea} = Input;
+const {Option} = Select;
 
 @connect(({loading, user})=>({
   userLoading: loading.models.user,
@@ -16,6 +17,8 @@ const {TextArea} = Input;
 export default class UserDetailInfoPanel extends React.Component{
   state={
     createNew: this.props.createNew,
+    selectingDepartment: false,
+    selectDepartment: undefined,
   }
   componentDidMount(){
     const {dispatch, selectUser} = this.props;
@@ -23,6 +26,9 @@ export default class UserDetailInfoPanel extends React.Component{
       dispatch({
         type: 'user/getUserDetailInfo',
         payload: {userId: selectUser.id},
+      });
+      this.setState({
+        selectDepartment: this.props.selectUserInfo.departmentId,
       });
     } else{
       dispatch({
@@ -50,9 +56,40 @@ export default class UserDetailInfoPanel extends React.Component{
     });
   }
 
+  handleDepartmentChange(value){
+    this.setState({
+      selectDepartment: value,
+    });
+  }
+  handleSaveOrEditDepartment(selectUserInfo){
+    const {selectingDepartment, selectDepartment} = this.state;
+    const {departments} = this.props;
+    if (selectingDepartment){
+      const {dispatch} = this.props;
+      const selectDepartmentName = departments.filter(department => department.id == selectDepartment)[0].name;
+      dispatch({
+        type: 'user/changeUserDepartment',
+        payload: {
+          departmentId: selectDepartment,
+          departmentName: selectDepartmentName,
+          userId: selectUserInfo.id
+        }
+      });
+    }
+    this.setState({
+      selectingDepartment: !selectingDepartment,
+    });
+  }
+  handleCancelSaveDepartment(){
+    this.setState({
+      selectingDepartment: !this.state.selectingDepartment,
+      selectDepartment: undefined,
+    });
+  }
+
   render(){
-    const {selectUserInfo, userLoading, handleCancelSave, enableEdit} = this.props;
-    const {createNew, showChangePassword} =  this.state;
+    const {selectUserInfo, userLoading, handleCancelSave, enableEdit, departments} = this.props;
+    const {createNew, selectingDepartment, selectDepartment} =  this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 8 },
@@ -77,9 +114,8 @@ export default class UserDetailInfoPanel extends React.Component{
               name="avatar"
               listType="picture-card"
               disabled={!createNew}
-              action="/avatar"
-            >
-              {selectUserInfo.avatar ? <img src={"http://www.potafish.com/avatar/"+selectUserInfo.avatar} style={{height:'100%', width:'100%'}}/> : uploadButton}
+              action="/avatar">
+              {selectUserInfo.avatar ? <img src={"http://www.potafish.com/avatar/"+selectUserInfo.avatar} style={{height:'100px', width:'100px'}}/> : uploadButton}
             </Upload>
           </div>
           <div>
@@ -104,7 +140,19 @@ export default class UserDetailInfoPanel extends React.Component{
               {createNew ? <Input value={selectUserInfo.idCard} size="small"/> : selectUserInfo.idCard}
             </FormItem>
             <FormItem label="所在部门" {...formItemLayout} style={{marginTop:'-24px'}}>
-              {selectUserInfo.department}
+              {
+                selectingDepartment ? <Select value={selectDepartment} placeholder="选择部门"
+                                              onChange={this.handleDepartmentChange.bind(this)} style={{ width: '60%' }}>
+                  {
+                    departments.map(department => <Option key={department.id+""}>{department.name}</Option>)
+                  }
+                </Select> : selectUserInfo.department
+              }
+              {enableEdit ? <a style={{marginLeft:'8px'}} onClick={this.handleSaveOrEditDepartment.bind(this, selectUserInfo)}>
+                <Icon type={selectingDepartment ? 'save':'edit'}/></a> : ''}
+              {
+                selectingDepartment ? <a style={{marginLeft:'8px'}} onClick={this.handleCancelSaveDepartment.bind(this)}><Icon type="close"/></a> : ''
+              }
             </FormItem>
             <FormItem label="员工等级" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.level}</FormItem>
             <FormItem label="提成比例" {...formItemLayout} style={{marginTop:'-24px'}}>{createNew ? <Input value={selectUserInfo.idCard} size="small"/> : selectUserInfo.hireTime}</FormItem>

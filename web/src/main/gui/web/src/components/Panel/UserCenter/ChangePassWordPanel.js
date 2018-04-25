@@ -48,7 +48,7 @@ export default class ChangePassWordPanel extends React.Component{
                 message: '邮箱地址格式错误！',
               }
             ],
-          })(<Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} value={inputEmail} placeholder="输入邮箱"/>}/>)
+          })(<Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} value={inputEmail}/>} placeholder="输入邮箱"/>)
         }
         </Row></FormItem>
         <FormItem label="验证码" {...formItemLayout} style={{marginTop: '-20px'}}>
@@ -95,7 +95,7 @@ export default class ChangePassWordPanel extends React.Component{
                 validator: checkRepeatPassword
               }
             ],
-          })(<Input value={repeatPassword} type="password" prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} placeholder="请重复输入密码"/>}/>)}
+          })(<Input value={repeatPassword} type="password" prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }}/>} placeholder="请重复输入密码"/>)}
         </FormItem>
         <FormItem style={{marginTop: '-20px'}} {...tailFormItemLayout}><Button  onClick={onCancelChange}>取消</Button>
           <Button  type="primary" htmlType="submit" style={{marginLeft:'16px'}}>提交</Button></FormItem>

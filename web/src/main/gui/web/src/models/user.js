@@ -70,10 +70,30 @@ export default {
         })
       }
     },
-    *changeUserDepartment({payload}, {call, put}){
+    *changeUserDepartment({payload}, {call, put, select}){
       const response = yield call(changeUserDepartment, payload);
       if (response.status === 200){
         message.success("修改员工部门成功！");
+        let selectUserInfo = yield select(state => state.selectUserInfo);
+        selectUserInfo = {...selectUserInfo, departmentId: payload.departmentId, department: payload.departmentName};
+        console.log("userinfo", selectUserInfo);
+        yield put({
+          type: 'saveSelectUser',
+          payload: selectUserInfo,
+        });
+        console.log("start change companyUsers");
+        let companyUsers = yield select(state => state.companyUsers);
+        console.log("companyUsers", companyUsers);
+        companyUsers = companyUsers.map(user => {
+          if (user.id === payload.userId){
+            return {...user, departmentId: payload.departmentId, department: payload.departmentName};
+          }
+          return user;
+        });
+        yield put({
+          type: 'saveUsers',
+          payload: companyUsers,
+        });
       }
     },
     *changeUserLevel({payload}, {call, put}){

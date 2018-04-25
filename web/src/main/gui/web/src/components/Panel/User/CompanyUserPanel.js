@@ -173,13 +173,11 @@ export default class CompanyUserPanel extends React.Component{
     });
   }
   handleDepartmentChange(value){
-    console.log("departments:", value);
     this.setState({
       advanceSelectDepartments: value,
     });
   }
   handleFilterChange(e){
-    console.log("filter: ", e.target.value)
     this.setState({
       advanceFilter: e.target.value,
     });
@@ -283,7 +281,7 @@ export default class CompanyUserPanel extends React.Component{
       {
         enableView ? <Modal footer="" visible={showUserDetail} title={createNew ? '创建新用户' : selectUser.name} width="40%"
                             onCancel={this.handleCloseUserInfo.bind(this)} destroyOnClose>
-          <UserDetailInfoPanel selectUser={selectUser}
+          <UserDetailInfoPanel selectUser={selectUser} departments = {departments}
                                createNew={createNew}
                                enableEdit = {enableEdit}
                                handleCancelSave = {this.handleCloseUserInfo.bind(this)}/>

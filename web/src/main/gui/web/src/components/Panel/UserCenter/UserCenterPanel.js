@@ -109,7 +109,7 @@ export default class UserCenterPanel extends React.Component{
                 disabled={!editing}
                 action="/avatar"
               >
-                {currentUser.avatar ? <img src={"http://www.potafish.com/avatar/"+currentUser.avatar} style={{height:'100%', width:'100%'}}/> : uploadButton}
+                {currentUser.avatar ? <img src={"http://www.potafish.com/avatar/"+currentUser.avatar} style={{height:'150px', width:'150px'}}/> : uploadButton}
               </Upload>
             </div>
             <div  style={{marginBottom: '8px'}}>
