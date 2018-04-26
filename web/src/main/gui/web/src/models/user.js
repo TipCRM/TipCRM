@@ -1,5 +1,5 @@
 import { fetchCurrentUser,
-  fetchUserByName, createNewUser,
+  fetchUserByName, createNewUser, changeMyInfo,
   fetchUserDetailInfo, disMissUser, changeUserDepartment,
   updateUserInfo, fetchCompanyUsers, changePassword,
   changeUserLevel} from '../services/api';
@@ -12,6 +12,7 @@ export default {
     selectUserInfo: {},
     users:[],
     companyUsers: [],
+    editingMyInfo: false,
   },
   effects: {
     *getCurrentUser(_,{call, put}){
@@ -65,9 +66,9 @@ export default {
       const response = yield call(changePassword, payload);
       if (response.status === 200){
         message.success("修改密码成功");
-        yield put({
-          type: 'login/logout'
-        })
+        //yield put({
+        //  type: 'login/logout'
+        //})
       }
     },
     *changeUserDepartment({payload}, {call, put, select}){
@@ -100,6 +101,20 @@ export default {
       const response = yield call(changeUserLevel, payload);
       if (response.status === 200){
         message.success("修改员工等级成功！");
+      }
+    },
+    *changeMyInfo({payload}, {call, put}){
+      const response = yield call(changeMyInfo, payload);
+      if (response.status === 200){
+        message.success("修改信息成功！");
+        const {dispatch} = this.props;
+        dispatch({
+          type: 'user/saveEditStatus',
+          payload: false,
+        })
+        yield put({
+          type: 'getCurrentUser'
+        })
       }
     }
   },
@@ -135,6 +150,12 @@ export default {
       return{
         ...state,
         companyUsers: payload,
+      }
+    },
+    saveEditStatus(state, {payload}){
+      return{
+        ...state,
+        editingMyInfo: payload
       }
     }
   },

@@ -8,6 +8,7 @@ const apis = {
   'POST /public/api/user/query': 'http://www.potafish.com',
   'PUT /public/api/user/department': 'http://www.potafish.com',
   'PUT /public/api/user/password': 'http://www.potafish.com',
+  'PUT /public/api/user/me': 'http://www.potafish.com',
 
   // permissions
   'POST /public/api/my/customers' :'http://www.potafish.com',
@@ -38,6 +39,9 @@ const apis = {
   'POST /public/api/department': 'http://www.potafish.com',
   'PUT /public/api/department': 'http://www.potafish.com',
   'DELETE /public/api/department/*': 'http://www.potafish.com',
+
+  //utils
+  'GET /public/api/mail':'http://www.potafish.com'
 };
 
 export default delay(apis, 1000);

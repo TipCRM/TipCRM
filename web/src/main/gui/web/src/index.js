@@ -23,6 +23,7 @@ app.model(require('./models/role').default);
 app.model(require('./models/permission').default);
 app.model(require('./models/config').default);
 app.model(require('./models/department').default);
+app.model(require('./models/util').default);
 
 // 4. Router
 app.router(require('./router').default);

@@ -67,6 +67,12 @@ export async function changeUserLevel(params){
     body: params,
   })
 }
+export async function changeMyInfo(params){
+  return request('/public/api/user/me', {
+    method: 'PUT',
+    body: params,
+  });
+}
 
 // menu api
 export async function fakeGetMenu(){
@@ -180,4 +186,10 @@ export async function uploadAvatar(){
   return request('/avatar', {
     method: 'POST'
   });
+}
+
+
+// utils
+export async function sendNotification(params){
+  return request('/public/api/mail?type=' + params.type+'&email='+params.email);
 }

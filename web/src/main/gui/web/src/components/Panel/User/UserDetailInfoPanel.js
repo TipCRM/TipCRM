@@ -154,8 +154,9 @@ export default class UserDetailInfoPanel extends React.Component{
                 selectingDepartment ? <a style={{marginLeft:'8px'}} onClick={this.handleCancelSaveDepartment.bind(this)}><Icon type="close"/></a> : ''
               }
             </FormItem>
+            <FormItem label="职位" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.roles ? selectUserInfo.roles[0] :''}</FormItem>
             <FormItem label="员工等级" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.level}</FormItem>
-            <FormItem label="提成比例" {...formItemLayout} style={{marginTop:'-24px'}}>{createNew ? <Input value={selectUserInfo.idCard} size="small"/> : selectUserInfo.hireTime}</FormItem>
+            <FormItem label="提成比例" {...formItemLayout} style={{marginTop:'-24px'}}>{createNew ? <Input value={selectUserInfo.paymentPercentage} size="small"/> : selectUserInfo.paymentPercentage} %</FormItem>
             {
               createNew ? '':<FormItem label="入职时间" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.hireTime}</FormItem>
             }
@@ -164,6 +165,15 @@ export default class UserDetailInfoPanel extends React.Component{
             }
             {
               createNew ? '': <FormItem label="状态" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.status}</FormItem>
+            }
+            {
+              selectUserInfo.dismissUser ? <FormItem label="离职经办人" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.dismissUser}</FormItem> : ''
+            }
+            {
+              selectUserInfo.dismissUser ? <FormItem label="离职时间" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.dismissDate}</FormItem> : ''
+            }
+            {
+              selectUserInfo.dismissUser ? <FormItem label="备注" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.dismissReason}</FormItem> : ''
             }
           </Form>
         </div>

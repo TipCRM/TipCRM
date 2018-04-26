@@ -37,6 +37,9 @@ export default class CompanyUserPanel extends React.Component{
     advanceCheckedDead: false,
     advanceFilter: "",
     advanceSelectDepartments: [],
+    // quick search
+    checkMyDepartmentUsers: false,
+    checkActiveUsers: false,
   }
   componentDidMount(){
     const {dispatch, menuId} = this.props;
@@ -142,6 +145,8 @@ export default class CompanyUserPanel extends React.Component{
         advanceSelectDepartments: [],
         filterCondition:{"criteria":[]},
         sorterCondition:{},
+        checkMyDepartmentUsers: false,
+        checkActiveUsers: false,
       });
     } else{
       this.setState({
@@ -236,9 +241,45 @@ export default class CompanyUserPanel extends React.Component{
     });
   }
 
+  handleActiveUsers(checked){
+    var { sorterCondition, currentPage, pageSize, filterCondition} = this.state;
+    const {dispatch} = this.props;
+    /** init page condition **/
+    let pageCondition = {page: currentPage, size: pageSize};
+    /** init request **/
+    let request = {...filterCondition, ...pageCondition, ...sorterCondition};
+    dispatch({
+      type:'user/listCompanyUsers',
+      payload:request,
+    });
+    this.setState({
+      filterCondition: filterCondition,
+      sorterCondition: sorterCondition,
+      checkActiveUsers: checked,
+    });
+  }
+
+  handleMyDepartmentUsers(checked){
+    var { sorterCondition, currentPage, pageSize, filterCondition} = this.state;
+    const {dispatch} = this.props;
+    /** init page condition **/
+    let pageCondition = {page: currentPage, size: pageSize};
+    /** init request **/
+    let request = {...filterCondition, ...pageCondition, ...sorterCondition};
+    dispatch({
+      type:'user/listCompanyUsers',
+      payload:request,
+    });
+    this.setState({
+      filterCondition: filterCondition,
+      sorterCondition: sorterCondition,
+      checkMyDepartmentUsers: checked,
+    });
+  }
+
   render(){
     const {companyUsers, userLoading, menuPermissions, departments} = this.props;
-    const {showUserDetail, createNew, selectUser,
+    const {showUserDetail, createNew, selectUser, checkActiveUsers, checkMyDepartmentUsers,
       advanceSearch, advanceCheckedDead, advanceCheckedAlive, advanceFilter, advanceSelectDepartments} = this.state;
     //init permissions
     const {permissions} = menuPermissions;
@@ -248,8 +289,8 @@ export default class CompanyUserPanel extends React.Component{
     const enableDelete = permissions.filter(item => item === getPermission('USER_DELETE')).length > 0;
     const enableAasign = permissions.filter(item => item === getPermission('ROLE_ASSIGN')).length > 0;
 
-    const tags = [{content: '在职员工',checked: false, handleTagChange: {}},
-      {content: '部门员工',checked: true, handleTagChange: {}},];
+    const tags = [{content: '在职员工',checked: checkActiveUsers, handleTagChange: this.handleActiveUsers.bind(this)},
+      {content: '部门员工',checked: checkMyDepartmentUsers, handleTagChange: this.handleMyDepartmentUsers.bind(this)},];
     const searchCell = (<DepartmentUserSearchCell
       searchByName={this.handlerOnSearch.bind(this)}
       enableAdd={enableAdd} createNewUser={this.handleCreateNewUser.bind(this)}
