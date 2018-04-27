@@ -41,7 +41,10 @@ const apis = {
   'DELETE /public/api/department/*': 'http://www.potafish.com',
 
   //utils
-  'GET /public/api/mail':'http://www.potafish.com'
+  'GET /public/api/mail':'http://www.potafish.com',
+
+  // level
+  'GET /public/api/levels': 'http://www.potafish.com',
 };
 
 export default delay(apis, 1000);

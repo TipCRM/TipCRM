@@ -4,21 +4,25 @@
 import React from 'react';
 import CommonSpin from '../../Common/CommonSpin';
 import {connect} from 'dva';
-import {Input, Button, Icon, Col, Upload, Form, Modal, Select} from 'antd';
+import {Input, Button, Icon, Col, Upload, Form, Modal, Select, message} from 'antd';
 import styles from './Index.less';
 const FormItem = Form.Item;
 const {TextArea} = Input;
 const {Option} = Select;
 
-@connect(({loading, user})=>({
+@connect(({loading, user, level})=>({
   userLoading: loading.models.user,
-  selectUserInfo: user.selectUserInfo
+  selectUserInfo: user.selectUserInfo,
+  levels: level.levels,
 }))
 export default class UserDetailInfoPanel extends React.Component{
   state={
     createNew: this.props.createNew,
     selectingDepartment: false,
     selectDepartment: undefined,
+    selectingLevel: false,
+    selectedLevel: undefined,
+    paymentPercentage: this.props.selectUserInfo.paymentPercentage,
   }
   componentDidMount(){
     const {dispatch, selectUser} = this.props;
@@ -36,6 +40,9 @@ export default class UserDetailInfoPanel extends React.Component{
         payload: {}
       });
     }
+    dispatch({
+      type: 'level/listLevels',
+    });
   }
 
   handleSaveUser(selectUserInfo){
@@ -87,9 +94,39 @@ export default class UserDetailInfoPanel extends React.Component{
     });
   }
 
+  handleSaveOrEditLevel(){
+    const {selectingLevel, selectedLevel, paymentPercentage} = this.state;
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'user'
+    });
+    this.setState({
+      selectingLevel: !selectingLevel,
+    });
+  }
+  handleCancelSaveLevel(){
+    this.setState({
+      selectingLevel: !this.state.selectingLevel,
+      selectedLevel: undefined,
+    });
+  }
+  handlePaymentPercentageChange(e){
+    try {
+      const percentage = parseInt(e.target.value);
+      if (percentage> 100 || percentage < 0){
+        throw "percentage should between 0 and 100";
+      }
+      this.setState({
+        paymentPercentage: percentage,
+      });
+    } catch (e){
+      message.error("提成比例应该在0-100之间");
+    }
+  }
+
   render(){
-    const {selectUserInfo, userLoading, handleCancelSave, enableEdit, departments} = this.props;
-    const {createNew, selectingDepartment, selectDepartment} =  this.state;
+    const {selectUserInfo, userLoading, handleCancelSave, enableEdit, departments, levels} = this.props;
+    const {createNew, selectingDepartment, selectDepartment, selectingLevel, selectedLevel, paymentPercentage} =  this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 8 },
@@ -155,8 +192,26 @@ export default class UserDetailInfoPanel extends React.Component{
               }
             </FormItem>
             <FormItem label="职位" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.roles ? selectUserInfo.roles[0] :''}</FormItem>
-            <FormItem label="员工等级" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.level}</FormItem>
-            <FormItem label="提成比例" {...formItemLayout} style={{marginTop:'-24px'}}>{createNew ? <Input value={selectUserInfo.paymentPercentage} size="small"/> : selectUserInfo.paymentPercentage} %</FormItem>
+            <FormItem label="员工等级" {...formItemLayout} style={{marginTop:'-24px'}}>
+              {
+                selectingLevel ? <Select value={selectedLevel} placeholder="选择部门"
+                                              onChange={this.handleDepartmentChange.bind(this)} style={{ width: '60%' }}>
+                  {
+                    levels.map(level => <Option key={level.id+""}>{level.name}</Option>)
+                  }
+                </Select> : selectUserInfo.department
+              }
+              {enableEdit ? <a style={{marginLeft:'8px'}} onClick={this.handleSaveOrEditLevel.bind(this, selectUserInfo)}>
+                <Icon type={selectingLevel ? 'save':'edit'}/></a> : ''}
+              {
+                selectingLevel ? <a style={{marginLeft:'8px'}} onClick={this.handleCancelSaveLevel.bind(this)}><Icon type="close"/></a> : ''
+              }
+            </FormItem>
+            <FormItem label="提成比例" {...formItemLayout} style={{marginTop:'-24px'}}>
+              {createNew || selectingLevel ? <Input value={paymentPercentage} size="small" style={{width: '20%'}}
+                                                    onChange={this.handlePaymentPercentageChange.bind(this)}/>
+                : selectUserInfo.paymentPercentage} %
+            </FormItem>
             {
               createNew ? '':<FormItem label="入职时间" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.hireTime}</FormItem>
             }

@@ -193,3 +193,9 @@ export async function uploadAvatar(){
 export async function sendNotification(params){
   return request('/public/api/mail?type=' + params.type+'&email='+params.email);
 }
+
+
+// level
+export async function listLevels(){
+  return request('/public/api/levels')
+}
