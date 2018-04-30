@@ -1,11 +1,11 @@
 package com.tipcrm.util;
 
-import com.google.common.collect.Lists;
-import org.apache.commons.lang3.StringUtils;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+
+import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 
 public class IDCardValidator {
 

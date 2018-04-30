@@ -1,10 +1,10 @@
 package com.tipcrm.cache;
 
-import com.tipcrm.dao.entity.Menu;
-import com.tipcrm.dao.entity.MenuPermission;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.tipcrm.dao.entity.Menu;
+import com.tipcrm.dao.entity.MenuPermission;
 
 public class MenuCache {
     /**

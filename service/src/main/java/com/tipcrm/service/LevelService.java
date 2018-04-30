@@ -1,9 +1,9 @@
 package com.tipcrm.service;
 
+import java.util.List;
+
 import com.tipcrm.bo.LevelBo;
 import com.tipcrm.bo.SaveLevelBo;
-
-import java.util.List;
 
 public interface LevelService {
     Integer createNewLevel(SaveLevelBo saveLevelBo);

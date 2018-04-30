@@ -1,5 +1,13 @@
 package com.tipcrm.service.impl;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+
 import com.tipcrm.config.FileConfiguration;
 import com.tipcrm.constant.AttachmentLocation;
 import com.tipcrm.constant.AttachmentType;
@@ -23,14 +31,6 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -109,10 +109,10 @@ public class FileServiceImpl implements FileService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
         Date date = new Date();
         directory.append(sdf.format(date))
-                .append("/");
+                 .append("/");
         sdf = new SimpleDateFormat("MM");
         directory.append(sdf.format(date))
-                .append("/");
+                 .append("/");
         return directory.toString();
     }
 

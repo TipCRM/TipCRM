@@ -1,5 +1,8 @@
 package com.tipcrm.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.tipcrm.constant.UserStatus;
 import com.tipcrm.dao.entity.Role;
 import com.tipcrm.dao.entity.Security;
@@ -19,9 +22,6 @@ import org.apache.shiro.util.ByteSource;
 import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Transactional
 public class TipCRMRealm extends AuthorizingRealm {

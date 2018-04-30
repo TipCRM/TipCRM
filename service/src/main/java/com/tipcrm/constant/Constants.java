@@ -1,8 +1,8 @@
 package com.tipcrm.constant;
 
-import com.google.common.collect.Maps;
-
 import java.util.Map;
+
+import com.google.common.collect.Maps;
 
 public class Constants {
     public static final Integer HASH_ITERATIONS = 2;

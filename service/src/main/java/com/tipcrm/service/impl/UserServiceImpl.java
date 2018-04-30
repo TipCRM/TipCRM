@@ -1,5 +1,20 @@
 package com.tipcrm.service.impl;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import com.google.common.collect.Sets;
 import com.tipcrm.bo.CreateUserBo;
 import com.tipcrm.bo.DismissBo;
@@ -64,20 +79,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
@@ -151,7 +152,7 @@ public class UserServiceImpl implements UserService {
         Security security = generateSecurity(user.getId(), randomPwd);
         securityRepository.save(security);
         mailService.sendSimpleEmail(createUserBo.getEmail(), "注册通知",
-                MessageUtil.getMessage(Constants.Email.ADD_USER_CONTENT, workNo, user.getEmail(), randomPwd));
+                                    MessageUtil.getMessage(Constants.Email.ADD_USER_CONTENT, workNo, user.getEmail(), randomPwd));
         return user.getWorkNo();
     }
 
@@ -344,14 +345,14 @@ public class UserServiceImpl implements UserService {
                 page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize());
             } else {
                 page = new PageRequest(queryRequestBo.getPage() - 1, queryRequestBo.getSize(),
-                        new Sort(querySortBo.getDirection(),
-                                Constants.SortFieldName.User.fieldMap.get(querySortBo.getFieldName())));
+                                       new Sort(querySortBo.getDirection(),
+                                                Constants.SortFieldName.User.fieldMap.get(querySortBo.getFieldName())));
             }
             Specification<User> specification = new UserSpecification(queryRequestBo);
             Page<User> users = userRepository.findAll(specification, page);
             List<UserBo> customerBos = convertToUserBos(users.getContent());
             QueryResultBo<UserBo> queryResultBo = new QueryResultBo<>(customerBos, queryRequestBo.getPage(), queryRequestBo.getSize(),
-                    users.getTotalElements(), users.getTotalPages());
+                                                                      users.getTotalElements(), users.getTotalPages());
             return queryResultBo;
         } catch (Exception e) {
             throw new QueryException("查询条件错误", e);
@@ -483,68 +484,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    static class UserSpecification implements Specification<User> {
-        private QueryRequestBo queryRequestBo;
-
-        public UserSpecification(QueryRequestBo queryRequestBo) {
-            this.queryRequestBo = queryRequestBo;
-        }
-
-        @Override
-        public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-            List<Predicate> predicates = new ArrayList<Predicate>();
-            if (!CollectionUtils.isEmpty(queryRequestBo.getCriteria())) {
-                for (QueryCriteriaBo criteria : queryRequestBo.getCriteria()) {
-                    Path path = null;
-                    switch (criteria.getFieldName()) {
-                        case Constants.QueryFieldName.User.USER_NAME:
-                            path = root.get("userName");
-                            String userName = (String) criteria.getValue();
-                            if (StringUtils.isNotBlank(userName)) {
-                                predicates.add(criteriaBuilder.like(path, "%" + userName + "%"));
-                            }
-                            break;
-                        case Constants.QueryFieldName.User.STATUS:
-                            path = root.get("status").get("id");
-                            List statuses = (List) criteria.getValue();
-                            if (!CollectionUtils.isEmpty(statuses)) {
-                                predicates.add(path.in(statuses.toArray()));
-                            }
-                            break;
-                        case Constants.QueryFieldName.User.DEPARTMENT_ID:
-                            path = root.get("department").get("id");
-                            List departmentId = (List) criteria.getValue();
-                            if (!CollectionUtils.isEmpty(departmentId)) {
-                                predicates.add(path.in(departmentId.toArray()));
-                            }
-                            break;
-                        case Constants.QueryFieldName.User.LEVEL_ID:
-                            path = root.get("level").get("id");
-                            List levelIds = (List) criteria.getValue();
-                            if (!CollectionUtils.isEmpty(levelIds)) {
-                                predicates.add(path.in(levelIds.toArray()));
-                            }
-                            break;
-                        case Constants.QueryFieldName.User.WORK_NO:
-                            path = root.get("workNo");
-                            Integer workNo = (Integer) criteria.getValue();
-                            if (workNo != null) {
-                                predicates.add(criteriaBuilder.like(path, "%" + workNo + "%"));
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            Path path = root.get("id");
-            predicates.add(criteriaBuilder.gt(path, 0));
-            Predicate[] pre = new Predicate[predicates.size()];
-            criteriaQuery.where(predicates.toArray(pre));
-            return criteriaQuery.getRestriction();
-        }
-    }
-
     @Override
     public String generateChangePasswordValidationCode(String email) {
         String validationCode = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8);
@@ -621,7 +560,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-
     @Override
     public void dismiss(DismissBo dismissBo) {
         if (dismissBo.getUserId() == null) {
@@ -631,7 +569,7 @@ public class UserServiceImpl implements UserService {
             throw new BizException("原因不能为空");
         }
         if (dismissBo.getReason().length() > 255) {
-         throw new BizException("原因过长");
+            throw new BizException("原因过长");
         }
         User user = userRepository.findByIdWithoutDismiss(dismissBo.getUserId());
         if (user == null) {
@@ -650,5 +588,67 @@ public class UserServiceImpl implements UserService {
             departmentRepository.save(managed);
         }
         userRepository.save(user);
+    }
+
+    static class UserSpecification implements Specification<User> {
+        private QueryRequestBo queryRequestBo;
+
+        public UserSpecification(QueryRequestBo queryRequestBo) {
+            this.queryRequestBo = queryRequestBo;
+        }
+
+        @Override
+        public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+            List<Predicate> predicates = new ArrayList<Predicate>();
+            if (!CollectionUtils.isEmpty(queryRequestBo.getCriteria())) {
+                for (QueryCriteriaBo criteria : queryRequestBo.getCriteria()) {
+                    Path path = null;
+                    switch (criteria.getFieldName()) {
+                        case Constants.QueryFieldName.User.USER_NAME:
+                            path = root.get("userName");
+                            String userName = (String) criteria.getValue();
+                            if (StringUtils.isNotBlank(userName)) {
+                                predicates.add(criteriaBuilder.like(path, "%" + userName + "%"));
+                            }
+                            break;
+                        case Constants.QueryFieldName.User.STATUS:
+                            path = root.get("status").get("id");
+                            List statuses = (List) criteria.getValue();
+                            if (!CollectionUtils.isEmpty(statuses)) {
+                                predicates.add(path.in(statuses.toArray()));
+                            }
+                            break;
+                        case Constants.QueryFieldName.User.DEPARTMENT_ID:
+                            path = root.get("department").get("id");
+                            List departmentId = (List) criteria.getValue();
+                            if (!CollectionUtils.isEmpty(departmentId)) {
+                                predicates.add(path.in(departmentId.toArray()));
+                            }
+                            break;
+                        case Constants.QueryFieldName.User.LEVEL_ID:
+                            path = root.get("level").get("id");
+                            List levelIds = (List) criteria.getValue();
+                            if (!CollectionUtils.isEmpty(levelIds)) {
+                                predicates.add(path.in(levelIds.toArray()));
+                            }
+                            break;
+                        case Constants.QueryFieldName.User.WORK_NO:
+                            path = root.get("workNo");
+                            Integer workNo = (Integer) criteria.getValue();
+                            if (workNo != null) {
+                                predicates.add(criteriaBuilder.like(path, "%" + workNo + "%"));
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            Path path = root.get("id");
+            predicates.add(criteriaBuilder.gt(path, 0));
+            Predicate[] pre = new Predicate[predicates.size()];
+            criteriaQuery.where(predicates.toArray(pre));
+            return criteriaQuery.getRestriction();
+        }
     }
 }

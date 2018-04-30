@@ -1,5 +1,9 @@
 package com.tipcrm.web.publicapi;
 
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+
 import com.tipcrm.constant.Constants;
 import com.tipcrm.constant.MailType;
 import com.tipcrm.service.UserService;
@@ -11,9 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 
 @RestController
 @Api
