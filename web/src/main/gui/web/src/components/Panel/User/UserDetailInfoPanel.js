@@ -79,7 +79,7 @@ export default class UserDetailInfoPanel extends React.Component{
               disabled={!createNew}
               action="/avatar"
             >
-              {selectUserInfo.avatar ? <img src={"http://www.potafish.com/avatar/"+selectUserInfo.avatar} style={{height:'100%', width:'100%'}}/> : uploadButton}
+              {selectUserInfo.avatar ? <img src={"avatar/"+selectUserInfo.avatar} style={{height:'100%', width:'100%'}}/> : uploadButton}
             </Upload>
           </div>
           <div>
