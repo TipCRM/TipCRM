@@ -22,7 +22,7 @@ spring:
          name: plm2
       datasource:
          driverClassName: com.mysql.jdbc.Driver
-         url: jdbc:mysql://www.potafish.com:3306/TIP_CRM?zeroDateTimeBehavior=convertToNull&verifyServerCertificate=false&useSSL=true&useUnicode=true&characterEncoding=utf-8
+         url: jdbc:mysql://mysql.potafish.com:3408/TIP_CRM?zeroDateTimeBehavior=convertToNull&verifyServerCertificate=false&useSSL=true&useUnicode=true&characterEncoding=utf-8
          username:
          password:
       jackson:
