@@ -1,10 +1,10 @@
 package com.tipcrm.cache;
 
-import com.tipcrm.dao.entity.Configuration;
-import org.springframework.util.CollectionUtils;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.tipcrm.dao.entity.Configuration;
+import org.springframework.util.CollectionUtils;
 
 public class ConfigurationCache {
     private static List<Configuration> configurations = new ArrayList<>();

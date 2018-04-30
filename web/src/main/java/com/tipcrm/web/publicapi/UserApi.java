@@ -1,5 +1,10 @@
 package com.tipcrm.web.publicapi;
 
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import com.tipcrm.bo.ChangePasswordBo;
 import com.tipcrm.bo.CreateUserBo;
 import com.tipcrm.bo.DismissBo;
@@ -28,10 +33,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/public/api/")

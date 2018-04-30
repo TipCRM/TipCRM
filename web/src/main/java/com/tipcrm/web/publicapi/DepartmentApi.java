@@ -1,5 +1,7 @@
 package com.tipcrm.web.publicapi;
 
+import java.util.List;
+
 import com.tipcrm.bo.DepartmentBo;
 import com.tipcrm.bo.SaveDepartmentBo;
 import com.tipcrm.constant.Constants;
@@ -15,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/public/api")

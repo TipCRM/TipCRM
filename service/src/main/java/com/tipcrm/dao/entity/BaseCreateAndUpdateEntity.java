@@ -1,11 +1,12 @@
 package com.tipcrm.dao.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import java.util.Date;
 
 @MappedSuperclass
 public class BaseCreateAndUpdateEntity extends BaseCreateEntity {

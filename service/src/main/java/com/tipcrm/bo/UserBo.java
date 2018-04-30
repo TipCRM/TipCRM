@@ -1,13 +1,5 @@
 package com.tipcrm.bo;
 
-import com.tipcrm.dao.entity.Department;
-import com.tipcrm.dao.entity.Level;
-import com.tipcrm.dao.entity.User;
-import org.springframework.util.CollectionUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class UserBo extends UserBasicBo {
 
     private String email;

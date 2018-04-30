@@ -1,5 +1,12 @@
 package com.tipcrm.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Sets;
 import com.tipcrm.bo.MenuPermissionBo;
 import com.tipcrm.bo.PermissionBo;
@@ -21,13 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
@@ -163,7 +163,7 @@ public class PermissionServiceImpl implements PermissionService {
         Set<Integer> existIds = new HashSet<>();
         if (!CollectionUtils.isEmpty(permissionBos)) {
             existIds = permissionBos.stream().filter(permissionBo -> permissionBo.getChecked()).map(permissionBo -> permissionBo.getId()).collect(
-                    Collectors.toSet());
+                Collectors.toSet());
         }
         Set<Integer> needRemove = new HashSet<>();
         Set<Integer> needAdd = new HashSet<>();
@@ -254,7 +254,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public List<String> getMyPermission(Integer menuId) {
         List<String> menuPermissions = MenuCache.getMenuPermissions(menuId).stream().map(menuPermission -> menuPermission.getPermission().getName())
-                .collect(Collectors.toList());
+                                                .collect(Collectors.toList());
         Set<String> myPermission = getPermissionNamesByUserId(webContext.getCurrentUserId());
 
         menuPermissions.retainAll(myPermission);

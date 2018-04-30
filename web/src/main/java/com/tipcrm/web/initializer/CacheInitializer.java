@@ -1,5 +1,8 @@
 package com.tipcrm.web.initializer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.tipcrm.cache.ConfigurationCache;
 import com.tipcrm.cache.ListBoxCache;
 import com.tipcrm.cache.MenuCache;
@@ -27,9 +30,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @Order(value = 1)

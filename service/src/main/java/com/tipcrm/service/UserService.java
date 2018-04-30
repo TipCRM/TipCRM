@@ -1,5 +1,7 @@
 package com.tipcrm.service;
 
+import java.util.List;
+
 import com.tipcrm.bo.CreateUserBo;
 import com.tipcrm.bo.DismissBo;
 import com.tipcrm.bo.LoginBo;
@@ -12,8 +14,6 @@ import com.tipcrm.bo.UserDepartmentAssignBo;
 import com.tipcrm.bo.UserExtBo;
 import com.tipcrm.bo.UserLevelAssignBo;
 import com.tipcrm.dao.entity.User;
-
-import java.util.List;
 
 public interface UserService {
 

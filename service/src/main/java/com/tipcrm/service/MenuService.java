@@ -1,9 +1,9 @@
 package com.tipcrm.service;
 
+import java.util.List;
+
 import com.tipcrm.bo.MenuBo;
 import com.tipcrm.dao.entity.Menu;
-
-import java.util.List;
 
 public interface MenuService {
 

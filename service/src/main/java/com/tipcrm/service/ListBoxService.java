@@ -1,9 +1,9 @@
 package com.tipcrm.service;
 
+import java.util.List;
+
 import com.tipcrm.bo.ListBoxBo;
 import com.tipcrm.dao.entity.ListBox;
-
-import java.util.List;
 
 public interface ListBoxService {
 
