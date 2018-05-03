@@ -10,10 +10,9 @@ const FormItem = Form.Item;
 const {TextArea} = Input;
 const {Option} = Select;
 
-@connect(({loading, user, level})=>({
+@connect(({loading, user})=>({
   userLoading: loading.models.user,
   selectUserInfo: user.selectUserInfo,
-  levels: level.levels,
 }))
 export default class UserDetailInfoPanel extends React.Component{
   state={
@@ -40,9 +39,6 @@ export default class UserDetailInfoPanel extends React.Component{
         payload: {}
       });
     }
-    dispatch({
-      type: 'level/listLevels',
-    });
   }
 
   handleSaveUser(selectUserInfo){
@@ -94,12 +90,16 @@ export default class UserDetailInfoPanel extends React.Component{
     });
   }
 
-  handleSaveOrEditLevel(){
+  handleSaveOrEditLevel(selectUserInfo){
     const {selectingLevel, selectedLevel, paymentPercentage} = this.state;
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'user'
-    });
+    const {dispatch, levels} = this.props;
+    if (selectingLevel){
+      //const levelName = levels.filter(level => level.id === selectedLevel)[0].name;
+      dispatch({
+        type: 'user/changeUserLevel',
+        payload: {levelId: selectedLevel, paymentPercentage: paymentPercentage, userId: selectUserInfo.id}
+      });
+    }
     this.setState({
       selectingLevel: !selectingLevel,
     });
@@ -122,6 +122,11 @@ export default class UserDetailInfoPanel extends React.Component{
     } catch (e){
       message.error("提成比例应该在0-100之间");
     }
+  }
+  handleLevelChange(value){
+    this.setState({
+      selectedLevel: value,
+    });
   }
 
   render(){
@@ -194,12 +199,12 @@ export default class UserDetailInfoPanel extends React.Component{
             <FormItem label="职位" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.roles ? selectUserInfo.roles[0] :''}</FormItem>
             <FormItem label="员工等级" {...formItemLayout} style={{marginTop:'-24px'}}>
               {
-                selectingLevel ? <Select value={selectedLevel} placeholder="选择部门"
-                                              onChange={this.handleDepartmentChange.bind(this)} style={{ width: '60%' }}>
+                selectingLevel ? <Select value={selectedLevel} placeholder="选择等级"
+                                              onChange={this.handleLevelChange.bind(this)} style={{ width: '60%' }}>
                   {
                     levels.map(level => <Option key={level.id+""}>{level.name}</Option>)
                   }
-                </Select> : selectUserInfo.department
+                </Select> : selectUserInfo.level
               }
               {enableEdit ? <a style={{marginLeft:'8px'}} onClick={this.handleSaveOrEditLevel.bind(this, selectUserInfo)}>
                 <Icon type={selectingLevel ? 'save':'edit'}/></a> : ''}

@@ -197,5 +197,5 @@ export async function sendNotification(params){
 
 // level
 export async function listLevels(){
-  return request('/public/api/levels')
+  return request('/public/api/levels');
 }

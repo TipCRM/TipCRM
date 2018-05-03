@@ -11,13 +11,14 @@ import {Modal} from 'antd';
 import UserDetailInfoPanel from './UserDetailInfoPanel';
 import DepartmentUserSearchCell from './CompanyUserSearchCell';
 
-@connect(({user, loading, permission, department})=>
+@connect(({user, loading, permission, department, level})=>
   ({
     companyUsers: user.companyUsers,
     userLoading: loading.effects['user/listCompanyUsers'],
     menuPermissions: permission.menuPermissions,
     permissionsLoading: loading.effects['permission/getPermissionsByMenu'],
     departments: department.departments,
+    levels: level.levels,
   }))
 export default class CompanyUserPanel extends React.Component{
   state={
@@ -59,6 +60,10 @@ export default class CompanyUserPanel extends React.Component{
     // init department
     dispatch({
       type: 'department/listDepartments'
+    });
+    // init level
+    dispatch({
+      type: 'level/listLevels',
     });
   }
   handleTableRowSelect(record){
@@ -278,7 +283,7 @@ export default class CompanyUserPanel extends React.Component{
   }
 
   render(){
-    const {companyUsers, userLoading, menuPermissions, departments} = this.props;
+    const {companyUsers, userLoading, menuPermissions, departments, levels} = this.props;
     const {showUserDetail, createNew, selectUser, checkActiveUsers, checkMyDepartmentUsers,
       advanceSearch, advanceCheckedDead, advanceCheckedAlive, advanceFilter, advanceSelectDepartments} = this.state;
     //init permissions
@@ -323,7 +328,7 @@ export default class CompanyUserPanel extends React.Component{
         enableView ? <Modal footer="" visible={showUserDetail} title={createNew ? '创建新用户' : selectUser.name} width="40%"
                             onCancel={this.handleCloseUserInfo.bind(this)} destroyOnClose>
           <UserDetailInfoPanel selectUser={selectUser} departments = {departments}
-                               createNew={createNew}
+                               createNew={createNew}  levels={levels}
                                enableEdit = {enableEdit}
                                handleCancelSave = {this.handleCloseUserInfo.bind(this)}/>
         </Modal> : ""

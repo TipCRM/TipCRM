@@ -105,6 +105,10 @@ export default {
       const response = yield call(changeUserLevel, payload);
       if (response.status === 200){
         message.success("修改员工等级成功！");
+        yield put({
+          type: 'getUserDetailInfo',
+          payload: payload
+        });
       }
     },
     *changeMyInfo({payload}, {call, put}){

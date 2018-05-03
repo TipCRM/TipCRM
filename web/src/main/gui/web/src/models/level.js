@@ -10,7 +10,7 @@ export default{
   },
   effects: {
     *listLevels(_, {call, put}){
-      const response = call(listLevels);
+      const response = yield call(listLevels);
       yield put({
         type: 'saveLevels',
         payload: response.data,
