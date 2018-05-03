@@ -1,10 +1,12 @@
 package com.tipcrm.service.impl;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.tipcrm.bo.CreateDepartmentBo;
 import com.tipcrm.bo.DepartmentBo;
+import com.tipcrm.bo.SaveDepartmentBo;
+import com.tipcrm.bo.UserBasicBo;
 import com.tipcrm.dao.entity.Department;
 import com.tipcrm.dao.entity.User;
 import com.tipcrm.dao.repository.DepartmentRepository;
@@ -42,10 +44,15 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Integer createNewDepartment(CreateDepartmentBo createDepartmentBo) {
-        validateCreateDepartmentBo(createDepartmentBo);
-        Department department = convertToDepartment(createDepartmentBo);
+    public Integer createNewDepartment(SaveDepartmentBo saveDepartmentBo) {
+        validateSaveDepartmentBo(saveDepartmentBo);
+        Department department = convertToDepartment(saveDepartmentBo);
         department = departmentRepository.save(department);
+        if (saveDepartmentBo.getManagerId() != null) {
+            User manager = userRepository.findOne(saveDepartmentBo.getManagerId());
+            manager.setDepartment(department);
+            userRepository.save(manager);
+        }
         return department.getId();
     }
 
@@ -55,34 +62,36 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Integer updateDepartment(Integer departmentId, CreateDepartmentBo createDepartmentBo) {
-        validateUpdateDepartment(departmentId, createDepartmentBo);
-        Department department = departmentRepository.findOne(departmentId);
-        department.setName(createDepartmentBo.getName());
+    public Integer updateDepartment(SaveDepartmentBo saveDepartmentBo) {
+        validateUpdateDepartment(saveDepartmentBo);
+        Department department = departmentRepository.findByIdAndDeleteTimeIsNull(saveDepartmentBo.getId());
+        department.setName(saveDepartmentBo.getName());
         User manager = null;
-        if (createDepartmentBo.getManagerId() != null) {
-            if (!userService.isUserExist(createDepartmentBo.getManagerId())) {
-                throw new BizException("经理不存在");
+        if (saveDepartmentBo.getManagerId() != null) {
+            if (!userService.isUserExist(saveDepartmentBo.getManagerId())) {
+                throw new BizException("用户不存在");
             }
-            manager = userRepository.findOne(createDepartmentBo.getManagerId());
+            manager = userRepository.findOne(saveDepartmentBo.getManagerId());
+            manager.setDepartment(department);
+            userRepository.save(manager);
         }
         department.setManager(manager);
         departmentRepository.save(department);
         return department.getId();
     }
 
-    private void validateUpdateDepartment(Integer departmentId, CreateDepartmentBo createDepartmentBo) {
-        if (departmentId == null) {
+    private void validateUpdateDepartment(SaveDepartmentBo saveDepartmentBo) {
+        if (saveDepartmentBo.getId() == null) {
             throw new BizException("部门Id不能为空");
         }
-        Department department = departmentRepository.findOne(departmentId);
+        Department department = departmentRepository.findOne(saveDepartmentBo.getId());
         if (department == null) {
             throw new BizException("部门不存在");
         }
-        if (StringUtils.isBlank(createDepartmentBo.getName())) {
+        if (StringUtils.isBlank(saveDepartmentBo.getName())) {
             throw new BizException("部门名称不能为空");
         }
-        Department departmentByName = departmentRepository.findByNameAndDeleteTimeIsNull(createDepartmentBo.getName());
+        Department departmentByName = departmentRepository.findByNameAndDeleteTimeIsNull(saveDepartmentBo.getName());
         if (departmentByName != null && !departmentByName.getId().equals(department.getId())) {
             throw new BizException("部门名称已被占用");
         }
@@ -105,6 +114,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = departmentRepository.findOne(departmentId);
         department.setDeleteTime(new Date());
         department.setDeleteUser(webContext.getCurrentUser());
+        List<User> users = userRepository.findByDepartmentId(departmentId);
+        if (!CollectionUtils.isEmpty(users)) {
+            users.forEach(user -> user.setDepartment(null));
+            userRepository.save(users);
+        }
         departmentRepository.save(department);
     }
 
@@ -116,21 +130,21 @@ public class DepartmentServiceImpl implements DepartmentService {
         return department != null;
     }
 
-    private void validateCreateDepartmentBo(CreateDepartmentBo createDepartmentBo) {
-        if (isDepartmentExist(createDepartmentBo.getName())) {
+    private void validateSaveDepartmentBo(SaveDepartmentBo saveDepartmentBo) {
+        if (isDepartmentExist(saveDepartmentBo.getName())) {
             throw new BizException("部门已存在");
         }
-        if (createDepartmentBo.getManagerId() != null && !userService.isUserExist(createDepartmentBo.getManagerId())) {
+        if (saveDepartmentBo.getManagerId() != null && !userService.isUserExist(saveDepartmentBo.getManagerId())) {
             throw new BizException("该经理不存在");
         }
     }
 
-    private Department convertToDepartment(CreateDepartmentBo createDepartmentBo) {
+    private Department convertToDepartment(SaveDepartmentBo saveDepartmentBo) {
         Department department = new Department();
-        department.setName(createDepartmentBo.getName());
+        department.setName(saveDepartmentBo.getName());
         User manager = null;
-        if (createDepartmentBo.getManagerId() != null) {
-            manager = userRepository.findOne(createDepartmentBo.getManagerId());
+        if (saveDepartmentBo.getManagerId() != null) {
+            manager = userRepository.findOne(saveDepartmentBo.getManagerId());
         }
         department.setManager(manager);
         department.setEntryTime(new Date());
@@ -156,12 +170,16 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentBo.setId(department.getId());
         User manager = department.getManager();
         if (manager != null) {
-            departmentBo.setManagerId(manager.getId());
-            departmentBo.setManagerName(manager.getUserName());
+            UserBasicBo userBasicBo = new UserBasicBo();
+            userBasicBo.setId(manager.getId());
+            userBasicBo.setName(manager.getUserName());
+            userBasicBo.setWorkNo(manager.getWorkNo());
+            departmentBo.setManager(userBasicBo);
         }
         departmentBo.setName(department.getName());
         departmentBo.setEntryTime(department.getEntryTime());
         departmentBo.setEntryUser(department.getEntryUser().getUserName());
+        departmentBo.setTotal(userRepository.countByDepartmentId(department.getId()));
         return departmentBo;
     }
 

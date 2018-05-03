@@ -1,61 +1,20 @@
 package com.tipcrm.bo;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import com.tipcrm.dao.entity.Role;
 import org.springframework.util.CollectionUtils;
 
-public class RoleBo {
-    private Integer id;
+public class RoleBo extends RoleBasicBo {
+    private String entryUser;
 
-    private String name;
+    private Date entryDatetime;
 
-    private String displayName;
+    private String updateUser;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    @Override
-    public int hashCode() {
-        return id;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if ((obj == null) || (obj.getClass() != this.getClass())) {
-            return false;
-        }
-        if (id == ((RoleBo) obj).id) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    private Date updateDate;
 
     public static List<RoleBo> toRoleBos(List<Role> roles) {
         List<RoleBo> roleBos = new ArrayList<>();
@@ -77,7 +36,55 @@ public class RoleBo {
         RoleBo roleBo = new RoleBo();
         roleBo.setId(role.getId());
         roleBo.setName(role.getName());
-        roleBo.setDisplayName(role.getDisplayName());
+        roleBo.setEditable(role.getEditable());
+        roleBo.setEntryUser(role.getEntryUser().getUserName());
+        roleBo.setEntryDatetime(role.getEntryTime());
+        if (role.getUpdateUser() != null) {
+            roleBo.setUpdateUser(role.getUpdateUser().getUserName());
+            roleBo.setUpdateDate(role.getUpdateTime());
+        }
         return roleBo;
+    }
+
+    public String getEntryUser() {
+        return entryUser;
+    }
+
+    public void setEntryUser(String entryUser) {
+        this.entryUser = entryUser;
+    }
+
+    public Date getEntryDatetime() {
+        return entryDatetime == null ? null : (Date) entryDatetime.clone();
+    }
+
+    public void setEntryDatetime(Date entryDatetime) {
+        this.entryDatetime = entryDatetime == null ? null : (Date) entryDatetime.clone();
+    }
+
+    public String getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(String updateUser) {
+        this.updateUser = updateUser;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate == null ? null : (Date) updateDate.clone();
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate == null ? null : (Date) updateDate.clone();
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }

@@ -1,28 +1,36 @@
 package com.tipcrm.cache;
-import java.util.HashMap;
-import java.util.Map;
 
-import com.google.common.collect.Maps;
-import org.apache.commons.lang3.StringUtils;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.tipcrm.dao.entity.Configuration;
 import org.springframework.util.CollectionUtils;
 
 public class ConfigurationCache {
-    private static Map<String, String> configurations = Maps.newHashMap();
+    private static List<Configuration> configurations = new ArrayList<>();
 
-    public static void pushConfigurations(Map<String, String> configurationMap) {
+    public static void pushConfigurations(List<Configuration> configurations) {
         if (CollectionUtils.isEmpty(configurations)) {
-            configurations = Maps.newHashMap();
+            configurations = new ArrayList<>();
         }
-        configurations.putAll(configurationMap);
+        configurations.forEach(ConfigurationCache::pushConfiguration);
     }
-    public static void pushConfiguration(String key, String value) {
-        Map<String, String> configuration = new HashMap<>();
-        configuration.put(key, value);
-        pushConfigurations(configuration);
+
+    public static void pushConfiguration(Configuration configuration) {
+        for (Configuration config : configurations) {
+            if (config.getKey().equals(configuration.getKey())) {
+                config.setValue(configuration.getValue());
+                return;
+            }
+        }
+        configurations.add(configuration);
     }
-    public static String get(String key){
-        if (StringUtils.isNotBlank(key)) {
-            return configurations.get(key);
+
+    public static Configuration get(String key) {
+        for (Configuration configuration : configurations) {
+            if (configuration.getKey().equals(key)) {
+                return configuration;
+            }
         }
         return null;
     }

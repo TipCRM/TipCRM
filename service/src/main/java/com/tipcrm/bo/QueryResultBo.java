@@ -1,4 +1,5 @@
 package com.tipcrm.bo;
+
 import java.util.List;
 
 public class QueryResultBo<T> {
@@ -21,15 +22,15 @@ public class QueryResultBo<T> {
         this.totalPage = totalPage;
     }
 
+    public QueryResultBo() {
+    }
+
     public List<T> getData() {
         return data;
     }
 
     public void setData(List<T> data) {
         this.data = data;
-    }
-
-    public QueryResultBo() {
     }
 
     public Integer getPage() {

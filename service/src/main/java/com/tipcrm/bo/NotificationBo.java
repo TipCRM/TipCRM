@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class NotificationBo {
     private Integer id;
-    private String  subject;
-    private String  content;
-    private String  sender;
+    private String subject;
+    private String content;
+    private String sender;
     private Date time;
-    private String  status;
+    private String status;
 
     public String getContent() {
         return content;
@@ -19,11 +19,11 @@ public class NotificationBo {
     }
 
     public Date getTime() {
-        return time;
+        return time == null ? null : (Date) time.clone();
     }
 
     public void setTime(Date time) {
-        this.time = time;
+        this.time = time == null ? null : (Date) time.clone();
     }
 
     public String getSender() {
@@ -58,6 +58,3 @@ public class NotificationBo {
         this.subject = subject;
     }
 }
-
-
-//~ Formatted by Jindent --- http://www.jindent.com

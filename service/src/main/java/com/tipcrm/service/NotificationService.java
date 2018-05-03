@@ -1,4 +1,5 @@
 package com.tipcrm.service;
+
 import java.util.List;
 
 import com.tipcrm.bo.NotificationBo;

@@ -1,4 +1,5 @@
 package com.tipcrm.constant;
+
 public enum ListBoxCategory {
     CUSTOMER_STATUS,
     APPROVAL_STATUS,
@@ -9,4 +10,6 @@ public enum ListBoxCategory {
     OPERATION_TYPE,
     APPROVAL_TYPE,
     REVIEW_TYPE,
+    ATTACHMENT_TYPE,
+    ATTACHMENT_LOCATION
 }

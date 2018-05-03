@@ -1,4 +1,5 @@
 package com.tipcrm.service.impl;
+
 import com.tipcrm.exception.BizException;
 import com.tipcrm.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class MailServiceImpl implements MailService {
         try {
             javaMailSender.send(message);
         } catch (Exception e) {
-            throw new BizException("邮件发送失败，请检查邮件配置");
+            throw new BizException("邮件发送失败，请检查邮件配置", e);
         }
     }
 }

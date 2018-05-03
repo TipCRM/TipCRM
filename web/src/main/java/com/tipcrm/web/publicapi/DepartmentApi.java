@@ -1,8 +1,9 @@
 package com.tipcrm.web.publicapi;
+
 import java.util.List;
 
-import com.tipcrm.bo.CreateDepartmentBo;
 import com.tipcrm.bo.DepartmentBo;
+import com.tipcrm.bo.SaveDepartmentBo;
 import com.tipcrm.constant.Constants;
 import com.tipcrm.service.DepartmentService;
 import com.tipcrm.web.util.JsonEntity;
@@ -37,16 +38,15 @@ public class DepartmentApi {
     }
 
     @RequestMapping(value = "/department", method = RequestMethod.POST)
-    @RequiresPermissions(value = Constants.Permission.DEPARTMENT_ADD_UPDATE)
-    public JsonEntity<Integer> addDepartment(@RequestBody CreateDepartmentBo createDepartmentBo) {
-        return ResponseHelper.createInstance(departmentService.createNewDepartment(createDepartmentBo));
+    @RequiresPermissions(value = Constants.Permission.DEPARTMENT_ADD)
+    public JsonEntity<Integer> addDepartment(@RequestBody SaveDepartmentBo saveDepartmentBo) {
+        return ResponseHelper.createInstance(departmentService.createNewDepartment(saveDepartmentBo));
     }
 
-    @RequestMapping(value = "/department/{departmentId}", method = RequestMethod.PUT)
-    @RequiresPermissions(value = Constants.Permission.DEPARTMENT_ADD_UPDATE)
-    public JsonEntity<Integer> updateDepartment(@PathVariable("departmentId") Integer departmentId, @RequestBody CreateDepartmentBo createDepartmentBo)
-        {
-        return ResponseHelper.createInstance(departmentService.updateDepartment(departmentId, createDepartmentBo));
+    @RequestMapping(value = "/department", method = RequestMethod.PUT)
+    @RequiresPermissions(value = Constants.Permission.DEPARTMENT_UPDATE)
+    public JsonEntity<Integer> updateDepartment(@RequestBody SaveDepartmentBo saveDepartmentBo) {
+        return ResponseHelper.createInstance(departmentService.updateDepartment(saveDepartmentBo));
     }
 
     @RequestMapping(value = "/department/{departmentId}", method = RequestMethod.DELETE)

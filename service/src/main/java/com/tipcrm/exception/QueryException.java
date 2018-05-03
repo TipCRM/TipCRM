@@ -1,4 +1,5 @@
 package com.tipcrm.exception;
+
 public class QueryException extends RuntimeException {
     public QueryException() {
     }

@@ -1,4 +1,5 @@
 package com.tipcrm.dao.entity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,6 +24,9 @@ public class Menu {
     @Column(name = "display_name")
     private String displayName;
 
+    @Column(name = "sequence")
+    private Integer sequence;
+
     @Column(name = "icon")
     private String icon;
 
@@ -30,11 +34,15 @@ public class Menu {
     @JoinColumn(name = "parent_id")
     private Menu parent;
 
-    @Column(name = "permission")
-    private String permission;
+    @ManyToOne
+    @JoinColumn(name = "permission_id", referencedColumnName = "id")
+    private Permission permission;
 
     @Column(name = "url")
     private String url;
+
+    @Column(name = "active")
+    private Boolean active;
 
     public Integer getId() {
         return id;
@@ -60,6 +68,14 @@ public class Menu {
         this.displayName = displayName;
     }
 
+    public Integer getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(Integer sequence) {
+        this.sequence = sequence;
+    }
+
     public String getIcon() {
         return icon;
     }
@@ -76,11 +92,11 @@ public class Menu {
         this.parent = parent;
     }
 
-    public String getPermission() {
+    public Permission getPermission() {
         return permission;
     }
 
-    public void setPermission(String permission) {
+    public void setPermission(Permission permission) {
         this.permission = permission;
     }
 
@@ -90,5 +106,13 @@ public class Menu {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

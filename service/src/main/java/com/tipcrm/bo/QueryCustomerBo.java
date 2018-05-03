@@ -1,4 +1,5 @@
 package com.tipcrm.bo;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -66,11 +67,11 @@ public class QueryCustomerBo {
     }
 
     public Date getLastCommunicationTime() {
-        return lastCommunicationTime;
+        return lastCommunicationTime == null ? null : (Date) lastCommunicationTime.clone();
     }
 
     public void setLastCommunicationTime(Date lastCommunicationTime) {
-        this.lastCommunicationTime = lastCommunicationTime;
+        this.lastCommunicationTime = lastCommunicationTime == null ? null : (Date) lastCommunicationTime.clone();
     }
 
     public String getLastCommunicationContent() {
@@ -82,11 +83,11 @@ public class QueryCustomerBo {
     }
 
     public Date getNextCommunicationTime() {
-        return nextCommunicationTime;
+        return nextCommunicationTime == null ? null : (Date) nextCommunicationTime.clone();
     }
 
     public void setNextCommunicationTime(Date nextCommunicationTime) {
-        this.nextCommunicationTime = nextCommunicationTime;
+        this.nextCommunicationTime = nextCommunicationTime == null ? null : (Date) nextCommunicationTime.clone();
     }
 
     public BigDecimal getIntentionalAmount() {

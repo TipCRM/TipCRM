@@ -30,25 +30,22 @@ public class CustomerApi {
     private CustomerService customerService;
 
     @RequestMapping(value = "/customer", method = RequestMethod.POST)
-    @RequiresPermissions(Constants.Permission.CUSTOMER_ADD_UPDATE)
+    @RequiresPermissions(Constants.Permission.CUSTOMER_ADD)
     public JsonEntity<OptCustomerResultBo> createNewCustomer(@RequestBody CreateCustomerBo createCustomerBo) {
         return ResponseHelper.createInstance(customerService.createNewCustomer(createCustomerBo));
     }
 
     @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.PUT)
-    @RequiresPermissions(Constants.Permission.CUSTOMER_ADD_UPDATE)
     public JsonEntity<Integer> updateCustomer() {
         return null;
     }
 
     @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.DELETE)
-    @RequiresPermissions(Constants.Permission.CUSTOMER_DELETE)
     public JsonEntity<OptCustomerResultBo> deleteCustomer(@PathVariable("customerId") Integer customerId) {
         return ResponseHelper.createInstance(customerService.deleteCustomer(customerId));
     }
 
     @RequestMapping(value = "/customer/transfer/out", method = RequestMethod.POST)
-    @RequiresPermissions(Constants.Permission.CUSTOMER_TRANSFER)
     public JsonEntity<OptCustomerResultBo> transferCustomerOut(@RequestBody CustomerTransferRequestBo transferBo) {
         return ResponseHelper.createInstance(customerService.transferCustomer(transferBo));
     }

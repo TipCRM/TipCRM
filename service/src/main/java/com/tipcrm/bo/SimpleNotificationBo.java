@@ -1,5 +1,4 @@
 package com.tipcrm.bo;
-import com.tipcrm.constant.NotificationType;
 
 public class SimpleNotificationBo {
 

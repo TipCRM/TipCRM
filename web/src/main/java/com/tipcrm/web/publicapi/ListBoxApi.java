@@ -1,4 +1,5 @@
 package com.tipcrm.web.publicapi;
+
 import java.util.List;
 
 import com.tipcrm.bo.ListBoxBo;

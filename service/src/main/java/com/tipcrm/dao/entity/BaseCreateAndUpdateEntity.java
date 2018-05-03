@@ -1,4 +1,5 @@
 package com.tipcrm.dao.entity;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,7 +10,7 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public class BaseCreateAndUpdateEntity extends BaseCreateEntity {
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "update_id")
     private User updateUser;
 
@@ -25,10 +26,10 @@ public class BaseCreateAndUpdateEntity extends BaseCreateEntity {
     }
 
     public Date getUpdateTime() {
-        return updateTime;
+        return updateTime == null ? null : (Date) updateTime.clone();
     }
 
     public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+        this.updateTime = updateTime == null ? null : (Date) updateTime.clone();
     }
 }

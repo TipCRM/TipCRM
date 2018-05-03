@@ -1,4 +1,5 @@
 package com.tipcrm.dao.entity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,10 +15,10 @@ public class Configuration {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "key")
+    @Column(name = "conf_key")
     private String key;
 
-    @Column(name = "value")
+    @Column(name = "conf_value")
     private String value;
 
     public Integer getId() {
