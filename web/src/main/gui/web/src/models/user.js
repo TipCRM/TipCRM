@@ -1,7 +1,8 @@
 import { fetchCurrentUser,
-  fetchUserByName, createNewUser,
-  fetchUserDetailInfo, disMissUser,
-  updateUserInfo, fetchCompanyUsers} from '../services/api';
+  fetchUserByName, createNewUser, changeMyInfo,
+  fetchUserDetailInfo, disMissUser, changeUserDepartment,
+  updateUserInfo, fetchCompanyUsers, changePassword,
+  changeUserLevel} from '../services/api';
 import {message} from 'antd';
 
 export default {
@@ -11,6 +12,7 @@ export default {
     selectUserInfo: {},
     users:[],
     companyUsers: [],
+    editingMyInfo: false,
   },
   effects: {
     *getCurrentUser(_,{call, put}){
@@ -59,6 +61,69 @@ export default {
         type: 'saveCompanyUsers',
         payload: response.data,
       });
+    },
+    *changePassword({payload}, {call, put}){
+      const response = yield call(changePassword, payload);
+      if (response.status === 200){
+        message.success("修改密码成功");
+        //yield put({
+        //  type: 'login/logout'
+        //})
+      }
+    },
+    *changeUserDepartment({payload}, {call, put, select}){
+      const response = yield call(changeUserDepartment, payload);
+      if (response.status === 200){
+        message.success("修改员工部门成功！");
+        yield put({
+          type: 'getUserDetailInfo',
+          payload: payload
+        });
+        //let selectUserInfo = yield select(state => state.selectUserInfo);
+        //selectUserInfo = {...selectUserInfo, departmentId: payload.departmentId, department: payload.departmentName};
+        //console.log("userinfo", selectUserInfo);
+        //yield put({
+        //  type: 'saveSelectUser',
+        //  payload: selectUserInfo,
+        //});
+        //console.log("start change companyUsers");
+        //let companyUsers = yield select(state => state.companyUsers);
+        //console.log("companyUsers", companyUsers);
+        //companyUsers = companyUsers.map(user => {
+        //  if (user.id === payload.userId){
+        //    return {...user, departmentId: payload.departmentId, department: payload.departmentName};
+        //  }
+        //  return user;
+        //});
+        //yield put({
+        //  type: 'saveUsers',
+        //  payload: companyUsers,
+        //});
+      }
+    },
+    *changeUserLevel({payload}, {call, put}){
+      const response = yield call(changeUserLevel, payload);
+      if (response.status === 200){
+        message.success("修改员工等级成功！");
+        yield put({
+          type: 'getUserDetailInfo',
+          payload: payload
+        });
+      }
+    },
+    *changeMyInfo({payload}, {call, put}){
+      const response = yield call(changeMyInfo, payload);
+      if (response.status === 200){
+        message.success("修改信息成功！");
+        const {dispatch} = this.props;
+        dispatch({
+          type: 'user/saveEditStatus',
+          payload: false,
+        })
+        yield put({
+          type: 'getCurrentUser'
+        })
+      }
     }
   },
 
@@ -93,6 +158,12 @@ export default {
       return{
         ...state,
         companyUsers: payload,
+      }
+    },
+    saveEditStatus(state, {payload}){
+      return{
+        ...state,
+        editingMyInfo: payload
       }
     }
   },

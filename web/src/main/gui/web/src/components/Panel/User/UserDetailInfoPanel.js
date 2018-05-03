@@ -4,18 +4,24 @@
 import React from 'react';
 import CommonSpin from '../../Common/CommonSpin';
 import {connect} from 'dva';
-import {Input, Button, Icon, Col, Upload, Form, Modal} from 'antd';
+import {Input, Button, Icon, Col, Upload, Form, Modal, Select, message} from 'antd';
 import styles from './Index.less';
 const FormItem = Form.Item;
 const {TextArea} = Input;
+const {Option} = Select;
 
 @connect(({loading, user})=>({
   userLoading: loading.models.user,
-  selectUserInfo: user.selectUserInfo
+  selectUserInfo: user.selectUserInfo,
 }))
 export default class UserDetailInfoPanel extends React.Component{
   state={
     createNew: this.props.createNew,
+    selectingDepartment: false,
+    selectDepartment: undefined,
+    selectingLevel: false,
+    selectedLevel: undefined,
+    paymentPercentage: this.props.selectUserInfo.paymentPercentage,
   }
   componentDidMount(){
     const {dispatch, selectUser} = this.props;
@@ -23,6 +29,9 @@ export default class UserDetailInfoPanel extends React.Component{
       dispatch({
         type: 'user/getUserDetailInfo',
         payload: {userId: selectUser.id},
+      });
+      this.setState({
+        selectDepartment: this.props.selectUserInfo.departmentId,
       });
     } else{
       dispatch({
@@ -50,9 +59,79 @@ export default class UserDetailInfoPanel extends React.Component{
     });
   }
 
+  handleDepartmentChange(value){
+    this.setState({
+      selectDepartment: value,
+    });
+  }
+  handleSaveOrEditDepartment(selectUserInfo){
+    const {selectingDepartment, selectDepartment} = this.state;
+    const {departments} = this.props;
+    if (selectingDepartment){
+      const {dispatch} = this.props;
+      const selectDepartmentName = departments.filter(department => department.id == selectDepartment)[0].name;
+      dispatch({
+        type: 'user/changeUserDepartment',
+        payload: {
+          departmentId: selectDepartment,
+          departmentName: selectDepartmentName,
+          userId: selectUserInfo.id
+        }
+      });
+    }
+    this.setState({
+      selectingDepartment: !selectingDepartment,
+    });
+  }
+  handleCancelSaveDepartment(){
+    this.setState({
+      selectingDepartment: !this.state.selectingDepartment,
+      selectDepartment: undefined,
+    });
+  }
+
+  handleSaveOrEditLevel(selectUserInfo){
+    const {selectingLevel, selectedLevel, paymentPercentage} = this.state;
+    const {dispatch, levels} = this.props;
+    if (selectingLevel){
+      //const levelName = levels.filter(level => level.id === selectedLevel)[0].name;
+      dispatch({
+        type: 'user/changeUserLevel',
+        payload: {levelId: selectedLevel, paymentPercentage: paymentPercentage, userId: selectUserInfo.id}
+      });
+    }
+    this.setState({
+      selectingLevel: !selectingLevel,
+    });
+  }
+  handleCancelSaveLevel(){
+    this.setState({
+      selectingLevel: !this.state.selectingLevel,
+      selectedLevel: undefined,
+    });
+  }
+  handlePaymentPercentageChange(e){
+    try {
+      const percentage = parseInt(e.target.value);
+      if (percentage> 100 || percentage < 0){
+        throw "percentage should between 0 and 100";
+      }
+      this.setState({
+        paymentPercentage: percentage,
+      });
+    } catch (e){
+      message.error("提成比例应该在0-100之间");
+    }
+  }
+  handleLevelChange(value){
+    this.setState({
+      selectedLevel: value,
+    });
+  }
+
   render(){
-    const {selectUserInfo, userLoading, handleCancelSave} = this.props;
-    const {createNew, showChangePassword} =  this.state;
+    const {selectUserInfo, userLoading, handleCancelSave, enableEdit, departments, levels} = this.props;
+    const {createNew, selectingDepartment, selectDepartment, selectingLevel, selectedLevel, paymentPercentage} =  this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 8 },
@@ -77,9 +156,8 @@ export default class UserDetailInfoPanel extends React.Component{
               name="avatar"
               listType="picture-card"
               disabled={!createNew}
-              action="/avatar"
-            >
-              {selectUserInfo.avatar ? <img src={"avatar/"+selectUserInfo.avatar} style={{height:'100%', width:'100%'}}/> : uploadButton}
+              action="/avatar">
+              {selectUserInfo.avatar ? <img src={"http://www.potafish.com/avatar/"+selectUserInfo.avatar} style={{height:'100px', width:'100px'}}/> : uploadButton}
             </Upload>
           </div>
           <div>
@@ -104,10 +182,41 @@ export default class UserDetailInfoPanel extends React.Component{
               {createNew ? <Input value={selectUserInfo.idCard} size="small"/> : selectUserInfo.idCard}
             </FormItem>
             <FormItem label="所在部门" {...formItemLayout} style={{marginTop:'-24px'}}>
-              {selectUserInfo.department}
+              {
+                selectingDepartment ? <Select value={selectDepartment} placeholder="选择部门"
+                                              onChange={this.handleDepartmentChange.bind(this)} style={{ width: '60%' }}>
+                  {
+                    departments.map(department => <Option key={department.id+""}>{department.name}</Option>)
+                  }
+                </Select> : selectUserInfo.department
+              }
+              {enableEdit ? <a style={{marginLeft:'8px'}} onClick={this.handleSaveOrEditDepartment.bind(this, selectUserInfo)}>
+                <Icon type={selectingDepartment ? 'save':'edit'}/></a> : ''}
+              {
+                selectingDepartment ? <a style={{marginLeft:'8px'}} onClick={this.handleCancelSaveDepartment.bind(this)}><Icon type="close"/></a> : ''
+              }
             </FormItem>
-            <FormItem label="员工等级" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.level}</FormItem>
-            <FormItem label="提成比例" {...formItemLayout} style={{marginTop:'-24px'}}>{createNew ? <Input value={selectUserInfo.idCard} size="small"/> : selectUserInfo.hireTime}</FormItem>
+            <FormItem label="职位" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.roles ? selectUserInfo.roles[0] :''}</FormItem>
+            <FormItem label="员工等级" {...formItemLayout} style={{marginTop:'-24px'}}>
+              {
+                selectingLevel ? <Select value={selectedLevel} placeholder="选择等级"
+                                              onChange={this.handleLevelChange.bind(this)} style={{ width: '60%' }}>
+                  {
+                    levels.map(level => <Option key={level.id+""}>{level.name}</Option>)
+                  }
+                </Select> : selectUserInfo.level
+              }
+              {enableEdit ? <a style={{marginLeft:'8px'}} onClick={this.handleSaveOrEditLevel.bind(this, selectUserInfo)}>
+                <Icon type={selectingLevel ? 'save':'edit'}/></a> : ''}
+              {
+                selectingLevel ? <a style={{marginLeft:'8px'}} onClick={this.handleCancelSaveLevel.bind(this)}><Icon type="close"/></a> : ''
+              }
+            </FormItem>
+            <FormItem label="提成比例" {...formItemLayout} style={{marginTop:'-24px'}}>
+              {createNew || selectingLevel ? <Input value={paymentPercentage} size="small" style={{width: '20%'}}
+                                                    onChange={this.handlePaymentPercentageChange.bind(this)}/>
+                : selectUserInfo.paymentPercentage} %
+            </FormItem>
             {
               createNew ? '':<FormItem label="入职时间" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.hireTime}</FormItem>
             }
@@ -116,6 +225,15 @@ export default class UserDetailInfoPanel extends React.Component{
             }
             {
               createNew ? '': <FormItem label="状态" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.status}</FormItem>
+            }
+            {
+              selectUserInfo.dismissUser ? <FormItem label="离职经办人" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.dismissUser}</FormItem> : ''
+            }
+            {
+              selectUserInfo.dismissUser ? <FormItem label="离职时间" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.dismissDate}</FormItem> : ''
+            }
+            {
+              selectUserInfo.dismissUser ? <FormItem label="备注" {...formItemLayout} style={{marginTop:'-24px'}}>{selectUserInfo.dismissReason}</FormItem> : ''
             }
           </Form>
         </div>

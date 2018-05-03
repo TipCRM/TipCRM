@@ -49,6 +49,30 @@ export async function fetchCompanyUsers(params){
     body: params
   });
 }
+export async function changePassword(params){
+  return request('/public/api/user/password', {
+    method: 'PUT',
+    body: params,
+  });
+}
+export async function changeUserDepartment(params){
+  return request('/public/api/user/department',{
+    method: 'PUT',
+    body: params,
+  })
+}
+export async function changeUserLevel(params){
+  return request('/public/api/user/level', {
+    method: 'PUT',
+    body: params,
+  })
+}
+export async function changeMyInfo(params){
+  return request('/public/api/user/me', {
+    method: 'PUT',
+    body: params,
+  });
+}
 
 // menu api
 export async function fakeGetMenu(){
@@ -162,4 +186,16 @@ export async function uploadAvatar(){
   return request('/avatar', {
     method: 'POST'
   });
+}
+
+
+// utils
+export async function sendNotification(params){
+  return request('/public/api/mail?type=' + params.type+'&email='+params.email);
+}
+
+
+// level
+export async function listLevels(){
+  return request('/public/api/levels');
 }

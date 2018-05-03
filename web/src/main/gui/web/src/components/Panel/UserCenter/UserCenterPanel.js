@@ -3,47 +3,69 @@
  */
 import React from 'react';
 import {connect} from 'dva';
-import {Upload, Icon, Modal, Form, Input, Button} from 'antd';
+import {Upload, Icon, Modal, Form, Input, Button, message} from 'antd';
 import ChangePassWordPanel from './ChangePassWordPanel';
 import CommonSpin from '../../Common/CommonSpin';
 const FormItem = Form.Item;
 const {TextArea} = Input;
 
-@connect(({loading, user}) =>({
-  currentUserloading : loading.effects['user/getCurrentUser'],
+@connect(({loading, user, util}) =>({
+  changingMyInfo: loading.effects['user/changeMyInfo'],
+  gettingValidationCode:loading.effects['util/getValidationCode'],
+  submittingChange: loading.effects['user/changePassword'],
   currentUser: user.currentUser,
+  successGetValidationCode: util.successGetValidationCode,
+  editingMyInfo: user.editingMyInfo
 }))
-
 export default class UserCenterPanel extends React.Component{
   state={
     loading: false,
-    editing: false,
     showChangePassword: false,
+    inputEmail: null,
+    newPassword: null,
+    repeatPassword: null,
+    validationCode: null,
+    count: 0,
+    changeData: null,
   }
 
-  componentDidMount(){
-    //const {dispatch} = this.props;
-    //dispatch({
-    //  type: 'user/getCurrentUser'
-    //});
-    //this.setState({
-    //  avatar: ,
-    //});
-  }
-  handleCancelSave(){
+  componentWillMount(){
+    const {currentUser} = this.props;
     this.setState({
-      editing: false,
+      changeData: {
+        avatar: currentUser.avatar,
+        avatarType: 0,
+        birthday: currentUser.birthday,
+        email: currentUser.email,
+        id: currentUser.id,
+        idCard: currentUser.idCard,
+        motto: currentUser.motto,
+        phoneNo: currentUser.phoneNo,
+        userName: currentUser.name,
+      }
     });
   }
+  handleCancelSave(){
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'user/saveEditStatus',
+      payload: false,
+    })
+  }
   handleSaveUser(){
-    this.setState({
-      editing: false,
+    const {dispatch} = this.props;
+    const {changeData} = this.state;
+    dispatch({
+      type: 'user/changeMyInfo',
+      payload: changeData
     });
   }
   handleEditUserInfo(){
-    this.setState({
-      editing: true,
-    });
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'user/saveEditStatus',
+      payload: true,
+    })
   }
 
   handleOpenChangePassword(){
@@ -56,13 +78,91 @@ export default class UserCenterPanel extends React.Component{
       showChangePassword: false
     });
   }
-  handleSubmitChangePassword(){
-    console.log("submit change password");
+  handleGetValidationCode(inputEmail){
+    const reg = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+    if (inputEmail == null || !reg.test(inputEmail)){
+      message.error("邮箱地址不合法！");
+      return;
+    }
+    const {dispatch, successGetValidationCode} = this.props;
+    dispatch({
+      type: 'util/getValidationCode',
+      payload: {type: 'CHANGE_PASSWORD', email: inputEmail}
+    });
+    let count = '';
+    this.setState({ count });
+    count = 60;
+    this.interval = setInterval(() => {
+      if (!successGetValidationCode){
+        count = 0;
+      } else {
+        count -= 1;
+      }
+      this.setState({ count });
+      if (count === 0) {
+        clearInterval(this.interval);
+        dispatch({
+          type: 'util/saveGetValidationCodeStatus',
+          payload: true,
+        });
+      }
+    }, 1000);
+  }
+  handleSubmitChangePassword(e){
+    e.preventDefault();
+    const {dispatch} = this.props;
+    const {newPassword, repeatPassword, validationCode, inputEmail} = this.state;
+
+    if (newPassword && (newPassword.length >= 6) && (newPassword === repeatPassword)
+      && validationCode && inputEmail){
+      let request = {
+        newPassword: newPassword,
+        validationCode: validationCode
+      };
+      dispatch({
+        type: 'user/changePassword',
+        payload: request,
+      });
+      return;
+    }
+    message.error("请补全信息,且密码长度不小于6位！");
+  }
+  handleInputEmailChange(e){
+    this.setState({
+      inputEmail: e.target.value,
+    });
+  }
+  handlePasswordChange(e){
+    this.setState({
+      newPassword: e.target.value,
+    });
+  }
+  handleRepeatPasswordChange(e){
+    this.setState({
+      repeatPassword: e.target.value,
+    });
+  }
+  handleValidationCodeChange(e){
+    this.setState({
+      validationCode: e.target.value,
+    });
+  }
+
+  // common handle the edit value
+  handleCommonValueChange(field, e){
+    console.log("e", e);
+    console.log("filed", field);
+    let {changeData} = this.state;
+    changeData[field] = e.target.value;
+    this.setState({
+      changeData: changeData,
+    })
   }
 
   render(){
-    const {currentUser} = this.props;
-    const { showChangePassword, editing} =  this.state;
+    const {currentUser, gettingValidationCode, editingMyInfo, changingMyInfo} = this.props;
+    const { showChangePassword, validationCode, inputEmail,
+      newPassword, repeatPassword, count, submittingChange, changeData} =  this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 8 },
@@ -74,9 +174,9 @@ export default class UserCenterPanel extends React.Component{
       },
     };
     const uploadButton = (
-      <div>
+      <div style={{height:'150px', width:'150px'}}>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
-        <div className="ant-upload-text">Upload</div>
+        <div className="ant-upload-text">上传</div>
       </div>
     );
     return(<CommonSpin spinning={false}>
@@ -87,56 +187,67 @@ export default class UserCenterPanel extends React.Component{
               <Upload
                 name="avatar"
                 listType="picture-card"
-                disabled={!editing}
+                disabled={!editingMyInfo}
                 action="/avatar"
               >
-                {currentUser.avatar ? <img src={"avatar/"+currentUser.avatar} style={{height:'100%', width:'100%'}}/> : uploadButton}
+                {currentUser.avatar ? <img src={"http://www.potafish.com/avatar/"+currentUser.avatar} style={{height:'150px', width:'150px'}}/> : uploadButton}
               </Upload>
             </div>
             <div  style={{marginBottom: '8px'}}>
               <a onClick={this.handleOpenChangePassword.bind(this)}><Icon type="lock"/>修改密码</a>
               <Modal footer="" visible={showChangePassword} title="修改密码" width="30%"
                      onCancel={this.handleCloseChangePassword.bind(this)} destroyOnClose>
-                <ChangePassWordPanel onSubmitChange={this.handleSubmitChangePassword.bind(this)} onCancelChange={this.handleCloseChangePassword.bind(this)}/>
+                <ChangePassWordPanel inputEmail ={inputEmail} validationCode={validationCode}
+                                     count = {count} gettingValidationCode={gettingValidationCode}
+                                     onPasswordChange = {this.handlePasswordChange.bind(this)}
+                                     onRepeatPasswordChange = {this.handleRepeatPasswordChange.bind(this)}
+                                     newPassword = {newPassword} repeatPassword={repeatPassword}
+                                     onGetValidationCode = {this.handleGetValidationCode.bind(this, inputEmail)}
+                                     onInputEmailChange = {this.handleInputEmailChange.bind(this)}
+                                     onSubmitChange={this.handleSubmitChangePassword.bind(this)}
+                                     submittingChange = {submittingChange} onValidationCodeChange={this.handleValidationCodeChange.bind(this)}
+                                     onCancelChange={this.handleCloseChangePassword.bind(this)}/>
               </Modal>
             </div>
 
             <div>
               <b>座右铭：</b>
-              <TextArea row="4" value={currentUser.motto} style={{marginTop: '4px'}} disabled={!editing}/>
+              <TextArea row="4" value={editingMyInfo ? changeData.motto : currentUser.motto} style={{marginTop: '4px'}}
+                        onChange={this.handleCommonValueChange.bind(this, 'motto')} disabled={!editingMyInfo}/>
             </div>
           </div>
           <div style={{float: 'left', width:'70%'}}>
             <Form style={{marginTop: '16px'}}>
               <FormItem label="员工编号" {...formItemLayout} style={{marginTop:'-24px'}}>{currentUser.workNo}</FormItem>
-              <FormItem label="用户名" {...formItemLayout} style={{marginTop:'-24px'}}>
-                {editing ? <Input value={currentUser.name} size="small"/> : currentUser.name}
+              <FormItem label="用户名" {...formItemLayout} style={{marginTop:'-20px'}}>
+                {editingMyInfo ? <Input value={changeData.userName} onChange={this.handleCommonValueChange.bind(this, 'userName')} width="60%"/> : currentUser.name}
               </FormItem>
-              <FormItem label="邮箱" {...formItemLayout} style={{marginTop:'-24px'}}>
-                {editing ? <Input value={currentUser.email} size="small"/> : currentUser.email}
+              <FormItem label="邮箱" {...formItemLayout} style={{marginTop:'-20px'}}>
+                {editingMyInfo ? <Input value={changeData.email} onChange={this.handleCommonValueChange.bind(this, 'email')} width="60%"/> : currentUser.email}
               </FormItem>
-              <FormItem label="联系电话" {...formItemLayout} style={{marginTop:'-24px'}}>
-                {editing ? <Input value={currentUser.phoneNo} size="small"/> : currentUser.phoneNo}</FormItem>
-              <FormItem label="身份证" {...formItemLayout} style={{marginTop:'-24px'}}>
-                {editing ? <Input value={currentUser.idCard} size="small"/> : currentUser.idCard}
+              <FormItem label="联系电话" {...formItemLayout} style={{marginTop:'-20px'}}>
+                {editingMyInfo ? <Input value={changeData.phoneNo} onChange={this.handleCommonValueChange.bind(this, 'phoneNo')} width="60%"/> : currentUser.phoneNo}</FormItem>
+              <FormItem label="身份证" {...formItemLayout} style={{marginTop:'-20px'}}>
+                {editingMyInfo ? <Input value={changeData.idCard} onChange={this.handleCommonValueChange.bind(this, 'idCard')} width="60%"/> : currentUser.idCard}
               </FormItem>
               <FormItem label="所在部门" {...formItemLayout} style={{marginTop:'-24px'}}>{currentUser.department}</FormItem>
               <FormItem label="员工等级" {...formItemLayout} style={{marginTop:'-24px'}}>{currentUser.level}</FormItem>
-              <FormItem label="提成比例" {...formItemLayout} style={{marginTop:'-24px'}}>currentUser.hireTime}</FormItem>
+              <FormItem label="提成比例" {...formItemLayout} style={{marginTop:'-24px'}}>{currentUser.paymentPercentage}%</FormItem>
               <FormItem label="入职时间" {...formItemLayout} style={{marginTop:'-24px'}}>{currentUser.hireTime}</FormItem>
               <FormItem label="经办人" {...formItemLayout} style={{marginTop:'-24px'}}>{currentUser.hirer}</FormItem>
-              <FormItem label="状态" {...formItemLayout} style={{marginTop:'-24px'}}>{currentUser.status}</FormItem>
             </Form>
           </div>
         </div>
         <div style={{textAlign: 'center',clear: 'both'}}>
           {
-            editing ?
+            editingMyInfo ?
               <div>
-                <Button onClick={this.handleCancelSave.bind(this)} size="small">取消</Button>
-                <Button type="primary" style={{marginLeft: '8px', marginRight:'8px'}} icon="save" size="small" onClick={this.handleSaveUser.bind(this)}>保存</Button>
+                <Button onClick={this.handleCancelSave.bind(this)}>取消</Button>
+                <Button type="primary" style={{marginLeft: '8px', marginRight:'16px'}} icon="save"
+                        onClick={this.handleSaveUser.bind(this)} loading={changingMyInfo}>保存</Button>
               </div> :
-              <Button type="primary" style={{marginLeft: '8px', marginRight:'8px'}} icon="edit" size="small" onClick={this.handleEditUserInfo.bind(this)}>修改</Button>
+              <Button type="primary" style={{marginLeft: '8px', marginRight:'16px'}} icon="edit"
+                      onClick={this.handleEditUserInfo.bind(this)} loading={changingMyInfo}>修改</Button>
           }
         </div>
       </div>

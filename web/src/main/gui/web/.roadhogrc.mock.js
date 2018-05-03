@@ -1,31 +1,51 @@
 import { delay } from 'roadhog-api-doc';
 const apis = {
-  'POST /public/api/login':'http://www.potafish.com',
-  'GET /public/api/logout':'http://www.potafish.com',
-  'GET /public/api/user/me':'http://www.potafish.com',
-  'GET /public/api/user': 'http://www.potafish.com',
-  'POST /public/api/user/query': 'http://www.potafish.com',
+  // user
+  'POST /public/api/login':'http://tipcrm.potafish.com',
+  'GET /public/api/logout':'http://tipcrm.potafish.com',
+  'GET /public/api/user/me':'http://tipcrm.potafish.com',
+  'GET /public/api/user': 'http://tipcrm.potafish.com',
+  'POST /public/api/user/query': 'http://tipcrm.potafish.com',
+  'PUT /public/api/user/department': 'http://tipcrm.potafish.com',
+  'PUT /public/api/user/password': 'http://tipcrm.potafish.com',
+  'PUT /public/api/user/me': 'http://tipcrm.potafish.com',
+  'PUT /public/api/user/level': 'http://tipcrm.potafish.com',
 
-  'POST /public/api/my/customers' :'http://www.potafish.com',
-  'POST /public/api/notification/my' : 'http://www.potafish.com',
-  'GET /public/api/roles' : 'http://www.potafish.com',
-  'GET /public/api/permission/role/*': 'http://www.potafish.com',
-  'PUT /public/api/permission/role/*': 'http://www.potafish.com',
-  'GET /public/api/permission/me': 'http://www.potafish.com',
+  // permissions
+  'POST /public/api/my/customers' :'http://tipcrm.potafish.com',
+  'POST /public/api/notification/my' : 'http://tipcrm.potafish.com',
+  'GET /public/api/roles' : 'http://tipcrm.potafish.com',
+  'GET /public/api/permission/role/*': 'http://tipcrm.potafish.com',
+  'PUT /public/api/permission/role/*': 'http://tipcrm.potafish.com',
+  'GET /public/api/permission/me': 'http://tipcrm.potafish.com',
 
-  'POST /public/avatar' : 'http://www.potafish.com',
+  // attachment
+  'POST /public/avatar' : 'http://tipcrm.potafish.com',
 
-  'POST /public/api/role': 'http://www.potafish.com',
-  'PUT /public/api/role': 'http://www.potafish.com',
-  'DELETE /public/api/role/*': 'http://www.potafish.com',
-  'POST /public/api/cache/refresh/roleAndPermission': 'http://www.potafish.com',
-  'GET /public/api/menu/me' :'http://www.potafish.com',
-  'GET /public/api/permission/menu/*': 'http://www.potafish.com',
-  'GET /public/api/departments': 'http://www.potafish.com',
-  'GET /public/api/departments': 'http://www.potafish.com',
-  'POST /public/api/department': 'http://www.potafish.com',
-  'PUT /public/api/department': 'http://www.potafish.com',
-  'DELETE /public/api/department/*': 'http://www.potafish.com',
+  // role
+  'POST /public/api/role': 'http://tipcrm.potafish.com',
+  'PUT /public/api/role': 'http://tipcrm.potafish.com',
+  'DELETE /public/api/role/*': 'http://tipcrm.potafish.com',
+
+  // cache
+  'POST /public/api/cache/refresh/roleAndPermission': 'http://tipcrm.potafish.com',
+
+  // menu
+  'GET /public/api/menu/me' :'http://tipcrm.potafish.com',
+  'GET /public/api/permission/menu/*': 'http://tipcrm.potafish.com',
+
+  // departments
+  'GET /public/api/departments': 'http://tipcrm.potafish.com',
+  'GET /public/api/departments': 'http://tipcrm.potafish.com',
+  'POST /public/api/department': 'http://tipcrm.potafish.com',
+  'PUT /public/api/department': 'http://tipcrm.potafish.com',
+  'DELETE /public/api/department/*': 'http://tipcrm.potafish.com',
+
+  //utils
+  'GET /public/api/mail':'http://tipcrm.potafish.com',
+
+  // level
+  'GET /public/api/levels': 'http://tipcrm.potafish.com',
 };
 
 export default delay(apis, 1000);
