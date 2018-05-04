@@ -7,13 +7,9 @@ public class DepartmentBo {
 
     private String name;
 
-    private Integer parentId;
+    private Integer total;
 
-    private String parentName;
-
-    private Integer managerId;
-
-    private String managerName;
+    private UserBasicBo manager;
 
     private String entryUser;
 
@@ -35,36 +31,20 @@ public class DepartmentBo {
         this.name = name;
     }
 
-    public Integer getParentId() {
-        return parentId;
+    public Integer getTotal() {
+        return total;
     }
 
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
+    public void setTotal(Integer total) {
+        this.total = total;
     }
 
-    public String getParentName() {
-        return parentName;
+    public UserBasicBo getManager() {
+        return manager;
     }
 
-    public void setParentName(String parentName) {
-        this.parentName = parentName;
-    }
-
-    public Integer getManagerId() {
-        return managerId;
-    }
-
-    public void setManagerId(Integer managerId) {
-        this.managerId = managerId;
-    }
-
-    public String getManagerName() {
-        return managerName;
-    }
-
-    public void setManagerName(String managerName) {
-        this.managerName = managerName;
+    public void setManager(UserBasicBo manager) {
+        this.manager = manager;
     }
 
     public String getEntryUser() {
@@ -76,10 +56,10 @@ public class DepartmentBo {
     }
 
     public Date getEntryTime() {
-        return entryTime;
+        return entryTime == null ? null : (Date) entryTime.clone();
     }
 
     public void setEntryTime(Date entryTime) {
-        this.entryTime = entryTime;
+        this.entryTime = entryTime == null ? null : (Date) entryTime.clone();
     }
 }

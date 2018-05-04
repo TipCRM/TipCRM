@@ -1,3 +1,5 @@
+<img src="LOGO.png" width="50px" height="50px"/>
+
 # Tip CRM
 **The project of Tip CRM**
 

@@ -1,4 +1,5 @@
 package com.tipcrm.bo;
+
 public class ListBoxBo {
     private Integer id;
     private String displayName;

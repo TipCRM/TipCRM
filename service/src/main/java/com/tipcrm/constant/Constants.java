@@ -1,10 +1,22 @@
 package com.tipcrm.constant;
+
 import java.util.Map;
 
 import com.google.common.collect.Maps;
 
 public class Constants {
     public static final Integer HASH_ITERATIONS = 2;
+
+    public static class SessionAttribute {
+        public static final String CHANG_PASSWORD_VALIDATION_CODE = "CHANG_PASSWORD_VALIDATION_CODE";
+        public static final String CHANG_PASSWORD_VALIDATION_CODE_TIME = "CHANG_PASSWORD_VALIDATION_CODE_TIME";
+        public static final String CHANG_PASSWORD_VALIDATION_CODE_TRY_TIMES = "CHANG_PASSWORD_VALIDATION_CODE_TRY_TIMES";
+    }
+
+    public static class Email {
+        public static final String ADD_USER_CONTENT = "管理员已为您分配帐号，您的工号是{0}, 您可以用工号或者邮箱({1})登录系统，初始密码是{2}。请尽快修改密码。";
+        public static final String CHANGE_PASSWORD_VALIDATION_CODE = "您正请求修改密码，请确认是本人操作。请求验证码是{0}，30分钟内有效。";
+    }
 
     public static class User {
         public static final String SYSTEM = "系统";
@@ -15,16 +27,49 @@ public class Constants {
     }
 
     public static class Permission {
-        public static final String CUSTOMER_ADD_UPDATE = "customer:add_update";
-        public static final String CUSTOMER_DELETE = "customer:delete";
-        public static final String CUSTOMER_TRANSFER = "customer:transfer";
+        public static final String CUSTOMER_DEPARTMENT_VIEW = "customer:department:view";
+        public static final String CUSTOMER_COMPANY_VIEW = "customer:company:view";
+        public static final String CUSTOMER_ADD = "customer:add";
+        public static final String CUSTOMER_MY_UPDATE = "customer:my:update";
+        public static final String CUSTOMER_DEPARTMENT_UPDATE = "customer:department:update";
+        public static final String CUSTOMER_COMPANY_UPDATE = "customer:company:update";
+        public static final String CUSTOMER_COMMUNICATION_ADD = "customer:communication:add";
+        public static final String CUSTOMER_STATUS_CHANGE = "customer:status:change";
+        public static final String CUSTOMER_MY_DELETE = "customer:my:delete";
+        public static final String CUSTOMER_DEPARTMENT_DELETE = "customer:department:delete";
+        public static final String CUSTOMER_COMPANY_DELETE = "customer:company:delete";
+        public static final String CUSTOMER_DEPARTMENT_TRANSFER_TO_USER = "customer:department:transfer_to_user";
+        public static final String CUSTOMER_MY_TRANSFER_TO_USER = "customer:my:transfer_to_user";
+        public static final String CUSTOMER_COMPANY_TRANSFER_TO_DEPARTMENT = "customer:company:transfer_to_department";
+        public static final String CUSTOMER_MY_TRANSFER_TO_DEPARTMENT = "customer:my:transfer_to_department";
         public static final String CUSTOMER_APPROVAL = "customer:approval";
-        public static final String USER_ADD_UPDATE = "user:add_update";
+        public static final String USER_DETAIL_VIEW = "user:detail:view";
+        public static final String USER_ADD = "user:add";
+        public static final String USER_UPDATE = "user:update";
         public static final String USER_DELETE = "user:delete";
         public static final String ROLE_ADD = "role:add";
-        public static final String ROLE_ASSIGN = "role:assign";
-        public static final String DEPARTMENT_ADD_UPDATE = "department:add_update";
+        public static final String ROLE_UPDATE = "role:update";
+        public static final String ROLE_DELETE = "role:delete";
+        public static final String DEPARTMENT_ADD = "department:add";
+        public static final String DEPARTMENT_UPDATE = "department:update";
         public static final String DEPARTMENT_DELETE = "department:delete";
+        public static final String CONTRACT_DEPARTMENT_VIEW = "contract:department:view";
+        public static final String CONTRACT_COMPANY_VIEW = "contract:company:view";
+        public static final String CONTRACT_UPDATE = "contract:update";
+        public static final String CONTRACT_APPROVAL = "contract:approval";
+        public static final String PRODUCTION_ADD = "production:add";
+        public static final String PRODUCTION_UPDATE = "production:update";
+        public static final String PRODUCTION_DELETE = "production:delete";
+        public static final String SYSTEM_CONFIGURE = "system:configure";
+        public static final String DEPARTMENT_GOAL_VIEW = "department_goal:view";
+        public static final String DEPARTMENT_GOAL_ASSIGN = "department_goal:assign";
+        public static final String USER_GOAL_VIEW = "user_goal:view";
+        public static final String USER_GOAL_ASSIGN = "user_goal:assign";
+        public static final String ROLE_ASSIGN = "role:assign";
+        public static final String LEVEL_VIEW = "level:view";
+        public static final String LEVEL_ADD = "level:add";
+        public static final String LEVEL_UPDATE = "level:update";
+        public static final String LEVEL_DELETE = "level:delete";
     }
 
     public static class RequestResult {
@@ -41,6 +86,7 @@ public class Constants {
             public static final String NEW_CUSTOMER_APPROVAL = "您的客户操作申请已{0}! \n申请号：{1}\n审批人:{2}\n审批时间:{3}\n审批意见:{4}";
         }
     }
+
     public static class QueryFieldName {
         public static class Customer {
             public static final String CUSTOMER_NAME = "customer_name";
@@ -51,6 +97,7 @@ public class Constants {
             public static final String FOLLOW_USER = "follow_user";
             public static final String FOLLOW_DEPARTMENT = "follow_department";
         }
+
         public static class Notification {
             public static final String SENDER = "sender";
             public static final String TYPE = "type";
@@ -60,11 +107,21 @@ public class Constants {
             public static final String READ_STATUS = "read_status";
             public static final String RECEIVER = "receiver";
         }
+
+        public static class User {
+            public static final String USER_NAME = "user_name";
+            public static final String WORK_NO = "work_no";
+            public static final String STATUS = "status";
+            public static final String DEPARTMENT_ID = "department";
+            public static final String LEVEL_ID = "level";
+        }
     }
+
     public static class SortFieldName {
         public static class Customer {
             public static final Map<String, String> fieldMap = Maps.newHashMap();
-            static  {
+
+            static {
                 fieldMap.put(QueryFieldName.Customer.CUSTOMER_NAME, "name");
                 fieldMap.put(QueryFieldName.Customer.STATUS, "status.id");
                 fieldMap.put(QueryFieldName.Customer.FOLLOW_USER, "followUser.userName");
@@ -76,6 +133,7 @@ public class Constants {
 
         public static class Notification {
             public static final Map<String, String> fieldMap = Maps.newHashMap();
+
             static {
                 fieldMap.put(QueryFieldName.Notification.SENDER, "entryUser.userName");
                 fieldMap.put(QueryFieldName.Notification.TYPE, "type.name");
@@ -84,6 +142,18 @@ public class Constants {
                 fieldMap.put(QueryFieldName.Notification.CONTENT, "content");
                 fieldMap.put(QueryFieldName.Notification.READ_STATUS, "readStatus.name");
                 fieldMap.put(QueryFieldName.Notification.RECEIVER, "toUser.userName");
+            }
+        }
+
+        public static class User {
+            public static final Map<String, String> fieldMap = Maps.newHashMap();
+
+            static {
+                fieldMap.put(QueryFieldName.User.USER_NAME, "userName");
+                fieldMap.put(QueryFieldName.User.STATUS, "status.name");
+                fieldMap.put(QueryFieldName.User.DEPARTMENT_ID, "department.name");
+                fieldMap.put(QueryFieldName.User.LEVEL_ID, "level.name");
+                fieldMap.put(QueryFieldName.User.WORK_NO, "workNo");
             }
         }
     }

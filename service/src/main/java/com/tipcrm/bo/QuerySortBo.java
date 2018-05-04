@@ -1,4 +1,5 @@
 package com.tipcrm.bo;
+
 import org.springframework.data.domain.Sort;
 
 public class QuerySortBo {

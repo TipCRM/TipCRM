@@ -1,43 +1,26 @@
 package com.tipcrm.bo;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
-public class UserBo {
-
-    private String userName;
+public class UserBo extends UserBasicBo {
 
     private String email;
 
-    private String idCard;
-
-    private Date birthday;
-
     private String phoneNo;
-
-    private String avatar;
 
     private String status;
 
-    private String hirer;
-
-    private Date hireTime;
-
-    private String manager;
+    private Integer departmentId;
 
     private String department;
 
+    private String manager;
+
+    private Integer levelId;
+
     private String level;
 
-    private List<String> roles = new ArrayList<String>();
+    private String motto;
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+    private Boolean isDepartmentManager = false;
 
     public String getEmail() {
         return email;
@@ -45,38 +28,6 @@ public class UserBo {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getIdCard() {
-        return idCard;
-    }
-
-    public void setIdCard(String idCard) {
-        this.idCard = idCard;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getPhoneNo() {
-        return phoneNo;
-    }
-
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
     }
 
     public String getStatus() {
@@ -87,20 +38,12 @@ public class UserBo {
         this.status = status;
     }
 
-    public String getHirer() {
-        return hirer;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setHirer(String hirer) {
-        this.hirer = hirer;
-    }
-
-    public Date getHireTime() {
-        return hireTime;
-    }
-
-    public void setHireTime(Date hireTime) {
-        this.hireTime = hireTime;
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     public String getManager() {
@@ -111,14 +54,6 @@ public class UserBo {
         this.manager = manager;
     }
 
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
     public String getLevel() {
         return level;
     }
@@ -127,11 +62,43 @@ public class UserBo {
         this.level = level;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public String getPhoneNo() {
+        return phoneNo;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
+    public String getMotto() {
+        return motto;
+    }
+
+    public void setMotto(String motto) {
+        this.motto = motto;
+    }
+
+    public Integer getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public Integer getLevelId() {
+        return levelId;
+    }
+
+    public void setLevelId(Integer levelId) {
+        this.levelId = levelId;
+    }
+
+    public Boolean getIsDepartmentManager() {
+        return isDepartmentManager;
+    }
+
+    public void setIsDepartmentManager(Boolean isDepartmentManager) {
+        this.isDepartmentManager = isDepartmentManager;
     }
 }

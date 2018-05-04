@@ -1,4 +1,5 @@
 package com.tipcrm.cache;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -8,9 +9,8 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.tipcrm.bo.PermissionBo;
-import com.tipcrm.bo.PermissionGroupBo;
-import com.tipcrm.util.MyCollectionUtils;
+import com.tipcrm.dao.entity.MenuPermission;
+import com.tipcrm.dao.entity.Permission;
 import org.springframework.util.CollectionUtils;
 
 public class PermissionCache {
@@ -18,29 +18,49 @@ public class PermissionCache {
     /**
      * Map <roleId, permissions>
      */
-    private static Map<Integer, Set<PermissionBo>> rolePermissions = Maps.newHashMap();
+    private static Map<Integer, Set<Permission>> rolePermissions = Maps.newHashMap();
 
-    private static List<PermissionGroupBo> allPermissionGroups = new ArrayList<>();
+    private static List<Permission> allPermissions = new ArrayList<>();
 
-    public static void addOrUpdatePermissions(Integer roleId, Set<PermissionBo> permissions) {
+    private static List<Permission> deactivePermissions = new ArrayList<>();
+
+    private static List<MenuPermission> menuPermissions = new ArrayList<>();
+
+    public static List<MenuPermission> getMenuPermissions() {
+        return menuPermissions;
+    }
+
+    public static void setMenuPermissions(List<MenuPermission> menuPermissions) {
+        PermissionCache.menuPermissions = menuPermissions;
+    }
+
+    public static List<Permission> getDeactivePermissions() {
+        return deactivePermissions;
+    }
+
+    public static void setDeactivePermissions(List<Permission> deactivePermission) {
+        deactivePermissions = deactivePermission;
+    }
+
+    public static void addOrUpdatePermissions(Integer roleId, Set<Permission> permissions) {
         if (CollectionUtils.isEmpty(rolePermissions)) {
             rolePermissions = Maps.newHashMap();
         }
         rolePermissions.put(roleId, permissions);
     }
 
-    public static void addOrUpdatePermissions(Integer roleId, PermissionBo permission) {
+    public static void addOrUpdatePermissions(Integer roleId, Permission permission) {
         addOrUpdatePermissions(roleId, Sets.newHashSet(permission));
     }
 
-    public static void pushPermissions(Integer roleId, Set<PermissionBo> permissions) {
+    public static void pushPermissions(Integer roleId, Set<Permission> permissions) {
         if (CollectionUtils.isEmpty(rolePermissions)) {
             rolePermissions = Maps.newHashMap();
         }
         if (CollectionUtils.isEmpty(rolePermissions.get(roleId))) {
             addOrUpdatePermissions(roleId, permissions);
         } else {
-            rolePermissions.get(roleId).addAll((permissions));
+            rolePermissions.get(roleId).addAll(permissions);
         }
     }
 
@@ -48,11 +68,11 @@ public class PermissionCache {
         if (CollectionUtils.isEmpty(rolePermissions)) {
             return;
         }
-        Set<PermissionBo> currentPermissions = rolePermissions.get(roleId);
+        Set<Permission> currentPermissions = rolePermissions.get(roleId);
         if (CollectionUtils.isEmpty(currentPermissions)) {
             return;
         }
-        Iterator<PermissionBo> it = currentPermissions.iterator();
+        Iterator<Permission> it = currentPermissions.iterator();
         while (it.hasNext()) {
             if (permissionIds.contains(it.next().getId())) {
                 it.remove();
@@ -60,37 +80,44 @@ public class PermissionCache {
         }
     }
 
-    public static Set<PermissionBo> getPermissions(Integer roleId) {
+    public static void popPermissions(Integer roleId) {
+        if (CollectionUtils.isEmpty(rolePermissions)) {
+            return;
+        }
+        rolePermissions.remove(roleId);
+    }
+
+    public static Set<Permission> getPermissions(Integer roleId) {
         if (CollectionUtils.isEmpty(rolePermissions)) {
             return new HashSet<>();
         }
         return rolePermissions.get(roleId);
     }
 
-    public static Set<PermissionBo> getPermissions(List<Integer> roleIds) {
+    public static Set<Permission> getPermissions(List<Integer> roleIds) {
         if (CollectionUtils.isEmpty(rolePermissions) || CollectionUtils.isEmpty(roleIds)) {
             return new HashSet<>();
         }
-        Set<PermissionBo> permissionBos = new HashSet<>();
+        Set<Permission> permissions = new HashSet<>();
         for (Integer roleId : roleIds) {
-            permissionBos.addAll(getPermissions(roleId));
+            permissions.addAll(getPermissions(roleId));
         }
-        return permissionBos;
+        return permissions;
     }
 
-    public static Map<Integer, Set<PermissionBo>> getRolePermissions() {
+    public static Map<Integer, Set<Permission>> getRolePermissions() {
         return rolePermissions;
     }
 
-    public static void setRolePermissions(Map<Integer, Set<PermissionBo>> rolePermissions) {
+    public static void setRolePermissions(Map<Integer, Set<Permission>> rolePermissions) {
         PermissionCache.rolePermissions = rolePermissions;
     }
 
-    public static List<PermissionGroupBo> getAllPermissionGroups() {
-        return MyCollectionUtils.depCopy(allPermissionGroups);
+    public static List<Permission> getAllPermissions() {
+        return allPermissions;
     }
 
-    public static void setAllPermissionGroups(List<PermissionGroupBo> allPermissionGroups) {
-        PermissionCache.allPermissionGroups = allPermissionGroups;
+    public static void setAllPermissions(List<Permission> allPermissions) {
+        PermissionCache.allPermissions = allPermissions;
     }
 }

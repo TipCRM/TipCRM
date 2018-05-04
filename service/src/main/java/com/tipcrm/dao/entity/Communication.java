@@ -1,4 +1,5 @@
 package com.tipcrm.dao.entity;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -76,11 +77,11 @@ public class Communication extends BaseCreateAndUpdateEntity {
     }
 
     public Date getCommunicateTime() {
-        return communicateTime;
+        return communicateTime == null ? null : (Date) communicateTime.clone();
     }
 
     public void setCommunicateTime(Date communicateTime) {
-        this.communicateTime = communicateTime;
+        this.communicateTime = communicateTime == null ? null : (Date) communicateTime.clone();
     }
 
     public String getNote() {
@@ -92,11 +93,11 @@ public class Communication extends BaseCreateAndUpdateEntity {
     }
 
     public Date getNextCommunicateTime() {
-        return nextCommunicateTime;
+        return nextCommunicateTime == null ? null : (Date) nextCommunicateTime.clone();
     }
 
     public void setNextCommunicateTime(Date nextCommunicateTime) {
-        this.nextCommunicateTime = nextCommunicateTime;
+        this.nextCommunicateTime = nextCommunicateTime == null ? null : (Date) nextCommunicateTime.clone();
     }
 
     public Boolean getOnSide() {

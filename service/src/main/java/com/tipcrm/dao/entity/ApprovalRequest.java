@@ -1,4 +1,5 @@
 package com.tipcrm.dao.entity;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -83,11 +84,11 @@ public class ApprovalRequest {
     }
 
     public Date getReviewTime() {
-        return reviewTime;
+        return reviewTime == null ? null : (Date) reviewTime.clone();
     }
 
     public void setReviewTime(Date reviewTime) {
-        this.reviewTime = reviewTime;
+        this.reviewTime = reviewTime == null ? null : (Date) reviewTime.clone();
     }
 
     public ListBox getReviewStatus() {

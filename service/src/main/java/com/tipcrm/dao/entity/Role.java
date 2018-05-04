@@ -1,4 +1,5 @@
 package com.tipcrm.dao.entity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +25,6 @@ public class Role extends BaseAllEntity {
 
     @Column(name = "name")
     private String name;
-
-    @Column(name = "display_name")
-    private String displayName;
 
     @Column(name = "editable")
     private Boolean editable;
@@ -68,14 +66,6 @@ public class Role extends BaseAllEntity {
 
     public void setRolePermissions(List<RolePermission> rolePermissions) {
         this.rolePermissions = rolePermissions;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
     }
 
     public List<User> getUsers() {

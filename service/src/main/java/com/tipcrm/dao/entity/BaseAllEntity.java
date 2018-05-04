@@ -1,4 +1,5 @@
 package com.tipcrm.dao.entity;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,7 +10,7 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public class BaseAllEntity extends BaseCreateAndUpdateEntity {
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "delete_id")
     private User deleteUser;
 
@@ -25,10 +26,10 @@ public class BaseAllEntity extends BaseCreateAndUpdateEntity {
     }
 
     public Date getDeleteTime() {
-        return deleteTime;
+        return this.deleteTime == null ? null : (Date) deleteTime.clone();
     }
 
     public void setDeleteTime(Date deleteTime) {
-        this.deleteTime = deleteTime;
+        this.deleteTime = deleteTime == null ? null : (Date) deleteTime.clone();
     }
 }

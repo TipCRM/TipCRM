@@ -1,17 +1,15 @@
 package com.tipcrm.dao.entity;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -22,6 +20,9 @@ public class User {
     @Id
     @Column(name = "id")
     private Integer id;
+
+    @Column(name = "work_no")
+    private Integer workNo;
 
     @Column(name = "username")
     private String userName;
@@ -38,8 +39,9 @@ public class User {
     @Column(name = "phone_no")
     private String phoneNo;
 
-    @Column(name = "avatar")
-    private String avatar;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "avatar")
+    private Attachment avatar;
 
     @Column(name = "motto")
     private String motto;
@@ -80,10 +82,6 @@ public class User {
     @Column(name = "update_time")
     private Date updateTime;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    private List<Role> roles = new ArrayList<Role>();
-
     @Column(name = "payment_percent")
     private BigDecimal paymentPercent;
 
@@ -120,11 +118,11 @@ public class User {
     }
 
     public Date getBirthday() {
-        return birthday;
+        return birthday == null ? null : (Date) birthday.clone();
     }
 
     public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+        this.birthday = birthday == null ? null : (Date) birthday.clone();
     }
 
     public String getPhoneNo() {
@@ -135,11 +133,11 @@ public class User {
         this.phoneNo = phoneNo;
     }
 
-    public String getAvatar() {
+    public Attachment getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(Attachment avatar) {
         this.avatar = avatar;
     }
 
@@ -168,11 +166,11 @@ public class User {
     }
 
     public Date getHireTime() {
-        return hireTime;
+        return hireTime == null ? null : (Date) hireTime.clone();
     }
 
     public void setHireTime(Date hireTime) {
-        this.hireTime = hireTime;
+        this.hireTime = hireTime == null ? null : (Date) hireTime.clone();
     }
 
     public Department getDepartment() {
@@ -200,11 +198,11 @@ public class User {
     }
 
     public Date getDismissTime() {
-        return dismissTime;
+        return dismissTime == null ? null : (Date) dismissTime.clone();
     }
 
     public void setDismissTime(Date dismissTime) {
-        this.dismissTime = dismissTime;
+        this.dismissTime = dismissTime == null ? null : (Date) dismissTime.clone();
     }
 
     public String getDismissReason() {
@@ -224,19 +222,11 @@ public class User {
     }
 
     public Date getUpdateTime() {
-        return updateTime;
+        return updateTime == null ? null : (Date) updateTime.clone();
     }
 
     public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+        this.updateTime = updateTime == null ? null : (Date) updateTime.clone();
     }
 
     public BigDecimal getPaymentPercent() {
@@ -245,5 +235,13 @@ public class User {
 
     public void setPaymentPercent(BigDecimal paymentPercent) {
         this.paymentPercent = paymentPercent;
+    }
+
+    public Integer getWorkNo() {
+        return workNo;
+    }
+
+    public void setWorkNo(Integer workNo) {
+        this.workNo = workNo;
     }
 }

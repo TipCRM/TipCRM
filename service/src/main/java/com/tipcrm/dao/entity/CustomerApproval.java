@@ -1,4 +1,5 @@
 package com.tipcrm.dao.entity;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -71,16 +72,16 @@ public class CustomerApproval extends BaseCreateEntity {
         return optType;
     }
 
+    public void setOptType(ListBox optType) {
+        this.optType = optType;
+    }
+
     public ListBox getReviewType() {
         return reviewType;
     }
 
     public void setReviewType(ListBox reviewType) {
         this.reviewType = reviewType;
-    }
-
-    public void setOptType(ListBox optType) {
-        this.optType = optType;
     }
 
     public Customer getCustomer() {
@@ -148,10 +149,10 @@ public class CustomerApproval extends BaseCreateEntity {
     }
 
     public Date getFinalApprovalTime() {
-        return finalApprovalTime;
+        return finalApprovalTime == null ? null : (Date) finalApprovalTime.clone();
     }
 
     public void setFinalApprovalTime(Date finalApprovalTime) {
-        this.finalApprovalTime = finalApprovalTime;
+        this.finalApprovalTime = finalApprovalTime == null ? null : (Date) finalApprovalTime.clone();
     }
 }

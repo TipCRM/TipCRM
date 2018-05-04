@@ -1,4 +1,5 @@
 package com.tipcrm.service.impl;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,11 +29,11 @@ import com.tipcrm.constant.NotificationReadStatus;
 import com.tipcrm.constant.NotificationType;
 import com.tipcrm.dao.entity.ListBox;
 import com.tipcrm.dao.entity.Notification;
-import com.tipcrm.dao.repository.ListBoxRepository;
 import com.tipcrm.dao.repository.NotificationRepository;
 import com.tipcrm.dao.repository.UserRepository;
 import com.tipcrm.exception.BizException;
 import com.tipcrm.exception.QueryException;
+import com.tipcrm.service.ListBoxService;
 import com.tipcrm.service.NotificationService;
 import com.tipcrm.service.UserService;
 import com.tipcrm.service.WebContext;
@@ -58,7 +59,7 @@ public class NotificationServiceImpl implements NotificationService {
     private UserService userService;
 
     @Autowired
-    private ListBoxRepository listBoxRepository;
+    private ListBoxService listBoxService;
 
     @Autowired
     private WebContext webContext;
@@ -74,8 +75,8 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setToUser(userRepository.findOne(toId));
         notification.setSubject(subject);
         notification.setContent(content);
-        ListBox notificationType = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.NOTIFICATION_TYPE.name(), type.name());
-        ListBox unread = listBoxRepository.findByCategoryNameAndName(ListBoxCategory.NOTIFICATION_READ_STATUS.name(), NotificationReadStatus.UNREAD.name());
+        ListBox notificationType = listBoxService.findByCategoryAndName(ListBoxCategory.NOTIFICATION_TYPE.name(), type.name());
+        ListBox unread = listBoxService.findByCategoryAndName(ListBoxCategory.NOTIFICATION_READ_STATUS.name(), NotificationReadStatus.UNREAD.name());
         notification.setType(notificationType);
         notification.setReadStatus(unread);
         if (NotificationType.SYSTEM_NOTIFICATION.equals(type)) {
@@ -168,9 +169,6 @@ public class NotificationServiceImpl implements NotificationService {
             QueryCriteriaBo queryCriteriaBo = it.next();
             if (Constants.QueryFieldName.Notification.TYPE.equals(queryCriteriaBo.getFieldName())) {
                 notificationType = NotificationType.valueOf((String) queryCriteriaBo.getValue());
-                if (notificationType == null) {
-                    throw new BizException("查询条件有误，请检查" + queryCriteriaBo.getValue() + "的拼写");
-                }
                 it.remove();
                 break;
             }
@@ -196,9 +194,6 @@ public class NotificationServiceImpl implements NotificationService {
         }
         Integer systemId = userService.findSystemUser().getId();
         if (NotificationType.SYSTEM_NOTIFICATION.equals(notificationType)) {
-            if (queryCriteriaBo == null) {
-                queryCriteriaBo = new QueryCriteriaBo();
-            }
             queryCriteriaBo.setFieldName(Constants.QueryFieldName.Notification.SENDER);
             queryCriteriaBo.setValue(Lists.newArrayList(systemId));
         } else {
@@ -305,6 +300,8 @@ public class NotificationServiceImpl implements NotificationService {
                             if (!CollectionUtils.isEmpty(toUsers)) {
                                 predicates.add(path.in(toUsers.toArray()));
                             }
+                            break;
+                        default:
                             break;
                     }
                 }

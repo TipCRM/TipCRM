@@ -12,8 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "contract_project")
-public class ContractProject {
+@Table(name = "contract_production")
+public class ContractProduction {
 
     @Id
     @GeneratedValue
@@ -25,8 +25,8 @@ public class ContractProject {
     private Contract contract;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
-    private Project project;
+    @JoinColumn(name = "production_id")
+    private Production production;
 
     @Column(name = "amount")
     private BigDecimal bigDecimal;
@@ -47,12 +47,12 @@ public class ContractProject {
         this.contract = contract;
     }
 
-    public Project getProject() {
-        return project;
+    public Production getProduction() {
+        return production;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setProduction(Production production) {
+        this.production = production;
     }
 
     public BigDecimal getBigDecimal() {

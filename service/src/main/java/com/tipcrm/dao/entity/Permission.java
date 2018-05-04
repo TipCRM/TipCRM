@@ -10,15 +10,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "permission")
-public class Permission extends BaseAllEntity {
+public class Permission {
     @GeneratedValue
     @Id
     @Column(name = "id")
     private Integer id;
-
-    @ManyToOne
-    @JoinColumn(name = "group_id", referencedColumnName = "id")
-    private PermissionGroup group;
 
     @Column(name = "name")
     private String name;
@@ -29,20 +25,16 @@ public class Permission extends BaseAllEntity {
     @Column(name = "display_name")
     private String displayName;
 
+    @ManyToOne
+    @JoinColumn(name = "dependence_id", referencedColumnName = "id")
+    private Permission dependence;
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public PermissionGroup getGroup() {
-        return group;
-    }
-
-    public void setGroup(PermissionGroup group) {
-        this.group = group;
     }
 
     public String getName() {
@@ -67,5 +59,13 @@ public class Permission extends BaseAllEntity {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public Permission getDependence() {
+        return dependence;
+    }
+
+    public void setDependence(Permission dependence) {
+        this.dependence = dependence;
     }
 }
