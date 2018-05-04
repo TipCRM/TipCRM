@@ -10,6 +10,7 @@ const apis = {
   'PUT /public/api/user/password': 'http://tipcrm.potafish.com',
   'PUT /public/api/user/me': 'http://tipcrm.potafish.com',
   'PUT /public/api/user/level': 'http://tipcrm.potafish.com',
+  'DELETE /public/api/user': 'http://tipcrm.potafish.com',
 
   // permissions
   'POST /public/api/my/customers' :'http://tipcrm.potafish.com',

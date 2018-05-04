@@ -31,12 +31,6 @@ export async function createNewUser(params){
 export async function fetchUserDetailInfo(params){
   return request('/public/api/user/'+params.userId);
 }
-export async function disMissUser(params){
-  return request('/pubic/api/user/dismiss', {
-    method: 'DELETE',
-    body: params,
-  });
-}
 export async function updateUserInfo(params){
   return request('/public/api/user', {
     method: 'PUT',
@@ -72,6 +66,12 @@ export async function changeMyInfo(params){
     method: 'PUT',
     body: params,
   });
+}
+export async function dismissUser(params){
+  return request('/public/api/user',{
+    method: 'PUT',
+    body: params,
+  })
 }
 
 // menu api
