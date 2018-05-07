@@ -120,6 +120,7 @@ export default {
       }
     },
     *dismissUser({payload}, {call, put}){
+      console.log("request body:", payload);
       const response = yield call(dismissUser, payload);
       if (response.status === 200){
         message.success("离职员工成功");

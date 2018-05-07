@@ -151,7 +151,7 @@ export default class UserDetailInfoPanel extends React.Component{
     const {dispatch} = this.props;
     dispatch({
       type: 'user/dismissUser',
-      payload: {userId: selectUserInfo.userId, reason: dismissReason},
+      payload: {userId: selectUserInfo.id, reason: dismissReason},
     });
     this.setState({
       dismissingUser: false,
@@ -277,16 +277,17 @@ export default class UserDetailInfoPanel extends React.Component{
           </div> : ''
         }
         {
-          selectUserInfo.dismissUser&& !enableDelete ? '' :
-            <Button type="primary" distroyOnClose
-                    style={{marginLeft: '8px', marginRight:'8px'}}
-                    icon="delete" size="small"
-                    onClick={this.handleOpenOrCloseDismissModal.bind(this)}>
-              员工离职</Button>
+          selectUserInfo.dismissUser ? '':
+            enableDelete && !createNew ? <Button type="primary" distroyOnClose
+                                               style={{marginLeft: '8px', marginRight:'8px'}}
+                                               icon="delete" size="small"
+                                               onClick={this.handleOpenOrCloseDismissModal.bind(this)}>
+              员工离职</Button> : ''
         }
       </div>
-      <Modal visible={dismissingUser} footer=""
+      <Modal visible={dismissingUser} title="离职原因"
              onCancel={this.handleOpenOrCloseDismissModal.bind(this)}
+             okText="确认" cancelText="取消"
              onOk={this.handleDismissUser.bind(this, selectUserInfo)}>
         <TextArea value={dismissReason} onChange={this.handleDismissReasonChange.bind(this)}/>
       </Modal>

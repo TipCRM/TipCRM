@@ -69,7 +69,7 @@ export async function changeMyInfo(params){
 }
 export async function dismissUser(params){
   return request('/public/api/user',{
-    method: 'PUT',
+    method: 'DELETE',
     body: params,
   })
 }
