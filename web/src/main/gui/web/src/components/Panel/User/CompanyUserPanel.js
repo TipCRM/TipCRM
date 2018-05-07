@@ -329,7 +329,7 @@ export default class CompanyUserPanel extends React.Component{
                             onCancel={this.handleCloseUserInfo.bind(this)} destroyOnClose>
           <UserDetailInfoPanel selectUser={selectUser} departments = {departments}
                                createNew={createNew}  levels={levels}
-                               enableEdit = {enableEdit}
+                               enableEdit = {enableEdit} enableDelete={enableDelete}
                                handleCancelSave = {this.handleCloseUserInfo.bind(this)}/>
         </Modal> : ""
       }

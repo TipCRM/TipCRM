@@ -1,6 +1,6 @@
-import { fetchCurrentUser,
+import { fetchCurrentUser, dismissUser,
   fetchUserByName, createNewUser, changeMyInfo,
-  fetchUserDetailInfo, disMissUser, changeUserDepartment,
+  fetchUserDetailInfo, changeUserDepartment,
   updateUserInfo, fetchCompanyUsers, changePassword,
   changeUserLevel} from '../services/api';
 import {message} from 'antd';
@@ -41,12 +41,6 @@ export default {
         type: 'saveSelectUser',
         payload: response.data,
       });
-    },
-    *disMissUser({payload}, {call, put}){
-      const response = yield call(disMissUser, payload);
-      if (response.status === 200){
-        message.success('离职员工成功');
-      }
     },
     *updateUser({payload}, {call, put}){
       const response = yield call(updateUserInfo, payload);
@@ -123,6 +117,17 @@ export default {
         yield put({
           type: 'getCurrentUser'
         })
+      }
+    },
+    *dismissUser({payload}, {call, put}){
+      console.log("request body:", payload);
+      const response = yield call(dismissUser, payload);
+      if (response.status === 200){
+        message.success("离职员工成功");
+        yield put({
+          type: 'getUserDetailInfo',
+          payload: payload
+        });
       }
     }
   },

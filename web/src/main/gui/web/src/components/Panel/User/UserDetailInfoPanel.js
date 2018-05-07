@@ -22,6 +22,8 @@ export default class UserDetailInfoPanel extends React.Component{
     selectingLevel: false,
     selectedLevel: undefined,
     paymentPercentage: this.props.selectUserInfo.paymentPercentage,
+    dismissingUser: false,
+    dismissReason: "",
   }
   componentDidMount(){
     const {dispatch, selectUser} = this.props;
@@ -129,9 +131,38 @@ export default class UserDetailInfoPanel extends React.Component{
     });
   }
 
+  handleOpenOrCloseDismissModal(){
+    this.setState({
+      dismissingUser: !this.state.dismissingUser,
+    });
+  }
+  handleDismissReasonChange(e){
+    const value = e.target.value;
+    this.setState({
+      dismissReason: value,
+    });
+  }
+  handleDismissUser(selectUserInfo){
+    const {dismissReason} = this.state;
+    if (dismissReason == null || dismissReason.length === 0){
+      message.error("离职理由不能为空！");
+      return;
+    }
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'user/dismissUser',
+      payload: {userId: selectUserInfo.id, reason: dismissReason},
+    });
+    this.setState({
+      dismissingUser: false,
+    });
+  }
+
+
   render(){
-    const {selectUserInfo, userLoading, handleCancelSave, enableEdit, departments, levels} = this.props;
-    const {createNew, selectingDepartment, selectDepartment, selectingLevel, selectedLevel, paymentPercentage} =  this.state;
+    const {selectUserInfo, userLoading, handleCancelSave, enableEdit, departments, levels, enableDelete} = this.props;
+    const {createNew, selectingDepartment, selectDepartment, dismissReason,
+      selectingLevel, selectedLevel, paymentPercentage, dismissingUser} =  this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 8 },
@@ -245,7 +276,21 @@ export default class UserDetailInfoPanel extends React.Component{
             <Button type="primary" style={{marginLeft: '8px', marginRight:'8px'}} icon="save" size="small" onClick={this.handleSaveUser.bind(this, selectUserInfo)}>保存</Button>
           </div> : ''
         }
+        {
+          selectUserInfo.dismissUser ? '':
+            enableDelete && !createNew ? <Button type="primary" distroyOnClose
+                                               style={{marginLeft: '8px', marginRight:'8px'}}
+                                               icon="delete" size="small"
+                                               onClick={this.handleOpenOrCloseDismissModal.bind(this)}>
+              员工离职</Button> : ''
+        }
       </div>
+      <Modal visible={dismissingUser} title="离职原因"
+             onCancel={this.handleOpenOrCloseDismissModal.bind(this)}
+             okText="确认" cancelText="取消"
+             onOk={this.handleDismissUser.bind(this, selectUserInfo)}>
+        <TextArea value={dismissReason} onChange={this.handleDismissReasonChange.bind(this)}/>
+      </Modal>
     </CommonSpin>);
   }
 }
